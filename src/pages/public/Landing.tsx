@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { CornerDownLeft } from 'lucide-react';
+import studioDarkLogo from '../../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Dark Mode.png';
+import craftDarkLogo from '../../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Dark Mode 2.png';
+import { AnimatedBrandText } from '../../components/common/AnimatedBrandText';
 
 export function Landing() {
   const navigate = useNavigate();
@@ -22,8 +25,19 @@ export function Landing() {
       {/* Background glow effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--nexus-yellow)]/5 rounded-full blur-[120px] pointer-events-none"></div>
       
-      <header className="px-8 py-6 flex items-center justify-between relative z-10">
-        <div></div> {/* Empty left side, no UNI-NEXUS lettermark */}
+      <header className="px-6 md:px-10 py-6 flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-4 md:gap-6">
+          <img 
+            src={studioDarkLogo} 
+            alt="Uni-Inside Studio Logo" 
+            className="h-10 md:h-12 w-auto object-contain transition-transform hover:scale-105" 
+          />
+          <img 
+            src={craftDarkLogo} 
+            alt="Uni-Inside Craft Logo" 
+            className="h-10 md:h-12 w-auto object-contain transition-transform hover:scale-105" 
+          />
+        </div>
         <div className="flex gap-4 items-center">
           <Link to="/register" className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wider">
             Daftar
@@ -38,7 +52,7 @@ export function Landing() {
           </p>
           
           <h1 className="text-6xl md:text-8xl font-black tracking-tight text-white glow-text">
-            UNI-NEXUS
+            <AnimatedBrandText text="UNI-NEXUS" />
           </h1>
           
           <div className="text-2xl md:text-3xl text-gray-400 font-light tracking-wide space-x-4">

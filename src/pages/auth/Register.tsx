@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import nexusLogo from '../../assets/branding/logos/uni-nexus/UNI-NEXUS Single Logo.png';
+import { AnimatedBrandText } from '../../components/common/AnimatedBrandText';
 
 export function Register() {
   const navigate = useNavigate();
@@ -45,8 +47,15 @@ export function Register() {
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[var(--nexus-yellow)]/5 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
       
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
-        <Link to="/" className="text-2xl font-bold tracking-[0.2em] text-white mb-8 glow-text">
-          UNI-NEXUS
+        <Link to="/" className="flex flex-col items-center group mb-6">
+          <img 
+            src={nexusLogo} 
+            alt="UNI-NEXUS Logo" 
+            className="w-14 h-14 md:w-16 md:h-16 object-contain mb-2 drop-shadow-[0_0_25px_rgba(255,212,59,0.4)] transition-transform duration-300 group-hover:scale-105" 
+          />
+          <span className="text-2xl font-bold tracking-[0.2em] text-white glow-text">
+            <AnimatedBrandText text="UNI-NEXUS" />
+          </span>
         </Link>
         
         <div className="w-full max-w-md bg-[var(--nexus-charcoal)]/50 backdrop-blur-md p-8 rounded-2xl border border-gray-800">

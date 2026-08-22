@@ -13,6 +13,11 @@
   --color-nexus-muted: #737373;
 }
 
+@font-face {
+  font-family: 'Cube';
+  src: url('./assets/fonts/Cube/Cube.ttf') format('truetype');
+}
+
 :root {
   --nexus-yellow: #FFD43B;
   --nexus-yellow-deep: #E5B800;
@@ -69,3 +74,14 @@ body {
   }
 }
 
+@keyframes wave-jump {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-20px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-7px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-wave-jump {
+  animation: wave-jump 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
