@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@import "tailwindcss/utilities";
+
+@theme {
+  --color-nexus-yellow: #FFD43B;
+  --color-nexus-yellow-deep: #E5B800;
+  --color-nexus-black: #111111;
+  --color-nexus-charcoal: #202020;
+  --color-nexus-white: #FFFFFF;
+  --color-nexus-cream: #FAF7F0;
+  --color-nexus-cream-soft: #F5F1E8;
+  --color-nexus-border: #E8E2D7;
+  --color-nexus-muted: #737373;
+}
+
+:root {
+  --nexus-yellow: #FFD43B;
+  --nexus-yellow-deep: #E5B800;
+  --nexus-black: #111111;
+  --nexus-charcoal: #202020;
+  --nexus-white: #FFFFFF;
+  --nexus-cream: #FAF7F0;
+  --nexus-cream-soft: #F5F1E8;
+  --nexus-border: #E8E2D7;
+  --nexus-muted: #737373;
+  
+  /* Semantic Colors */
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #EF4444;
+  --status-info: #3B82F6;
+}
+
+body {
+  @apply bg-[var(--nexus-cream)] text-[var(--nexus-black)] font-sans antialiased selection:bg-[var(--nexus-yellow)] selection:text-black;
+}
+
+/* Cinematic Dark Theme for Landing/Auth */
+.dark-theme {
+  @apply bg-[var(--nexus-black)] text-[var(--nexus-white)];
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  @apply bg-[var(--nexus-charcoal)];
+}
+
+@layer utilities {
+  .glow-text {
+    text-shadow: 0 0 20px rgba(255, 212, 59, 0.4), 0 0 40px rgba(255, 212, 59, 0.1);
+  }
+  
+  .card-shadow {
+    box-shadow: 0 2px 8px -2px rgba(17, 17, 17, 0.05), 0 4px 12px -4px rgba(17, 17, 17, 0.05);
+  }
+}
+
