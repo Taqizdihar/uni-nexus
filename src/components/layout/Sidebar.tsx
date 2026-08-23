@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../../context/WorkspaceContext';
+import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
 import { 
   LayoutDashboard, ShoppingCart, Printer, Box, Layers, Wallet, Users,
@@ -19,6 +20,7 @@ interface NavItem {
   icon: React.ElementType;
   path: string;
   subItems?: NavSubItem[];
+  permission?: string;
 }
 
 interface NavGroup {
@@ -134,7 +136,7 @@ const globalToolsNav: NavGroup = {
     { name: 'Pusat Dokumen', icon: FileArchive, path: '/app/documents' },
     { name: 'Kalender & Tugas', icon: Calendar, path: '/app/calendar' },
     { name: 'Notifikasi', icon: Bell, path: '/app/notifications' },
-    { name: 'Pengguna & Hak Akses', icon: Users, path: '/app/users' },
+    { name: 'Manajemen Pengguna', icon: Users, path: '/app/users', permission: 'users.manage' },
     { name: 'Log Audit', icon: ShieldAlert, path: '/app/audit-log' },
     { name: 'Integrasi', icon: Network, path: '/app/integrations' },
     { name: 'Pusat Otomasi', icon: Zap, path: '/app/automations' },
@@ -209,6 +211,7 @@ function SidebarItem({ item }: { item: NavItem }) {
 
 export function Sidebar() {
   const { activeWorkspace } = useWorkspace();
+  const { hasPermission } = useAuth();
   const navGroups = activeWorkspace === 'craft' ? craftNav : studioNav;
 
   return (
@@ -238,9 +241,10 @@ export function Sidebar() {
             {globalToolsNav.label}
           </h3>
           <div className="space-y-1">
-            {globalToolsNav.items.map((item) => (
-              <SidebarItem key={item.name} item={item} />
-            ))}
+            {globalToolsNav.items.map((item) => {
+              if (item.permission && !hasPermission(item.permission)) return null;
+              return <SidebarItem key={item.name} item={item} />;
+            })}
           </div>
         </div>
       </div>

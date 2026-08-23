@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { sendSuccess } from '../shared/utils/response';
 import { checkDatabaseConnection } from '../config/database';
 import authRoutes from '../modules/auth/auth.routes';
+import usersRoutes from '../modules/users/users.routes';
+import profileRoutes from '../modules/users/profile.routes';
 
 const router = Router();
 
@@ -16,5 +18,7 @@ router.get('/health', async (req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/users', usersRoutes);
+router.use('/profile', profileRoutes);
 
 export default router;

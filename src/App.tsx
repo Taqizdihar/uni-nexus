@@ -8,11 +8,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { WorkspaceProvider } from './context/WorkspaceContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { PermissionGate } from './components/auth/PermissionGate';
 import { AppLayout } from './components/layout/AppLayout';
 import { Landing } from './pages/public/Landing';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { Dashboard } from './pages/global/Dashboard';
+import { Users as UsersManagement } from './pages/global/Users';
+import { Profile } from './pages/global/Profile';
 import { CraftOrders } from './pages/craft/Orders';
 import { CraftPrinters } from './pages/craft/Printers';
 import { CraftProduction } from './pages/craft/Production';
@@ -51,7 +54,12 @@ export default function App() {
             <Route path="documents" element={<PlannedModulePage title="Pusat Dokumen" description="Penyimpanan dan berbagi file terpusat." stage="Lanjutan" icon={FileArchive} />} />
             <Route path="settings" element={<PlannedModulePage title="Pengaturan Sistem" description="Pengaturan global aplikasi dan ruang kerja." stage="Tahap Berikutnya" icon={Settings} />} />
             <Route path="notifications" element={<PlannedModulePage title="Notifikasi" description="Peringatan sistem dan pemberitahuan pengguna." stage="Tahap Berikutnya" icon={Bell} />} />
-            <Route path="users" element={<PlannedModulePage title="Pengguna & Hak Akses" description="Kontrol akses berbasis peran dan manajemen pengguna." stage="Lanjutan" icon={Users} />} />
+            <Route path="users" element={
+              <PermissionGate permission="users.manage">
+                <UsersManagement />
+              </PermissionGate>
+            } />
+            <Route path="profile" element={<Profile />} />
             <Route path="audit-log" element={<PlannedModulePage title="Log Audit" description="Pelacakan aktivitas sistem dan log keamanan." stage="Lanjutan" icon={ShieldAlert} />} />
             
             {/* Craft Workspace Routes */}

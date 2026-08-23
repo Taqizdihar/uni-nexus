@@ -17,6 +17,7 @@ export function Register() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [successPending, setSuccessPending] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,23 +25,66 @@ export function Register() {
     setIsLoading(true);
     
     try {
-      // 1. Register
-      await api.post('/auth/register', formData);
+      const response = await api.post<any>('/auth/register', formData);
       
-      // 2. Auto Login after register
-      const loginResponse = await api.post<any>('/auth/login', {
-        usernameOrEmail: formData.email,
-        password: formData.password
-      });
-      
-      login(loginResponse.token, loginResponse.user);
-      navigate('/app/dashboard');
+      if (response.bootstrap) {
+         // Auto Login only for Bootstrap CTO
+         const loginResponse = await api.post<any>('/auth/login', {
+           usernameOrEmail: formData.email,
+           password: formData.password
+         });
+         
+         login(loginResponse.token, loginResponse.user);
+         navigate('/app/dashboard');
+      } else {
+         // Show pending approval screen for normal users
+         setSuccessPending(true);
+      }
     } catch (err: any) {
       setError(err.message || 'Gagal membuat akun. Silakan coba lagi.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (successPending) {
+    return (
+      <div className="min-h-screen dark-theme flex flex-col relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[var(--nexus-yellow)]/5 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
+        <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
+          <Link to="/" className="flex flex-col items-center group mb-6">
+            <img 
+              src={nexusLogo} 
+              alt="UNI-NEXUS Logo" 
+              className="w-14 h-14 md:w-16 md:h-16 object-contain mb-2 drop-shadow-[0_0_25px_rgba(255,212,59,0.4)] transition-transform duration-300 group-hover:scale-105" 
+            />
+            <span className="text-2xl font-bold tracking-[0.2em] text-white glow-text">
+              <AnimatedBrandText text="UNI-NEXUS" />
+            </span>
+          </Link>
+          <div className="w-full max-w-md bg-[var(--nexus-charcoal)]/50 backdrop-blur-md p-8 rounded-2xl border border-gray-800 text-center">
+             <div className="w-16 h-16 bg-[var(--nexus-yellow)]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-8 h-8 text-[var(--nexus-yellow)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+             </div>
+             <h2 className="text-xl font-semibold text-white mb-4">Permintaan Akun Berhasil Dikirim</h2>
+             <p className="text-sm text-gray-400 mb-8 leading-relaxed">
+               Akun Anda telah berhasil dibuat dan sedang menunggu persetujuan dari manajemen Uni-Inside. Anda belum dapat masuk ke UNI-NEXUS hingga akun disetujui.
+             </p>
+             <div className="flex flex-col gap-3">
+               <Link to="/" className="w-full">
+                 <Button variant="outline" className="w-full border-gray-700 text-white hover:bg-gray-800">Kembali ke Halaman Utama</Button>
+               </Link>
+               <Link to="/login" className="w-full">
+                 <Button className="w-full">Masuk</Button>
+               </Link>
+             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen dark-theme flex flex-col relative overflow-hidden">

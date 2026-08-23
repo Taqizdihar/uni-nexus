@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { Bell, Search, UserCircle, ArrowLeftRight } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export function Header() {
   const { activeWorkspace, setWorkspace } = useWorkspace();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -94,19 +96,26 @@ export function Header() {
         
         <div className="relative group cursor-pointer">
           <button className="text-gray-500 hover:text-[var(--nexus-charcoal)] transition-colors flex items-center">
-            <UserCircle className="w-6 h-6" />
+            {user?.avatar_path ? (
+               <img src={user.avatar_path} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
+            ) : (
+               <UserCircle className="w-6 h-6" />
+            )}
           </button>
           <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-1">
              <div className="px-4 py-2 border-b border-gray-50">
-               <p className="text-sm font-medium text-gray-800">Admin User</p>
-               <p className="text-xs text-gray-500">CEO / Master</p>
+               <p className="text-sm font-medium text-gray-800">{user?.full_name}</p>
+               <p className="text-xs text-gray-500">{user?.role?.name || 'Pengguna'}</p>
              </div>
+             <Link to="/app/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
+               Profil Saya
+             </Link>
              <Link to="/app/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
                Preferensi
              </Link>
-             <Link to="/" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+             <button onClick={logout} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                Keluar
-             </Link>
+             </button>
           </div>
         </div>
       </div>

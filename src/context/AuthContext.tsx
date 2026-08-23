@@ -7,7 +7,14 @@ interface User {
   username: string;
   full_name: string;
   email: string;
+  phone?: string | null;
+  avatar_path?: string | null;
   default_workspace_code: string;
+  role?: {
+    code: string;
+    name: string;
+  };
+  permissions?: string[];
 }
 
 interface AuthContextType {
@@ -17,6 +24,7 @@ interface AuthContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  hasPermission: (code: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +65,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const hasPermission = (code: string): boolean => {
+    if (!user || !user.permissions) return false;
+    return user.permissions.includes(code);
+  };
+
   useEffect(() => {
     // Initial load from localStorage
     const savedUser = localStorage.getItem('user');
@@ -69,7 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout, checkAuth }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout, checkAuth, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );
