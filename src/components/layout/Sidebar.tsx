@@ -164,7 +164,7 @@ const SidebarItem: React.FC<{ item: NavItem }> = ({ item }) => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors",
+            "w-full text-left flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors",
             isActive ? "bg-[var(--nexus-cream-soft)] text-[var(--nexus-yellow-deep)]" : "text-[var(--nexus-charcoal)] hover:bg-gray-50"
           )}
         >

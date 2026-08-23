@@ -3,6 +3,8 @@ import { useWorkspace } from '../../context/WorkspaceContext';
 import { Bell, Search, UserCircle, ArrowLeftRight } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import studioLogo from '../../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Light Mode.png';
+import craftLogo from '../../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 export function Header() {
   const { activeWorkspace, setWorkspace } = useWorkspace();
@@ -81,11 +83,24 @@ export function Header() {
         <button 
           onClick={handleWorkspaceToggle}
           className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 hover:border-[var(--nexus-yellow)] hover:bg-[var(--nexus-cream-soft)] transition-all group"
-          title="Ganti Ruang Kerja"
+          title="Ganti Workspace"
         >
           <ArrowLeftRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-[var(--nexus-charcoal)] transition-colors" />
-          <span className="text-xs text-gray-500 font-medium tracking-wide">
-            Ruang Kerja: <span className="text-[var(--nexus-charcoal)] font-bold">{activeWorkspace === 'craft' ? 'Uni-Inside Craft' : 'Uni-Inside Studio'}</span>
+          <span className="text-xs text-gray-500 font-medium tracking-wide flex items-center gap-1.5">
+            Workspace: 
+            <span className="text-[var(--nexus-charcoal)] font-bold flex items-center gap-1">
+              {activeWorkspace === 'craft' ? (
+                <>
+                  <img src={craftLogo} alt="Craft Logo" className="h-4 w-auto" />
+                  Uni-Inside Craft
+                </>
+              ) : (
+                <>
+                  <img src={studioLogo} alt="Studio Logo" className="h-4 w-auto" />
+                  Uni-Inside Studio
+                </>
+              )}
+            </span>
           </span>
         </button>
 
