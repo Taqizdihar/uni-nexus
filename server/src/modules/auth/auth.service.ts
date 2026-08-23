@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { pool } from '../../config/database';
 import { env } from '../../config/env';
 import { ValidationError, UnauthorizedError } from '../../shared/errors/AppError';
+import { UsersService } from '../users/users.service';
 
 export class AuthService {
   static async register(data: any) {
@@ -206,11 +207,11 @@ export class AuthService {
       expiresIn: env.JWT_EXPIRES_IN as any,
     });
 
-    delete user.password_hash;
+    const authenticatedUser = await UsersService.getAuthPrincipal(user.id);
 
     return {
       token,
-      user,
+      user: authenticatedUser,
     };
   }
 }

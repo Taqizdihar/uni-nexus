@@ -3,9 +3,11 @@ import { cn } from '../../lib/utils';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'outline';
+  className?: string;
+  children?: React.ReactNode;
 }
 
-export function Badge({ className, variant = 'default', children, ...props }: BadgeProps) {
+export const Badge: React.FC<BadgeProps> = ({ className, variant = 'default', children, ...props }) => {
   const variants = {
     default: "bg-gray-100 text-gray-800",
     success: "bg-emerald-50 text-emerald-700 border border-emerald-200",

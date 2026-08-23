@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { UnauthorizedError } from '../shared/errors/AppError';
 import { pool } from '../config/database';
+import { UsersService } from '../modules/users/users.service';
 
 export interface AuthRequest extends Request {
   user?: any;
@@ -20,46 +21,13 @@ export const requireAuth = async (req: AuthRequest, res: Response, next: NextFun
     try {
       const decoded = jwt.verify(token, env.JWT_SECRET) as any;
       
-      const [users] = await pool.execute<any[]>(
-        'SELECT id, organization_id, full_name, username, email, phone, avatar_path, status_code, approval_status_code, default_workspace_code FROM users WHERE id = ? AND status_code = "active" AND approval_status_code = "approved" AND deleted_at IS NULL',
-        [decoded.id]
-      );
+      const authenticatedUser = await UsersService.getAuthPrincipal(decoded.id);
 
-      if (!users || users.length === 0) {
+      if (!authenticatedUser || authenticatedUser.status_code !== 'active' || authenticatedUser.approval_status_code !== 'approved') {
         throw new UnauthorizedError('Akun pengguna tidak ditemukan atau tidak aktif.', 'ACCOUNT_INACTIVE');
       }
-
-      const user = users[0];
-
-      const [roles] = await pool.execute<any[]>(
-        `SELECT r.code, r.name 
-         FROM roles r
-         JOIN user_roles ur ON r.id = ur.role_id
-         WHERE ur.user_id = ? AND r.is_active = 1
-         LIMIT 1`,
-        [user.id]
-      );
       
-      const role = roles[0] || null;
-      let permissions: string[] = [];
-      
-      if (role) {
-         const [perms] = await pool.execute<any[]>(
-           `SELECT p.code 
-            FROM permissions p
-            JOIN role_permissions rp ON p.id = rp.permission_id
-            JOIN user_roles ur ON rp.role_id = ur.role_id
-            WHERE ur.user_id = ?`,
-           [user.id]
-         );
-         permissions = perms.map(p => p.code);
-      }
-      
-      req.user = {
-         ...user,
-         role,
-         permissions
-      };
+      req.user = authenticatedUser;
       
       next();
     } catch (err) {

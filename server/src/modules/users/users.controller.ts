@@ -25,7 +25,8 @@ export class UsersController {
 
   static async getAvailableRoles(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const roles = await UsersService.getAvailableRoles();
+      const forUserId = req.query.forUserId ? parseInt(req.query.forUserId as string) : undefined;
+      const roles = await UsersService.getAvailableRoles(forUserId);
       return sendSuccess(res, roles);
     } catch (error) {
       next(error);

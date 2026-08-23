@@ -4,6 +4,48 @@ import { UserResponse } from './users.types';
 import bcrypt from 'bcryptjs';
 
 export class UsersService {
+  static async getAuthPrincipal(id: number): Promise<any> {
+    const [users] = await pool.execute<any[]>(
+      'SELECT id, organization_id, full_name, username, email, phone, avatar_path, status_code, approval_status_code, default_workspace_code FROM users WHERE id = ? AND deleted_at IS NULL',
+      [id]
+    );
+
+    if (!users || users.length === 0) {
+      return null;
+    }
+
+    const user = users[0];
+
+    const [roles] = await pool.execute<any[]>(
+      `SELECT r.code, r.name 
+       FROM roles r
+       JOIN user_roles ur ON r.id = ur.role_id
+       WHERE ur.user_id = ? AND r.is_active = 1
+       LIMIT 1`,
+      [user.id]
+    );
+    
+    const role = roles[0] || null;
+    let permissions: string[] = [];
+    
+    if (role) {
+       const [perms] = await pool.execute<any[]>(
+         `SELECT p.code 
+          FROM permissions p
+          JOIN role_permissions rp ON p.id = rp.permission_id
+          JOIN user_roles ur ON rp.role_id = ur.role_id
+          WHERE ur.user_id = ?`,
+         [user.id]
+       );
+       permissions = perms.map(p => p.code);
+    }
+    
+    return {
+       ...user,
+       role,
+       permissions
+    };
+  }
   static async getUsers(filters?: any): Promise<UserResponse[]> {
     let query = `
       SELECT u.id, u.organization_id, u.full_name, u.username, u.email, u.phone, 
@@ -62,9 +104,9 @@ export class UsersService {
     };
   }
 
-  static async getAvailableRoles(): Promise<any[]> {
+  static async getAvailableRoles(forUserId?: number): Promise<any[]> {
     const [roles] = await pool.execute<any[]>(
-      'SELECT id, code, name FROM roles WHERE is_active = 1 AND is_system = 0 AND code IN ("CEO", "COO", "CTO", "OPERATOR", "ENGINEER_3D")'
+      'SELECT id, code, name FROM roles WHERE is_active = 1 AND code IN ("CEO", "COO", "CTO", "OPERATOR", "ENGINEER_3D")'
     );
     
     // Check singleton occupancy
@@ -80,7 +122,10 @@ export class UsersService {
            [role.id]
          );
          
-         if (occupants.length === 0) {
+         const isOccupied = occupants.length > 0;
+         const isOccupiedByTargetUser = forUserId && occupants.some(o => o.id === forUserId);
+         
+         if (!isOccupied || isOccupiedByTargetUser) {
             availableRoles.push(role);
          }
       } else {
@@ -186,6 +231,11 @@ export class UsersService {
 
   static async updateStatus(id: number, status_code: string, managerId: number): Promise<void> {
     if (id === managerId) {
+       // Check if manager is CTO
+       const managerPrincipal = await this.getAuthPrincipal(managerId);
+       if (managerPrincipal?.role?.code === 'CTO') {
+          throw new ValidationError('Akun Chief Technology Officer tidak dapat mengubah peran atau menonaktifkan dirinya sendiri.', 'CTO_SELF_PROTECTION');
+       }
        throw new ValidationError('Anda tidak dapat mengubah status akun Anda sendiri.', 'CANNOT_SELF_MODIFY');
     }
     await pool.execute(
@@ -195,6 +245,13 @@ export class UsersService {
   }
 
   static async updateRole(id: number, roleCode: string, managerId: number): Promise<void> {
+     if (id === managerId) {
+        const managerPrincipal = await this.getAuthPrincipal(managerId);
+        if (managerPrincipal?.role?.code === 'CTO') {
+           throw new ValidationError('Akun Chief Technology Officer tidak dapat mengubah peran atau menonaktifkan dirinya sendiri.', 'CTO_SELF_PROTECTION');
+        }
+     }
+     
      const connection = await pool.getConnection();
      try {
        await connection.beginTransaction();
@@ -238,6 +295,10 @@ export class UsersService {
 
   static async softDeleteUser(id: number, managerId: number): Promise<void> {
     if (id === managerId) {
+       const managerPrincipal = await this.getAuthPrincipal(managerId);
+       if (managerPrincipal?.role?.code === 'CTO') {
+          throw new ValidationError('Akun Chief Technology Officer tidak dapat menghapus dirinya sendiri.', 'CTO_SELF_PROTECTION');
+       }
        throw new ValidationError('Anda tidak dapat menghapus akun Anda sendiri.', 'CANNOT_SELF_DELETE');
     }
     await pool.execute(

@@ -25,8 +25,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    if (response.status === 401) {
-      // Auto logout on unauthorized (token expired/invalid)
+    if (response.status === 401 && !endpoint.includes('/auth/login')) {
+      // Auto logout on unauthorized (token expired/invalid) - skip for login to allow normal error handling
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -55,6 +55,12 @@ export const api = {
     request<T>(endpoint, { 
       ...options, 
       method: 'PUT', 
+      body: body instanceof FormData ? body : JSON.stringify(body) 
+    }),
+  patch: <T>(endpoint: string, body: any, options?: RequestInit) => 
+    request<T>(endpoint, { 
+      ...options, 
+      method: 'PATCH', 
       body: body instanceof FormData ? body : JSON.stringify(body) 
     }),
   delete: <T>(endpoint: string, options?: RequestInit) => request<T>(endpoint, { ...options, method: 'DELETE' }),

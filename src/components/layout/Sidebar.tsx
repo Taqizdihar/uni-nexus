@@ -146,7 +146,7 @@ const globalToolsNav: NavGroup = {
   ]
 };
 
-function SidebarItem({ item }: { item: NavItem }) {
+const SidebarItem: React.FC<{ item: NavItem }> = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 

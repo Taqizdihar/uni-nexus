@@ -6,9 +6,10 @@ import {
   XCircle, UserCog, Trash2, Search, Filter 
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 
 export function Users() {
-  const { hasPermission } = useAuth();
+  const { user: currentUser, hasPermission, isLoading: authLoading } = useAuth();
   const [users, setUsers] = useState<any[]>([]);
   const [roles, setRoles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,9 +21,16 @@ export function Users() {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   
   const [selectedRole, setSelectedRole] = useState('');
   const [rejectReason, setRejectReason] = useState('');
+  const [feedbackMsg, setFeedbackMsg] = useState<{type: 'success' | 'error', text: string} | null>(null);
+
+  const showFeedback = (type: 'success' | 'error', text: string) => {
+    setFeedbackMsg({ type, text });
+    setTimeout(() => setFeedbackMsg(null), 5000);
+  };
 
   const fetchUsers = async () => {
     try {
@@ -37,19 +45,22 @@ export function Users() {
     }
   };
 
-  const fetchRoles = async () => {
+  const fetchRoles = async (forUserId?: number) => {
     try {
-      const response = await api.get<any[]>('/users/roles/available');
+      const endpoint = forUserId ? `/users/roles/available?forUserId=${forUserId}` : '/users/roles/available';
+      const response = await api.get<any[]>(endpoint);
       setRoles(response);
     } catch (error) {
-      console.error('Failed to fetch roles', error);
+      showFeedback('error', 'Gagal memuat daftar peran.');
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-    fetchRoles();
-  }, []);
+    if (!authLoading && hasPermission('users.manage')) {
+      fetchUsers();
+      fetchRoles();
+    }
+  }, [authLoading, hasPermission]);
 
   const handleApprove = async () => {
     try {
@@ -57,8 +68,9 @@ export function Users() {
       setIsApproveModalOpen(false);
       fetchUsers();
       fetchRoles(); // Refresh roles to check singleton occupancy
+      showFeedback('success', 'Pengguna berhasil disetujui.');
     } catch (error: any) {
-      alert(error.message || 'Gagal menyetujui pengguna');
+      showFeedback('error', error.message || 'Gagal menyetujui pengguna');
     }
   };
 
@@ -67,8 +79,9 @@ export function Users() {
       await api.post(`/users/${selectedUser.id}/reject`, { reason: rejectReason });
       setIsRejectModalOpen(false);
       fetchUsers();
+      showFeedback('success', 'Pengguna berhasil ditolak.');
     } catch (error: any) {
-      alert(error.message || 'Gagal menolak pengguna');
+      showFeedback('error', error.message || 'Gagal menolak pengguna');
     }
   };
   
@@ -78,8 +91,9 @@ export function Users() {
       setIsRoleModalOpen(false);
       fetchUsers();
       fetchRoles();
+      showFeedback('success', 'Peran pengguna berhasil diperbarui.');
     } catch (error: any) {
-      alert(error.message || 'Gagal mengubah role');
+      showFeedback('error', error.message || 'Gagal mengubah role');
     }
   };
 
@@ -88,25 +102,29 @@ export function Users() {
     try {
       await api.patch(`/users/${userId}/status`, { status_code: newStatus });
       fetchUsers();
+      showFeedback('success', newStatus === 'active' ? 'Akun berhasil diaktifkan kembali.' : 'Akun berhasil ditangguhkan.');
     } catch (error: any) {
-      alert(error.message || 'Gagal mengubah status');
+      showFeedback('error', error.message || 'Gagal mengubah status');
     }
   };
 
-  const handleDelete = async (userId: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini secara permanen?')) {
-      try {
-        await api.delete(`/users/${userId}`);
-        fetchUsers();
-      } catch (error: any) {
-        alert(error.message || 'Gagal menghapus pengguna');
-      }
+  const handleDelete = async () => {
+    if (!selectedUser) return;
+    try {
+      await api.delete(`/users/${selectedUser.id}`);
+      setIsDeleteDialogOpen(false);
+      fetchUsers();
+      showFeedback('success', 'Pengguna berhasil dihapus.');
+    } catch (error: any) {
+      setIsDeleteDialogOpen(false);
+      showFeedback('error', error.message || 'Gagal menghapus pengguna');
     }
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          user.username?.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (!matchesSearch) return false;
     
@@ -130,6 +148,13 @@ export function Users() {
           <p className="text-gray-500 mt-1">Kelola akses, peran, dan persetujuan akun pengguna</p>
         </div>
       </div>
+
+      {feedbackMsg && (
+        <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 text-sm font-medium ${feedbackMsg.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+          {feedbackMsg.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+          {feedbackMsg.text}
+        </div>
+      )}
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="border-b border-gray-100 p-4 flex gap-4 bg-gray-50/50">
@@ -253,7 +278,7 @@ export function Users() {
                         {new Date(user.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-2 transition-opacity">
                           {activeTab === 'pending' && (
                             <>
                               <Button 
@@ -285,31 +310,43 @@ export function Users() {
                           
                           {activeTab === 'active' && (
                             <>
-                              <button 
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setSelectedRole(user.role?.code || '');
-                                  setIsRoleModalOpen(true);
-                                }}
-                                className="p-1.5 text-gray-400 hover:text-[var(--nexus-yellow-deep)] transition-colors rounded-md hover:bg-[var(--nexus-cream-soft)]"
-                                title="Ubah Peran"
-                              >
-                                <UserCog className="w-4 h-4" />
-                              </button>
-                              <button 
-                                onClick={() => handleUpdateStatus(user.id, user.status_code)}
-                                className="p-1.5 text-gray-400 hover:text-orange-600 transition-colors rounded-md hover:bg-orange-50"
-                                title="Tangguhkan"
-                              >
-                                <Ban className="w-4 h-4" />
-                              </button>
-                              <button 
-                                onClick={() => handleDelete(user.id)}
-                                className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-md hover:bg-red-50"
-                                title="Hapus"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                              {user.id === currentUser?.id ? (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200" title="Ini adalah akun Anda">
+                                  Akun Anda
+                                </span>
+                              ) : (
+                                <>
+                                  <button 
+                                    onClick={() => {
+                                      setSelectedUser(user);
+                                      setSelectedRole(user.role?.code || '');
+                                      fetchRoles(user.id);
+                                      setIsRoleModalOpen(true);
+                                    }}
+                                    className="p-1.5 text-gray-400 hover:text-[var(--nexus-yellow-deep)] transition-colors rounded-md hover:bg-[var(--nexus-cream-soft)]"
+                                    title="Ubah Peran"
+                                  >
+                                    <UserCog className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    onClick={() => handleUpdateStatus(user.id, user.status_code)}
+                                    className="p-1.5 text-gray-400 hover:text-orange-600 transition-colors rounded-md hover:bg-orange-50"
+                                    title="Tangguhkan"
+                                  >
+                                    <Ban className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    onClick={() => {
+                                      setSelectedUser(user);
+                                      setIsDeleteDialogOpen(true);
+                                    }}
+                                    className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-md hover:bg-red-50"
+                                    title="Hapus"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
                             </>
                           )}
                           
@@ -325,7 +362,10 @@ export function Users() {
                                 </Button>
                               )}
                               <button 
-                                onClick={() => handleDelete(user.id)}
+                                onClick={() => {
+                                  setSelectedUser(user);
+                                  setIsDeleteDialogOpen(true);
+                                }}
                                 className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-md hover:bg-red-50"
                                 title="Hapus"
                               >
@@ -448,6 +488,21 @@ export function Users() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog 
+        open={isDeleteDialogOpen}
+        title="Hapus Pengguna?"
+        description={
+          <>
+            Pengguna <strong>{selectedUser?.full_name}</strong> akan dihapus dari akses aktif UNI-NEXUS. Riwayat sistem dan data terkait tetap dipertahankan.
+          </>
+        }
+        confirmLabel="Hapus Pengguna"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setIsDeleteDialogOpen(false)}
+      />
     </div>
   );
 }
