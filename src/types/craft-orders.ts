@@ -137,6 +137,7 @@ export interface CreateOrderItem {
 }
 
 export interface CreateCraftOrderRequest {
+  draft_id?: number | null;
   customer_party_id: number;
   sales_channel_id: number;
   external_order_id?: string | null;
@@ -179,3 +180,78 @@ export interface CraftOrderFilters {
 }
 
 export interface PaginatedResult<T> { items: T[]; meta: { page: number; limit: number; total: number; totalPages: number; }; }
+
+export type DraftStatus = 'active' | 'converted' | 'discarded';
+export type DraftItemMode = 'catalog' | 'custom';
+
+export interface OrderDraftFormData {
+  customer_party_id: string;
+  sales_channel_id: string;
+  external_order_id: string;
+  order_type: CraftOrder['order_type'];
+  deadline_at: string;
+  priority_mode: 'automatic' | 'manual';
+  priority_code: PriorityCode | string;
+  priority_reason: string;
+  discount_amount: number | '';
+  shipping_amount: number | '';
+  marketplace_fee_amount: number | '';
+  tax_amount: number | '';
+  customer_notes: string;
+  internal_notes: string;
+  shipping_recipient_name: string;
+  shipping_phone: string;
+  shipping_address: string;
+  courier_name: string;
+}
+
+export interface OrderDraftItemData {
+  mode: DraftItemMode;
+  product_id: string;
+  variant_id: string;
+  item_name: string;
+  item_description: string;
+  quantity: number | '';
+  unit_price: number | '';
+  discount_amount: number | '';
+  estimated_material_g: number | '';
+  estimated_print_minutes: number | '';
+  material: string;
+  color: string;
+  size: string;
+  specification: string;
+}
+
+export interface OrderDraftPayload {
+  schema_version: number;
+  form: OrderDraftFormData;
+  items: OrderDraftItemData[];
+}
+
+export interface CraftOrderDraftSummary {
+  id: number;
+  draft_code: string;
+  title: string | null;
+  status_code: DraftStatus;
+  created_by: number;
+  created_by_name: string | null;
+  customer_name: string | null;
+  item_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CraftOrderDraft extends CraftOrderDraftSummary {
+  business_unit_id: number;
+  payload: OrderDraftPayload;
+  schema_version: number;
+  converted_order_id: number | null;
+  updated_by: number | null;
+  converted_at: string | null;
+  deleted_at: string | null;
+}
+
+export interface SaveOrderDraftRequest {
+  title?: string | null;
+  payload: OrderDraftPayload;
+}

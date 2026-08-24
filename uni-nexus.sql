@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 24, 2026 at 03:26 AM
+-- Generation Time: Aug 24, 2026 at 06:59 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -136,7 +136,10 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (20, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:50:09.754'),
 (21, 1, NULL, 4, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 11:10:35.707'),
 (22, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 11:11:21.839'),
-(23, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 08:59:59.566');
+(23, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 08:59:59.566'),
+(24, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 11:09:29.177'),
+(25, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 11:20:14.128'),
+(26, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 13:13:02.671');
 
 -- --------------------------------------------------------
 
@@ -370,6 +373,29 @@ CREATE TABLE `craft_orders` (
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `completed_at` datetime(3) DEFAULT NULL,
   `cancelled_at` datetime(3) DEFAULT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `craft_order_drafts`
+--
+
+CREATE TABLE `craft_order_drafts` (
+  `id` bigint UNSIGNED NOT NULL,
+  `business_unit_id` bigint UNSIGNED NOT NULL,
+  `draft_code` varchar(80) DEFAULT NULL,
+  `title` varchar(180) DEFAULT NULL,
+  `payload_json` json NOT NULL,
+  `schema_version` int UNSIGNED NOT NULL DEFAULT '1',
+  `status_code` varchar(30) NOT NULL DEFAULT 'active' COMMENT 'active|converted|discarded',
+  `converted_order_id` bigint UNSIGNED DEFAULT NULL,
+  `created_by` bigint UNSIGNED NOT NULL,
+  `updated_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  `converted_at` datetime(3) DEFAULT NULL,
   `deleted_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1168,6 +1194,13 @@ CREATE TABLE `parties` (
   `deleted_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `parties`
+--
+
+INSERT INTO `parties` (`id`, `organization_id`, `code`, `party_kind`, `display_name`, `legal_name`, `email`, `phone`, `website`, `tax_id`, `address_line1`, `address_line2`, `city`, `province`, `postal_code`, `country_code`, `notes`, `status_code`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'CUS-000001', 'company', 'PT Arunika Kreasi', NULL, 'arunika.test@example.com', '081234567890', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ID', NULL, 'active', '2026-08-24 13:43:06.511', '2026-08-24 13:43:06.515', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1224,6 +1257,13 @@ CREATE TABLE `party_roles` (
   `valid_until` date DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `party_roles`
+--
+
+INSERT INTO `party_roles` (`id`, `party_id`, `business_unit_id`, `role_code`, `is_active`, `valid_from`, `valid_until`, `created_at`) VALUES
+(1, 1, 1, 'craft_customer', 1, NULL, NULL, '2026-08-24 13:43:06.517');
 
 -- --------------------------------------------------------
 
@@ -2622,7 +2662,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-24 08:59:59.555', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-24 08:59:59.555', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-24 13:13:02.662', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-24 13:13:02.662', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -2961,6 +3001,17 @@ ALTER TABLE `craft_orders`
   ADD KEY `idx_craft_orders_payment` (`payment_status_code`),
   ADD KEY `fk_craft_orders_bu` (`business_unit_id`),
   ADD KEY `fk_craft_orders_user` (`created_by`);
+
+--
+-- Indexes for table `craft_order_drafts`
+--
+ALTER TABLE `craft_order_drafts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_craft_order_drafts_code` (`draft_code`),
+  ADD KEY `idx_craft_order_drafts_active` (`business_unit_id`,`status_code`,`updated_at`),
+  ADD KEY `idx_craft_order_drafts_creator` (`created_by`,`status_code`,`updated_at`),
+  ADD KEY `idx_craft_order_drafts_converted_order` (`converted_order_id`),
+  ADD KEY `fk_craft_order_drafts_updated_by` (`updated_by`);
 
 --
 -- Indexes for table `craft_order_items`
@@ -3877,7 +3928,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -3931,6 +3982,12 @@ ALTER TABLE `chart_of_accounts`
 -- AUTO_INCREMENT for table `craft_orders`
 --
 ALTER TABLE `craft_orders`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `craft_order_drafts`
+--
+ALTER TABLE `craft_order_drafts`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -4129,7 +4186,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4147,7 +4204,7 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -4626,6 +4683,15 @@ ALTER TABLE `craft_orders`
   ADD CONSTRAINT `fk_craft_orders_channel` FOREIGN KEY (`sales_channel_id`) REFERENCES `sales_channels` (`id`),
   ADD CONSTRAINT `fk_craft_orders_customer` FOREIGN KEY (`customer_party_id`) REFERENCES `parties` (`id`),
   ADD CONSTRAINT `fk_craft_orders_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `craft_order_drafts`
+--
+ALTER TABLE `craft_order_drafts`
+  ADD CONSTRAINT `fk_craft_order_drafts_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`),
+  ADD CONSTRAINT `fk_craft_order_drafts_converted_order` FOREIGN KEY (`converted_order_id`) REFERENCES `craft_orders` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_craft_order_drafts_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `fk_craft_order_drafts_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `craft_order_items`

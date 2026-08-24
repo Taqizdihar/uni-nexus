@@ -155,4 +155,36 @@ export class CraftOrdersRepository {
     `, [channelId, externalId]);
     return rows.length > 0;
   }
+
+  async getDrafts(businessUnitId: number) {
+    const [rows]: any = await pool.execute(
+      `SELECT d.id, d.draft_code, d.title, d.status_code, d.created_by, d.created_at, d.updated_at,
+              u.full_name AS created_by_name, p.display_name AS customer_name,
+              COALESCE(JSON_LENGTH(JSON_EXTRACT(d.payload_json, '$.items')), 0) AS item_count
+       FROM craft_order_drafts d
+       LEFT JOIN users u ON u.id = d.created_by
+       LEFT JOIN parties p ON p.id = CAST(JSON_UNQUOTE(JSON_EXTRACT(d.payload_json, '$.form.customer_party_id')) AS UNSIGNED)
+       WHERE d.business_unit_id = ? AND d.status_code = 'active' AND d.deleted_at IS NULL
+       ORDER BY d.updated_at DESC, d.id DESC`,
+      [businessUnitId],
+    );
+    return rows;
+  }
+
+  async getDraftById(id: number, businessUnitId: number) {
+    const [rows]: any = await pool.execute(
+      `SELECT d.*, u.full_name AS created_by_name, p.display_name AS customer_name,
+              COALESCE(JSON_LENGTH(JSON_EXTRACT(d.payload_json, '$.items')), 0) AS item_count
+       FROM craft_order_drafts d
+       LEFT JOIN users u ON u.id = d.created_by
+       LEFT JOIN parties p ON p.id = CAST(JSON_UNQUOTE(JSON_EXTRACT(d.payload_json, '$.form.customer_party_id')) AS UNSIGNED)
+       WHERE d.id = ? AND d.business_unit_id = ? AND d.deleted_at IS NULL
+       LIMIT 1`,
+      [id, businessUnitId],
+    );
+    if (!rows.length) return null;
+    const row = rows[0];
+    const payload = typeof row.payload_json === 'string' ? JSON.parse(row.payload_json) : row.payload_json;
+    return { ...row, payload };
+  }
 }

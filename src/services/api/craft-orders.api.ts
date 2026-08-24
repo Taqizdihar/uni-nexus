@@ -1,8 +1,8 @@
 import { api } from '../../lib/api';
 import type {
   AttachmentSummary, CreateCraftOrderRequest, CraftOrder, CraftOrderDetail, CraftOrderFilters, CustomerOption,
-  InvoiceSummary, OrderDetailResponse, PaginatedResult, PaymentMethodOption, PaymentSummary, ProductOption,
-  ProductionQueueItem, SalesChannelOption, TreasuryAccountOption,
+  CraftOrderDraft, CraftOrderDraftSummary, InvoiceSummary, OrderDetailResponse, PaginatedResult, PaymentMethodOption, PaymentSummary, ProductOption,
+  ProductionQueueItem, SalesChannelOption, SaveOrderDraftRequest, TreasuryAccountOption,
 } from '../../types/craft-orders';
 
 const BASE_PATH = '/craft/orders';
@@ -32,6 +32,11 @@ export const craftOrdersApi = {
   getOrders: (filters: CraftOrderFilters) => api.get<PaginatedResult<CraftOrder>>(`${BASE_PATH}?${toQuery(filters)}`),
   getOrder: (id: number) => api.get<OrderDetailResponse>(`${BASE_PATH}/${id}`),
   createOrder: (data: CreateCraftOrderRequest) => api.post<{ id: number; order_code: string }>(BASE_PATH, data),
+  getDrafts: () => api.get<CraftOrderDraftSummary[]>(`${BASE_PATH}/drafts`),
+  getDraft: (id: number) => api.get<CraftOrderDraft>(`${BASE_PATH}/drafts/${id}`),
+  createDraft: (data: SaveOrderDraftRequest) => api.post<CraftOrderDraft>(`${BASE_PATH}/drafts`, data),
+  updateDraft: (id: number, data: SaveOrderDraftRequest) => api.patch<CraftOrderDraft>(`${BASE_PATH}/drafts/${id}`, data),
+  discardDraft: (id: number) => api.delete<{ message: string }>(`${BASE_PATH}/drafts/${id}`),
   updateOrder: (id: number, data: Partial<Pick<CraftOrderDetail, 'deadline_at' | 'customer_notes' | 'internal_notes' | 'shipping_recipient_name' | 'shipping_phone' | 'shipping_address' | 'courier_name'>>) => api.patch<{ message: string }>(`${BASE_PATH}/${id}`, data),
   updateStatus: (id: number, statusCode: string, reason?: string) => api.patch<{ message: string }>(`${BASE_PATH}/${id}/status`, { status_code: statusCode, reason }),
   updatePriority: (id: number, priorityCode: string, reason?: string, isManual = true) => api.patch<{ message: string }>(`${BASE_PATH}/${id}/priority`, { priority_code: priorityCode, reason, is_priority_manual: isManual }),

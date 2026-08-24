@@ -74,10 +74,114 @@ export class CraftOrdersService {
     }
   }
 
+  private async writeDraftAudit(connection: SqlConnection, userId: number, businessUnitId: number, actionCode: string, description: string) {
+    const [businessUnits]: any = await connection.execute('SELECT organization_id FROM business_units WHERE id = ? LIMIT 1', [businessUnitId]);
+    if (!businessUnits.length) return;
+    await connection.execute(
+      `INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description)
+       VALUES (?, ?, 'craft_orders', ?, ?)`,
+      [businessUnits[0].organization_id, userId, actionCode, description],
+    );
+  }
+
+  private getDraftTitle(payload: any) {
+    const customerSelected = Boolean(payload?.form?.customer_party_id);
+    const namedItems = Array.isArray(payload?.items) ? payload.items.filter((item: any) => String(item?.item_name || '').trim()) : [];
+    if (customerSelected && namedItems[0]) return `Pesanan Custom — ${namedItems[0].item_name}`.slice(0, 180);
+    if (namedItems.length) return `Pesanan Custom — ${namedItems.length} Item`;
+    return 'Draf Pesanan Baru';
+  }
+
+  async createDraft(payload: any, title: string | null | undefined, userId: number, businessUnitId: number) {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      const schemaVersion = Number(payload.schema_version || 1);
+      const draftTitle = title || this.getDraftTitle(payload);
+      const [result]: any = await connection.execute(
+        `INSERT INTO craft_order_drafts (business_unit_id, draft_code, title, payload_json, schema_version, status_code, created_by, updated_by)
+         VALUES (?, NULL, ?, ?, ?, 'active', ?, ?)`,
+        [businessUnitId, draftTitle, JSON.stringify(payload), schemaVersion, userId, userId],
+      );
+      const draftId = Number(result.insertId);
+      const draftCode = `DRF-${draftId.toString().padStart(6, '0')}`;
+      await connection.execute('UPDATE craft_order_drafts SET draft_code = ? WHERE id = ?', [draftCode, draftId]);
+      await this.writeDraftAudit(connection, userId, businessUnitId, 'draft.create', `Draft ${draftCode} dibuat.`);
+      await connection.commit();
+      return { id: draftId, draft_code: draftCode, title: draftTitle, payload, status_code: 'active' };
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
+  async updateDraft(draftId: number, payload: any, title: string | null | undefined, userId: number, businessUnitId: number) {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      const [drafts]: any = await connection.execute(
+        'SELECT draft_code, status_code FROM craft_order_drafts WHERE id = ? AND business_unit_id = ? AND deleted_at IS NULL FOR UPDATE',
+        [draftId, businessUnitId],
+      );
+      if (!drafts.length) throw new NotFoundError('Draf pesanan tidak ditemukan.');
+      if (drafts[0].status_code !== 'active') throw new AppError(409, 'DRAFT_NOT_EDITABLE', 'Draf pesanan ini sudah tidak dapat diubah.');
+      const draftTitle = title || this.getDraftTitle(payload);
+      await connection.execute(
+        `UPDATE craft_order_drafts SET title = ?, payload_json = ?, schema_version = ?, updated_by = ?
+         WHERE id = ?`,
+        [draftTitle, JSON.stringify(payload), Number(payload.schema_version || 1), userId, draftId],
+      );
+      await this.writeDraftAudit(connection, userId, businessUnitId, 'draft.update', `Draft ${drafts[0].draft_code} diperbarui.`);
+      await connection.commit();
+      return { id: draftId, draft_code: drafts[0].draft_code, title: draftTitle, payload, status_code: 'active' };
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
+  async discardDraft(draftId: number, userId: number, businessUnitId: number) {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      const [drafts]: any = await connection.execute(
+        'SELECT draft_code, status_code FROM craft_order_drafts WHERE id = ? AND business_unit_id = ? AND deleted_at IS NULL FOR UPDATE',
+        [draftId, businessUnitId],
+      );
+      if (!drafts.length) throw new NotFoundError('Draf pesanan tidak ditemukan.');
+      if (drafts[0].status_code !== 'active') throw new AppError(409, 'DRAFT_NOT_ACTIVE', 'Draf pesanan ini sudah tidak aktif.');
+      await connection.execute(
+        `UPDATE craft_order_drafts SET status_code = 'discarded', deleted_at = UTC_TIMESTAMP(), updated_by = ? WHERE id = ?`,
+        [userId, draftId],
+      );
+      await this.writeDraftAudit(connection, userId, businessUnitId, 'draft.discard', `Draft ${drafts[0].draft_code} dibuang.`);
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
   async createOrder(data: any, userId: number, businessUnitId: number) {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
     try {
+      let draftCode: string | null = null;
+      if (data.draft_id) {
+        const [drafts]: any = await connection.execute(
+          'SELECT draft_code, status_code FROM craft_order_drafts WHERE id = ? AND business_unit_id = ? AND deleted_at IS NULL FOR UPDATE',
+          [data.draft_id, businessUnitId],
+        );
+        if (!drafts.length) throw new NotFoundError('Draf pesanan tidak ditemukan.');
+        if (drafts[0].status_code !== 'active') throw new AppError(409, 'DRAFT_ALREADY_CONVERTED', 'Draf pesanan ini sudah dikonversi atau tidak aktif.');
+        draftCode = drafts[0].draft_code;
+      }
       await this.assertOrderReferenceData(connection, data, businessUnitId);
       const subtotal = data.items.reduce(
         (sum: number, item: any) => sum + (Number(item.quantity) * Number(item.unit_price)) - Number(item.discount_amount || 0),
@@ -125,6 +229,14 @@ export class CraftOrdersService {
         [orderId, userId],
       );
       await this.priorityService.calculatePriority(orderId, connection);
+      if (data.draft_id) {
+        await connection.execute(
+          `UPDATE craft_order_drafts SET status_code = 'converted', converted_order_id = ?, converted_at = UTC_TIMESTAMP(), updated_by = ?
+           WHERE id = ? AND status_code = 'active'`,
+          [orderId, userId, data.draft_id],
+        );
+        await this.writeDraftAudit(connection, userId, businessUnitId, 'draft.convert', `Draft ${draftCode || data.draft_id} dikonversi menjadi ${orderCode}.`);
+      }
       await connection.commit();
       return { id: orderId, order_code: orderCode };
     } catch (error) {

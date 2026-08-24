@@ -10,7 +10,7 @@ import { sendSuccess } from '../../shared/utils/response';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import {
   createOrderSchema, updateOrderStatusSchema, updateOrderPrioritySchema, updateOrderSchema,
-  createInvoiceSchema, recordPaymentSchema, enqueueOrderItemsSchema, quickCreateCustomerSchema,
+  createInvoiceSchema, recordPaymentSchema, enqueueOrderItemsSchema, quickCreateCustomerSchema, saveOrderDraftSchema,
 } from './craft-orders.schema';
 import { getCraftBusinessUnit } from './craft-orders.helpers';
 import { z } from 'zod';
@@ -20,6 +20,12 @@ export const ORDER_UPLOAD_ROOT = path.resolve(__dirname, '../../../uploads');
 const parseOrderId = (value: string): number => {
   const id = Number.parseInt(value, 10);
   if (!Number.isInteger(id) || id <= 0) throw new AppError(400, 'INVALID_ORDER_ID', 'ID pesanan tidak valid.');
+  return id;
+};
+
+const parseDraftId = (value: string): number => {
+  const id = Number.parseInt(value, 10);
+  if (!Number.isInteger(id) || id <= 0) throw new AppError(400, 'INVALID_DRAFT_ID', 'ID draf pesanan tidak valid.');
   return id;
 };
 
@@ -52,6 +58,63 @@ export class CraftOrdersController {
         sortOrder: req.query.sortOrder === 'asc' ? 'asc' : 'desc',
       }, craft.id);
       sendSuccess(res, result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getDrafts = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const craft = await getCraftBusinessUnit();
+      sendSuccess(res, await this.repository.getDrafts(craft.id));
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getDraft = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const craft = await getCraftBusinessUnit();
+      const draft = await this.repository.getDraftById(parseDraftId(req.params.draftId as string), craft.id);
+      if (!draft) throw new NotFoundError('Draf pesanan tidak ditemukan.');
+      if (draft.status_code !== 'active') throw new AppError(409, 'DRAFT_NOT_ACTIVE', 'Draf pesanan ini sudah tidak aktif.');
+      sendSuccess(res, draft);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  createDraft = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data = saveOrderDraftSchema.parse(req.body);
+      const craft = await getCraftBusinessUnit();
+      const result = await this.service.createDraft(data.payload, data.title, (req as any).user.id, craft.id);
+      sendSuccess(res, result, undefined, 201);
+    } catch (error) {
+      next(error instanceof z.ZodError
+        ? new AppError(400, 'VALIDATION_ERROR', 'Data draf pesanan tidak valid.', error.issues)
+        : error);
+    }
+  };
+
+  updateDraft = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data = saveOrderDraftSchema.parse(req.body);
+      const craft = await getCraftBusinessUnit();
+      const result = await this.service.updateDraft(parseDraftId(req.params.draftId as string), data.payload, data.title, (req as any).user.id, craft.id);
+      sendSuccess(res, result);
+    } catch (error) {
+      next(error instanceof z.ZodError
+        ? new AppError(400, 'VALIDATION_ERROR', 'Data draf pesanan tidak valid.', error.issues)
+        : error);
+    }
+  };
+
+  discardDraft = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const craft = await getCraftBusinessUnit();
+      await this.service.discardDraft(parseDraftId(req.params.draftId as string), (req as any).user.id, craft.id);
+      sendSuccess(res, { message: 'Draf pesanan dibuang.' });
     } catch (error) {
       next(error);
     }

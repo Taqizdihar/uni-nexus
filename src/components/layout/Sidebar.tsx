@@ -36,6 +36,7 @@ const craftNav: NavGroup[] = [
     { name: 'Pesanan', icon: ShoppingCart, path: '/app/craft/orders', subItems: [
       { name: 'Semua Pesanan', path: '/app/craft/orders' },
       { name: 'Pesanan Baru', path: '/app/craft/orders/new' },
+      { name: 'Draf Pesanan', path: '/app/craft/orders/drafts' },
       { name: 'Prioritas Produksi', path: '/app/craft/orders/priority' },
       { name: 'Antrean Produksi', path: '/app/craft/orders/queue' },
       { name: 'Pesanan Custom', path: '/app/craft/orders/custom' },

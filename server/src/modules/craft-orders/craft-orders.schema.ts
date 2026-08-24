@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const createOrderSchema = z.object({
+  draft_id: z.number().int().positive().nullable().optional(),
   customer_party_id: z.number().int().positive(),
   sales_channel_id: z.number().int().positive(),
   external_order_id: z.string().nullable().optional(),
@@ -26,10 +27,10 @@ export const createOrderSchema = z.object({
     variant_id: z.number().int().positive().nullable().optional(),
     item_name: z.string().min(1),
     item_description: z.string().nullable().optional(),
-    quantity: z.number().min(0.0001),
+    quantity: z.number().int().positive(),
     unit_price: z.number().min(0),
     discount_amount: z.number().min(0).default(0),
-    estimated_material_g: z.number().nullable().optional(),
+    estimated_material_g: z.number().nonnegative().nullable().optional(),
     estimated_print_minutes: z.number().int().positive().nullable().optional(),
     print_profile_id: z.number().int().positive().nullable().optional(),
     custom_spec_json: z.any().nullable().optional(),
@@ -81,4 +82,51 @@ export const quickCreateCustomerSchema = z.object({
   party_kind: z.enum(['individual', 'company', 'institution']).default('individual'),
   email: z.string().email().nullable().optional().or(z.literal('')),
   phone: z.string().nullable().optional()
+});
+
+const draftFormSchema = z.object({
+  customer_party_id: z.union([z.string(), z.number()]).optional(),
+  sales_channel_id: z.union([z.string(), z.number()]).optional(),
+  external_order_id: z.string().max(255).optional(),
+  order_type: z.enum(['standard', 'custom', 'partner', 'internal']).optional(),
+  deadline_at: z.string().optional(),
+  priority_mode: z.enum(['automatic', 'manual']).optional(),
+  priority_code: z.enum(['low', 'normal', 'high', 'critical']).optional(),
+  priority_reason: z.string().optional(),
+  discount_amount: z.union([z.number().nonnegative(), z.literal('')]).optional(),
+  shipping_amount: z.union([z.number().nonnegative(), z.literal('')]).optional(),
+  marketplace_fee_amount: z.union([z.number().nonnegative(), z.literal('')]).optional(),
+  tax_amount: z.union([z.number().nonnegative(), z.literal('')]).optional(),
+  customer_notes: z.string().optional(),
+  internal_notes: z.string().optional(),
+  shipping_recipient_name: z.string().optional(),
+  shipping_phone: z.string().optional(),
+  shipping_address: z.string().optional(),
+  courier_name: z.string().optional(),
+}).passthrough();
+
+const draftItemSchema = z.object({
+  mode: z.enum(['catalog', 'custom']).optional(),
+  product_id: z.union([z.string(), z.number()]).optional(),
+  variant_id: z.union([z.string(), z.number()]).optional(),
+  item_name: z.string().optional(),
+  item_description: z.string().optional(),
+  quantity: z.union([z.number(), z.string()]).optional(),
+  unit_price: z.union([z.number(), z.string()]).optional(),
+  discount_amount: z.union([z.number(), z.string()]).optional(),
+  estimated_material_g: z.union([z.number(), z.string()]).optional(),
+  estimated_print_minutes: z.union([z.number(), z.string()]).optional(),
+  material: z.string().optional(),
+  color: z.string().optional(),
+  size: z.string().optional(),
+  specification: z.string().optional(),
+}).passthrough();
+
+export const saveOrderDraftSchema = z.object({
+  title: z.string().max(180).nullable().optional(),
+  payload: z.object({
+    schema_version: z.number().int().positive().default(1),
+    form: draftFormSchema,
+    items: z.array(draftItemSchema).default([]),
+  }).passthrough(),
 });

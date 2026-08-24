@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Check, LucideIcon } from 'lucide-react';
+import { useBlocker } from 'react-router-dom';
 import { Badge } from '../../../../components/ui/Badge';
 import { Button } from '../../../../components/ui/Button';
 import { cn } from '../../../../lib/utils';
@@ -59,3 +60,35 @@ export function EmptyOrdersState({ title = 'Belum Ada Pesanan', description = 'P
 
 export function TableHeader({ children }: { children: React.ReactNode }) { return <thead className="orders-table-head">{children}</thead>; }
 export function TableRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void; key?: React.Key }) { return <tr className={cn('orders-table-row', onClick && 'cursor-pointer')} onClick={onClick}>{children}</tr>; }
+
+export function useUnsavedChangesGuard(when: boolean, onSaveDraft: () => Promise<void>) {
+  const allowNextNavigation = React.useRef(false);
+  const shouldBlock = React.useCallback(({ currentLocation, nextLocation }: { currentLocation: { pathname: string }; nextLocation: { pathname: string } }) => {
+    if (allowNextNavigation.current) { allowNextNavigation.current = false; return false; }
+    return when && currentLocation.pathname !== nextLocation.pathname;
+  }, [when]);
+  const blocker = useBlocker(shouldBlock);
+  const [saving, setSaving] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!when) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [when]);
+
+  const saveAndExit = async () => {
+    if (blocker.state !== 'blocked') return;
+    setSaving(true); setError(null);
+    try { await onSaveDraft(); blocker.proceed(); }
+    catch (saveError) { setError(saveError instanceof Error ? saveError.message : 'Gagal menyimpan draf pesanan.'); }
+    finally { setSaving(false); }
+  };
+
+  const dialog = blocker.state === 'blocked' ? <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[var(--nexus-charcoal)]/45 p-4 backdrop-blur-[2px]"><div className="w-full max-w-md overflow-hidden rounded-xl border border-[var(--nexus-border)] bg-white shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="unsaved-changes-title"><div className="p-6"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--nexus-yellow)]/20 text-[var(--nexus-yellow-deep)]">!</div><h2 id="unsaved-changes-title" className="mt-4 text-lg font-bold text-[var(--nexus-charcoal)]">Perubahan Belum Disimpan</h2><p className="mt-2 text-sm leading-6 text-[var(--nexus-muted)]">Data pesanan yang Anda isi belum disimpan. Anda dapat menyimpannya sebagai draf sebelum meninggalkan halaman.</p>{error && <p className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">{error}</p>}</div><div className="flex flex-col-reverse gap-2 border-t border-[var(--nexus-border)] bg-[var(--nexus-cream-soft)]/45 p-4 sm:flex-row sm:justify-end"><button type="button" className="h-10 rounded-lg px-3 text-xs font-semibold text-[var(--nexus-muted)] hover:bg-white hover:text-[var(--nexus-charcoal)]" onClick={() => blocker.reset()} disabled={saving}>Lanjut Mengedit</button><button type="button" className="h-10 rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-700 hover:bg-red-50" onClick={() => blocker.proceed()} disabled={saving}>Keluar Tanpa Menyimpan</button><button type="button" className="inline-flex h-10 items-center justify-center rounded-lg bg-[var(--nexus-yellow)] px-3 text-xs font-bold text-[var(--nexus-charcoal)] hover:bg-[var(--nexus-yellow-deep)] disabled:opacity-50" onClick={() => void saveAndExit()} disabled={saving}>{saving ? 'Menyimpan...' : 'Simpan Draf & Keluar'}</button></div></div></div> : null;
+  return { blocker, dialog, approveNavigation: () => { allowNextNavigation.current = true; } };
+}
