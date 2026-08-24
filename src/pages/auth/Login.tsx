@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
-import nexusLogo from '../../assets/branding/logos/uni-nexus/UNI-NEXUS Single Logo.png';
+
 import { AnimatedBrandText } from '../../components/common/AnimatedBrandText';
 
 export function Login() {
@@ -13,6 +13,28 @@ export function Login() {
   const [formData, setFormData] = useState({ usernameOrEmail: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        // If focus is already on an input or button, let native form submission handle it
+        if (
+          document.activeElement?.tagName === 'INPUT' || 
+          document.activeElement?.tagName === 'BUTTON'
+        ) {
+          return;
+        }
+        e.preventDefault();
+        const submitBtn = document.getElementById('login-submit-btn');
+        if (submitBtn) {
+          submitBtn.click();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,12 +60,7 @@ export function Login() {
       
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
         <Link to="/" className="flex flex-col items-center group mb-8">
-          <img 
-            src={nexusLogo} 
-            alt="UNI-NEXUS Logo" 
-            className="w-16 h-16 md:w-20 md:h-20 object-contain mb-3 drop-shadow-[0_0_25px_rgba(255,212,59,0.4)] transition-transform duration-300 group-hover:scale-105" 
-          />
-          <span className="text-2xl font-bold tracking-[0.2em] text-white glow-text">
+          <span className="text-5xl md:text-6xl font-bold tracking-[0.2em] text-white glow-text">
             <AnimatedBrandText text="UNI-NEXUS" />
           </span>
         </Link>
@@ -92,7 +109,7 @@ export function Login() {
               </label>
             </div>
             
-            <Button type="submit" className="w-full mt-4" size="lg" disabled={isLoading}>
+            <Button id="login-submit-btn" type="submit" className="w-full mt-4" size="lg" disabled={isLoading}>
               {isLoading ? 'Masuk...' : 'Masuk'}
             </Button>
           </form>

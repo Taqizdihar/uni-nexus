@@ -4,6 +4,8 @@ import { checkDatabaseConnection } from '../config/database';
 import authRoutes from '../modules/auth/auth.routes';
 import usersRoutes from '../modules/users/users.routes';
 import profileRoutes from '../modules/users/profile.routes';
+import { craftOrdersRoutes } from '../modules/craft-orders/craft-orders.routes';
+import { craftReferencesRoutes } from '../modules/craft-orders/craft-references.routes';
 
 const router = Router();
 
@@ -20,5 +22,8 @@ router.get('/health', async (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/profile', profileRoutes);
+
+router.use('/craft/orders', craftOrdersRoutes);
+router.use('/craft/references', craftReferencesRoutes);
 
 export default router;

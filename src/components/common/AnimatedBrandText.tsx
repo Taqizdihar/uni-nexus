@@ -77,7 +77,7 @@ export function AnimatedBrandText({
           key={index}
           className={cn(
             "inline-block",
-            fonts[index],
+            fonts[index] === '' ? "font-['Technique'] glow-text-bright-gold" : fonts[index],
             animatingIndices.has(index) ? "animate-wave-jump" : ""
           )}
           style={{ whiteSpace: 'pre' }}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 23, 2026 at 02:24 AM
+-- Generation Time: Aug 24, 2026 at 03:26 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -108,6 +108,35 @@ CREATE TABLE `audit_logs` (
   `user_agent` text,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `audit_logs`
+--
+
+INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`, `module_code`, `action_code`, `entity_type`, `entity_id`, `entity_code`, `description`, `old_values`, `new_values`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1, 1, NULL, 2, 'users', 'bootstrap_cto', NULL, NULL, NULL, 'CTO bootstrap registration', NULL, NULL, NULL, NULL, '2026-08-23 10:07:06.561'),
+(2, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 10:07:06.685'),
+(3, 1, NULL, 3, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:14:08.002'),
+(4, 1, NULL, 4, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:14:40.764'),
+(5, 1, NULL, 5, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:16:56.534'),
+(6, 1, NULL, 6, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:17:33.382'),
+(7, 1, NULL, 7, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:18:10.987'),
+(8, 1, NULL, 8, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:19:35.786'),
+(9, 1, NULL, 9, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:20:05.570'),
+(10, 1, NULL, 10, 'users', 'signup_request', NULL, NULL, NULL, 'User signup request', NULL, NULL, NULL, NULL, '2026-08-23 10:20:42.457'),
+(11, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 10:20:58.004'),
+(12, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 10:49:25.735'),
+(13, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:49:37.878'),
+(14, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:49:42.820'),
+(15, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:49:46.828'),
+(16, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:49:50.874'),
+(17, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:49:54.451'),
+(18, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:50:00.352'),
+(19, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:50:05.939'),
+(20, 1, NULL, 2, 'users', 'approval', NULL, NULL, NULL, 'Account approved', NULL, NULL, NULL, NULL, '2026-08-23 10:50:09.754'),
+(21, 1, NULL, 4, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 11:10:35.707'),
+(22, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-23 11:11:21.839'),
+(23, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 08:59:59.566');
 
 -- --------------------------------------------------------
 
@@ -2023,12 +2052,14 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `organization_id`, `code`, `name`, `description`, `scope_code`, `is_system`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 'CEO', 'CEO', 'Akses eksekutif penuh.', 'global', 1, 1, '2026-08-22 07:48:09.716', '2026-08-22 07:48:09.716'),
-(2, 1, 'CTO', 'CTO', 'Akses administrasi teknologi dan sistem.', 'global', 1, 1, '2026-08-22 07:48:09.720', '2026-08-22 07:48:09.720'),
-(3, 1, 'COO', 'COO', 'Akses pengelolaan operasional.', 'global', 1, 1, '2026-08-22 07:48:09.722', '2026-08-22 07:48:09.722'),
-(4, 1, 'FINANCE', 'Keuangan', 'Akses modul keuangan dan pelaporan.', 'global', 1, 1, '2026-08-22 07:48:09.725', '2026-08-22 07:48:09.725'),
-(5, 1, 'CRAFT_OPERATOR', 'Operator Craft', 'Akses operasional Craft.', 'craft', 1, 1, '2026-08-22 07:48:09.727', '2026-08-22 07:48:09.727'),
-(6, 1, 'STUDIO_STAFF', 'Staf Studio', 'Akses operasional Studio.', 'studio', 1, 1, '2026-08-22 07:48:09.730', '2026-08-22 07:48:09.730');
+(1, 1, 'CEO', 'Chief Executive Officer', 'Peran eksekutif Chief Executive Officer UNI-NEXUS.', 'global', 1, 1, '2026-08-22 07:48:09.716', '2026-08-23 09:54:06.643'),
+(2, 1, 'CTO', 'Chief Technology Officer', 'Administrator utama dan Chief Technology Officer UNI-NEXUS.', 'global', 1, 1, '2026-08-22 07:48:09.720', '2026-08-23 09:54:06.682'),
+(3, 1, 'COO', 'Chief Operating Officer', 'Peran eksekutif Chief Operating Officer UNI-NEXUS.', 'global', 1, 1, '2026-08-22 07:48:09.722', '2026-08-23 09:54:06.663'),
+(4, 1, 'FINANCE', 'Keuangan', 'Akses modul keuangan dan pelaporan.', 'global', 1, 0, '2026-08-22 07:48:09.725', '2026-08-23 09:54:06.803'),
+(5, 1, 'CRAFT_OPERATOR', 'Operator Craft', 'Akses operasional Craft.', 'craft', 1, 0, '2026-08-22 07:48:09.727', '2026-08-23 09:54:06.803'),
+(6, 1, 'STUDIO_STAFF', 'Staf Studio', 'Akses operasional Studio.', 'studio', 1, 0, '2026-08-22 07:48:09.730', '2026-08-23 09:54:06.803'),
+(7, 1, 'OPERATOR', 'Operator', 'Operator internal Uni-Inside.', 'global', 1, 1, '2026-08-23 09:54:06.704', '2026-08-23 09:54:06.704'),
+(8, 1, 'ENGINEER_3D', 'Insinyur 3D', 'Insinyur 3D internal Uni-Inside.', 'global', 1, 1, '2026-08-23 09:54:06.731', '2026-08-23 09:54:06.731');
 
 -- --------------------------------------------------------
 
@@ -2096,7 +2127,80 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 22, '2026-08-22 07:48:09.737'),
 (2, 23, '2026-08-22 07:48:09.737'),
 (2, 24, '2026-08-22 07:48:09.737'),
-(2, 25, '2026-08-22 07:48:09.737');
+(2, 25, '2026-08-22 07:48:09.737'),
+(3, 1, '2026-08-23 09:54:06.853'),
+(3, 2, '2026-08-23 09:54:06.853'),
+(3, 3, '2026-08-23 09:54:06.853'),
+(3, 4, '2026-08-23 09:54:06.853'),
+(3, 5, '2026-08-23 09:54:06.853'),
+(3, 6, '2026-08-23 09:54:06.853'),
+(3, 7, '2026-08-23 09:54:06.853'),
+(3, 8, '2026-08-23 09:54:06.853'),
+(3, 9, '2026-08-23 09:54:06.853'),
+(3, 10, '2026-08-23 09:54:06.853'),
+(3, 11, '2026-08-23 09:54:06.853'),
+(3, 12, '2026-08-23 09:54:06.853'),
+(3, 13, '2026-08-23 09:54:06.853'),
+(3, 14, '2026-08-23 09:54:06.853'),
+(3, 15, '2026-08-23 09:54:06.853'),
+(3, 16, '2026-08-23 09:54:06.853'),
+(3, 17, '2026-08-23 09:54:06.853'),
+(3, 18, '2026-08-23 09:54:06.853'),
+(3, 19, '2026-08-23 09:54:06.853'),
+(3, 20, '2026-08-23 09:54:06.853'),
+(3, 21, '2026-08-23 09:54:06.853'),
+(3, 22, '2026-08-23 09:54:06.903'),
+(3, 23, '2026-08-23 09:54:06.853'),
+(3, 24, '2026-08-23 09:54:06.853'),
+(3, 25, '2026-08-23 09:54:06.853'),
+(7, 1, '2026-08-23 09:54:06.853'),
+(7, 2, '2026-08-23 09:54:06.853'),
+(7, 3, '2026-08-23 09:54:06.853'),
+(7, 4, '2026-08-23 09:54:06.853'),
+(7, 5, '2026-08-23 09:54:06.853'),
+(7, 6, '2026-08-23 09:54:06.853'),
+(7, 7, '2026-08-23 09:54:06.853'),
+(7, 8, '2026-08-23 09:54:06.853'),
+(7, 9, '2026-08-23 09:54:06.853'),
+(7, 10, '2026-08-23 09:54:06.853'),
+(7, 11, '2026-08-23 09:54:06.853'),
+(7, 12, '2026-08-23 09:54:06.853'),
+(7, 13, '2026-08-23 09:54:06.853'),
+(7, 14, '2026-08-23 09:54:06.853'),
+(7, 15, '2026-08-23 09:54:06.853'),
+(7, 16, '2026-08-23 09:54:06.853'),
+(7, 17, '2026-08-23 09:54:06.853'),
+(7, 18, '2026-08-23 09:54:06.853'),
+(7, 19, '2026-08-23 09:54:06.853'),
+(7, 20, '2026-08-23 09:54:06.853'),
+(7, 21, '2026-08-23 09:54:06.853'),
+(7, 23, '2026-08-23 09:54:06.853'),
+(7, 24, '2026-08-23 09:54:06.853'),
+(7, 25, '2026-08-23 09:54:06.853'),
+(8, 1, '2026-08-23 09:54:06.853'),
+(8, 2, '2026-08-23 09:54:06.853'),
+(8, 3, '2026-08-23 09:54:06.853'),
+(8, 4, '2026-08-23 09:54:06.853'),
+(8, 5, '2026-08-23 09:54:06.853'),
+(8, 6, '2026-08-23 09:54:06.853'),
+(8, 7, '2026-08-23 09:54:06.853'),
+(8, 8, '2026-08-23 09:54:06.853'),
+(8, 9, '2026-08-23 09:54:06.853'),
+(8, 10, '2026-08-23 09:54:06.853'),
+(8, 11, '2026-08-23 09:54:06.853'),
+(8, 12, '2026-08-23 09:54:06.853'),
+(8, 13, '2026-08-23 09:54:06.853'),
+(8, 14, '2026-08-23 09:54:06.853'),
+(8, 15, '2026-08-23 09:54:06.853'),
+(8, 16, '2026-08-23 09:54:06.853'),
+(8, 17, '2026-08-23 09:54:06.853'),
+(8, 18, '2026-08-23 09:54:06.853'),
+(8, 19, '2026-08-23 09:54:06.853'),
+(8, 20, '2026-08-23 09:54:06.853'),
+(8, 21, '2026-08-23 09:54:06.853'),
+(8, 23, '2026-08-23 09:54:06.853'),
+(8, 24, '2026-08-23 09:54:06.853'),
+(8, 25, '2026-08-23 09:54:06.853');
 
 -- --------------------------------------------------------
 
@@ -2493,7 +2597,7 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) NOT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `avatar_path` varchar(500) DEFAULT NULL,
-  `status_code` varchar(30) NOT NULL DEFAULT 'active' COMMENT 'active|inactive|suspended',
+  `status_code` varchar(30) NOT NULL DEFAULT 'inactive' COMMENT 'active|inactive|suspended',
   `approval_status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|approved|rejected',
   `registration_source` varchar(30) NOT NULL DEFAULT 'self_signup' COMMENT 'self_signup|admin_created|bootstrap|legacy',
   `approval_requested_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -2517,7 +2621,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'active', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-22 20:15:25.038', NULL);
+(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-24 08:59:59.555', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-24 08:59:59.555', NULL),
+(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
+(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
+(5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
+(6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL),
+(7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL),
+(8, 1, NULL, 'Siti Amany Fakhirah Riby', 'sitiamanyfakhirahriby', 'amanyfrss@gmail.com', '$2b$10$DInVMuTao6S.gXLHN1LDOesJsPICEsMBqaHg05T8in7xUYXOsW35O', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:19:35.785', 2, '2026-08-23 10:49:46.824', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:19:35.785', '2026-08-23 10:49:46.824', NULL),
+(9, 1, NULL, 'Ahmad Ropaldo', 'ahmadropaldo', 'ahmadropaldo@gmail.com', '$2b$10$JBBoBb3h1j5idkGu0u.lSunIXGwWoLAmiPD7GzA18yEK5BAopsWOG', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:20:05.570', 2, '2026-08-23 10:49:42.815', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:20:05.570', '2026-08-23 10:49:42.815', NULL),
+(10, 1, NULL, 'Nadine Nathania Pelleng', 'nadinenathaniapelleng', 'nathaniapelleng15@gmail.com', '$2b$10$3PbnHpPuPG2Y.kt/TLzMLuH7ZbjA3VPM5lg4obU/yIqnxIVkO1CuC', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:20:42.456', 2, '2026-08-23 10:49:37.870', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:20:42.456', '2026-08-23 10:49:37.870', NULL);
 
 -- --------------------------------------------------------
 
@@ -2531,6 +2644,39 @@ CREATE TABLE `user_business_units` (
   `can_access` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_business_units`
+--
+
+INSERT INTO `user_business_units` (`user_id`, `business_unit_id`, `can_access`, `created_at`) VALUES
+(2, 1, 1, '2026-08-23 10:07:06.555'),
+(2, 2, 1, '2026-08-23 10:07:06.557'),
+(2, 3, 1, '2026-08-23 10:07:06.558'),
+(3, 1, 1, '2026-08-23 10:50:09.752'),
+(3, 2, 1, '2026-08-23 10:50:09.753'),
+(3, 3, 1, '2026-08-23 10:50:09.753'),
+(4, 1, 1, '2026-08-23 10:50:05.937'),
+(4, 2, 1, '2026-08-23 10:50:05.938'),
+(4, 3, 1, '2026-08-23 10:50:05.938'),
+(5, 1, 1, '2026-08-23 10:50:00.351'),
+(5, 2, 1, '2026-08-23 10:50:00.351'),
+(5, 3, 1, '2026-08-23 10:50:00.351'),
+(6, 1, 1, '2026-08-23 10:49:54.449'),
+(6, 2, 1, '2026-08-23 10:49:54.450'),
+(6, 3, 1, '2026-08-23 10:49:54.450'),
+(7, 1, 1, '2026-08-23 10:49:50.873'),
+(7, 2, 1, '2026-08-23 10:49:50.873'),
+(7, 3, 1, '2026-08-23 10:49:50.874'),
+(8, 1, 1, '2026-08-23 10:49:46.826'),
+(8, 2, 1, '2026-08-23 10:49:46.827'),
+(8, 3, 1, '2026-08-23 10:49:46.827'),
+(9, 1, 1, '2026-08-23 10:49:42.819'),
+(9, 2, 1, '2026-08-23 10:49:42.819'),
+(9, 3, 1, '2026-08-23 10:49:42.820'),
+(10, 1, 1, '2026-08-23 10:49:37.875'),
+(10, 2, 1, '2026-08-23 10:49:37.876'),
+(10, 3, 1, '2026-08-23 10:49:37.876');
 
 -- --------------------------------------------------------
 
@@ -2546,6 +2692,21 @@ CREATE TABLE `user_roles` (
   `assigned_by` bigint UNSIGNED DEFAULT NULL,
   `assigned_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_roles`
+--
+
+INSERT INTO `user_roles` (`id`, `user_id`, `role_id`, `business_unit_id`, `assigned_by`, `assigned_at`) VALUES
+(1, 2, 2, NULL, NULL, '2026-08-23 10:07:06.548'),
+(2, 10, 7, NULL, NULL, '2026-08-23 10:49:37.868'),
+(3, 9, 8, NULL, NULL, '2026-08-23 10:49:42.814'),
+(4, 8, 7, NULL, NULL, '2026-08-23 10:49:46.823'),
+(5, 7, 7, NULL, NULL, '2026-08-23 10:49:50.870'),
+(6, 6, 7, NULL, NULL, '2026-08-23 10:49:54.446'),
+(7, 5, 7, NULL, NULL, '2026-08-23 10:50:00.349'),
+(8, 4, 3, NULL, NULL, '2026-08-23 10:50:05.934'),
+(9, 3, 1, NULL, NULL, '2026-08-23 10:50:09.749');
 
 -- --------------------------------------------------------
 
@@ -3716,7 +3877,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4208,7 +4369,7 @@ ALTER TABLE `report_exports`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `sales_channels`
@@ -4304,13 +4465,13 @@ ALTER TABLE `units_of_measure`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`

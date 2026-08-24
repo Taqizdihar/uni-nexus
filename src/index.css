@@ -18,6 +18,16 @@
   src: url('./assets/fonts/Cube/Cube.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Technique';
+  src: url('./assets/fonts/Technique/techniqu.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Techniqo';
+  src: url('./assets/fonts/Technique/techniqo.ttf') format('truetype');
+}
+
 :root {
   --nexus-yellow: #FFD43B;
   --nexus-yellow-deep: #E5B800;
@@ -67,6 +77,14 @@ body {
 @layer utilities {
   .glow-text {
     text-shadow: 0 0 20px rgba(255, 212, 59, 0.4), 0 0 40px rgba(255, 212, 59, 0.1);
+  }
+  
+  .glow-text-bright-gold {
+    text-shadow: 
+      0 0 10px rgba(255, 212, 59, 0.9),
+      0 0 20px rgba(255, 212, 59, 0.7),
+      0 0 40px rgba(255, 212, 59, 0.5),
+      0 0 80px rgba(255, 212, 59, 0.3);
   }
   
   .card-shadow {

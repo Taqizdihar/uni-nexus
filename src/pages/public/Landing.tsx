@@ -51,7 +51,7 @@ export function Landing() {
             Nexus Creationis et Productionis
           </p>
           
-          <h1 className="text-6xl md:text-8xl font-black tracking-tight text-white glow-text">
+          <h1 className="text-6xl md:text-8xl font-['Technique'] tracking-tight text-white glow-text">
             <AnimatedBrandText text="UNI-NEXUS" />
           </h1>
           
