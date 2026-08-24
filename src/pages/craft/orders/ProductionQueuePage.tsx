@@ -1,35 +1,14 @@
-import React from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
+import React, { useEffect, useState } from 'react';
+import { Layers } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Printer } from 'lucide-react';
+import { Badge } from '../../../components/ui/Badge';
+import { Card } from '../../../components/ui/Card';
+import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import type { ProductionQueueItem } from '../../../types/craft-orders';
 
+const labels: Record<string, string> = { low: 'Rendah', normal: 'Normal', high: 'Tinggi', critical: 'Kritis', queued: 'Antrean', printing: 'Mencetak' };
 export function ProductionQueuePage() {
-  const navigate = useNavigate();
-
-  return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/app/craft/orders')} className="p-2">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Antrean Produksi</h1>
-            <p className="text-sm text-[var(--nexus-muted)] mt-1">Kelola urutan pencetakan per item.</p>
-          </div>
-        </div>
-      </div>
-
-      <Card className="p-12 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
-          <Printer className="w-8 h-8" />
-        </div>
-        <h2 className="text-xl font-medium mb-2">Antrean Produksi</h2>
-        <p className="text-gray-500 max-w-md">
-          Modul antrean produksi per printer sedang dalam pengembangan. Saat ini Anda dapat melihat prioritas pesanan melalui halaman <Button variant="link" className="p-0 inline" onClick={() => navigate('/app/craft/orders/priority')}>Prioritas Produksi</Button>.
-        </p>
-      </Card>
-    </div>
-  );
+  const navigate = useNavigate(); const [queue, setQueue] = useState<ProductionQueueItem[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState<string | null>(null);
+  useEffect(() => { void (async () => { try { setQueue(await craftOrdersApi.getProductionQueue()); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat antrean produksi.'); } finally { setLoading(false); } })(); }, []);
+  return <div className="space-y-6 max-w-6xl mx-auto"><div><h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Antrean Produksi</h1><p className="text-sm text-[var(--nexus-muted)]">Rencana antrean item Craft dari database.</p></div><Card>{loading ? <div className="h-48 flex items-center justify-center text-gray-500">Memuat antrean...</div> : error ? <div className="p-6 text-red-600">{error}</div> : queue.length === 0 ? <div className="h-48 flex flex-col items-center justify-center text-center"><Layers className="w-10 h-10 text-gray-400 mb-2" /><h3 className="font-medium">Antrean Produksi Masih Kosong</h3></div> : <div className="overflow-x-auto"><table className="w-full text-left text-sm whitespace-nowrap"><thead className="bg-gray-50"><tr>{['Posisi','ID Pesanan','Pelanggan','Item','Jumlah','Prioritas','Skor','Tenggat','Est. Cetak','Status'].map(label => <th key={label} className="p-3 font-semibold text-gray-600">{label}</th>)}</tr></thead><tbody>{queue.map(item => <tr key={item.id} className="border-t cursor-pointer hover:bg-gray-50" onClick={() => navigate(`/app/craft/orders/${item.order_id}`)}><td className="p-3 font-bold">#{item.queue_position}</td><td className="p-3">{item.order_code}</td><td className="p-3">{item.customer_name}</td><td className="p-3">{item.item_name}</td><td className="p-3">{Number(item.quantity)}</td><td className="p-3"><Badge variant={item.priority_code === 'critical' ? 'error' : item.priority_code === 'high' ? 'warning' : 'default'}>{labels[item.priority_code]}</Badge></td><td className="p-3">{Number(item.priority_score).toFixed(1)}</td><td className="p-3">{item.deadline_at ? new Date(item.deadline_at).toLocaleDateString('id-ID') : '-'}</td><td className="p-3">{item.estimated_print_minutes ? `${item.estimated_print_minutes} mnt` : '-'}</td><td className="p-3"><Badge variant={item.status_code === 'printing' ? 'warning' : 'info'}>{labels[item.status_code] || item.status_code}</Badge></td></tr>)}</tbody></table></div>}</Card></div>;
 }

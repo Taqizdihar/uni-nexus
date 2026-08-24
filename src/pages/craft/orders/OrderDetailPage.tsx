@@ -1,338 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ArrowLeft, Download, FileText, Pencil, Printer, Upload } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Badge } from '../../../components/ui/Badge';
-import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import { Button } from '../../../components/ui/Button';
+import { Card, CardContent } from '../../../components/ui/Card';
+import { ConfirmDialog } from '../../../components/ui/ConfirmDialog';
 import { formatCurrency } from '../../../lib/utils';
-import { ArrowLeft, Printer, FileText, Download, CheckCircle, Package, Truck, XCircle, CreditCard, Clock } from 'lucide-react';
+import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import type { AttachmentSummary, OrderDetailResponse, OrderStatus } from '../../../types/craft-orders';
 import { PaymentModal } from './components/PaymentModal';
 
+const statusLabels: Record<OrderStatus, string> = { new: 'Baru', confirmed: 'Dikonfirmasi', waiting: 'Menunggu', ready: 'Siap Produksi', in_production: 'Diproduksi', qc: 'QC', completed: 'Selesai', packed: 'Dikemas', shipped: 'Dikirim', cancelled: 'Dibatalkan', returned: 'Dikembalikan' };
+const transitions: Partial<Record<OrderStatus, OrderStatus[]>> = { new: ['confirmed', 'cancelled'], confirmed: ['waiting', 'ready', 'cancelled'], waiting: ['ready', 'cancelled'], ready: ['in_production', 'cancelled'], in_production: ['qc'], qc: ['completed'], completed: ['packed', 'returned'], packed: ['shipped', 'returned'], shipped: ['returned'] };
+
 export function OrderDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('summary');
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        if (!id) return;
-        const result = await craftOrdersApi.getOrder(parseInt(id));
-        setData(result);
-      } catch (error) {
-        console.error(error);
-        alert('Gagal memuat pesanan');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrder();
-  }, [id]);
-
+  const id = Number(useParams<{ id: string }>().id); const navigate = useNavigate();
+  const [data, setData] = useState<OrderDetailResponse | null>(null); const [loading, setLoading] = useState(true); const [error, setError] = useState<string | null>(null); const [notice, setNotice] = useState<string | null>(null); const [tab, setTab] = useState<'summary' | 'payments' | 'history' | 'attachments'>('summary'); const [paymentOpen, setPaymentOpen] = useState(false); const [pendingStatus, setPendingStatus] = useState<OrderStatus | null>(null); const [pendingDelete, setPendingDelete] = useState<AttachmentSummary | null>(null); const [working, setWorking] = useState(false);
+  const reload = useCallback(async () => { if (!Number.isInteger(id) || id <= 0) { setError('ID pesanan tidak valid.'); setLoading(false); return; } setLoading(true); try { setData(await craftOrdersApi.getOrder(id)); setError(null); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat detail pesanan.'); } finally { setLoading(false); } }, [id]);
+  useEffect(() => { void reload(); }, [reload]);
+  const doStatus = async () => { if (!pendingStatus) return; setWorking(true); try { await craftOrdersApi.updateStatus(id, pendingStatus); setNotice(`Status diubah menjadi ${statusLabels[pendingStatus]}.`); setPendingStatus(null); await reload(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memperbarui status.'); } finally { setWorking(false); } };
+  const createInvoice = async () => { setWorking(true); try { await craftOrdersApi.createInvoice(id, {}); setNotice('Invoice berhasil dibuat.'); await reload(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal membuat invoice.'); } finally { setWorking(false); } };
+  const enqueue = async () => { if (!data) return; setWorking(true); try { await craftOrdersApi.enqueueItems(id, data.items.map(item => item.id)); setNotice('Item pesanan ditambahkan ke antrean produksi.'); await reload(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal menambahkan antrean.'); } finally { setWorking(false); } };
+  const upload = async (event: ChangeEvent<HTMLInputElement>) => { const file = event.target.files?.[0]; if (!file) return; const body = new FormData(); body.set('file', file); setWorking(true); try { await craftOrdersApi.uploadAttachment(id, body); setNotice('Lampiran berhasil diunggah.'); await reload(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal mengunggah lampiran.'); } finally { setWorking(false); event.target.value = ''; } };
+  const deleteAttachment = async () => { if (!pendingDelete) return; setWorking(true); try { await craftOrdersApi.deleteAttachment(id, pendingDelete.id); setNotice('Lampiran berhasil dihapus.'); setPendingDelete(null); await reload(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal menghapus lampiran.'); } finally { setWorking(false); } };
   if (loading) return <div className="p-8 text-center text-gray-500">Memuat detail pesanan...</div>;
-  if (!data || !data.order) return <div className="p-8 text-center text-red-500">Pesanan tidak ditemukan</div>;
-
+  if (!data) return <div className="p-8 text-center text-red-600">{error || 'Pesanan tidak ditemukan.'}</div>;
   const { order, items, history, invoices, payments, attachments } = data;
-
-  const handleUpdateStatus = async (status: string) => {
-    try {
-      await craftOrdersApi.updateStatus(order.id, status);
-      window.location.reload();
-    } catch (error) {
-      alert('Gagal memperbarui status');
-    }
-  };
-
-  const handleEnqueue = async () => {
-    try {
-      const itemIds = items.map((i: any) => i.id);
-      await craftOrdersApi.enqueueItems(order.id, itemIds);
-      alert('Berhasil ditambahkan ke antrean produksi');
-    } catch (error) {
-      alert('Gagal menambahkan ke antrean');
-    }
-  };
-
-  const handleCreateInvoice = async () => {
-    try {
-      await craftOrdersApi.createInvoice(order.id, {});
-      window.location.reload();
-    } catch (error: any) {
-      alert(error.message || 'Gagal membuat invoice');
-    }
-  };
-
-  const tabs = [
-    { id: 'summary', label: 'Ringkasan' },
-    { id: 'items', label: 'Item Pesanan' },
-    { id: 'production', label: 'Produksi' },
-    { id: 'finance', label: 'Pembayaran & Dokumen' },
-    { id: 'history', label: 'Riwayat' },
-  ];
-
-  return (
-    <div className="space-y-6 max-w-6xl mx-auto pb-12">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/app/craft/orders')} className="p-2">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">{order.order_code}</h1>
-              <Badge variant={order.status_code === 'completed' ? 'success' : order.status_code === 'cancelled' ? 'error' : 'info'}>
-                {order.status_code.toUpperCase()}
-              </Badge>
-            </div>
-            <p className="text-sm text-[var(--nexus-muted)] mt-1">{order.customer_name} • {order.sales_channel_name}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {order.status_code === 'new' && (
-            <Button variant="outline" onClick={() => handleUpdateStatus('confirmed')}>Konfirmasi Pesanan</Button>
-          )}
-          {['confirmed', 'waiting', 'ready'].includes(order.status_code) && (
-            <Button className="gap-2" onClick={handleEnqueue}>
-              <Printer className="w-4 h-4" /> Masukkan Antrean
-            </Button>
-          )}
-        </div>
-      </div>
-
-      <div className="flex gap-4 border-b">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`pb-2 px-1 border-b-2 text-sm font-medium transition-colors ${
-              activeTab === tab.id 
-                ? 'border-[var(--nexus-yellow)] text-[var(--nexus-charcoal)]' 
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-6">
-        {activeTab === 'summary' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                <h3 className="font-semibold border-b pb-2">Informasi Umum</h3>
-                <div className="grid grid-cols-2 gap-y-3 text-sm">
-                  <div className="text-gray-500">Tanggal Pesanan</div>
-                  <div>{new Date(order.order_date).toLocaleString()}</div>
-                  <div className="text-gray-500">Tenggat Waktu</div>
-                  <div>{order.deadline_at ? new Date(order.deadline_at).toLocaleString() : '-'}</div>
-                  <div className="text-gray-500">Tipe Pesanan</div>
-                  <div className="capitalize">{order.order_type}</div>
-                  <div className="text-gray-500">Prioritas</div>
-                  <div>
-                    <Badge variant={order.priority_code === 'critical' ? 'error' : 'default'}>{order.priority_code}</Badge>
-                    {order.is_priority_manual === 1 && <span className="ml-2 text-xs text-gray-500">(Manual)</span>}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                <h3 className="font-semibold border-b pb-2">Pengiriman</h3>
-                <div className="grid grid-cols-2 gap-y-3 text-sm">
-                  <div className="text-gray-500">Penerima</div>
-                  <div>{order.shipping_recipient_name || order.customer_name}</div>
-                  <div className="text-gray-500">Telepon</div>
-                  <div>{order.shipping_phone || order.phone || '-'}</div>
-                  <div className="text-gray-500">Alamat</div>
-                  <div className="whitespace-pre-wrap">{order.shipping_address || '-'}</div>
-                  <div className="text-gray-500">Kurir</div>
-                  <div>{order.courier_name || '-'}</div>
-                  <div className="text-gray-500">Resi</div>
-                  <div>{order.tracking_number || '-'}</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {activeTab === 'items' && (
-          <Card>
-            <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Item</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Qty</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Harga Satuan</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600 text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {items.map((item: any) => (
-                  <tr key={item.id}>
-                    <td className="px-6 py-4">
-                      <div className="font-medium">{item.item_name}</div>
-                      {item.item_description && <div className="text-xs text-gray-500">{item.item_description}</div>}
-                    </td>
-                    <td className="px-6 py-4">{item.quantity}</td>
-                    <td className="px-6 py-4">{formatCurrency(item.unit_price)}</td>
-                    <td className="px-6 py-4 text-right font-medium">{formatCurrency(item.line_total)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="p-4 bg-gray-50 border-t flex justify-end">
-              <div className="w-64 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal</span>
-                  <span>{formatCurrency(order.subtotal)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Ongkir</span>
-                  <span>{formatCurrency(order.shipping_amount)}</span>
-                </div>
-                <div className="flex justify-between font-bold pt-2 border-t">
-                  <span>Total</span>
-                  <span>{formatCurrency(order.total_amount)}</span>
-                </div>
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {activeTab === 'finance' && (
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-semibold">Invoice</h3>
-                  {invoices.length === 0 && (
-                    <Button size="sm" onClick={handleCreateInvoice}>Buat Invoice</Button>
-                  )}
-                </div>
-                {invoices.length > 0 ? (
-                  <div className="border rounded-md divide-y">
-                    {invoices.map((inv: any) => (
-                      <div key={inv.id} className="p-4 flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{inv.invoice_number}</div>
-                          <div className="text-sm text-gray-500">
-                            Terbit: {new Date(inv.issue_date).toLocaleDateString()} • 
-                            Status: <Badge variant="info">{inv.status_code}</Badge>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="text-right mr-4">
-                            <div className="font-medium">{formatCurrency(inv.total_amount)}</div>
-                            <div className="text-sm text-gray-500">Sisa: {formatCurrency(inv.balance_due)}</div>
-                          </div>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="gap-2"
-                            onClick={() => window.open(craftOrdersApi.downloadInvoicePdfUrl(order.id), '_blank')}
-                          >
-                            <Download className="w-4 h-4" /> PDF
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm text-gray-500 p-4 border rounded-md text-center bg-gray-50">Belum ada invoice untuk pesanan ini.</div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-semibold">Pembayaran</h3>
-                  {invoices.length > 0 && invoices[0].status_code !== 'paid' && (
-                     <Button size="sm" variant="outline" className="gap-2" onClick={() => setIsPaymentModalOpen(true)}>
-                       <CreditCard className="w-4 h-4" /> Catat Pembayaran
-                     </Button>
-                  )}
-                </div>
-                {payments.length > 0 ? (
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-gray-50 border-b">
-                      <tr>
-                        <th className="py-2 px-4">Tanggal</th>
-                        <th className="py-2 px-4">Kode</th>
-                        <th className="py-2 px-4">Metode</th>
-                        <th className="py-2 px-4 text-right">Jumlah</th>
-                        <th className="py-2 px-4 text-center">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {payments.map((p: any) => (
-                        <tr key={p.id}>
-                          <td className="py-3 px-4">{new Date(p.payment_date).toLocaleDateString()}</td>
-                          <td className="py-3 px-4">{p.payment_code}</td>
-                          <td className="py-3 px-4">{p.method_name}</td>
-                          <td className="py-3 px-4 text-right font-medium">{formatCurrency(p.amount)}</td>
-                          <td className="py-3 px-4 text-center">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className="text-blue-600 hover:text-blue-800"
-                              onClick={() => window.open(craftOrdersApi.downloadReceiptPdfUrl(order.id, p.id), '_blank')}
-                            >
-                              Kwitansi
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className="text-sm text-gray-500 p-4 border rounded-md text-center bg-gray-50">Belum ada pembayaran.</div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        )}
-        
-        {activeTab === 'history' && (
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {history.map((h: any, idx: number) => (
-                  <div key={h.id} className="flex gap-4 items-start relative">
-                    {idx !== history.length - 1 && (
-                      <div className="absolute left-[11px] top-6 bottom-[-16px] w-[2px] bg-gray-200"></div>
-                    )}
-                    <div className="w-6 h-6 rounded-full bg-[var(--nexus-yellow)] flex items-center justify-center shrink-0 z-10 border-2 border-white">
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">
-                        Status berubah menjadi <span className="uppercase text-[var(--nexus-charcoal)]">{h.to_status_code}</span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {new Date(h.changed_at).toLocaleString()} • oleh {h.changed_by_name || 'System'}
-                      </div>
-                      {h.reason && <div className="text-sm mt-1 text-gray-600">Catatan: {h.reason}</div>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      <PaymentModal 
-        orderId={order?.id} 
-        isOpen={isPaymentModalOpen} 
-        onClose={() => setIsPaymentModalOpen(false)}
-        onSuccess={() => window.location.reload()}
-      />
-    </div>
-  );
+  return <div className="space-y-6 max-w-6xl mx-auto pb-12"><div className="flex flex-col md:flex-row md:justify-between gap-3"><div className="flex items-center gap-3"><Button variant="ghost" onClick={() => navigate('/app/craft/orders')}><ArrowLeft className="w-5 h-5" /></Button><div><h1 className="text-2xl font-bold">{order.order_code}</h1><p className="text-sm text-gray-500">{order.customer_name} · {order.sales_channel_name}</p></div><Badge>{statusLabels[order.status_code]}</Badge></div><div className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => navigate(`/app/craft/orders/${id}/edit`)}><Pencil className="w-4 h-4" /> Edit</Button>{order.status_code === 'ready' && <Button variant="outline" disabled={working} onClick={enqueue}><Printer className="w-4 h-4" /> Masuk Antrean</Button>}{invoices.length === 0 ? <Button variant="outline" disabled={working} onClick={createInvoice}><FileText className="w-4 h-4" /> Buat Invoice</Button> : <Button variant="outline" onClick={() => void craftOrdersApi.downloadInvoicePdf(id).catch(requestError => setError(requestError instanceof Error ? requestError.message : 'Gagal mengunduh invoice.'))}><Download className="w-4 h-4" /> Invoice PDF</Button>}</div></div>
+    {error && <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}{notice && <div className="rounded border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">{notice}</div>}
+    <Card><CardContent className="flex flex-wrap gap-2">{(['summary','payments','history','attachments'] as const).map(value => <Button key={value} size="sm" variant={tab === value ? 'primary' : 'outline'} onClick={() => setTab(value)}>{{ summary: 'Ringkasan', payments: 'Invoice & Pembayaran', history: 'Riwayat', attachments: 'Lampiran' }[value]}</Button>)}</CardContent></Card>
+    {tab === 'summary' && <div className="space-y-4"><Card><CardContent className="grid md:grid-cols-3 gap-4 text-sm"><div><p className="text-gray-500">Pelanggan</p><p className="font-medium">{order.customer_name}</p><p>{order.phone || '-'}</p></div><div><p className="text-gray-500">Prioritas</p><p><Badge>{order.priority_code}</Badge> {order.is_priority_manual ? 'Manual' : 'Otomatis'}</p><p>{order.priority_reason || '-'}</p></div><div><p className="text-gray-500">Tenggat</p><p className="font-medium">{order.deadline_at ? new Date(order.deadline_at).toLocaleString('id-ID') : 'Tidak ada'}</p></div></CardContent></Card><Card><CardContent><h2 className="font-semibold mb-3">Item Pesanan</h2><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-left text-gray-500"><th className="pb-2">Item</th><th>Jumlah</th><th>Harga</th><th>Est. Material</th><th>Est. Cetak</th><th className="text-right">Total</th></tr></thead><tbody>{items.map(item => <tr key={item.id} className="border-t"><td className="py-2"><div className="font-medium">{item.item_name}</div><small>{item.item_description}</small></td><td>{Number(item.quantity)}</td><td>{formatCurrency(item.unit_price)}</td><td>{item.estimated_material_g ? `${item.estimated_material_g} g` : '-'}</td><td>{item.estimated_print_minutes ? `${item.estimated_print_minutes} mnt` : '-'}</td><td className="text-right">{formatCurrency(item.line_total)}</td></tr>)}</tbody></table></div><div className="ml-auto max-w-xs border-t mt-4 pt-3 text-sm space-y-1"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(order.subtotal)}</span></div><div className="flex justify-between"><span>Diskon</span><span>-{formatCurrency(order.discount_amount)}</span></div><div className="flex justify-between"><span>Ongkos kirim</span><span>{formatCurrency(order.shipping_amount)}</span></div><div className="flex justify-between"><span>Pajak</span><span>{formatCurrency(order.tax_amount)}</span></div><div className="flex justify-between font-bold"><span>Total</span><span>{formatCurrency(order.total_amount)}</span></div></div></CardContent></Card><Card><CardContent><h2 className="font-semibold mb-2">Pengiriman & Catatan</h2><p className="text-sm whitespace-pre-wrap">{order.shipping_recipient_name || '-'} · {order.shipping_phone || '-'}<br />{order.shipping_address || 'Alamat belum diisi'}<br />Kurir: {order.courier_name || '-'}</p><div className="grid md:grid-cols-2 mt-3 text-sm gap-3"><p><strong>Catatan pelanggan:</strong><br />{order.customer_notes || '-'}</p><p><strong>Catatan internal:</strong><br />{order.internal_notes || '-'}</p></div></CardContent></Card><Card><CardContent><h2 className="font-semibold mb-3">Perbarui Status</h2><div className="flex flex-wrap gap-2">{(transitions[order.status_code] || []).map(status => <Button key={status} size="sm" variant={status === 'cancelled' || status === 'returned' ? 'outline' : 'primary'} onClick={() => setPendingStatus(status)}>{statusLabels[status]}</Button>) || <span className="text-sm text-gray-500">Tidak ada transisi lanjutan.</span>}</div></CardContent></Card></div>}
+    {tab === 'payments' && <Card><CardContent className="space-y-5"><div className="flex justify-between"><h2 className="font-semibold">Invoice</h2>{invoices.length > 0 && <Badge>{invoices[0].status_code}</Badge>}</div>{invoices.length ? <div className="text-sm">{invoices[0].invoice_number} · Total {formatCurrency(invoices[0].total_amount)} · Sisa {formatCurrency(invoices[0].balance_due)}</div> : <p className="text-sm text-gray-500">Belum ada invoice.</p>}<div className="flex justify-between items-center"><h2 className="font-semibold">Pembayaran</h2>{invoices.length > 0 && invoices[0].status_code !== 'paid' && <Button size="sm" onClick={() => setPaymentOpen(true)}>Catat Pembayaran</Button>}</div>{payments.length ? <table className="w-full text-sm"><thead><tr className="text-left"><th>Tanggal</th><th>Kode</th><th>Metode</th><th className="text-right">Jumlah</th><th /></tr></thead><tbody>{payments.map(payment => <tr key={payment.id} className="border-t"><td className="py-2">{new Date(payment.payment_date).toLocaleDateString('id-ID')}</td><td>{payment.payment_code}</td><td>{payment.method_name || '-'}</td><td className="text-right">{formatCurrency(payment.amount)}</td><td className="text-right"><Button size="sm" variant="ghost" onClick={() => void craftOrdersApi.downloadReceiptPdf(id, payment.id).catch(requestError => setError(requestError instanceof Error ? requestError.message : 'Gagal mengunduh kwitansi.'))}>Kwitansi</Button></td></tr>)}</tbody></table> : <p className="text-sm text-gray-500">Belum ada pembayaran.</p>}</CardContent></Card>}
+    {tab === 'history' && <Card><CardContent><h2 className="font-semibold mb-3">Riwayat Status</h2>{history.length ? <div className="space-y-3">{history.map(entry => <div key={entry.id} className="border-l-2 border-[var(--nexus-yellow)] pl-3"><p className="text-sm font-medium">{entry.from_status_code ? `${statusLabels[entry.from_status_code]} → ` : ''}{statusLabels[entry.to_status_code]}</p><p className="text-xs text-gray-500">{new Date(entry.changed_at).toLocaleString('id-ID')} · {entry.changed_by_name || 'Sistem'}</p>{entry.reason && <p className="text-sm">{entry.reason}</p>}</div>)}</div> : <p className="text-sm text-gray-500">Belum ada riwayat.</p>}</CardContent></Card>}
+    {tab === 'attachments' && <Card><CardContent><div className="flex justify-between items-center mb-4"><h2 className="font-semibold">Lampiran</h2><label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[var(--nexus-yellow)] px-3 py-2 text-sm font-semibold"><Upload className="w-4 h-4" /> Unggah<input hidden type="file" accept=".jpg,.jpeg,.png,.webp,.stl,.3mf,.step,.stp,.scad,.pdf" onChange={upload} /></label></div><p className="text-xs text-gray-500 mb-3">Maks. 10 MB: gambar, STL, 3MF, STEP, SCAD, atau PDF.</p>{attachments.length ? <div className="space-y-2">{attachments.map(attachment => <div key={attachment.id} className="flex flex-wrap items-center justify-between gap-2 border rounded p-3 text-sm"><div><p className="font-medium">{attachment.file_name}</p><p className="text-xs text-gray-500">{attachment.file_type || '-'} · {attachment.file_size_bytes ? `${Math.ceil(attachment.file_size_bytes / 1024)} KB` : '-'} · {new Date(attachment.uploaded_at).toLocaleDateString('id-ID')} · {attachment.uploaded_by_name || 'Sistem'}</p></div><div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => void craftOrdersApi.downloadAttachment(id, attachment).catch(requestError => setError(requestError instanceof Error ? requestError.message : 'Gagal mengunduh lampiran.'))}>Download</Button><Button size="sm" variant="ghost" className="text-red-600" onClick={() => setPendingDelete(attachment)}>Hapus</Button></div></div>)}</div> : <p className="text-sm text-gray-500">Belum ada lampiran.</p>}</CardContent></Card>}
+    <PaymentModal orderId={id} isOpen={paymentOpen} onClose={() => setPaymentOpen(false)} onSuccess={() => { setPaymentOpen(false); void reload(); }} />
+    <ConfirmDialog open={Boolean(pendingStatus)} title="Ubah status pesanan?" description={pendingStatus ? `Pesanan akan diubah menjadi ${statusLabels[pendingStatus]}.` : ''} confirmLabel="Ubah Status" isLoading={working} onCancel={() => setPendingStatus(null)} onConfirm={() => void doStatus()} variant={pendingStatus === 'cancelled' || pendingStatus === 'returned' ? 'warning' : 'default'} />
+    <ConfirmDialog open={Boolean(pendingDelete)} title="Hapus lampiran?" description={pendingDelete ? `Lampiran ${pendingDelete.file_name} akan dihapus permanen.` : ''} confirmLabel="Hapus" isLoading={working} onCancel={() => setPendingDelete(null)} onConfirm={() => void deleteAttachment()} variant="danger" />
+  </div>;
 }

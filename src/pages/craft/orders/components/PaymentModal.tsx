@@ -1,67 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../../../components/ui/Button';
 import { craftOrdersApi } from '../../../../services/api/craft-orders.api';
+import type { PaymentMethodOption } from '../../../../types/craft-orders';
 
-export function PaymentModal({ orderId, isOpen, onClose, onSuccess }: { orderId: number, isOpen: boolean, onClose: () => void, onSuccess: () => void }) {
-  const [amount, setAmount] = useState('');
-  const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 16));
-  const [methodId, setMethodId] = useState('');
-  const [methods, setMethods] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      craftOrdersApi.getPaymentMethods().then(setMethods);
-    }
-  }, [isOpen]);
-
+interface Props { orderId: number; isOpen: boolean; onClose: () => void; onSuccess: () => void; }
+export function PaymentModal({ orderId, isOpen, onClose, onSuccess }: Props) {
+  const [amount, setAmount] = useState(''); const [date, setDate] = useState(new Date().toISOString().slice(0, 16)); const [methodId, setMethodId] = useState(''); const [methods, setMethods] = useState<PaymentMethodOption[]>([]); const [error, setError] = useState<string | null>(null); const [saving, setSaving] = useState(false);
+  useEffect(() => { if (isOpen) void craftOrdersApi.getPaymentMethods().then(setMethods).catch(requestError => setError(requestError instanceof Error ? requestError.message : 'Gagal memuat metode pembayaran.')); }, [isOpen]);
   if (!isOpen) return null;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await craftOrdersApi.recordPayment(orderId, {
-        amount: Number(amount),
-        payment_date: paymentDate,
-        payment_method_id: Number(methodId)
-      });
-      onSuccess();
-    } catch (error: any) {
-      alert(error.message || 'Gagal mencatat pembayaran');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Catat Pembayaran</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Jumlah Pembayaran</label>
-            <input type="number" required min="1" className="w-full border p-2 rounded" value={amount} onChange={e => setAmount(e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Tanggal</label>
-            <input type="datetime-local" required className="w-full border p-2 rounded" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Metode</label>
-            <select required className="w-full border p-2 rounded" value={methodId} onChange={e => setMethodId(e.target.value)}>
-              <option value="">Pilih Metode</option>
-              {methods.map(m => (
-                <option key={m.id} value={m.id}>{m.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex justify-end gap-2 mt-6">
-            <Button type="button" variant="outline" onClick={onClose}>Batal</Button>
-            <Button type="submit" disabled={loading}>Simpan</Button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); setSaving(true); setError(null); try { await craftOrdersApi.recordPayment(orderId, { amount: Number(amount), payment_date: date, payment_method_id: Number(methodId) }); onSuccess(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal mencatat pembayaran.'); } finally { setSaving(false); } };
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"><form onSubmit={submit} className="w-full max-w-md rounded-xl bg-white p-6 space-y-4"><h2 className="text-lg font-semibold">Catat Pembayaran</h2>{error && <div className="rounded bg-red-50 p-2 text-sm text-red-700">{error}</div>}<label className="block text-sm">Jumlah<input required type="number" min="1" className="mt-1 w-full border rounded p-2" value={amount} onChange={event => setAmount(event.target.value)} /></label><label className="block text-sm">Tanggal<input required type="datetime-local" className="mt-1 w-full border rounded p-2" value={date} onChange={event => setDate(event.target.value)} /></label><label className="block text-sm">Metode<select required className="mt-1 w-full border rounded p-2" value={methodId} onChange={event => setMethodId(event.target.value)}><option value="">Pilih metode</option>{methods.map(method => <option key={method.id} value={method.id}>{method.name} ({method.method_type})</option>)}</select></label><div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={onClose}>Batal</Button><Button type="submit" disabled={saving}>{saving ? 'Menyimpan...' : 'Simpan'}</Button></div></form></div>;
 }

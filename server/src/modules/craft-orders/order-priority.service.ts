@@ -8,7 +8,7 @@ export class OrderPriorityService {
    * 3. Total estimated print duration
    * 4. Age of order in waiting states
    */
-  async calculatePriority(orderId: number, connection = pool): Promise<void> {
+  async calculatePriority(orderId: number, connection: any = pool): Promise<void> {
     const [orders]: any = await connection.execute(
       `SELECT status_code, deadline_at, is_priority_manual, priority_code, priority_score, order_date 
        FROM craft_orders WHERE id = ?`,
@@ -108,13 +108,14 @@ export class OrderPriorityService {
     );
   }
 
-  async recalculateAllAutomaticPriorities(): Promise<void> {
+  async recalculateAllAutomaticPriorities(businessUnitId: number): Promise<void> {
     const [orders]: any = await pool.execute(
       `SELECT id FROM craft_orders 
-       WHERE is_priority_manual = 0 
+       WHERE business_unit_id = ?
+       AND is_priority_manual = 0
        AND status_code NOT IN ('completed', 'packed', 'shipped', 'cancelled', 'returned')
        AND deleted_at IS NULL`
-    );
+    , [businessUnitId]);
 
     for (const row of orders) {
       await this.calculatePriority(row.id);

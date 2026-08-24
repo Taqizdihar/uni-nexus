@@ -1,11 +1,10 @@
 import { pool } from '../../config/database';
 import { CraftOrderFilters } from './craft-orders.types';
-import { Connection } from 'mysql2/promise';
 
 export class CraftOrdersRepository {
-  async getOrders(filters: CraftOrderFilters) {
-    const page = filters.page || 1;
-    const limit = filters.limit || 20;
+  async getOrders(filters: CraftOrderFilters, businessUnitId: number) {
+    const page = Math.max(1, filters.page || 1);
+    const limit = Math.min(100, Math.max(1, filters.limit || 20));
     const offset = (page - 1) * limit;
 
     let query = `
@@ -17,24 +16,24 @@ export class CraftOrdersRepository {
              (SELECT COUNT(*) FROM craft_order_items coi WHERE coi.order_id = o.id) as item_count,
              (SELECT SUM(quantity) FROM craft_order_items coi WHERE coi.order_id = o.id) as total_quantity,
              (SELECT GROUP_CONCAT(item_name SEPARATOR ', ') FROM craft_order_items coi WHERE coi.order_id = o.id) as item_summary,
+             (SELECT COALESCE(SUM(COALESCE(coi.estimated_print_minutes, 0) * coi.quantity), 0) FROM craft_order_items coi WHERE coi.order_id = o.id) as total_print_minutes,
              (o.deadline_at < UTC_TIMESTAMP() AND o.status_code NOT IN ('completed', 'cancelled', 'returned', 'shipped')) as is_overdue
       FROM craft_orders o
       JOIN parties p ON o.customer_party_id = p.id
       JOIN sales_channels sc ON o.sales_channel_id = sc.id
-      WHERE o.deleted_at IS NULL
+      WHERE o.deleted_at IS NULL AND o.business_unit_id = ?
     `;
-    
+
     let countQuery = `
       SELECT COUNT(*) as total
       FROM craft_orders o
       JOIN parties p ON o.customer_party_id = p.id
-      WHERE o.deleted_at IS NULL
+      WHERE o.deleted_at IS NULL AND o.business_unit_id = ?
     `;
+    const params: unknown[] = [businessUnitId];
+    const countParams: unknown[] = [businessUnitId];
 
-    const params: any[] = [];
-    const countParams: any[] = [];
-
-    const addCondition = (condition: string, value: any) => {
+    const addCondition = (condition: string, value: unknown) => {
       query += ` AND ${condition}`;
       countQuery += ` AND ${condition}`;
       params.push(value);
@@ -43,14 +42,24 @@ export class CraftOrdersRepository {
 
     if (filters.search) {
       const search = `%${filters.search}%`;
-      const searchCondition = `(o.order_code LIKE ? OR o.external_order_id LIKE ? OR p.display_name LIKE ?)`;
+      const searchCondition = `(o.order_code LIKE ? OR o.external_order_id LIKE ? OR p.display_name LIKE ? OR EXISTS (
+        SELECT 1 FROM craft_order_items search_items
+        WHERE search_items.order_id = o.id AND search_items.item_name LIKE ?
+      ))`;
       query += ` AND ${searchCondition}`;
       countQuery += ` AND ${searchCondition}`;
-      params.push(search, search, search);
-      countParams.push(search, search, search);
+      params.push(search, search, search, search);
+      countParams.push(search, search, search, search);
     }
 
     if (filters.status) addCondition('o.status_code = ?', filters.status);
+    if (filters.statuses?.length) {
+      const placeholders = filters.statuses.map(() => '?').join(', ');
+      query += ` AND o.status_code IN (${placeholders})`;
+      countQuery += ` AND o.status_code IN (${placeholders})`;
+      params.push(...filters.statuses);
+      countParams.push(...filters.statuses);
+    }
     if (filters.priority) addCondition('o.priority_code = ?', filters.priority);
     if (filters.paymentStatus) addCondition('o.payment_status_code = ?', filters.paymentStatus);
     if (filters.channel) addCondition('o.sales_channel_id = ?', filters.channel);
@@ -66,6 +75,14 @@ export class CraftOrdersRepository {
        query += ` AND (o.deadline_at < UTC_TIMESTAMP() AND o.status_code NOT IN ('completed', 'cancelled', 'returned', 'shipped'))`;
        countQuery += ` AND (o.deadline_at < UTC_TIMESTAMP() AND o.status_code NOT IN ('completed', 'cancelled', 'returned', 'shipped'))`;
     }
+    if (filters.activeOnly) {
+      const terminalStatuses = ['completed', 'packed', 'shipped', 'cancelled', 'returned'];
+      const placeholders = terminalStatuses.map(() => '?').join(', ');
+      query += ` AND o.status_code NOT IN (${placeholders})`;
+      countQuery += ` AND o.status_code NOT IN (${placeholders})`;
+      params.push(...terminalStatuses);
+      countParams.push(...terminalStatuses);
+    }
 
     const validSortFields = {
       'priority': 'o.priority_score',
@@ -80,14 +97,15 @@ export class CraftOrdersRepository {
     
     const sortOrder = filters.sortOrder === 'asc' ? 'ASC' : 'DESC';
 
-    query += ` ORDER BY ${sortField} ${sortOrder} LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    // This MySQL deployment rejects bound placeholders in LIMIT/OFFSET. Values are
+    // clamped integers above, so interpolation here remains safe and prevents a 500.
+    query += ` ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`;
 
-    const [rows] = await pool.execute(query, params);
-    const [countRows]: any = await pool.execute(countQuery, countParams);
+    const [rows] = await pool.execute(query, params as any[]);
+    const [countRows]: any = await pool.execute(countQuery, countParams as any[]);
     
     return {
-      items: rows,
+      items: rows as unknown as any[],
       meta: {
         page,
         limit,
@@ -97,18 +115,18 @@ export class CraftOrdersRepository {
     };
   }
 
-  async getOrderById(id: number) {
+  async getOrderById(id: number, businessUnitId: number) {
     const [rows]: any = await pool.execute(`
       SELECT o.*, 
-             p.display_name as customer_name, p.party_type as customer_type, p.email, p.phone,
+             p.display_name as customer_name, p.party_kind as customer_type, p.email, p.phone,
              sc.name as sales_channel_name, sc.channel_type,
-             u.name as created_by_name
+             u.full_name as created_by_name
       FROM craft_orders o
       JOIN parties p ON o.customer_party_id = p.id
       JOIN sales_channels sc ON o.sales_channel_id = sc.id
       LEFT JOIN users u ON o.created_by = u.id
-      WHERE o.id = ? AND o.deleted_at IS NULL
-    `, [id]);
+      WHERE o.id = ? AND o.business_unit_id = ? AND o.deleted_at IS NULL
+    `, [id, businessUnitId]);
     
     if (!rows.length) return null;
     return rows[0];

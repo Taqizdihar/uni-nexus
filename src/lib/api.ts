@@ -43,6 +43,18 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   return data.data;
 }
 
+async function requestBlob(endpoint: string, options: RequestInit = {}): Promise<Blob> {
+  const token = localStorage.getItem('token');
+  const headers = new Headers(options.headers);
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  const response = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(response.status, data?.error?.code || 'DOWNLOAD_ERROR', data?.error?.message || 'Gagal mengunduh dokumen.');
+  }
+  return response.blob();
+}
+
 export const api = {
   get: <T>(endpoint: string, options?: RequestInit) => request<T>(endpoint, { ...options, method: 'GET' }),
   post: <T>(endpoint: string, body: any, options?: RequestInit) => 
@@ -64,4 +76,5 @@ export const api = {
       body: body instanceof FormData ? body : JSON.stringify(body) 
     }),
   delete: <T>(endpoint: string, options?: RequestInit) => request<T>(endpoint, { ...options, method: 'DELETE' }),
+  getBlob: (endpoint: string, options?: RequestInit) => requestBlob(endpoint, { ...options, method: 'GET' }),
 };

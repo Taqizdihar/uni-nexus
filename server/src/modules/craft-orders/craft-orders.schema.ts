@@ -47,6 +47,16 @@ export const updateOrderPrioritySchema = z.object({
   is_priority_manual: z.boolean().default(true)
 });
 
+export const updateOrderSchema = z.object({
+  deadline_at: z.string().nullable().optional(),
+  customer_notes: z.string().max(5000).nullable().optional(),
+  internal_notes: z.string().max(5000).nullable().optional(),
+  shipping_recipient_name: z.string().max(180).nullable().optional(),
+  shipping_phone: z.string().max(50).nullable().optional(),
+  shipping_address: z.string().max(5000).nullable().optional(),
+  courier_name: z.string().max(100).nullable().optional(),
+});
+
 export const createInvoiceSchema = z.object({
   due_date: z.string().nullable().optional(),
   payment_terms: z.string().nullable().optional(),
@@ -68,7 +78,7 @@ export const enqueueOrderItemsSchema = z.object({
 
 export const quickCreateCustomerSchema = z.object({
   display_name: z.string().min(1),
-  party_type: z.enum(['individual', 'company', 'institution']).default('individual'),
+  party_kind: z.enum(['individual', 'company', 'institution']).default('individual'),
   email: z.string().email().nullable().optional().or(z.literal('')),
   phone: z.string().nullable().optional()
 });

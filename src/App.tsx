@@ -63,7 +63,6 @@ export default function App() {
             <Route path="audit-log" element={<PlannedModulePage title="Log Audit" description="Pelacakan aktivitas sistem dan log keamanan." stage="Lanjutan" icon={ShieldAlert} />} />
             
             {/* Craft Workspace Routes */}
-            <Route path="craft/orders" element={<CraftOrders />} />
             <Route path="craft/orders/*" element={<CraftOrders />} />
             <Route path="craft/production" element={<CraftProduction />} />
             <Route path="craft/production/*" element={<CraftProduction />} />

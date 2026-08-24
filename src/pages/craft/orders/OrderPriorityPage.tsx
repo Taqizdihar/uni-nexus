@@ -1,111 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Badge } from '../../../components/ui/Badge';
-import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AlertTriangle, Clock, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, AlertTriangle, Clock } from 'lucide-react';
+import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
+import { Card } from '../../../components/ui/Card';
+import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import type { CraftOrder } from '../../../types/craft-orders';
 
+const labels: Record<string, string> = { low: 'Rendah', normal: 'Normal', high: 'Tinggi', critical: 'Kritis' };
 export function OrderPriorityPage() {
-  const [orders, setOrders] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
-  const fetchPriority = async () => {
-    setLoading(true);
-    try {
-      const res = await craftOrdersApi.getOrders({
-        sortBy: 'priority',
-        sortOrder: 'desc',
-        limit: 50
-      });
-      setOrders(res.items);
-    } catch (error) {
-      alert('Gagal memuat prioritas');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPriority();
-  }, []);
-
-  const handleRecalculate = async () => {
-    try {
-      await craftOrdersApi.recalculatePriorities();
-      await fetchPriority();
-    } catch (error) {
-      alert('Gagal mengkalkulasi prioritas');
-    }
-  };
-
-  return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/app/craft/orders')} className="p-2">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Prioritas Produksi</h1>
-            <p className="text-sm text-[var(--nexus-muted)] mt-1">Daftar pesanan berdasarkan tingkat urgensi.</p>
-          </div>
-        </div>
-        <Button variant="outline" className="gap-2" onClick={handleRecalculate}>
-          <RefreshCw className="w-4 h-4" /> Kalkulasi Ulang
-        </Button>
-      </div>
-
-      <div className="space-y-4">
-        {loading ? (
-          <div className="text-center p-8 text-gray-500">Memuat...</div>
-        ) : orders.length === 0 ? (
-          <div className="text-center p-8 text-gray-500">Tidak ada pesanan aktif.</div>
-        ) : (
-          orders.map((order, idx) => (
-            <Card 
-              key={order.id} 
-              className={`hover:border-[var(--nexus-yellow)] transition-colors cursor-pointer ${order.priority_code === 'critical' ? 'border-red-200 bg-red-50' : ''}`}
-              onClick={() => navigate(`/app/craft/orders/${order.id}`)}
-            >
-              <div className="p-4 flex flex-col md:flex-row justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div className="text-2xl font-bold text-gray-300 w-12 text-center">#{idx + 1}</div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-[var(--nexus-charcoal)]">{order.order_code}</span>
-                      <Badge variant={
-                        order.priority_code === 'critical' ? 'error' : 
-                        order.priority_code === 'high' ? 'warning' : 'default'
-                      }>{order.priority_code.toUpperCase()}</Badge>
-                      {order.is_overdue && (
-                        <Badge variant="error" className="gap-1"><AlertTriangle className="w-3 h-3"/> Terlambat</Badge>
-                      )}
-                    </div>
-                    <div className="text-sm text-gray-600 mb-2">{order.customer_name} • {order.sales_channel_name}</div>
-                    <div className="text-sm">
-                      <span className="font-medium text-gray-700">Skor Prioritas:</span> {order.priority_score}
-                      {order.priority_reason && (
-                        <span className="ml-2 text-gray-500">({order.priority_reason})</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-2 text-sm">
-                   <div className="flex items-center gap-1 text-gray-600">
-                     <Clock className="w-4 h-4" />
-                     {order.deadline_at ? new Date(order.deadline_at).toLocaleString() : 'Tidak ada tenggat'}
-                   </div>
-                   <div className="text-gray-500">
-                     Estimasi waktu cetak: {order.total_print_minutes || '?'} menit
-                   </div>
-                </div>
-              </div>
-            </Card>
-          ))
-        )}
-      </div>
-    </div>
-  );
+  const navigate = useNavigate(); const [orders, setOrders] = useState<CraftOrder[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState<string | null>(null); const [working, setWorking] = useState(false);
+  const load = useCallback(async () => { setLoading(true); try { const result = await craftOrdersApi.getOrders({ page: 1, limit: 100, activeOnly: true, sortBy: 'priority', sortOrder: 'desc' }); setOrders(result.items); setError(null); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat prioritas.'); } finally { setLoading(false); } }, []);
+  useEffect(() => { void load(); }, [load]);
+  const recalculate = async () => { setWorking(true); try { await craftOrdersApi.recalculatePriorities(); await load(); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal mengkalkulasi prioritas.'); } finally { setWorking(false); } };
+  return <div className="space-y-6 max-w-5xl mx-auto"><div className="flex justify-between"><div><h1 className="text-2xl font-bold">Prioritas Produksi</h1><p className="text-sm text-gray-500">Pesanan aktif berdasarkan urgensi dan estimasi cetak.</p></div><Button variant="outline" onClick={() => void recalculate()} disabled={working}><RefreshCw className="w-4 h-4" />{working ? 'Menghitung...' : 'Kalkulasi Ulang'}</Button></div>{error && <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}{loading ? <div className="p-8 text-center text-gray-500">Memuat...</div> : orders.length === 0 ? <Card><div className="p-12 text-center text-gray-500">Tidak Ada Pesanan Aktif</div></Card> : <div className="space-y-3">{orders.map((order, index) => <Card key={order.id} className="cursor-pointer hover:border-[var(--nexus-yellow)]" onClick={() => navigate(`/app/craft/orders/${order.id}`)}><div className="p-4 flex justify-between gap-4"><div className="flex gap-4"><strong className="text-xl text-gray-300">#{index + 1}</strong><div><div className="flex gap-2"><strong>{order.order_code}</strong><Badge variant={order.priority_code === 'critical' ? 'error' : order.priority_code === 'high' ? 'warning' : 'default'}>{labels[order.priority_code]}</Badge>{Boolean(order.is_overdue) && <Badge variant="error"><AlertTriangle className="w-3 h-3" /> Terlambat</Badge>}</div><p className="text-sm text-gray-600">{order.customer_name} · {order.sales_channel_name}</p><p className="text-sm">Skor {Number(order.priority_score).toFixed(1)} {order.priority_reason ? `· ${order.priority_reason}` : ''}</p></div></div><div className="text-right text-sm text-gray-500"><p><Clock className="inline w-4 h-4" /> {order.deadline_at ? new Date(order.deadline_at).toLocaleString('id-ID') : 'Tanpa tenggat'}</p><p>Est. cetak: {order.total_print_minutes ? `${order.total_print_minutes} menit` : '-'}</p></div></div></Card>)}</div>}</div>;
 }

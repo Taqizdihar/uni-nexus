@@ -61,6 +61,7 @@ export interface CraftOrderFilters {
   limit?: number;
   search?: string;
   status?: string;
+  statuses?: string[];
   priority?: string;
   paymentStatus?: string;
   channel?: number;
@@ -70,6 +71,7 @@ export interface CraftOrderFilters {
   deadlineFrom?: string;
   deadlineTo?: string;
   overdue?: boolean;
+  activeOnly?: boolean;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }

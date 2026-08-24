@@ -1,228 +1,43 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { Badge } from '../../../components/ui/Badge';
-import { craftOrdersApi } from '../../../services/api/craft-orders.api';
-import { CraftOrder, CraftOrderFilters } from '../../../types/craft-orders';
-import { formatCurrency } from '../../../lib/utils';
-import { Search, Plus, Filter, Download, Inbox } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Download, Inbox, Plus, RotateCcw, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Badge } from '../../../components/ui/Badge';
+import { Button } from '../../../components/ui/Button';
+import { Card } from '../../../components/ui/Card';
+import { formatCurrency } from '../../../lib/utils';
+import { craftOrdersApi } from '../../../services/api/craft-orders.api';
+import type { CraftOrder, CraftOrderFilters, SalesChannelOption } from '../../../types/craft-orders';
+
+const statusLabels: Record<string, string> = { new: 'Baru', confirmed: 'Dikonfirmasi', waiting: 'Menunggu', ready: 'Siap Produksi', in_production: 'Diproduksi', qc: 'QC', completed: 'Selesai', packed: 'Dikemas', shipped: 'Dikirim', cancelled: 'Dibatalkan', returned: 'Dikembalikan' };
+const priorityLabels: Record<string, string> = { low: 'Rendah', normal: 'Normal', high: 'Tinggi', critical: 'Kritis' };
+const priorityVariant = (value: string) => value === 'critical' ? 'error' : value === 'high' ? 'warning' : 'default' as const;
 
 export function OrdersListPage() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<CraftOrder[]>([]);
+  const [channels, setChannels] = useState<SalesChannelOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<CraftOrderFilters>({ page: 1, limit: 20 });
+  const [exporting, setExporting] = useState(false);
+  const [filters, setFilters] = useState<CraftOrderFilters>({ page: 1, limit: 20, sortBy: 'date', sortOrder: 'desc' });
   const [meta, setMeta] = useState({ page: 1, limit: 20, total: 0, totalPages: 0 });
-  
-  const navigate = useNavigate();
 
   const fetchOrders = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await craftOrdersApi.getOrders(filters);
-      setOrders(result.items);
-      setMeta(result.meta);
-    } catch (err: any) {
-      setError(err.message || 'Gagal memuat pesanan');
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true); setError(null);
+    try { const result = await craftOrdersApi.getOrders(filters); setOrders(result.items); setMeta(result.meta); }
+    catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat pesanan.'); }
+    finally { setLoading(false); }
   }, [filters]);
+  useEffect(() => { void fetchOrders(); }, [fetchOrders]);
+  useEffect(() => { void craftOrdersApi.getSalesChannels().then(setChannels).catch(() => undefined); }, []);
+  const updateFilter = <K extends keyof CraftOrderFilters>(key: K, value: CraftOrderFilters[K]) => setFilters(current => ({ ...current, [key]: value, page: 1 }));
+  const reset = () => setFilters({ page: 1, limit: 20, sortBy: 'date', sortOrder: 'desc' });
+  const exportCsv = async () => { setExporting(true); try { await craftOrdersApi.exportOrders(filters); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal mengekspor CSV.'); } finally { setExporting(false); } };
 
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ ...filters, search: e.target.value, page: 1 });
-  };
-
-  const getPriorityBadgeVariant = (code: string) => {
-    if (code === 'critical') return 'error';
-    if (code === 'high') return 'warning';
-    return 'default';
-  };
-
-  const getStatusBadgeVariant = (code: string) => {
-    if (['completed', 'packed', 'shipped'].includes(code)) return 'success';
-    if (['in_production', 'qc'].includes(code)) return 'warning';
-    if (['cancelled', 'returned'].includes(code)) return 'error';
-    return 'info';
-  };
-
-  const statusLabels: Record<string, string> = {
-    new: 'Baru',
-    confirmed: 'Dikonfirmasi',
-    waiting: 'Menunggu',
-    ready: 'Siap Produksi',
-    in_production: 'Sedang Diproduksi',
-    qc: 'Kontrol Kualitas',
-    completed: 'Selesai',
-    packed: 'Dikemas',
-    shipped: 'Dikirim',
-    cancelled: 'Dibatalkan',
-    returned: 'Dikembalikan'
-  };
-
-  const priorityLabels: Record<string, string> = {
-    low: 'Rendah',
-    normal: 'Normal',
-    high: 'Tinggi',
-    critical: 'Kritis'
-  };
-
-  const paymentLabels: Record<string, string> = {
-    unpaid: 'Belum Dibayar',
-    partial: 'Dibayar Sebagian',
-    paid: 'Lunas',
-    refunded: 'Dikembalikan',
-    cancelled: 'Dibatalkan'
-  };
-
-  return (
-    <div className="space-y-6 h-full flex flex-col">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Semua Pesanan</h1>
-          <p className="text-sm text-[var(--nexus-muted)] mt-1">Kelola semua pesanan operasional Craft.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="gap-2" onClick={() => {/* Handle export CSV */}}>
-            <Download className="w-4 h-4" /> Ekspor
-          </Button>
-          <Button className="gap-2" onClick={() => navigate('/app/craft/orders/new')}>
-            <Plus className="w-4 h-4" /> Pesanan Baru
-          </Button>
-        </div>
-      </div>
-
-      <Card className="flex-1 flex flex-col min-h-0">
-        <div className="p-4 border-b border-[var(--nexus-border)] flex flex-col sm:flex-row gap-4 justify-between bg-gray-50/50">
-          <div className="relative w-full sm:w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Cari ID, pelanggan, produk, atau ID marketplace..." 
-              value={filters.search || ''}
-              onChange={handleSearch}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[var(--nexus-yellow)]"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="gap-2 bg-white">
-              <Filter className="w-4 h-4" /> Status
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2 bg-white">
-              <Filter className="w-4 h-4" /> Prioritas
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-auto">
-          {loading ? (
-             <div className="flex items-center justify-center h-full text-gray-500">Memuat pesanan...</div>
-          ) : error ? (
-             <div className="flex flex-col items-center justify-center h-full text-gray-500">
-               <p className="text-red-500">{error}</p>
-               <Button variant="outline" className="mt-4" onClick={fetchOrders}>Coba Lagi</Button>
-             </div>
-          ) : orders.length === 0 ? (
-             <div className="flex flex-col items-center justify-center h-full text-center p-8">
-               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
-                 <Inbox className="w-8 h-8" />
-               </div>
-               <h3 className="text-lg font-medium text-gray-900 mb-1">Belum Ada Pesanan</h3>
-               <p className="text-sm text-gray-500 max-w-sm mb-6">
-                 Pesanan Craft yang dibuat atau diimpor akan muncul di sini. Pesanan dapat berasal dari marketplace, pesanan langsung, mitra, maupun pesanan custom.
-               </p>
-               <Button onClick={() => navigate('/app/craft/orders/new')} className="gap-2">
-                 <Plus className="w-4 h-4" /> Pesanan Baru
-               </Button>
-             </div>
-          ) : (
-            <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-gray-50 sticky top-0 border-b border-[var(--nexus-border)] shadow-sm">
-                <tr>
-                  <th className="px-6 py-4 font-semibold text-gray-600">ID Pesanan</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Pelanggan</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Item</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Jumlah</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Tenggat</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Prioritas</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Status</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600">Pembayaran</th>
-                  <th className="px-6 py-4 font-semibold text-gray-600 text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/app/craft/orders/${order.id}`)}>
-                    <td className="px-6 py-4 font-medium text-[var(--nexus-charcoal)]">{order.order_code}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-medium">{order.customer_name}</span>
-                        <span className="text-xs text-gray-500">{order.sales_channel_name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate" title={order.item_summary}>
-                      {order.item_summary || '-'}
-                    </td>
-                    <td className="px-6 py-4 text-gray-700">{order.total_quantity || 0}</td>
-                    <td className="px-6 py-4 text-gray-700">
-                       {order.deadline_at ? new Date(order.deadline_at).toLocaleDateString() : '-'}
-                       {order.is_overdue && <span className="text-red-500 ml-2 text-xs font-medium">Terlambat</span>}
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge variant={getPriorityBadgeVariant(order.priority_code)}>
-                        {priorityLabels[order.priority_code] || order.priority_code}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge variant={getStatusBadgeVariant(order.status_code)}>
-                        {statusLabels[order.status_code] || order.status_code}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-xs font-medium ${order.payment_status_code === 'paid' ? 'text-green-600' : order.payment_status_code === 'partial' ? 'text-yellow-600' : 'text-gray-500'}`}>
-                        {paymentLabels[order.payment_status_code] || order.payment_status_code}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right font-medium text-[var(--nexus-charcoal)]">
-                      {formatCurrency(order.total_amount)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-        
-        {orders.length > 0 && (
-          <div className="p-4 border-t border-[var(--nexus-border)] flex items-center justify-between text-sm text-gray-500 bg-white">
-            <span>Menampilkan {(meta.page - 1) * meta.limit + 1} hingga Math.min(meta.page * meta.limit, meta.total) dari {meta.total} data</span>
-            <div className="flex gap-1">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                disabled={meta.page <= 1}
-                onClick={() => setFilters({ ...filters, page: meta.page - 1 })}
-              >
-                Sebelumnya
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                disabled={meta.page >= meta.totalPages}
-                onClick={() => setFilters({ ...filters, page: meta.page + 1 })}
-              >
-                Berikutnya
-              </Button>
-            </div>
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+  return <div className="space-y-6 h-full flex flex-col"><div className="flex flex-col sm:flex-row justify-between gap-4"><div><h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Semua Pesanan</h1><p className="text-sm text-[var(--nexus-muted)] mt-1">Kelola semua pesanan operasional Craft.</p></div><div className="flex gap-2"><Button variant="outline" onClick={exportCsv} disabled={exporting}><Download className="w-4 h-4" />{exporting ? 'Mengekspor...' : 'Ekspor CSV'}</Button><Button onClick={() => navigate('/app/craft/orders/new')}><Plus className="w-4 h-4" /> Pesanan Baru</Button></div></div>
+    {error && <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+    <Card className="flex-1"><div className="p-4 border-b space-y-3 bg-gray-50/50"><div className="relative max-w-lg"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" /><input className="w-full pl-10 pr-4 py-2 border rounded-md text-sm" placeholder="Cari ID, pelanggan, produk, atau ID marketplace..." value={filters.search || ''} onChange={event => updateFilter('search', event.target.value)} /></div><div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2"><select className="border rounded-md p-2 text-sm" value={filters.status || ''} onChange={event => updateFilter('status', event.target.value as CraftOrderFilters['status'] || undefined)}><option value="">Semua Status</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><select className="border rounded-md p-2 text-sm" value={filters.priority || ''} onChange={event => updateFilter('priority', event.target.value as CraftOrderFilters['priority'] || undefined)}><option value="">Semua Prioritas</option>{Object.entries(priorityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><select className="border rounded-md p-2 text-sm" value={filters.paymentStatus || ''} onChange={event => updateFilter('paymentStatus', event.target.value as CraftOrderFilters['paymentStatus'] || undefined)}><option value="">Semua Pembayaran</option><option value="unpaid">Belum Dibayar</option><option value="partial">Sebagian</option><option value="paid">Lunas</option></select><select className="border rounded-md p-2 text-sm" value={filters.channel || ''} onChange={event => updateFilter('channel', event.target.value ? Number(event.target.value) : undefined)}><option value="">Semua Kanal</option>{channels.map(channel => <option key={channel.id} value={channel.id}>{channel.name}</option>)}</select><select className="border rounded-md p-2 text-sm" value={filters.orderType || ''} onChange={event => updateFilter('orderType', event.target.value as CraftOrderFilters['orderType'] || undefined)}><option value="">Semua Tipe</option><option value="standard">Standar</option><option value="custom">Custom</option><option value="partner">Mitra</option><option value="internal">Internal</option></select><input type="date" className="border rounded-md p-2 text-sm" value={filters.dateFrom || ''} onChange={event => updateFilter('dateFrom', event.target.value || undefined)} title="Tanggal mulai" /><input type="date" className="border rounded-md p-2 text-sm" value={filters.dateTo || ''} onChange={event => updateFilter('dateTo', event.target.value || undefined)} title="Tanggal akhir" /></div><div className="flex items-center gap-3 text-sm"><label><input type="checkbox" checked={Boolean(filters.overdue)} onChange={event => updateFilter('overdue', event.target.checked || undefined)} /> Hanya terlambat</label><Button variant="ghost" size="sm" onClick={reset}><RotateCcw className="w-4 h-4" /> Reset Filter</Button></div></div>
+      <div className="overflow-auto">{loading ? <div className="h-64 flex items-center justify-center text-gray-500">Memuat pesanan...</div> : orders.length === 0 ? <div className="h-64 flex flex-col items-center justify-center text-center"><Inbox className="w-10 h-10 text-gray-400 mb-3" /><h3 className="font-medium">Belum Ada Pesanan</h3><p className="text-sm text-gray-500 mt-1">Pesanan Craft akan muncul di sini.</p><Button className="mt-4" onClick={() => navigate('/app/craft/orders/new')}>Pesanan Baru</Button></div> : <table className="w-full text-left text-sm whitespace-nowrap"><thead className="bg-gray-50 border-b"><tr>{['ID Pesanan','Pelanggan','Item','Jumlah','Tenggat','Prioritas','Status','Pembayaran','Total'].map(label => <th key={label} className="px-5 py-3 font-semibold text-gray-600">{label}</th>)}</tr></thead><tbody className="divide-y">{orders.map(order => <tr key={order.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate(`/app/craft/orders/${order.id}`)}><td className="px-5 py-3 font-medium">{order.order_code}</td><td className="px-5 py-3"><div>{order.customer_name}</div><small className="text-gray-500">{order.sales_channel_name}</small></td><td className="px-5 py-3 max-w-48 truncate">{order.item_summary || '-'}</td><td className="px-5 py-3">{Number(order.total_quantity || 0)}</td><td className="px-5 py-3">{order.deadline_at ? new Date(order.deadline_at).toLocaleDateString('id-ID') : '-'}{Boolean(order.is_overdue) && <small className="text-red-600 ml-1">Terlambat</small>}</td><td className="px-5 py-3"><Badge variant={priorityVariant(order.priority_code)}>{priorityLabels[order.priority_code]}</Badge></td><td className="px-5 py-3"><Badge variant={['cancelled','returned'].includes(order.status_code) ? 'error' : ['completed','packed','shipped'].includes(order.status_code) ? 'success' : 'info'}>{statusLabels[order.status_code]}</Badge></td><td className="px-5 py-3">{order.payment_status_code}</td><td className="px-5 py-3 text-right font-medium">{formatCurrency(order.total_amount)}</td></tr>)}</tbody></table>}</div>
+      {orders.length > 0 && <div className="p-4 border-t flex justify-between text-sm text-gray-500"><span>Menampilkan {(meta.page - 1) * meta.limit + 1}–{Math.min(meta.page * meta.limit, meta.total)} dari {meta.total} data</span><div className="flex gap-2"><Button size="sm" variant="outline" disabled={meta.page <= 1} onClick={() => setFilters(current => ({ ...current, page: meta.page - 1 }))}>Sebelumnya</Button><Button size="sm" variant="outline" disabled={meta.page >= meta.totalPages} onClick={() => setFilters(current => ({ ...current, page: meta.page + 1 }))}>Berikutnya</Button></div></div>}
+    </Card></div>;
 }
