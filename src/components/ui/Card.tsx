@@ -1,9 +1,9 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 
-export const Card: React.FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
+export const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => {
   return (
-    <div className={cn("bg-white rounded-xl border border-[var(--nexus-border)] card-shadow overflow-hidden", className)}>
+    <div className={cn("bg-white rounded-xl border border-[var(--nexus-border)] card-shadow overflow-hidden", className)} {...props}>
       {children}
     </div>
   );

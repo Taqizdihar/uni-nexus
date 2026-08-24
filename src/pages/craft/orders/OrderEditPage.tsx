@@ -1,149 +1,20 @@
-﻿import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '../../../components/ui/Card';
+import React, { useEffect, useState } from 'react';
+import { CalendarClock, Save, Truck } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { craftOrdersApi } from '../../../services/api/craft-orders.api';
-import { ArrowLeft, Save } from 'lucide-react';
+import { FormField, OrderPageHeader, OrderPriorityBadge, OrderSectionHeader, OrderStatusBadge } from './components/OrdersUI';
 
 const PRE_PRODUCTION_STATUSES = ['new', 'confirmed', 'waiting', 'ready'];
-
 export function OrderEditPage() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const orderId = parseInt(id!);
-  const [order, setOrder] = useState<Awaited<ReturnType<typeof craftOrdersApi.getOrder>>['order'] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [deadline, setDeadline] = useState('');
-  const [customerNotes, setCustomerNotes] = useState('');
-  const [internalNotes, setInternalNotes] = useState('');
-  const [couriername, setCourierName] = useState('');
-  const [shippingAddress, setShippingAddress] = useState('');
-  const [shippingRecipient, setShippingRecipient] = useState('');
-  const [shippingPhone, setShippingPhone] = useState('');
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await craftOrdersApi.getOrder(orderId);
-        const o = res.order;
-        setOrder(o);
-        setDeadline(o.deadline_at ? new Date(o.deadline_at).toISOString().slice(0, 16) : '');
-        setCustomerNotes(o.customer_notes || '');
-        setInternalNotes(o.internal_notes || '');
-        setCourierName(o.courier_name || '');
-        setShippingAddress(o.shipping_address || '');
-        setShippingRecipient(o.shipping_recipient_name || '');
-        setShippingPhone(o.shipping_phone || '');
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [orderId]);
-
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-500">Memuat...</div>;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
+  const { id } = useParams<{ id: string }>(); const navigate = useNavigate(); const orderId = parseInt(id!);
+  const [order, setOrder] = useState<Awaited<ReturnType<typeof craftOrdersApi.getOrder>>['order'] | null>(null); const [loading, setLoading] = useState(true); const [saving, setSaving] = useState(false); const [error, setError] = useState<string | null>(null); const [deadline, setDeadline] = useState(''); const [customerNotes, setCustomerNotes] = useState(''); const [internalNotes, setInternalNotes] = useState(''); const [couriername, setCourierName] = useState(''); const [shippingAddress, setShippingAddress] = useState(''); const [shippingRecipient, setShippingRecipient] = useState(''); const [shippingPhone, setShippingPhone] = useState('');
+  useEffect(() => { const load = async () => { try { const res = await craftOrdersApi.getOrder(orderId); const loadedOrder = res.order; setOrder(loadedOrder); setDeadline(loadedOrder.deadline_at ? new Date(loadedOrder.deadline_at).toISOString().slice(0, 16) : ''); setCustomerNotes(loadedOrder.customer_notes || ''); setInternalNotes(loadedOrder.internal_notes || ''); setCourierName(loadedOrder.courier_name || ''); setShippingAddress(loadedOrder.shipping_address || ''); setShippingRecipient(loadedOrder.shipping_recipient_name || ''); setShippingPhone(loadedOrder.shipping_phone || ''); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat pesanan.'); } finally { setLoading(false); } }; void load(); }, [orderId]);
+  if (loading) return <div className="flex h-64 items-center justify-center text-sm text-[var(--nexus-muted)]">Memuat pesanan...</div>;
+  if (error) return <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>;
   if (!order) return null;
-
   const canEdit = PRE_PRODUCTION_STATUSES.includes(order.status_code);
-
-  const handleSave = async () => {
-    if (!canEdit) return;
-    setSaving(true);
-    try {
-      await craftOrdersApi.updateOrder(orderId, {
-        deadline_at: deadline || null,
-        customer_notes: customerNotes || null,
-        internal_notes: internalNotes || null,
-        courier_name: couriername || null,
-        shipping_address: shippingAddress || null,
-        shipping_recipient_name: shippingRecipient || null,
-        shipping_phone: shippingPhone || null,
-      });
-      navigate('/app/craft/orders/' + orderId);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-12">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={() => navigate('/app/craft/orders/' + orderId)} className="p-2">
-          <ArrowLeft className="w-5 h-5" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Edit Pesanan — {order.order_code}</h1>
-          <p className="text-sm text-[var(--nexus-muted)] mt-1">Status: {order.status_code}</p>
-        </div>
-      </div>
-
-      {!canEdit && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-800 text-sm">
-          ⚠️ Pesanan ini tidak dapat diedit karena sudah memasuki tahap produksi atau selesai.
-        </div>
-      )}
-
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold border-b pb-2">Informasi Pengiriman</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Tenggat Waktu</label>
-              <input type="datetime-local" className="w-full border rounded-md p-2" value={deadline}
-                onChange={e => setDeadline(e.target.value)} disabled={!canEdit} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Kurir</label>
-              <input type="text" className="w-full border rounded-md p-2" value={couriername}
-                onChange={e => setCourierName(e.target.value)} disabled={!canEdit} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Penerima</label>
-              <input type="text" className="w-full border rounded-md p-2" value={shippingRecipient}
-                onChange={e => setShippingRecipient(e.target.value)} disabled={!canEdit} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Telepon Penerima</label>
-              <input type="text" className="w-full border rounded-md p-2" value={shippingPhone}
-                onChange={e => setShippingPhone(e.target.value)} disabled={!canEdit} />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">Alamat Pengiriman</label>
-              <textarea className="w-full border rounded-md p-2" rows={3} value={shippingAddress}
-                onChange={e => setShippingAddress(e.target.value)} disabled={!canEdit} />
-            </div>
-          </div>
-
-          <h2 className="text-lg font-semibold border-b pb-2 pt-4">Catatan</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Catatan Pelanggan</label>
-              <textarea className="w-full border rounded-md p-2" rows={3} value={customerNotes}
-                onChange={e => setCustomerNotes(e.target.value)} disabled={!canEdit} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Catatan Internal</label>
-              <textarea className="w-full border rounded-md p-2" rows={3} value={internalNotes}
-                onChange={e => setInternalNotes(e.target.value)} disabled={!canEdit} />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {canEdit && (
-        <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={saving} className="gap-2 px-8">
-            <Save className="w-4 h-4" /> {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
-          </Button>
-        </div>
-      )}
-    </div>
-  );
+  const handleSave = async () => { if (!canEdit) return; setSaving(true); try { await craftOrdersApi.updateOrder(orderId, { deadline_at: deadline || null, customer_notes: customerNotes || null, internal_notes: internalNotes || null, courier_name: couriername || null, shipping_address: shippingAddress || null, shipping_recipient_name: shippingRecipient || null, shipping_phone: shippingPhone || null }); navigate('/app/craft/orders/' + orderId); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal menyimpan perubahan.'); } finally { setSaving(false); } };
+  return <div className="space-y-6 pb-12"><OrderPageHeader eyebrow={`Craft Orders / ${order.order_code}`} title={`Edit ${order.order_code}`} description="Perbarui tenggat, pengiriman, dan catatan tanpa mengubah detail transaksi." back={() => navigate('/app/craft/orders/' + orderId)} actions={<><OrderStatusBadge value={order.status_code} /><OrderPriorityBadge value={order.priority_code} /></>} />{!canEdit && <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">Pesanan ini tidak dapat diedit karena sudah memasuki tahap produksi atau selesai.</div>}<Card><div className="space-y-5 p-5 sm:p-6"><OrderSectionHeader number="01" icon={Truck} title="Informasi Pengiriman" description="Field yang terkunci mengikuti aturan status pesanan." /><div className="grid gap-4 md:grid-cols-2"><FormField label="Tenggat waktu"><span className="relative"><CalendarClock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--nexus-muted)]" /><input type="datetime-local" className="orders-input pl-10" value={deadline} onChange={event => setDeadline(event.target.value)} disabled={!canEdit} /></span></FormField><FormField label="Kurir"><input className="orders-input" value={couriername} onChange={event => setCourierName(event.target.value)} disabled={!canEdit} /></FormField><FormField label="Penerima"><input className="orders-input" value={shippingRecipient} onChange={event => setShippingRecipient(event.target.value)} disabled={!canEdit} /></FormField><FormField label="Telepon penerima"><input className="orders-input" value={shippingPhone} onChange={event => setShippingPhone(event.target.value)} disabled={!canEdit} /></FormField><FormField label="Alamat pengiriman" className="md:col-span-2"><textarea className="orders-textarea" rows={3} value={shippingAddress} onChange={event => setShippingAddress(event.target.value)} disabled={!canEdit} /></FormField></div></div></Card><Card><div className="space-y-5 p-5 sm:p-6"><OrderSectionHeader number="02" title="Catatan" description="Bedakan instruksi untuk pelanggan dan kebutuhan internal tim." /><div className="grid gap-4 md:grid-cols-2"><FormField label="Catatan pelanggan"><textarea className="orders-textarea" rows={4} value={customerNotes} onChange={event => setCustomerNotes(event.target.value)} disabled={!canEdit} /></FormField><FormField label="Catatan internal"><textarea className="orders-textarea" rows={4} value={internalNotes} onChange={event => setInternalNotes(event.target.value)} disabled={!canEdit} /></FormField></div></div></Card>{canEdit && <div className="flex justify-end"><Button onClick={handleSave} disabled={saving} className="h-11 px-6"><Save className="h-4 w-4" />{saving ? 'Menyimpan...' : 'Simpan Perubahan'}</Button></div>}</div>;
 }
