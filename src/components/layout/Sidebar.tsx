@@ -59,7 +59,7 @@ const craftNav: NavGroup[] = [
       { name: 'Profil Cetak', path: '/app/craft/products/print-profiles' },
       { name: 'Biaya & Penetapan Harga', path: '/app/craft/products/cost-pricing' },
     ]},
-    { name: 'Printer', icon: Printer, path: '/app/craft/printers', subItems: [
+    { name: 'Printer', icon: Printer, path: '/app/craft/printers', permission: 'craft.printers.read', subItems: [
       { name: 'Daftar Printer', path: '/app/craft/printers' },
       { name: 'Aktivitas Saat Ini', path: '/app/craft/printers/activity' },
       { name: 'Riwayat Cetak', path: '/app/craft/printers/history' },
