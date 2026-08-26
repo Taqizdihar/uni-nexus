@@ -6,3 +6,7 @@ coverage/
 *.log
 .env*
 !.env.example
+server/uploads/products/
+server/uploads/designs/
+uploads/products/
+uploads/designs/

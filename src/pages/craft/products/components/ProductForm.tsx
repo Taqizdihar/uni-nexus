@@ -1,0 +1,38 @@
+import React, { useState } from 'react';
+import { ImagePlus, Save } from 'lucide-react';
+import { Button } from '../../../../components/ui/Button';
+import type { ProductCategory, ProductPayload } from '../../../../types/craft-products';
+
+const input = 'h-10 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 text-sm outline-none transition focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/15';
+
+export type ProductFormValues = ProductPayload & { image?: File | null };
+
+export function ProductForm({ categories, initial, saving, submitLabel = 'Simpan Produk', onSubmit }: { categories: ProductCategory[]; initial?: Partial<ProductPayload>; saving: boolean; submitLabel?: string; onSubmit: (data: ProductFormValues) => Promise<void> }) {
+  const [form, setForm] = useState({
+    name: initial?.name || '', sku: initial?.sku || '', category_id: initial?.category_id ? String(initial.category_id) : '', description: initial?.description || '',
+    product_type: initial?.product_type || 'premade', base_selling_price: String(initial?.base_selling_price ?? 0), estimated_cost: String(initial?.estimated_cost ?? 0),
+    estimated_weight_g: initial?.estimated_weight_g === null || initial?.estimated_weight_g === undefined ? '' : String(initial.estimated_weight_g),
+    estimated_print_minutes: initial?.estimated_print_minutes === null || initial?.estimated_print_minutes === undefined ? '' : String(initial.estimated_print_minutes),
+    default_margin_percent: initial?.default_margin_percent === null || initial?.default_margin_percent === undefined ? '' : String(initial.default_margin_percent),
+  });
+  const [image, setImage] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const update = (key: keyof typeof form, value: string) => setForm(current => ({ ...current, [key]: value }));
+  const numberValue = (value: string) => value === '' ? null : Number(value);
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault(); setError(null);
+    if (!form.name.trim()) { setError('Nama produk wajib diisi.'); return; }
+    const values = [form.base_selling_price, form.estimated_cost, form.estimated_weight_g, form.estimated_print_minutes, form.default_margin_percent].filter(value => value !== '');
+    if (values.some(value => !Number.isFinite(Number(value)))) { setError('Gunakan angka yang valid untuk harga dan estimasi.'); return; }
+    try {
+      await onSubmit({ name: form.name.trim(), sku: form.sku.trim() || null, category_id: form.category_id ? Number(form.category_id) : null, description: form.description.trim() || null,
+        product_type: form.product_type as ProductPayload['product_type'], base_selling_price: Number(form.base_selling_price || 0), estimated_cost: Number(form.estimated_cost || 0),
+        estimated_weight_g: numberValue(form.estimated_weight_g), estimated_print_minutes: numberValue(form.estimated_print_minutes), default_margin_percent: numberValue(form.default_margin_percent), image });
+    } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Produk gagal disimpan.'); }
+  };
+  return <form onSubmit={submit} className="space-y-6"><section className="rounded-xl border border-[var(--nexus-border)] bg-white p-5 shadow-sm sm:p-6"><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--nexus-muted)]">Identitas produk</p><h2 className="mt-1 text-lg font-bold text-[var(--nexus-charcoal)]">Informasi Dasar</h2></div><div className="mt-5 grid gap-4 md:grid-cols-2"><Field label="Nama Produk" required><input className={input} value={form.name} onChange={event => update('name', event.target.value)} /></Field><Field label="SKU" hint="Kosongkan untuk dibuat otomatis."><input className={input} value={form.sku} onChange={event => update('sku', event.target.value)} placeholder="PRD-000001" /></Field><Field label="Kategori"><select className={input} value={form.category_id} onChange={event => update('category_id', event.target.value)}><option value="">Tanpa kategori</option>{categories.filter(category => category.is_active).map(category => <option key={category.id} value={category.id}>{category.parent_name ? `${category.parent_name} › ` : ''}{category.name}</option>)}</select></Field><Field label="Tipe Produk" required><select className={input} value={form.product_type} onChange={event => update('product_type', event.target.value)}><option value="premade">Produk Jadi</option><option value="customizable">Dapat Dikustomisasi</option><option value="custom_service">Layanan Custom</option></select></Field><Field label="Deskripsi" className="md:col-span-2"><textarea className={`${input} h-24 py-2`} value={form.description} onChange={event => update('description', event.target.value)} placeholder="Ringkasan produk dan opsi kustomisasi..." /></Field></div></section>
+    <section className="rounded-xl border border-[var(--nexus-border)] bg-white p-5 shadow-sm sm:p-6"><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--nexus-muted)]">Komersial & produksi</p><h2 className="mt-1 text-lg font-bold text-[var(--nexus-charcoal)]">Harga dan Estimasi</h2><p className="mt-1 text-sm text-[var(--nexus-muted)]">BOM, file desain, dan profil cetak dapat ditambahkan setelah produk dibuat.</p></div><div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3"><Field label="Harga Jual Dasar"><input type="number" min="0" step="1" className={input} value={form.base_selling_price} onChange={event => update('base_selling_price', event.target.value)} /></Field><Field label="Estimasi Biaya"><input type="number" min="0" step="1" className={input} value={form.estimated_cost} onChange={event => update('estimated_cost', event.target.value)} /></Field><Field label="Target Margin (%)"><input type="number" min="0" max="100" step="0.1" className={input} value={form.default_margin_percent} onChange={event => update('default_margin_percent', event.target.value)} /></Field><Field label="Estimasi Material / Berat (g)"><input type="number" min="0" step="0.01" className={input} value={form.estimated_weight_g} onChange={event => update('estimated_weight_g', event.target.value)} /></Field><Field label="Estimasi Waktu Cetak (menit)"><input type="number" min="0" step="1" className={input} value={form.estimated_print_minutes} onChange={event => update('estimated_print_minutes', event.target.value)} /></Field><Field label="Gambar Produk" hint="JPG, PNG, WEBP · maks. 5 MB"><label className={`${input} flex cursor-pointer items-center gap-2 text-[var(--nexus-muted)]`}><ImagePlus className="h-4 w-4" /><span className="truncate">{image ? image.name : 'Pilih gambar'}</span><input className="hidden" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onChange={event => setImage(event.target.files?.[0] || null)} /></label></Field></div></section>
+    {error && <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}<div className="flex justify-end"><Button type="submit" disabled={saving}>{saving ? 'Menyimpan...' : <><Save className="h-4 w-4" />{submitLabel}</>}</Button></div></form>;
+}
+
+function Field({ label, required, hint, className, children }: { label: string; required?: boolean; hint?: string; className?: string; children: React.ReactNode }) { return <label className={`flex flex-col gap-1.5 ${className || ''}`}><span className="text-xs font-semibold text-[var(--nexus-charcoal)]">{label}{required && <span className="text-red-500"> *</span>}</span>{children}{hint && <span className="text-[11px] text-[var(--nexus-muted)]">{hint}</span>}</label>; }

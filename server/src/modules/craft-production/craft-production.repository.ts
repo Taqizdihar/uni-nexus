@@ -576,6 +576,35 @@ export class CraftProductionRepository {
     return rows.map((row: any) => normalizeNumericFields(row, ['id', 'product_id', 'variant_id']));
   }
 
+  async getBomSuggestion(businessUnitId: number, productId?: number, variantId?: number) {
+    if (!productId) return null;
+    const [bomRows]: any = await pool.execute(
+      `SELECT b.id, b.name, b.version_no, b.variant_id
+       FROM product_boms b
+       JOIN products p ON p.id = b.product_id AND p.business_unit_id = ?
+       WHERE b.product_id = ? AND b.is_active = 1 AND (b.variant_id <=> ? OR b.variant_id IS NULL)
+       ORDER BY (b.variant_id <=> ?) DESC, b.version_no DESC
+       LIMIT 1`,
+      [businessUnitId, productId, variantId ?? null, variantId ?? null],
+    );
+    if (!bomRows.length) return null;
+    const bom = bomRows[0];
+    const [items]: any = await pool.execute(
+      `SELECT bi.material_id, bi.unit_id, bi.quantity, bi.waste_factor_percent, bi.is_optional,
+              m.name AS material_name, u.code AS unit_code,
+              (bi.quantity * (1 + bi.waste_factor_percent / 100)) AS planned_qty
+       FROM product_bom_items bi
+       JOIN materials m ON m.id = bi.material_id AND m.business_unit_id = ? AND m.is_active = 1 AND m.deleted_at IS NULL
+       JOIN units_of_measure u ON u.id = bi.unit_id AND u.is_active = 1
+       WHERE bi.bom_id = ?
+       ORDER BY bi.id`,
+      [businessUnitId, bom.id],
+    );
+    return normalizeNumericFields({ ...bom, items: items.map((item: any) => normalizeNumericFields(item, [
+      'material_id', 'unit_id', 'quantity', 'waste_factor_percent', 'planned_qty',
+    ])) }, ['id', 'version_no', 'variant_id']);
+  }
+
   async getQcTemplates(businessUnitId: number) {
     const [templateRows]: any = await pool.execute(
       `SELECT id, name, description, is_default FROM qc_templates
@@ -599,11 +628,11 @@ export class CraftProductionRepository {
   }
 
   async getReferences(businessUnitId: number, productId?: number, variantId?: number, printerId?: number) {
-    const [printers, operators, materials, units, printProfiles, designFiles, qcTemplates] = await Promise.all([
+    const [printers, operators, materials, units, printProfiles, designFiles, qcTemplates, bomSuggestion] = await Promise.all([
       this.getPrinters(businessUnitId), this.getOperators(businessUnitId), this.getMaterials(businessUnitId), this.getUnits(),
       this.getPrintProfiles(businessUnitId, productId, variantId, printerId),
-      this.getDesignFiles(businessUnitId, productId, variantId), this.getQcTemplates(businessUnitId),
+      this.getDesignFiles(businessUnitId, productId, variantId), this.getQcTemplates(businessUnitId), this.getBomSuggestion(businessUnitId, productId, variantId),
     ]);
-    return { printers, operators, materials, units, print_profiles: printProfiles, design_files: designFiles, qc_templates: qcTemplates };
+    return { printers, operators, materials, units, print_profiles: printProfiles, design_files: designFiles, qc_templates: qcTemplates, bom_suggestion: bomSuggestion };
   }
 }

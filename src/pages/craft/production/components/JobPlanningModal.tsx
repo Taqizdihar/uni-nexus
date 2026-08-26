@@ -99,8 +99,22 @@ export function JobPlanningModal({ open, mode = 'create', queueItem, defaults, t
         const available = data.printers.find(printer => printer.status_code === 'available' && Boolean(printer.is_active));
         if (available) setPrinterId(String(available.id));
       }
-      if (!defaults?.printProfileId && data.print_profiles.length === 1) setProfileId(String(data.print_profiles[0].id));
+      if (!defaults?.printProfileId) {
+        const defaultProfile = data.print_profiles.find(profile => Boolean(profile.is_default));
+        if (defaultProfile) setProfileId(String(defaultProfile.id));
+        else if (data.print_profiles.length === 1) setProfileId(String(data.print_profiles[0].id));
+      }
       if (!defaults?.designFileId && data.design_files.length === 1) setDesignFileId(String(data.design_files[0].id));
+      if (!defaults?.materials?.length && data.bom_suggestion?.items.length) {
+        const initialQuantity = Number(defaults?.quantity || (maxQuantity && maxQuantity > 0 ? maxQuantity : queueItem?.quantity || 1));
+        setMaterialRows(data.bom_suggestion.items.map((item, index) => ({
+          key: Date.now() + index,
+          materialId: String(item.material_id),
+          batchId: '',
+          plannedQty: String(Number(item.planned_qty) * initialQuantity),
+          reserve: true,
+        })));
+      }
     }).catch(requestError => setError(requestError instanceof Error ? requestError.message : 'Gagal memuat referensi produksi.')).finally(() => setLoading(false));
   }, [defaults, maxQuantity, open, queueItem]);
 
@@ -201,7 +215,7 @@ export function JobPlanningModal({ open, mode = 'create', queueItem, defaults, t
             <Field label="Profil cetak"><select className="production-input production-select" value={profileId} onChange={event => setProfileId(event.target.value)}><option value="">Tanpa profil</option>{references.print_profiles.map(profile => <option key={profile.id} value={profile.id}>{profile.name}</option>)}</select></Field>
             <Field label="File desain"><select className="production-input production-select" value={designFileId} onChange={event => setDesignFileId(event.target.value)}><option value="">Tanpa file desain</option>{references.design_files.map(file => <option key={file.id} value={file.id}>{file.name || file.file_name}</option>)}</select></Field>
           </div></section>
-          <section className="space-y-4"><ProductionSectionHeader icon={Layers3} title="Rencana Material" description={mode === 'edit' ? 'Daftar ini menggantikan rencana material sebelumnya. Reservasi lama akan diselaraskan oleh sistem.' : 'Material boleh dikosongkan. Jika tidak ditautkan, pemakaian inventaris tidak tercatat otomatis.'} action={<Button type="button" size="sm" variant="outline" onClick={() => setMaterialRows(current => [...current, { key: Date.now(), materialId: '', batchId: '', plannedQty: estimatedMaterialG || '', reserve: true }])}><Plus className="h-3.5 w-3.5" /> Material</Button>} />
+          <section className="space-y-4"><ProductionSectionHeader icon={Layers3} title="Rencana Material" description={mode === 'edit' ? 'Daftar ini menggantikan rencana material sebelumnya. Reservasi lama akan diselaraskan oleh sistem.' : references.bom_suggestion ? `Disarankan dari BOM ${references.bom_suggestion.name} v${references.bom_suggestion.version_no}; stok belum berubah sampai pekerjaan direncanakan.` : 'Material boleh dikosongkan. Jika tidak ditautkan, pemakaian inventaris tidak tercatat otomatis.'} action={<Button type="button" size="sm" variant="outline" onClick={() => setMaterialRows(current => [...current, { key: Date.now(), materialId: '', batchId: '', plannedQty: estimatedMaterialG || '', reserve: true }])}><Plus className="h-3.5 w-3.5" /> Material</Button>} />
             <div className="grid gap-4 md:grid-cols-2"><Field label="Total estimasi material"><div className="relative"><input type="number" min={0} step="0.01" className="production-input pr-10" value={estimatedMaterialG} onChange={event => setEstimatedMaterialG(event.target.value)} /><span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--nexus-muted)]">g</span></div></Field><Field label="Catatan"><textarea className="production-textarea min-h-20" value={notes} onChange={event => setNotes(event.target.value)} placeholder="Instruksi operator, orientasi, atau catatan produksi..." /></Field></div>
             {materialRows.length === 0 ? <div className="rounded-lg border border-dashed border-[var(--nexus-border)] bg-[var(--nexus-cream-soft)]/50 p-4 text-xs leading-5 text-[var(--nexus-muted)]">Belum ada material inventaris yang ditautkan. Pekerjaan tetap dapat direncanakan.</div> : <div className="space-y-3">{selectedMaterials.map(({ row, material }) => <MaterialPlannerRow key={row.key} row={row} material={material} options={references.materials} update={changes => updateMaterial(row.key, changes)} remove={() => setMaterialRows(current => current.filter(item => item.key !== row.key))} />)}</div>}
           </section>

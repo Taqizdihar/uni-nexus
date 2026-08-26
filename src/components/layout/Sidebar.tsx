@@ -53,7 +53,7 @@ const craftNav: NavGroup[] = [
       { name: 'Kontrol Kualitas', path: '/app/craft/production/qc' },
       { name: 'Kalender Produksi', path: '/app/craft/production/calendar' },
     ]},
-    { name: 'Produk & Desain', icon: PackageSearch, path: '/app/craft/products', subItems: [
+    { name: 'Produk & Desain', icon: PackageSearch, path: '/app/craft/products', permission: 'craft.products.read', subItems: [
       { name: 'Katalog Produk', path: '/app/craft/products' },
       { name: 'Pustaka Desain 3D', path: '/app/craft/products/design-library' },
       { name: 'Profil Cetak', path: '/app/craft/products/print-profiles' },

@@ -252,6 +252,22 @@ export interface ProductionReferences {
   print_profiles: PrintProfileOption[];
   design_files: DesignFileOption[];
   qc_templates: QcTemplateOption[];
+  bom_suggestion?: {
+    id: number;
+    name: string;
+    version_no: number;
+    variant_id: number | null;
+    items: Array<{
+      material_id: number;
+      unit_id: number;
+      quantity: number;
+      waste_factor_percent: number;
+      planned_qty: number;
+      is_optional: boolean | number;
+      material_name: string;
+      unit_code: string;
+    }>;
+  } | null;
 }
 
 export interface ProductionJobDetail {
@@ -310,6 +326,7 @@ export interface PrintProfileOption {
   printer_id: number | null;
   estimated_print_minutes?: number | null;
   estimated_material_qty?: number | null;
+  is_default?: boolean | number;
 }
 
 export interface DesignFileOption {
