@@ -10,7 +10,9 @@
     "smoke:craft-printers": "tsx scripts/smoke-craft-printers.ts",
     "smoke:craft-materials": "tsx scripts/smoke-craft-materials.ts",
     "smoke:craft-customers": "tsx scripts/smoke-craft-customers.ts",
+    "smoke:craft-procurement": "tsx scripts/smoke-craft-procurement.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
+    "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
     "start": "node dist/server.js"
   },

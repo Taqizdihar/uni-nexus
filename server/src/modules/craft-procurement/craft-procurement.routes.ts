@@ -1,0 +1,200 @@
+import { Router } from "express";
+import {
+  requireAuth,
+  requirePermission,
+} from "../../middleware/auth.middleware";
+import { CraftProcurementController } from "./craft-procurement.controller";
+
+const controller = new CraftProcurementController();
+export const craftProcurementRoutes = Router();
+craftProcurementRoutes.use(requireAuth);
+
+craftProcurementRoutes.get(
+  "/",
+  requirePermission("craft.procurement.read"),
+  controller.overview,
+);
+craftProcurementRoutes.get(
+  "/overview",
+  requirePermission("craft.procurement.read"),
+  controller.overview,
+);
+craftProcurementRoutes.get(
+  "/references",
+  requirePermission("craft.procurement.read"),
+  controller.references,
+);
+craftProcurementRoutes.get(
+  "/history",
+  requirePermission("craft.procurement.read"),
+  controller.history,
+);
+craftProcurementRoutes.post(
+  "/suppliers/duplicates",
+  requirePermission("craft.procurement.read"),
+  controller.supplierDuplicates,
+);
+craftProcurementRoutes.get(
+  "/suppliers",
+  requirePermission("craft.procurement.read"),
+  controller.listSuppliers,
+);
+craftProcurementRoutes.post(
+  "/suppliers",
+  requirePermission("craft.procurement.write"),
+  controller.createSupplier,
+);
+craftProcurementRoutes.get(
+  "/suppliers/:id",
+  requirePermission("craft.procurement.read"),
+  controller.getSupplier,
+);
+craftProcurementRoutes.patch(
+  "/suppliers/:id",
+  requirePermission("craft.procurement.write"),
+  controller.updateSupplier,
+);
+craftProcurementRoutes.patch(
+  "/suppliers/:id/status",
+  requirePermission("craft.procurement.write"),
+  controller.setSupplierStatus,
+);
+craftProcurementRoutes.post(
+  "/suppliers/:id/contacts",
+  requirePermission("craft.procurement.write"),
+  controller.createSupplierContact,
+);
+craftProcurementRoutes.patch(
+  "/suppliers/:id/contacts/:contactId",
+  requirePermission("craft.procurement.write"),
+  controller.updateSupplierContact,
+);
+craftProcurementRoutes.delete(
+  "/suppliers/:id/contacts/:contactId",
+  requirePermission("craft.procurement.write"),
+  controller.deleteSupplierContact,
+);
+
+craftProcurementRoutes.get(
+  "/requests",
+  requirePermission("craft.procurement.read"),
+  controller.listRequests,
+);
+craftProcurementRoutes.post(
+  "/requests",
+  requirePermission("craft.procurement.write"),
+  controller.createRequest,
+);
+craftProcurementRoutes.get(
+  "/requests/:id",
+  requirePermission("craft.procurement.read"),
+  controller.getRequest,
+);
+craftProcurementRoutes.patch(
+  "/requests/:id",
+  requirePermission("craft.procurement.write"),
+  controller.updateRequest,
+);
+craftProcurementRoutes.post(
+  "/requests/:id/submit",
+  requirePermission("craft.procurement.write"),
+  controller.submitRequest,
+);
+craftProcurementRoutes.post(
+  "/requests/:id/approve",
+  requirePermission("craft.procurement.write"),
+  controller.approveRequest,
+);
+craftProcurementRoutes.post(
+  "/requests/:id/reject",
+  requirePermission("craft.procurement.write"),
+  controller.rejectRequest,
+);
+craftProcurementRoutes.post(
+  "/requests/:id/close",
+  requirePermission("craft.procurement.write"),
+  controller.closeRequest,
+);
+
+craftProcurementRoutes.get(
+  "/orders",
+  requirePermission("craft.procurement.read"),
+  controller.listOrders,
+);
+craftProcurementRoutes.post(
+  "/orders",
+  requirePermission("craft.procurement.write"),
+  controller.createOrder,
+);
+craftProcurementRoutes.get(
+  "/orders/:id/pdf",
+  requirePermission("craft.procurement.read"),
+  controller.downloadOrderPdf,
+);
+craftProcurementRoutes.get(
+  "/orders/:id",
+  requirePermission("craft.procurement.read"),
+  controller.getOrder,
+);
+craftProcurementRoutes.patch(
+  "/orders/:id",
+  requirePermission("craft.procurement.write"),
+  controller.updateOrder,
+);
+craftProcurementRoutes.post(
+  "/orders/:id/send",
+  requirePermission("craft.procurement.write"),
+  controller.sendOrder,
+);
+craftProcurementRoutes.post(
+  "/orders/:id/confirm",
+  requirePermission("craft.procurement.write"),
+  controller.confirmOrder,
+);
+craftProcurementRoutes.post(
+  "/orders/:id/cancel",
+  requirePermission("craft.procurement.write"),
+  controller.cancelOrder,
+);
+craftProcurementRoutes.post(
+  "/orders/:id/close",
+  requirePermission("craft.procurement.write"),
+  controller.closeOrder,
+);
+
+craftProcurementRoutes.get(
+  "/receipts",
+  requirePermission("craft.procurement.read"),
+  controller.listReceipts,
+);
+craftProcurementRoutes.post(
+  "/receipts",
+  requirePermission("craft.procurement.write"),
+  controller.createReceipt,
+);
+craftProcurementRoutes.get(
+  "/receipts/:id",
+  requirePermission("craft.procurement.read"),
+  controller.getReceipt,
+);
+
+craftProcurementRoutes.get(
+  "/invoices",
+  requirePermission("craft.procurement.read"),
+  controller.listInvoices,
+);
+craftProcurementRoutes.post(
+  "/invoices",
+  requirePermission("craft.procurement.write"),
+  controller.createInvoice,
+);
+craftProcurementRoutes.get(
+  "/invoices/:id/document",
+  requirePermission("craft.procurement.read"),
+  controller.downloadInvoiceDocument,
+);
+craftProcurementRoutes.post(
+  "/invoices/:id/void",
+  requirePermission("craft.procurement.write"),
+  controller.voidInvoice,
+);
