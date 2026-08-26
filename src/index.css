@@ -86,6 +86,26 @@ body {
 .orders-card { @apply rounded-xl border border-[var(--nexus-border)] bg-white shadow-[0_2px_10px_-4px_rgba(17,17,17,0.08)]; }
 .orders-kpi { @apply rounded-xl border border-[var(--nexus-border)] bg-white px-4 py-3 shadow-[0_2px_10px_-4px_rgba(17,17,17,0.08)]; }
 
+/* Craft Production visual language */
+.production-page-header { @apply flex flex-col gap-5 border-b border-[var(--nexus-border)] pb-5 sm:flex-row sm:items-end sm:justify-between; }
+.production-eyebrow { @apply mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--nexus-muted)]; }
+.production-page-title { @apply text-2xl font-bold tracking-[-0.02em] text-[var(--nexus-charcoal)] sm:text-[28px]; }
+.production-page-description { @apply mt-1 text-sm leading-6 text-[var(--nexus-muted)]; }
+.production-input { @apply h-11 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 text-sm text-[var(--nexus-charcoal)] outline-none transition duration-150 placeholder:text-gray-400 focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/20 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400; }
+.production-select { padding-right: 2.75rem; text-overflow: ellipsis; }
+.production-textarea { @apply min-h-24 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 py-2.5 text-sm text-[var(--nexus-charcoal)] outline-none transition duration-150 placeholder:text-gray-400 focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/20 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400; }
+.production-filter-select { @apply h-11 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 text-sm text-[var(--nexus-charcoal)] outline-none transition focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/20; }
+.production-empty-state { @apply flex min-h-72 flex-col items-center justify-center px-6 py-12 text-center; }
+.production-empty-icon { @apply flex h-14 w-14 items-center justify-center rounded-full border border-[var(--nexus-yellow)]/40 bg-[var(--nexus-yellow)]/15 text-[var(--nexus-yellow-deep)]; }
+.production-kpi { @apply rounded-xl border border-[var(--nexus-border)] bg-white px-4 py-3 shadow-[0_2px_10px_-4px_rgba(17,17,17,0.08)]; }
+.production-table-head { @apply sticky top-0 z-10 border-b border-[var(--nexus-border)] bg-[var(--nexus-cream-soft)] text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--nexus-muted)]; }
+.production-table-head th { @apply px-5 py-3.5 font-bold; }
+.production-table-row { @apply border-b border-[var(--nexus-border)]/70 transition-colors duration-150 last:border-0 hover:bg-[var(--nexus-cream-soft)]/55; }
+.production-table-row td { @apply px-5 py-3.5 align-middle; }
+.production-segmented { @apply inline-flex rounded-lg border border-[var(--nexus-border)] bg-[var(--nexus-cream-soft)] p-1; }
+.production-segmented button { @apply inline-flex h-8 items-center rounded-md px-3 text-xs font-semibold text-[var(--nexus-muted)] transition hover:text-[var(--nexus-charcoal)]; }
+.production-segmented button.is-active { @apply bg-white text-[var(--nexus-charcoal)] shadow-sm ring-1 ring-[var(--nexus-border)]; }
+
 input[type='date'], input[type='datetime-local'], input[type='number'], input[type='email'], input[type='tel'], input[type='text'], select, textarea { accent-color: var(--nexus-yellow-deep); }
 
 /* Cinematic Dark Theme for Landing/Auth */

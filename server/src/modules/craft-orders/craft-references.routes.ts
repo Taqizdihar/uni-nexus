@@ -181,7 +181,7 @@ router.get('/production-queue', async (_req: Request, res: Response, next): Prom
       JOIN parties p ON o.customer_party_id = p.id
       JOIN craft_order_items coi ON pqi.order_item_id = coi.id
       WHERE pqi.business_unit_id = ?
-        AND pqi.status_code NOT IN ('done', 'cancelled')
+        AND pqi.status_code NOT IN ('completed', 'cancelled')
       ORDER BY pqi.queue_position ASC
     `, [craftBuId]);
     sendSuccess(res, rows);

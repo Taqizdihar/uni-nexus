@@ -1,13 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Layers, Timer } from 'lucide-react';
+import { Timer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../components/ui/Card';
 import { craftOrdersApi } from '../../../services/api/craft-orders.api';
-import type { ProductionQueueItem } from '../../../types/craft-orders';
+import type { OrderStatus, ProductionQueueItem } from '../../../types/craft-orders';
 import { EmptyOrdersState, OrderPageHeader, OrderPriorityBadge, OrderStatusBadge, TableHeader, TableRow } from './components/OrdersUI';
 
 export function ProductionQueuePage() {
-  const navigate = useNavigate(); const [queue, setQueue] = useState<ProductionQueueItem[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState<string | null>(null);
-  useEffect(() => { void (async () => { try { setQueue(await craftOrdersApi.getProductionQueue()); } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Gagal memuat antrean produksi.'); } finally { setLoading(false); } })(); }, []);
-  return <div className="space-y-6 pb-8"><OrderPageHeader title="Antrean Produksi" description="Urutan kerja item Craft yang siap diproses oleh tim produksi." />{error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}<Card>{loading ? <div className="flex h-64 items-center justify-center text-sm text-[var(--nexus-muted)]">Memuat antrean...</div> : queue.length === 0 ? <EmptyOrdersState title="Antrean Produksi Masih Kosong" description="Item yang sudah masuk antrean akan tampil di sini." /> : <div className="overflow-x-auto"><table className="w-full min-w-[1080px] text-left text-sm"><TableHeader><tr>{['Posisi', 'ID Pesanan', 'Pelanggan', 'Item', 'Jumlah', 'Prioritas', 'Skor', 'Tenggat', 'Est. Cetak', 'Status'].map(label => <th key={label}>{label}</th>)}</tr></TableHeader><tbody>{queue.map(item => <TableRow key={item.id} onClick={() => navigate(`/app/craft/orders/${item.order_id}`)}><td><span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--nexus-charcoal)] text-xs font-bold text-[var(--nexus-yellow)]">{item.queue_position}</span></td><td><span className="orders-code">{item.order_code}</span></td><td>{item.customer_name}</td><td className="max-w-48 truncate font-medium">{item.item_name}</td><td>{Number(item.quantity)}</td><td><OrderPriorityBadge value={item.priority_code} /></td><td className="text-[var(--nexus-muted)]">{Number(item.priority_score).toFixed(1)}</td><td>{item.deadline_at ? new Date(item.deadline_at).toLocaleDateString('id-ID') : '-'}</td><td><span className="inline-flex items-center gap-1 text-[var(--nexus-muted)]"><Timer className="h-3.5 w-3.5" />{item.estimated_print_minutes ? `${item.estimated_print_minutes} mnt` : '-'}</span></td><td><OrderStatusBadge value={item.status_code === 'printing' ? 'in_production' : 'ready'} /></td></TableRow>)}</tbody></table></div>}</Card></div>;
+  const navigate = useNavigate();
+  const [queue, setQueue] = useState<ProductionQueueItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        setQueue(await craftOrdersApi.getProductionQueue());
+      } catch (requestError) {
+        setError(requestError instanceof Error ? requestError.message : 'Gagal memuat antrean produksi.');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  return <div className="space-y-6 pb-8">
+    <OrderPageHeader title="Antrean Produksi" description="Urutan kerja item Craft yang siap diproses oleh tim produksi." />
+    {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+    <Card>{loading ? <div className="flex h-64 items-center justify-center text-sm text-[var(--nexus-muted)]">Memuat antrean...</div> : queue.length === 0 ? <EmptyOrdersState title="Antrean Produksi Masih Kosong" description="Item yang sudah masuk antrean akan tampil di sini." /> : <div className="overflow-x-auto"><table className="w-full min-w-[1080px] text-left text-sm">
+      <TableHeader><tr>{['Posisi', 'ID Pesanan', 'Pelanggan', 'Item', 'Jumlah', 'Prioritas', 'Skor', 'Tenggat', 'Est. Cetak', 'Status'].map(label => <th key={label}>{label}</th>)}</tr></TableHeader>
+      <tbody>{queue.map(item => <TableRow key={item.id} onClick={() => navigate(`/app/craft/orders/${item.order_id}`)}>
+        <td><span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--nexus-charcoal)] text-xs font-bold text-[var(--nexus-yellow)]">{item.queue_position}</span></td>
+        <td><span className="orders-code">{item.order_code}</span></td>
+        <td>{item.customer_name}</td>
+        <td className="max-w-48 truncate font-medium">{item.item_name}</td>
+        <td>{Number(item.quantity)}</td>
+        <td><OrderPriorityBadge value={item.priority_code} /></td>
+        <td className="text-[var(--nexus-muted)]">{Number(item.priority_score).toFixed(1)}</td>
+        <td>{item.deadline_at ? new Date(item.deadline_at).toLocaleDateString('id-ID') : '-'}</td>
+        <td><span className="inline-flex items-center gap-1 text-[var(--nexus-muted)]"><Timer className="h-3.5 w-3.5" />{item.estimated_print_minutes ? `${item.estimated_print_minutes} mnt` : '-'}</span></td>
+        <td><OrderStatusBadge value={queueStatusToOrderStatus(item.status_code)} /></td>
+      </TableRow>)}</tbody>
+    </table></div>}</Card>
+  </div>;
+}
+
+function queueStatusToOrderStatus(status: string): OrderStatus {
+  const mapping: Record<string, OrderStatus> = {
+    queued: 'ready',
+    scheduled: 'ready',
+    printing: 'in_production',
+    completed: 'completed',
+    cancelled: 'cancelled',
+  };
+  return mapping[status] || 'ready';
 }

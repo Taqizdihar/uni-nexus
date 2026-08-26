@@ -1,0 +1,363 @@
+{
+  "generatedAt": "2026-08-24T09:27:45.524Z",
+  "baseUrl": "http://localhost:5173",
+  "apiUrl": "http://localhost:3001/api/v1",
+  "outputDirectory": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Projects\\UNI-NEXUS\\artifacts\\craft-production-browser-final-20260824",
+  "chromePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "authenticatedUserId": 2,
+  "forbiddenVisibleMarkers": [
+    "NX-102",
+    "NX-103",
+    "Budi Santoso",
+    "Dikemas"
+  ],
+  "routes": [
+    {
+      "key": "board",
+      "path": "/app/craft/production",
+      "expectedTitle": "Papan Produksi",
+      "actualTitle": "Papan Produksi",
+      "finalUrl": "http://localhost:5173/app/craft/production",
+      "screenshot": "01-papan-produksi.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "board",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "board",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "board",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "active",
+      "path": "/app/craft/production/active",
+      "expectedTitle": "Produksi Aktif",
+      "actualTitle": "Produksi Aktif",
+      "finalUrl": "http://localhost:5173/app/craft/production/active",
+      "screenshot": "02-produksi-aktif.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "active",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "active",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "active",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "queue",
+      "path": "/app/craft/production/queue",
+      "expectedTitle": "Antrean Cetak",
+      "actualTitle": "Antrean Cetak",
+      "finalUrl": "http://localhost:5173/app/craft/production/queue",
+      "screenshot": "03-antrean-cetak.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "queue",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "queue",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "queue",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "jobs",
+      "path": "/app/craft/production/jobs",
+      "expectedTitle": "Pekerjaan Cetak",
+      "actualTitle": "Pekerjaan Cetak",
+      "finalUrl": "http://localhost:5173/app/craft/production/jobs",
+      "screenshot": "04-pekerjaan-cetak.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "jobs",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "jobs",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "jobs",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "failures",
+      "path": "/app/craft/production/failures",
+      "expectedTitle": "Cetak Gagal",
+      "actualTitle": "Cetak Gagal",
+      "finalUrl": "http://localhost:5173/app/craft/production/failures",
+      "screenshot": "05-cetak-gagal.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "failures",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "failures",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "failures",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "qc",
+      "path": "/app/craft/production/qc",
+      "expectedTitle": "Kontrol Kualitas",
+      "actualTitle": "Kontrol Kualitas",
+      "finalUrl": "http://localhost:5173/app/craft/production/qc",
+      "screenshot": "06-kontrol-kualitas.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "qc",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "qc",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "qc",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    },
+    {
+      "key": "calendar",
+      "path": "/app/craft/production/calendar",
+      "expectedTitle": "Kalender Produksi",
+      "actualTitle": "Kalender Produksi",
+      "finalUrl": "http://localhost:5173/app/craft/production/calendar",
+      "screenshot": "07-kalender-produksi.png",
+      "forbiddenMarkers": [],
+      "diagnostics": [
+        {
+          "route": "calendar",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connecting..."
+        },
+        {
+          "route": "calendar",
+          "source": "console",
+          "level": "info",
+          "message": "[vite] connected."
+        },
+        {
+          "route": "calendar",
+          "source": "console",
+          "level": "info",
+          "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        }
+      ],
+      "failures": [],
+      "passed": true
+    }
+  ],
+  "diagnostics": [
+    {
+      "route": "board",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "board",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "board",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "active",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "active",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "active",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "queue",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "queue",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "queue",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "jobs",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "jobs",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "jobs",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "failures",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "failures",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "failures",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "qc",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "qc",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "qc",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "route": "calendar",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connecting..."
+    },
+    {
+      "route": "calendar",
+      "source": "console",
+      "level": "info",
+      "message": "[vite] connected."
+    },
+    {
+      "route": "calendar",
+      "source": "console",
+      "level": "info",
+      "message": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    }
+  ],
+  "passed": true,
+  "failures": []
+}

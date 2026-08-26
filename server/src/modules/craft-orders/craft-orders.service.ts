@@ -466,7 +466,7 @@ export class CraftOrdersService {
         if (!items.length) throw new AppError(400, 'INVALID_ORDER_ITEM', 'Item tidak termasuk dalam pesanan ini.');
         const [existing]: any = await connection.execute(
           `SELECT id FROM production_queue_items
-           WHERE order_item_id = ? AND status_code IN ('queued', 'printing') LIMIT 1`,
+           WHERE order_item_id = ? AND status_code IN ('queued', 'scheduled', 'printing') LIMIT 1`,
           [itemId],
         );
         if (existing.length) continue;

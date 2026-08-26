@@ -45,8 +45,7 @@ const router = createBrowserRouter(createRoutesFromElements(<>
     <Route path="profile" element={<Profile />} />
     <Route path="audit-log" element={<PlannedModulePage title="Log Audit" description="Pelacakan aktivitas sistem dan log keamanan." stage="Lanjutan" icon={ShieldAlert} />} />
     <Route path="craft/orders/*" element={<CraftOrders />} />
-    <Route path="craft/production" element={<CraftProduction />} />
-    <Route path="craft/production/*" element={<CraftProduction />} />
+    <Route path="craft/production/*" element={<PermissionGate permission="craft.production.read"><CraftProduction /></PermissionGate>} />
     <Route path="craft/products" element={<CraftProducts />} />
     <Route path="craft/products/*" element={<CraftProducts />} />
     <Route path="craft/printers" element={<CraftPrinters />} />

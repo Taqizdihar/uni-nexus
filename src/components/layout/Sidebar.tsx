@@ -44,7 +44,7 @@ const craftNav: NavGroup[] = [
       { name: 'Pesanan Selesai', path: '/app/craft/orders/completed' },
       { name: 'Dibatalkan / Dikembalikan', path: '/app/craft/orders/cancelled' },
     ]},
-    { name: 'Produksi', icon: Layers, path: '/app/craft/production', subItems: [
+    { name: 'Produksi', icon: Layers, path: '/app/craft/production', permission: 'craft.production.read', subItems: [
       { name: 'Papan Produksi', path: '/app/craft/production' },
       { name: 'Produksi Aktif', path: '/app/craft/production/active' },
       { name: 'Antrean Cetak', path: '/app/craft/production/queue' },
@@ -151,7 +151,7 @@ const SidebarItem: React.FC<{ item: NavItem }> = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const isActive = location.pathname === item.path || (item.subItems && item.subItems.some(sub => location.pathname === sub.path));
+  const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
 
   useEffect(() => {
     if (isActive) setIsOpen(true);
@@ -181,7 +181,7 @@ const SidebarItem: React.FC<{ item: NavItem }> = ({ item }) => {
               <NavLink
                 key={subItem.path}
                 to={subItem.path}
-                end
+                end={subItem.path === item.path}
                 className={({ isActive }) => cn(
                   "block px-3 py-1.5 rounded-md text-sm transition-colors",
                   isActive ? "text-[var(--nexus-yellow-deep)] font-semibold" : "text-gray-500 hover:text-[var(--nexus-charcoal)] hover:bg-gray-50"
@@ -230,7 +230,7 @@ export function Sidebar() {
               {group.label}
             </h3>
             <div className="space-y-1">
-              {group.items.map((item) => (
+              {group.items.filter(item => !item.permission || hasPermission(item.permission)).map((item) => (
                 <SidebarItem key={item.name} item={item} />
               ))}
             </div>

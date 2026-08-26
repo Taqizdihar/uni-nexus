@@ -6,6 +6,7 @@ import usersRoutes from '../modules/users/users.routes';
 import profileRoutes from '../modules/users/profile.routes';
 import { craftOrdersRoutes } from '../modules/craft-orders/craft-orders.routes';
 import { craftReferencesRoutes } from '../modules/craft-orders/craft-references.routes';
+import { craftProductionRoutes } from '../modules/craft-production/craft-production.routes';
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use('/profile', profileRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);
+router.use('/craft/production', craftProductionRoutes);
 
 export default router;
