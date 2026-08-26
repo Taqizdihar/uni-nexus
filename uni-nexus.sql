@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 26, 2026 at 12:43 PM
+-- Generation Time: Aug 26, 2026 at 01:45 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -1371,7 +1371,9 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (24, 'audit.read', 'audit', 'Lihat Log Audit', NULL, '2026-08-22 07:48:09.733'),
 (25, 'reports.export', 'reports', 'Ekspor Laporan', NULL, '2026-08-22 07:48:09.733'),
 (26, 'craft.customers.read', 'craft_customers', 'Lihat Pelanggan & Mitra Craft', 'Melihat data pelanggan, mitra, kontak, riwayat pesanan, dan informasi terkait di Uni-Inside Craft.', '2026-08-26 15:19:36.759'),
-(27, 'craft.customers.write', 'craft_customers', 'Kelola Pelanggan & Mitra Craft', 'Membuat, mengubah, mengaktifkan, menonaktifkan, serta mengelola pelanggan, mitra, kontak, dan harga khusus mitra Uni-Inside Craft.', '2026-08-26 15:19:36.782');
+(27, 'craft.customers.write', 'craft_customers', 'Kelola Pelanggan & Mitra Craft', 'Membuat, mengubah, mengaktifkan, menonaktifkan, serta mengelola pelanggan, mitra, kontak, dan harga khusus mitra Uni-Inside Craft.', '2026-08-26 15:19:36.782'),
+(28, 'craft.procurement.read', 'craft_procurement', 'Lihat Pengadaan Craft', 'Melihat pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, tagihan pemasok, dan riwayat pengadaan Uni-Inside Craft.', '2026-08-26 19:57:36.394'),
+(29, 'craft.procurement.write', 'craft_procurement', 'Kelola Pengadaan Craft', 'Membuat dan mengelola pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, dan tagihan pemasok Uni-Inside Craft.', '2026-08-26 19:57:36.475');
 
 -- --------------------------------------------------------
 
@@ -1814,6 +1816,7 @@ CREATE TABLE `purchase_orders` (
 CREATE TABLE `purchase_order_items` (
   `id` bigint UNSIGNED NOT NULL,
   `purchase_order_id` bigint UNSIGNED NOT NULL,
+  `purchase_request_item_id` bigint UNSIGNED DEFAULT NULL,
   `material_id` bigint UNSIGNED DEFAULT NULL,
   `description` varchar(255) NOT NULL,
   `quantity` decimal(18,4) NOT NULL,
@@ -2153,6 +2156,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 25, '2026-08-22 07:48:09.737'),
 (1, 26, '2026-08-26 15:19:36.805'),
 (1, 27, '2026-08-26 15:19:36.805'),
+(1, 28, '2026-08-26 19:57:36.549'),
+(1, 29, '2026-08-26 19:57:36.549'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2180,6 +2185,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 25, '2026-08-22 07:48:09.737'),
 (2, 26, '2026-08-26 15:19:36.805'),
 (2, 27, '2026-08-26 15:19:36.805'),
+(2, 28, '2026-08-26 19:57:36.549'),
+(2, 29, '2026-08-26 19:57:36.549'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2207,6 +2214,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 25, '2026-08-23 09:54:06.853'),
 (3, 26, '2026-08-26 15:19:36.805'),
 (3, 27, '2026-08-26 15:19:36.805'),
+(3, 28, '2026-08-26 19:57:36.549'),
+(3, 29, '2026-08-26 19:57:36.549'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2233,6 +2242,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 25, '2026-08-23 09:54:06.853'),
 (7, 26, '2026-08-26 15:19:36.805'),
 (7, 27, '2026-08-26 15:19:36.805'),
+(7, 28, '2026-08-26 19:57:36.549'),
+(7, 29, '2026-08-26 19:57:36.549'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -2258,7 +2269,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 24, '2026-08-23 09:54:06.853'),
 (8, 25, '2026-08-23 09:54:06.853'),
 (8, 26, '2026-08-26 15:19:36.805'),
-(8, 27, '2026-08-26 15:19:36.805');
+(8, 27, '2026-08-26 15:19:36.805'),
+(8, 28, '2026-08-26 19:57:36.549'),
+(8, 29, '2026-08-26 19:57:36.549');
 
 -- --------------------------------------------------------
 
@@ -3303,7 +3316,8 @@ ALTER TABLE `material_batches`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `batch_code` (`batch_code`),
   ADD KEY `idx_material_batches_material_status` (`material_id`,`status_code`),
-  ADD KEY `fk_material_batches_supplier` (`supplier_id`);
+  ADD KEY `fk_material_batches_supplier` (`supplier_id`),
+  ADD KEY `idx_material_batches_purchase_order_item` (`purchase_order_item_id`);
 
 --
 -- Indexes for table `material_categories`
@@ -3597,7 +3611,8 @@ ALTER TABLE `purchase_order_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_purchase_order_items_order` (`purchase_order_id`),
   ADD KEY `fk_purchase_order_items_material` (`material_id`),
-  ADD KEY `fk_purchase_order_items_unit` (`unit_id`);
+  ADD KEY `fk_purchase_order_items_unit` (`unit_id`),
+  ADD KEY `idx_purchase_order_items_request_item` (`purchase_request_item_id`);
 
 --
 -- Indexes for table `purchase_requests`
@@ -4048,7 +4063,7 @@ ALTER TABLE `expenses`
 -- AUTO_INCREMENT for table `filament_spools`
 --
 ALTER TABLE `filament_spools`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `financial_periods`
@@ -4066,13 +4081,13 @@ ALTER TABLE `financial_transactions`
 -- AUTO_INCREMENT for table `goods_receipts`
 --
 ALTER TABLE `goods_receipts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `goods_receipt_items`
 --
 ALTER TABLE `goods_receipt_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `integrations`
@@ -4096,7 +4111,7 @@ ALTER TABLE `internal_transfers`
 -- AUTO_INCREMENT for table `inventory_movements`
 --
 ALTER TABLE `inventory_movements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `invoices`
@@ -4162,13 +4177,13 @@ ALTER TABLE `master_options`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `material_batches`
 --
 ALTER TABLE `material_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -4180,7 +4195,7 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `material_waste`
 --
 ALTER TABLE `material_waste`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -4204,7 +4219,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4222,7 +4237,7 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -4240,7 +4255,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -4354,25 +4369,25 @@ ALTER TABLE `project_milestones`
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `purchase_order_items`
 --
 ALTER TABLE `purchase_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `purchase_request_items`
 --
 ALTER TABLE `purchase_request_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `qc_inspections`
@@ -4468,7 +4483,7 @@ ALTER TABLE `service_package_items`
 -- AUTO_INCREMENT for table `stock_reservations`
 --
 ALTER TABLE `stock_reservations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `studio_projects`
@@ -4504,7 +4519,7 @@ ALTER TABLE `studio_service_categories`
 -- AUTO_INCREMENT for table `supplier_invoices`
 --
 ALTER TABLE `supplier_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -4934,6 +4949,7 @@ ALTER TABLE `materials`
 --
 ALTER TABLE `material_batches`
   ADD CONSTRAINT `fk_material_batches_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`),
+  ADD CONSTRAINT `fk_material_batches_purchase_order_item` FOREIGN KEY (`purchase_order_item_id`) REFERENCES `purchase_order_items` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_material_batches_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `parties` (`id`) ON DELETE SET NULL;
 
 --
@@ -5165,6 +5181,7 @@ ALTER TABLE `purchase_orders`
 ALTER TABLE `purchase_order_items`
   ADD CONSTRAINT `fk_purchase_order_items_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_purchase_order_items_order` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_purchase_order_items_request_item` FOREIGN KEY (`purchase_request_item_id`) REFERENCES `purchase_request_items` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_purchase_order_items_unit` FOREIGN KEY (`unit_id`) REFERENCES `units_of_measure` (`id`) ON DELETE SET NULL;
 
 --
