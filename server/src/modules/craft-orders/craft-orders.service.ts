@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { OrderPriorityService } from './order-priority.service';
+import { PartnerPricingService } from '../craft-customers/partner-pricing.service';
 
 type SqlConnection = Awaited<ReturnType<typeof pool.getConnection>>;
 
@@ -22,6 +23,19 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
 
 export class CraftOrdersService {
   private priorityService = new OrderPriorityService();
+  private partnerPricing = new PartnerPricingService();
+
+  /** Partner pricing is resolved only while an order is created; persisted item prices stay historical snapshots. */
+  private async applyPartnerPrices(connection: SqlConnection, data: any, businessUnitId: number) {
+    for (const item of data.items) {
+      if (!item.product_id) continue;
+      const resolved = await this.partnerPricing.resolve(
+        connection, Number(data.customer_party_id), Number(item.product_id), item.variant_id ? Number(item.variant_id) : null,
+        Number(item.quantity), businessUnitId,
+      );
+      if (resolved) item.unit_price = resolved.resolved_price;
+    }
+  }
 
   private async assertOrderReferenceData(connection: SqlConnection, data: any, businessUnitId: number) {
     const [customers]: any = await connection.execute(
@@ -31,6 +45,8 @@ export class CraftOrdersService {
          AND pr.business_unit_id = ?
          AND pr.role_code = 'craft_customer'
          AND pr.is_active = 1
+         AND (pr.valid_from IS NULL OR pr.valid_from <= UTC_DATE())
+         AND (pr.valid_until IS NULL OR pr.valid_until >= UTC_DATE())
        WHERE p.id = ? AND p.deleted_at IS NULL AND p.status_code = 'active'
        LIMIT 1`,
       [businessUnitId, data.customer_party_id],
@@ -183,6 +199,7 @@ export class CraftOrdersService {
         draftCode = drafts[0].draft_code;
       }
       await this.assertOrderReferenceData(connection, data, businessUnitId);
+      await this.applyPartnerPrices(connection, data, businessUnitId);
       const subtotal = data.items.reduce(
         (sum: number, item: any) => sum + (Number(item.quantity) * Number(item.unit_price)) - Number(item.discount_amount || 0),
         0,
@@ -487,7 +504,7 @@ export class CraftOrdersService {
     }
   }
 
-  async quickCreateCustomer(data: any, businessUnitId: number, organizationId: number) {
+  async quickCreateCustomer(data: any, businessUnitId: number, organizationId: number, userId?: number) {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
     try {
@@ -503,6 +520,13 @@ export class CraftOrdersService {
         `INSERT INTO party_roles (party_id, business_unit_id, role_code, is_active) VALUES (?, ?, 'craft_customer', 1)`,
         [partyId, businessUnitId],
       );
+      if (userId) {
+        await connection.execute(
+          `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, new_values)
+           VALUES (?, ?, ?, 'craft_customers', 'customer.create', 'party', ?, ?, ?, ?)`,
+          [organizationId, businessUnitId, userId, partyId, code, `Membuat pelanggan Craft ${code} dari Pesanan Baru.`, JSON.stringify({ display_name: data.display_name, party_kind: data.party_kind || 'individual', source: 'craft_orders.quick_create' })],
+        );
+      }
       await connection.commit();
       return { id: partyId, code, display_name: data.display_name, party_kind: data.party_kind || 'individual', email: data.email || null, phone: data.phone || null };
     } catch (error) {

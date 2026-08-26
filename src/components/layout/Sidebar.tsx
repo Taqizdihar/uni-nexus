@@ -75,9 +75,9 @@ const craftNav: NavGroup[] = [
     ]},
   ]},
   { label: 'BISNIS', items: [
-    { name: 'Pelanggan & Mitra', icon: Users, path: '/app/craft/customers', subItems: [
+    { name: 'Pelanggan & Mitra', icon: Users, path: '/app/craft/customers', permission: 'craft.customers.read', subItems: [
       { name: 'Pelanggan', path: '/app/craft/customers' },
-      { name: 'Mitra', path: '/app/craft/partners' },
+      { name: 'Mitra', path: '/app/craft/customers/partners' },
     ]},
     { name: 'Pengadaan', icon: PackageSearch, path: '/app/craft/procurement', subItems: [
       { name: 'Pemasok', path: '/app/craft/procurement/suppliers' },

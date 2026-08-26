@@ -21,6 +21,8 @@ router.get('/customers', async (req: Request, res: Response, next): Promise<void
         AND pr.business_unit_id = ?
         AND pr.role_code = 'craft_customer'
         AND pr.is_active = 1
+        AND (pr.valid_from IS NULL OR pr.valid_from <= UTC_DATE())
+        AND (pr.valid_until IS NULL OR pr.valid_until >= UTC_DATE())
       WHERE p.deleted_at IS NULL
         AND p.status_code = 'active'
     `;

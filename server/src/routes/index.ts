@@ -10,6 +10,7 @@ import { craftProductionRoutes } from '../modules/craft-production/craft-product
 import { craftProductsRoutes } from '../modules/craft-products/craft-products.routes';
 import { craftPrintersRoutes } from '../modules/craft-printers/craft-printers.routes';
 import { craftMaterialsRoutes } from '../modules/craft-materials/craft-materials.routes';
+import { craftCustomersRoutes } from '../modules/craft-customers/craft-customers.routes';
 
 const router = Router();
 
@@ -33,5 +34,6 @@ router.use('/craft/production', craftProductionRoutes);
 router.use('/craft/products', craftProductsRoutes);
 router.use('/craft/printers', craftPrintersRoutes);
 router.use('/craft/materials', craftMaterialsRoutes);
+router.use('/craft/customers', craftCustomersRoutes);
 
 export default router;

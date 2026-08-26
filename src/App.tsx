@@ -52,8 +52,8 @@ const router = createBrowserRouter(createRoutesFromElements(<>
     <Route path="craft/finance" element={<CraftFinance />} />
     <Route path="craft/finance/calculator" element={<CraftCalculator />} />
     <Route path="craft/finance/*" element={<CraftFinance />} />
-    <Route path="craft/customers" element={<CraftCustomers />} />
-    <Route path="craft/customers/*" element={<CraftCustomers />} />
+    <Route path="craft/customers/*" element={<PermissionGate permission="craft.customers.read"><CraftCustomers /></PermissionGate>} />
+    <Route path="craft/partners" element={<Navigate to="/app/craft/customers/partners" replace />} />
     <Route path="craft/procurement/*" element={<PlannedModulePage title="Pengadaan" description="Manajemen pemasok dan pesanan pembelian." stage="Tahap Berikutnya" icon={FileText} />} />
     <Route path="craft/analytics" element={<PlannedModulePage title="Laporan & Analitik" description="Wawasan analitik tingkat lanjut." stage="Lanjutan" icon={FileText} />} />
     <Route path="craft/marketplace" element={<PlannedModulePage title="Integrasi Marketplace" description="Sinkronisasi pesanan dari platform e-commerce." stage="Belum Terkonfigurasi" icon={FileText} />} />

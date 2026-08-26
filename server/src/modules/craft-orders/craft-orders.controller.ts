@@ -272,7 +272,7 @@ export class CraftOrdersController {
   quickCreateCustomer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const craft = await getCraftBusinessUnit();
-      const result = await this.service.quickCreateCustomer(quickCreateCustomerSchema.parse(req.body), craft.id, craft.organizationId);
+      const result = await this.service.quickCreateCustomer(quickCreateCustomerSchema.parse(req.body), craft.id, craft.organizationId, (req as any).user.id);
       sendSuccess(res, result, undefined, 201);
     } catch (error) {
       next(error instanceof z.ZodError
