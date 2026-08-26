@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 26, 2026 at 08:19 AM
+-- Generation Time: Aug 26, 2026 at 12:43 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -143,7 +143,9 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (36, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-24 16:37:53.371'),
 (37, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 12:43:10.251'),
 (38, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 13:34:08.983'),
-(39, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 14:15:24.284');
+(39, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 14:15:24.284'),
+(40, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 18:25:06.723'),
+(41, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 19:38:37.190');
 
 -- --------------------------------------------------------
 
@@ -2678,7 +2680,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-26 14:15:24.276', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-26 14:15:24.276', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-26 19:38:37.180', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-26 19:38:37.180', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -2791,18 +2793,18 @@ CREATE TABLE `user_sessions` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_payable` (
-`balance_due` decimal(18,2)
+`supplier_invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_date` date
-,`paid_amount` decimal(18,2)
-,`status_code` varchar(30)
-,`supplier_invoice_id` bigint unsigned
 ,`supplier_invoice_number` varchar(120)
-,`supplier_name` varchar(200)
 ,`supplier_party_id` bigint unsigned
+,`supplier_name` varchar(200)
+,`invoice_date` date
+,`due_date` date
+,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -2812,18 +2814,18 @@ CREATE TABLE `v_accounts_payable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_receivable` (
-`balance_due` decimal(18,2)
+`invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_id` bigint unsigned
 ,`invoice_number` varchar(80)
-,`issue_date` date
-,`paid_amount` decimal(18,2)
 ,`party_id` bigint unsigned
 ,`party_name` varchar(200)
+,`issue_date` date
+,`due_date` date
 ,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -2833,20 +2835,20 @@ CREATE TABLE `v_accounts_receivable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_craft_order_priority` (
-`customer_name` varchar(200)
-,`customer_party_id` bigint unsigned
-,`deadline_at` datetime(3)
-,`id` bigint unsigned
-,`minutes_to_deadline` bigint
+`id` bigint unsigned
 ,`order_code` varchar(80)
-,`order_date` datetime(3)
-,`payment_status_code` varchar(30)
-,`priority_code` varchar(20)
-,`priority_score` decimal(10,3)
+,`customer_party_id` bigint unsigned
+,`customer_name` varchar(200)
 ,`sales_channel_id` bigint unsigned
 ,`sales_channel_name` varchar(100)
+,`order_date` datetime(3)
+,`deadline_at` datetime(3)
+,`priority_code` varchar(20)
+,`priority_score` decimal(10,3)
 ,`status_code` varchar(30)
+,`payment_status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`minutes_to_deadline` bigint
 );
 
 -- --------------------------------------------------------
@@ -2856,18 +2858,18 @@ CREATE TABLE `v_craft_order_priority` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_material_stock` (
-`available_qty` decimal(41,4)
+`material_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`color_name` varchar(100)
-,`low_stock_threshold` decimal(18,4)
-,`material_id` bigint unsigned
-,`material_type` varchar(80)
-,`name` varchar(180)
-,`reserved_qty` decimal(40,4)
 ,`sku` varchar(80)
-,`stock_status` varchar(12)
-,`total_qty` decimal(40,4)
+,`name` varchar(180)
+,`material_type` varchar(80)
+,`color_name` varchar(100)
 ,`unit_symbol` varchar(20)
+,`total_qty` decimal(40,4)
+,`reserved_qty` decimal(40,4)
+,`available_qty` decimal(41,4)
+,`low_stock_threshold` decimal(18,4)
+,`stock_status` varchar(12)
 );
 
 -- --------------------------------------------------------
@@ -2877,17 +2879,17 @@ CREATE TABLE `v_material_stock` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_printer_current_activity` (
-`estimated_finish_at` datetime(3)
+`printer_id` bigint unsigned
+,`printer_code` varchar(60)
+,`printer_name` varchar(150)
+,`printer_status` varchar(30)
+,`print_job_id` bigint unsigned
 ,`job_code` varchar(80)
 ,`job_name` varchar(200)
 ,`job_status` varchar(30)
-,`print_job_id` bigint unsigned
-,`printer_code` varchar(60)
-,`printer_id` bigint unsigned
-,`printer_name` varchar(150)
-,`printer_status` varchar(30)
 ,`progress_percent` decimal(6,2)
 ,`started_at` datetime(3)
+,`estimated_finish_at` datetime(3)
 );
 
 --
@@ -3944,7 +3946,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4202,7 +4204,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4214,13 +4216,13 @@ ALTER TABLE `partner_price_rules`
 -- AUTO_INCREMENT for table `party_contacts`
 --
 ALTER TABLE `party_contacts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `payments`
