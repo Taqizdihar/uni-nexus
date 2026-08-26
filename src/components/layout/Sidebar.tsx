@@ -218,7 +218,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 bg-white border-r border-[var(--nexus-border)] flex flex-col h-full shrink-0">
       <div className="h-16 flex items-center px-6">
-        <h1 className="font-['Techniqo'] font-bold text-2xl tracking-widest text-black">
+        <h1 className="font-['Techniqo'] font-bold text-2xl tracking-widest text-[#E5B800]">
           UNI-NEXUS
         </h1>
       </div>
