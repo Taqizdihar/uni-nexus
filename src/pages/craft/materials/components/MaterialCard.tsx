@@ -1,0 +1,17 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Layers3 } from 'lucide-react';
+import { formatCurrency } from '../../../../lib/utils';
+import type { CraftMaterial } from '../../../../types/craft-materials';
+import { FilamentSpoolIllustration } from './FilamentSpoolIllustration';
+import { MaterialStatusBadge } from './MaterialStatusBadge';
+
+export function MaterialCard({ material }: { material: CraftMaterial; key?: React.Key }) {
+  const initial = Math.max(material.total_qty, material.low_stock_threshold, 1); const percent = Math.min(100, Math.round((material.available_qty / initial) * 100));
+  return <Link to={`/app/craft/materials/${material.id}`} className="group rounded-xl border border-[var(--nexus-border)] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--nexus-yellow-deep)] hover:shadow-md">
+    <div className="flex gap-3"><div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-xl bg-[var(--nexus-cream-soft)]"><FilamentSpoolIllustration colorHex={material.color_hex} /></div><div className="min-w-0 flex-1"><p className="material-code">{material.sku}</p><h2 className="mt-1 truncate font-bold text-[var(--nexus-charcoal)]">{material.name}</h2><p className="mt-1 truncate text-xs text-[var(--nexus-muted)]">{material.material_type || material.category_name}{material.brand ? ` · ${material.brand}` : ''}</p>{material.color_name && <div className="mt-3 flex items-center gap-2 text-xs"><span className="h-3 w-3 rounded-full border border-black/10" style={{ backgroundColor: material.color_hex || '#9CA3AF' }} /><span className="truncate text-[var(--nexus-muted)]">{material.color_name}</span></div>}<code className="mt-1 block text-[11px] text-[var(--nexus-muted)]">{material.color_hex || '—'}</code></div></div>
+    <div className="mt-4 grid grid-cols-3 gap-2 border-y border-[var(--nexus-border)] py-3 text-xs"><div><span className="block text-[10px] font-bold tracking-wide text-[var(--nexus-muted)]">TERSEDIA</span><strong className="mt-1 block text-sm text-[var(--nexus-charcoal)]">{material.available_qty} {material.unit_symbol}</strong></div><div><span className="block text-[10px] font-bold tracking-wide text-[var(--nexus-muted)]">RESERVASI</span><strong className="mt-1 block text-sm text-[var(--nexus-charcoal)]">{material.reserved_qty} {material.unit_symbol}</strong></div><div><span className="block text-[10px] font-bold tracking-wide text-[var(--nexus-muted)]">SPOOL</span><strong className="mt-1 flex items-center gap-1 text-sm text-[var(--nexus-charcoal)]"><Layers3 className="h-3.5 w-3.5" />{material.active_spool_count}</strong></div></div>
+    <div className="mt-3"><div className="flex items-center justify-between text-[11px] text-[var(--nexus-muted)]"><span>Total {material.total_qty} {material.unit_symbol}</span><span>{percent}%</span></div><div className="mt-1.5 h-2 overflow-hidden rounded-full bg-[var(--nexus-cream-soft)]"><div className={material.stock_status === 'out_of_stock' ? 'h-full bg-red-500' : material.stock_status === 'low_stock' ? 'h-full bg-amber-500' : 'h-full bg-emerald-500'} style={{ width: `${percent}%` }} /></div></div>
+    <div className="mt-4 flex items-center justify-between"><MaterialStatusBadge status={material.stock_status} /><span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--nexus-charcoal)]">{formatCurrency(material.estimated_stock_value)}<ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" /></span></div>
+  </Link>;
+}

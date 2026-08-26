@@ -48,8 +48,7 @@ const router = createBrowserRouter(createRoutesFromElements(<>
     <Route path="craft/production/*" element={<PermissionGate permission="craft.production.read"><CraftProduction /></PermissionGate>} />
     <Route path="craft/products/*" element={<PermissionGate permission="craft.products.read"><CraftProducts /></PermissionGate>} />
     <Route path="craft/printers/*" element={<PermissionGate permission="craft.printers.read"><CraftPrinters /></PermissionGate>} />
-    <Route path="craft/materials" element={<CraftMaterials />} />
-    <Route path="craft/materials/*" element={<CraftMaterials />} />
+    <Route path="craft/materials/*" element={<PermissionGate permission="craft.materials.read"><CraftMaterials /></PermissionGate>} />
     <Route path="craft/finance" element={<CraftFinance />} />
     <Route path="craft/finance/calculator" element={<CraftCalculator />} />
     <Route path="craft/finance/*" element={<CraftFinance />} />

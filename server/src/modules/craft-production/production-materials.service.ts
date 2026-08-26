@@ -1,4 +1,5 @@
 import { AppError } from '../../shared/errors/AppError';
+import { applyFilamentBatchQuantityDelta } from '../craft-materials/material-spools.service';
 import { asNumber } from './craft-production.helpers';
 import type {
   ActualMaterialInput,
@@ -378,6 +379,11 @@ export class ProductionMaterialsService {
           `UPDATE material_batches SET current_qty = current_qty - ? WHERE id = ?`,
           [input.actual_qty, row.material_batch_id],
         );
+        // Reservations only affect available stock. Physical consumption is the
+        // event that reduces both the batch and its tracked filament spool.
+        await applyFilamentBatchQuantityDelta(
+          connection, Number(row.material_batch_id), -input.actual_qty, String(row.unit_code),
+        );
       }
 
       await this.releaseReservationRow(connection, craft, userId, row, jobId, jobCode, input.actual_qty > 0 ? 'consumed' : 'released');
@@ -490,6 +496,9 @@ export class ProductionMaterialsService {
           throw new AppError(409, 'INSUFFICIENT_MATERIAL', 'Stok batch tidak mencukupi untuk mencatat limbah cetak.');
         }
         await connection.execute(`UPDATE material_batches SET current_qty = current_qty - ? WHERE id = ?`, [baseQuantity, selected.material_batch_id]);
+        await applyFilamentBatchQuantityDelta(
+          connection, Number(selected.material_batch_id), -baseQuantity, String(selected.unit_code),
+        );
       }
       const unitCost = selected.unit_cost === null ? 0 : asNumber(selected.unit_cost);
       actualCost = baseQuantity * unitCost;

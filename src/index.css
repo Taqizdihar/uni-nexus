@@ -161,3 +161,23 @@ input[type='date'], input[type='datetime-local'], input[type='number'], input[ty
 .animate-wave-jump {
   animation: wave-jump 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* Craft Material visual language */
+.material-field { @apply flex flex-col gap-1.5 text-sm; }
+.material-field > span { @apply text-xs font-semibold tracking-wide text-[var(--nexus-charcoal)]; }
+.material-field input, .material-field select { @apply h-10 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 text-sm text-[var(--nexus-charcoal)] outline-none transition focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/20; }
+.material-field textarea { @apply min-h-24 w-full rounded-lg border border-[var(--nexus-border)] bg-white px-3 py-2.5 text-sm text-[var(--nexus-charcoal)] outline-none transition focus:border-[var(--nexus-yellow-deep)] focus:ring-4 focus:ring-[var(--nexus-yellow)]/20; }
+.material-code { @apply font-mono text-[10px] font-bold tracking-wider text-[var(--nexus-muted)]; }
+
+.filament-spool { position: relative; width: 100px; height: 100px; filter: drop-shadow(0 8px 7px rgba(32, 32, 32, .14)); }
+.filament-spool--sm { transform: scale(.68); transform-origin: center; margin: -16px; }
+.filament-spool--lg { transform: scale(1.35); transform-origin: center; margin: 18px; }
+.filament-spool__flange { position: absolute; border-radius: 50%; border: 7px solid #343434; background: radial-gradient(circle at 40% 34%, #676767, #202020 68%); box-shadow: inset 3px 3px 5px rgba(255,255,255,.22), inset -5px -5px 8px rgba(0,0,0,.35); }
+.filament-spool__flange--back { inset: 7px 2px 7px 8px; transform: translateX(-5px); opacity: .93; }
+.filament-spool__flange--front { inset: 7px 8px 7px 2px; transform: translateX(5px); }
+.filament-spool__coil { position: absolute; z-index: 2; inset: 14px; border-radius: 50%; border: 10px solid var(--filament-color); background: radial-gradient(circle, var(--filament-dark) 0 23%, transparent 24% 100%); box-shadow: inset 3px 4px 5px var(--filament-light), inset -4px -5px 6px var(--filament-dark), 0 0 0 1px rgba(25,25,25,.24); overflow: hidden; }
+.filament-spool__coil i { position: absolute; inset: 0; border: 2px solid rgba(255,255,255,.26); border-radius: 50%; transform: scale(var(--ring-scale)); }
+.filament-spool__coil i:nth-child(1) { --ring-scale: .83; }.filament-spool__coil i:nth-child(2) { --ring-scale: .68; }.filament-spool__coil i:nth-child(3) { --ring-scale: .53; }.filament-spool__coil i:nth-child(4) { --ring-scale: .39; }.filament-spool__coil i:nth-child(5) { --ring-scale: .27; }
+.filament-spool__hub { position: absolute; z-index: 4; left: 50%; top: 50%; width: 31px; height: 31px; transform: translate(-50%, -50%); border: 4px solid #171717; border-radius: 50%; background: radial-gradient(circle at 38% 30%, #767676, #2f2f2f 60%); box-shadow: 0 1px 2px rgba(255,255,255,.3), inset 0 -2px 4px #111; }
+.filament-spool__hub span { position: absolute; inset: 8px; border-radius: 50%; background: #151515; box-shadow: inset 1px 1px 2px #7f7f7f; }
+.filament-spool__shine { position: absolute; z-index: 5; top: 18px; left: 27px; width: 26px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.25); transform: rotate(-35deg); filter: blur(1px); }

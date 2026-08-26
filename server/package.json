@@ -8,6 +8,8 @@
     "build": "tsc",
     "smoke:craft-products": "tsx scripts/smoke-craft-products.ts",
     "smoke:craft-printers": "tsx scripts/smoke-craft-printers.ts",
+    "smoke:craft-materials": "tsx scripts/smoke-craft-materials.ts",
+    "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
     "start": "node dist/server.js"
   },
   "keywords": [],

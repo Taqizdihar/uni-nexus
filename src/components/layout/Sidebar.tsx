@@ -66,7 +66,7 @@ const craftNav: NavGroup[] = [
       { name: 'Perawatan', path: '/app/craft/printers/maintenance' },
       { name: 'Masalah Printer', path: '/app/craft/printers/issues' },
     ]},
-    { name: 'Material', icon: Box, path: '/app/craft/materials', subItems: [
+    { name: 'Material', icon: Box, path: '/app/craft/materials', permission: 'craft.materials.read', subItems: [
       { name: 'Inventaris Filament', path: '/app/craft/materials/filament' },
       { name: 'Spool Filament', path: '/app/craft/materials/spools' },
       { name: 'Pergerakan Stok', path: '/app/craft/materials/movements' },

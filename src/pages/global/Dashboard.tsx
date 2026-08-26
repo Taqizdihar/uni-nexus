@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { formatCurrency } from '../../lib/utils';
-import { mockKPIs, revenueData, mockOrders, mockProjects, mockPrinters, mockMaterials } from '../../data/mock';
+import { mockKPIs, revenueData, mockOrders, mockProjects, mockPrinters } from '../../data/mock';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, ArrowDownToLine, BadgeDollarSign, ExternalLink, ShoppingBag, Store, Folder } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
+import { craftMaterialsApi } from '../../services/api/craft-materials.api';
 
 function KPICard({ title, value, icon: Icon, trend, isGood, emphasize = false }: any) {
   return (
@@ -38,6 +39,8 @@ function KPICard({ title, value, icon: Icon, trend, isGood, emphasize = false }:
 }
 
 export function Dashboard() {
+  const [lowMaterialCount, setLowMaterialCount] = useState<number | null>(null);
+  useEffect(() => { void craftMaterialsApi.getLowStock().then((items) => setLowMaterialCount(items.length)).catch(() => setLowMaterialCount(null)); }, []);
   const formatChartYAxis = (val: number) => {
     if (val >= 1000000) return `Rp${(val / 1000000).toFixed(1)} jt`;
     if (val >= 1000) return `Rp${val / 1000}k`;
@@ -187,7 +190,7 @@ export function Dashboard() {
              </div>
              <div className="flex justify-between items-center text-sm pt-2 border-t border-gray-100">
                <span className="text-gray-600">Stok Mat. Menipis</span>
-               <span className="font-bold text-amber-500">{mockMaterials.filter(m => m.status === 'Low' || m.status === 'Critical').length}</span>
+               <span className="font-bold text-amber-500">{lowMaterialCount ?? '—'}</span>
              </div>
           </CardContent>
         </Card>

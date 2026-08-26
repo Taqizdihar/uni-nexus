@@ -25,13 +25,6 @@ export const mockProjects = [
   { id: 'PRJ-2407-15', client: 'Dina Weddings', type: 'Fotografi', status: 'Selesai', deadline: '2026-08-10', value: 12000000, payment: 'Lunas' },
 ];
 
-export const mockMaterials = [
-  { id: 'MAT-01', type: 'PLA Hitam', remaining: 623, initial: 1000, status: 'Normal' },
-  { id: 'MAT-02', type: 'PLA Putih', remaining: 140, initial: 1000, status: 'Rendah' },
-  { id: 'MAT-03', type: 'PETG Bening', remaining: 850, initial: 1000, status: 'Normal' },
-  { id: 'MAT-04', type: 'Resin Abu-abu', remaining: 50, initial: 500, status: 'Kritis' },
-];
-
 export const revenueData = [
   { name: 'Jan', Craft: 4000, Studio: 2400 },
   { name: 'Feb', Craft: 3000, Studio: 1398 },
