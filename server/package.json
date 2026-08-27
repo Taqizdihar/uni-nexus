@@ -14,6 +14,7 @@
     "smoke:craft-marketplace": "tsx scripts/smoke-craft-marketplace.ts",
     "smoke:craft-automations": "tsx scripts/smoke-craft-automations.ts",
     "smoke:studio-services": "tsx scripts/smoke-studio-services.ts",
+    "smoke:studio-equipment": "tsx scripts/smoke-studio-equipment.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
@@ -21,6 +22,7 @@
     "browser:studio-projects": "node scripts/browser-studio-projects.mjs",
     "browser:studio-clients": "node scripts/browser-studio-clients.mjs",
     "browser:studio-services": "node scripts/browser-studio-services.mjs",
+    "browser:studio-equipment": "node scripts/browser-studio-equipment.mjs",
     "automation:worker": "node dist/workers/craft-automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/craft-automation.worker.ts",
     "start": "node dist/server.js"

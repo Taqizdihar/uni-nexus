@@ -286,6 +286,13 @@ const studioNav: NavGroup[] = [
         name: "Peralatan & Aset",
         icon: HardDrive,
         path: "/app/studio/equipment",
+        permission: "studio.equipment.read",
+        subItems: [
+          { name: "Ringkasan Aset", path: "/app/studio/equipment" },
+          { name: "Daftar Peralatan", path: "/app/studio/equipment/assets" },
+          { name: "Jadwal Penggunaan", path: "/app/studio/equipment/assignments" },
+          { name: "Perawatan", path: "/app/studio/equipment/maintenance" },
+        ],
       },
     ],
   },

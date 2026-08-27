@@ -20,6 +20,7 @@ import { studioProjectsRoutes } from '../modules/studio-projects/studio-projects
 import { studioReferencesRoutes } from '../modules/studio-references/studio-references.routes';
 import { studioClientsRoutes } from '../modules/studio-clients/studio-clients.routes';
 import { studioServicesRoutes } from '../modules/studio-services/studio-services.routes';
+import { studioEquipmentRoutes } from '../modules/studio-equipment/studio-equipment.routes';
 
 const router = Router();
 
@@ -54,5 +55,6 @@ router.use('/studio/projects', studioProjectsRoutes);
 router.use('/studio/references', studioReferencesRoutes);
 router.use('/studio/clients', studioClientsRoutes);
 router.use('/studio/services', studioServicesRoutes);
+router.use('/studio/equipment', studioEquipmentRoutes);
 
 export default router;

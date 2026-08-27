@@ -36,6 +36,7 @@ import { CraftAutomations } from "./pages/craft/Automations";
 import { StudioProjects } from "./pages/studio/Projects";
 import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
+import { StudioEquipment } from "./pages/studio/Equipment";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -216,14 +217,11 @@ const router = createBrowserRouter(
           }
         />
         <Route
-          path="studio/equipment"
+          path="studio/equipment/*"
           element={
-            <PlannedModulePage
-              title="Peralatan & Aset"
-              description="Manajemen perangkat keras dan lisensi perangkat lunak studio."
-              stage="Tahap Berikutnya"
-              icon={FileText}
-            />
+            <PermissionGate permission="studio.equipment.read">
+              <StudioEquipment />
+            </PermissionGate>
           }
         />
         <Route
