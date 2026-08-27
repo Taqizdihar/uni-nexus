@@ -5,6 +5,7 @@ export const createOrderSchema = z.object({
   customer_party_id: z.number().int().positive(),
   sales_channel_id: z.number().int().positive(),
   external_order_id: z.string().nullable().optional(),
+  order_date: z.string().nullable().optional(),
   order_type: z.enum(['standard', 'custom', 'partner', 'internal']).default('standard'),
   deadline_at: z.string().nullable().optional(),
   priority_code: z.enum(['low', 'normal', 'high', 'critical']).default('normal'),

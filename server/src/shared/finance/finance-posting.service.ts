@@ -30,7 +30,7 @@ export class FinancePostingService {
     return rows[0];
   }
 
-  private async journal(connection: Connection, context: PostingContext, transactionId: number, date: string, description: string, treasuryCoa: number | null, categoryCoa: number | null, direction: 'in' | 'out', amount: number, partyId: number) {
+  private async journal(connection: Connection, context: PostingContext, transactionId: number, date: string, description: string, treasuryCoa: number | null, categoryCoa: number | null, direction: 'in' | 'out', amount: number, partyId: number | null) {
     if (!treasuryCoa || !categoryCoa) return;
     const [entry]: any = await connection.execute(
       `INSERT INTO journal_entries (organization_id,business_unit_id,journal_number,entry_date,description,source_transaction_id,source_type,source_id,status_code,created_by,posted_by,posted_at)
@@ -111,5 +111,34 @@ export class FinancePostingService {
     const transactionId=Number(transaction.insertId); await connection.execute('UPDATE financial_transactions SET transaction_code=? WHERE id=?',[code('FTX',transactionId),transactionId]); await connection.execute('UPDATE payments SET financial_transaction_id=? WHERE id=?',[transactionId,paymentId]); await connection.execute('UPDATE treasury_accounts SET current_balance=current_balance-? WHERE id=?',[amount,treasury.id]);
     const paid=money(invoice.paid_amount)+amount,balance=Math.max(0,money(invoice.balance_due)-amount),status=balance<=.01?'paid':'partial'; await connection.execute('UPDATE supplier_invoices SET paid_amount=?,balance_due=?,status_code=? WHERE id=?',[paid,balance,status,invoice.id]);
     await this.journal(connection,context,transactionId,input.paymentDate,`Pembayaran pemasok ${paymentCode}`,treasury.coa_account_id,category.default_coa_account_id,'out',amount,input.partyId); await this.audit(connection,context,'finance.supplier_payment',paymentId,paymentCode,`Membayar tagihan pemasok ${paymentCode}.`); return paymentId;
+  }
+
+  /** Posts the actual net cash paid out by a marketplace settlement. */
+  async postMarketplaceSettlement(connection: Connection, context: PostingContext, input: { settlementId: number; settlementCode: string; treasuryAccountId: number; amount: number; receivedAt: string }) {
+    const amount = money(input.amount);
+    if (amount < 0) throw new AppError(400, 'INVALID_SETTLEMENT_AMOUNT', 'Nilai settlement tidak valid.');
+    const [existing]: any = await connection.execute(
+      `SELECT id FROM financial_transactions WHERE source_type='marketplace_settlement' AND source_id=? AND status_code!='void' LIMIT 1 FOR UPDATE`,
+      [input.settlementId],
+    );
+    if (existing.length) throw new AppError(409, 'SETTLEMENT_ALREADY_POSTED', 'Settlement sudah pernah diposting ke keuangan.');
+    const treasury = await this.treasury(connection, context, input.treasuryAccountId);
+    const category = await this.category(connection, context, 'CRAFT_SALES', 'income');
+    const [transaction]: any = await connection.execute(
+      `INSERT INTO financial_transactions (organization_id,business_unit_id,transaction_code,transaction_date,transaction_type,category_id,treasury_account_id,party_id,amount,currency_code,description,source_type,source_id,source_code,status_code,created_by,posted_by,posted_at)
+       VALUES (?,?,?,?,'income',?,?,?,?,?,?,?,'marketplace_settlement',?,?,'posted',?,?,UTC_TIMESTAMP())`,
+      [context.organizationId, context.businessUnitId, `TMP-${randomUUID()}`, input.receivedAt, category.id, treasury.id, null, amount, treasury.currency_code, `Payout marketplace ${input.settlementCode}`, input.settlementId, input.settlementCode, context.userId, context.userId],
+    );
+    const transactionId = Number(transaction.insertId);
+    const transactionCode = code('FTX', transactionId);
+    await connection.execute('UPDATE financial_transactions SET transaction_code=? WHERE id=?', [transactionCode, transactionId]);
+    await connection.execute('UPDATE treasury_accounts SET current_balance=current_balance+? WHERE id=?', [amount, treasury.id]);
+    await this.journal(connection, context, transactionId, input.receivedAt, `Payout marketplace ${input.settlementCode}`, treasury.coa_account_id, category.default_coa_account_id, 'in', amount, null);
+    await connection.execute(
+      `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description)
+       VALUES (?,?,?,'craft_finance','finance.marketplace_settlement','financial_transaction',?,?,?)`,
+      [context.organizationId, context.businessUnitId, context.userId, transactionId, transactionCode, `Menerima payout marketplace ${input.settlementCode}.`],
+    );
+    return { transactionId, transactionCode };
   }
 }

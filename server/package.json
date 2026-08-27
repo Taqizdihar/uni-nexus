@@ -11,9 +11,11 @@
     "smoke:craft-materials": "tsx scripts/smoke-craft-materials.ts",
     "smoke:craft-customers": "tsx scripts/smoke-craft-customers.ts",
     "smoke:craft-procurement": "tsx scripts/smoke-craft-procurement.ts",
+    "smoke:craft-marketplace": "tsx scripts/smoke-craft-marketplace.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
+    "browser:craft-marketplace": "node scripts/browser-craft-marketplace.mjs",
     "start": "node dist/server.js"
   },
   "keywords": [],
@@ -23,7 +25,9 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
+    "csv-parse": "^7.0.2",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",

@@ -31,6 +31,7 @@ import { CraftFinance } from "./pages/craft/Finance";
 import { CraftCustomers } from "./pages/craft/Customers";
 import { CraftProcurement } from "./pages/craft/Procurement";
 import { CraftAnalytics } from "./pages/craft/Analytics";
+import { CraftMarketplace } from "./pages/craft/Marketplace";
 import { StudioProjects } from "./pages/studio/Projects";
 import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
@@ -181,14 +182,11 @@ const router = createBrowserRouter(
         />
         <Route path="craft/analytics/*" element={<PermissionGate permission="craft.analytics.read"><CraftAnalytics /></PermissionGate>} />
         <Route
-          path="craft/marketplace"
+          path="craft/marketplace/*"
           element={
-            <PlannedModulePage
-              title="Integrasi Marketplace"
-              description="Sinkronisasi pesanan dari platform e-commerce."
-              stage="Belum Terkonfigurasi"
-              icon={FileText}
-            />
+            <PermissionGate permission="craft.marketplace.read">
+              <CraftMarketplace />
+            </PermissionGate>
           }
         />
         <Route

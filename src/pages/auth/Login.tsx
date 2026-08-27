@@ -110,7 +110,7 @@ export function Login() {
             </div>
             
             <Button id="login-submit-btn" type="submit" className="w-full mt-4" size="lg" disabled={isLoading}>
-              {isLoading ? 'Masuk...' : 'Masuk'}
+              {isLoading ? 'Masuk...' : 'Tekan Enter untuk Masuk'}
             </Button>
           </form>
           

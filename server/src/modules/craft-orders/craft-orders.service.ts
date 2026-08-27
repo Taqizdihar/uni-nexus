@@ -186,7 +186,7 @@ export class CraftOrdersService {
     }
   }
 
-  async createOrder(data: any, userId: number, businessUnitId: number) {
+  async createOrder(data: any, userId: number, businessUnitId: number, options: { priceMode?: 'internal_resolve' | 'external_snapshot' } = {}) {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
     try {
@@ -201,7 +201,9 @@ export class CraftOrdersService {
         draftCode = drafts[0].draft_code;
       }
       await this.assertOrderReferenceData(connection, data, businessUnitId);
-      await this.applyPartnerPrices(connection, data, businessUnitId);
+      // Marketplace imports are historical external snapshots.  In that mode
+      // partner pricing must never replace the price supplied by the channel.
+      if (options.priceMode !== 'external_snapshot') await this.applyPartnerPrices(connection, data, businessUnitId);
       const subtotal = data.items.reduce(
         (sum: number, item: any) => sum + (Number(item.quantity) * Number(item.unit_price)) - Number(item.discount_amount || 0),
         0,
@@ -215,10 +217,10 @@ export class CraftOrdersService {
           currency_code, subtotal, discount_amount, shipping_amount, marketplace_fee_amount, tax_amount, total_amount,
           customer_notes, internal_notes, shipping_recipient_name, shipping_phone, shipping_address, courier_name,
           created_by
-        ) VALUES (?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, COALESCE(?, UTC_TIMESTAMP()), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           businessUnitId, temporaryCode, data.customer_party_id, data.sales_channel_id, data.external_order_id || null,
-          data.order_type, data.deadline_at || null, data.priority_code, data.priority_reason || null, data.is_priority_manual ? 1 : 0,
+          data.order_type, data.order_date || null, data.deadline_at || null, data.priority_code, data.priority_reason || null, data.is_priority_manual ? 1 : 0,
           data.currency_code || 'IDR', subtotal, data.discount_amount || 0, data.shipping_amount || 0, data.marketplace_fee_amount || 0, data.tax_amount || 0, totalAmount,
           data.customer_notes || null, data.internal_notes || null, data.shipping_recipient_name || null, data.shipping_phone || null, data.shipping_address || null, data.courier_name || null,
           userId,

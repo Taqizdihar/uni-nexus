@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2026 at 03:09 AM
+-- Generation Time: Aug 27, 2026 at 03:25 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -148,7 +148,9 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (41, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 19:38:37.190'),
 (42, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 07:45:57.293'),
 (43, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:04:48.933'),
-(44, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:47:23.797');
+(44, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:47:23.797'),
+(45, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:10:33.483'),
+(46, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:16:51.338');
 
 -- --------------------------------------------------------
 
@@ -666,6 +668,7 @@ CREATE TABLE `integrations` (
   `id` bigint UNSIGNED NOT NULL,
   `organization_id` bigint UNSIGNED NOT NULL,
   `business_unit_id` bigint UNSIGNED DEFAULT NULL,
+  `sales_channel_id` bigint UNSIGNED DEFAULT NULL,
   `integration_code` varchar(80) NOT NULL,
   `integration_type` varchar(50) NOT NULL COMMENT 'marketplace|google|messaging|payment|api|webhook|other',
   `provider_name` varchar(120) NOT NULL,
@@ -921,6 +924,7 @@ CREATE TABLE `marketplace_settlements` (
   `other_adjustments` decimal(18,2) NOT NULL DEFAULT '0.00',
   `net_settlement` decimal(18,2) NOT NULL DEFAULT '0.00',
   `treasury_account_id` bigint UNSIGNED DEFAULT NULL,
+  `financial_transaction_id` bigint UNSIGNED DEFAULT NULL,
   `status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|received|reconciled',
   `external_reference` varchar(190) DEFAULT NULL,
   `notes` varchar(500) DEFAULT NULL,
@@ -1379,7 +1383,10 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (28, 'craft.procurement.read', 'craft_procurement', 'Lihat Pengadaan Craft', 'Melihat pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, tagihan pemasok, dan riwayat pengadaan Uni-Inside Craft.', '2026-08-26 19:57:36.394'),
 (29, 'craft.procurement.write', 'craft_procurement', 'Kelola Pengadaan Craft', 'Membuat dan mengelola pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, dan tagihan pemasok Uni-Inside Craft.', '2026-08-26 19:57:36.475'),
 (30, 'craft.analytics.read', 'craft_analytics', 'Lihat Laporan & Analitik Craft', 'Melihat seluruh laporan dan analitik operasional Uni-Inside Craft.', '2026-08-27 09:20:16.880'),
-(31, 'craft.analytics.export', 'craft_analytics', 'Ekspor Laporan Craft', 'Menghasilkan dan mengunduh laporan Craft dalam format PDF, XLSX, atau CSV.', '2026-08-27 09:20:17.137');
+(31, 'craft.analytics.export', 'craft_analytics', 'Ekspor Laporan Craft', 'Menghasilkan dan mengunduh laporan Craft dalam format PDF, XLSX, atau CSV.', '2026-08-27 09:20:17.137'),
+(32, 'craft.marketplace.read', 'craft_marketplace', 'Lihat Marketplace & Kanal Penjualan', 'Melihat kanal penjualan, pemetaan produk, biaya marketplace, settlement, dan status integrasi Craft.', '2026-08-27 10:25:39.250'),
+(33, 'craft.marketplace.write', 'craft_marketplace', 'Kelola Marketplace & Kanal Penjualan', 'Mengelola kanal penjualan, pemetaan produk, aturan biaya marketplace, settlement, dan konfigurasi marketplace Craft.', '2026-08-27 10:25:39.281'),
+(34, 'craft.marketplace.sync', 'craft_marketplace', 'Sinkronisasi Marketplace Craft', 'Menjalankan impor atau sinkronisasi pesanan dan data marketplace ke UNI-NEXUS.', '2026-08-27 10:25:39.309');
 
 -- --------------------------------------------------------
 
@@ -2183,6 +2190,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 29, '2026-08-26 19:57:36.549'),
 (1, 30, '2026-08-27 09:20:17.164'),
 (1, 31, '2026-08-27 09:20:17.164'),
+(1, 32, '2026-08-27 10:25:39.332'),
+(1, 33, '2026-08-27 10:25:39.332'),
+(1, 34, '2026-08-27 10:25:39.332'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2214,6 +2224,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 29, '2026-08-26 19:57:36.549'),
 (2, 30, '2026-08-27 09:20:17.164'),
 (2, 31, '2026-08-27 09:20:17.164'),
+(2, 32, '2026-08-27 10:25:39.332'),
+(2, 33, '2026-08-27 10:25:39.332'),
+(2, 34, '2026-08-27 10:25:39.332'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2245,6 +2258,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 29, '2026-08-26 19:57:36.549'),
 (3, 30, '2026-08-27 09:20:17.164'),
 (3, 31, '2026-08-27 09:20:17.164'),
+(3, 32, '2026-08-27 10:25:39.332'),
+(3, 33, '2026-08-27 10:25:39.332'),
+(3, 34, '2026-08-27 10:25:39.332'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2275,6 +2291,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 29, '2026-08-26 19:57:36.549'),
 (7, 30, '2026-08-27 09:20:17.164'),
 (7, 31, '2026-08-27 09:20:17.164'),
+(7, 32, '2026-08-27 10:25:39.332'),
+(7, 33, '2026-08-27 10:25:39.332'),
+(7, 34, '2026-08-27 10:25:39.332'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -2304,7 +2323,10 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 28, '2026-08-26 19:57:36.549'),
 (8, 29, '2026-08-26 19:57:36.549'),
 (8, 30, '2026-08-27 09:20:17.164'),
-(8, 31, '2026-08-27 09:20:17.164');
+(8, 31, '2026-08-27 09:20:17.164'),
+(8, 32, '2026-08-27 10:25:39.332'),
+(8, 33, '2026-08-27 10:25:39.332'),
+(8, 34, '2026-08-27 10:25:39.332');
 
 -- --------------------------------------------------------
 
@@ -2726,7 +2748,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 08:47:23.788', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 08:47:23.788', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 10:16:51.333', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 10:16:51.333', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -3040,6 +3062,7 @@ ALTER TABLE `calendar_events`
 ALTER TABLE `channel_product_mappings`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_channel_product_variant` (`sales_channel_id`,`product_id`,`variant_id`),
+  ADD UNIQUE KEY `uq_channel_product_external_sku` (`sales_channel_id`,`external_sku`),
   ADD KEY `fk_channel_product_mapping_product` (`product_id`),
   ADD KEY `fk_channel_product_mapping_variant` (`variant_id`);
 
@@ -3059,6 +3082,7 @@ ALTER TABLE `chart_of_accounts`
 ALTER TABLE `craft_orders`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `order_code` (`order_code`),
+  ADD UNIQUE KEY `uq_craft_orders_channel_external` (`sales_channel_id`,`external_order_id`),
   ADD KEY `idx_craft_orders_priority` (`status_code`,`deadline_at`,`priority_score`),
   ADD KEY `idx_craft_orders_customer` (`customer_party_id`,`order_date`),
   ADD KEY `idx_craft_orders_channel` (`sales_channel_id`,`order_date`),
@@ -3202,7 +3226,8 @@ ALTER TABLE `integrations`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_integration` (`organization_id`,`business_unit_id`,`integration_code`),
   ADD KEY `fk_integrations_bu` (`business_unit_id`),
-  ADD KEY `fk_integrations_user` (`created_by`);
+  ADD KEY `fk_integrations_user` (`created_by`),
+  ADD KEY `idx_integrations_sales_channel` (`sales_channel_id`);
 
 --
 -- Indexes for table `integration_sync_logs`
@@ -3311,6 +3336,7 @@ ALTER TABLE `marketplace_fee_rules`
 ALTER TABLE `marketplace_settlements`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `settlement_code` (`settlement_code`),
+  ADD UNIQUE KEY `uq_marketplace_settlement_fin_tx` (`financial_transaction_id`),
   ADD KEY `fk_marketplace_settlement_channel` (`sales_channel_id`),
   ADD KEY `fk_marketplace_settlement_treasury` (`treasury_account_id`);
 
@@ -3995,7 +4021,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4289,7 +4315,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -4863,6 +4889,7 @@ ALTER TABLE `goods_receipt_items`
 ALTER TABLE `integrations`
   ADD CONSTRAINT `fk_integrations_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_integrations_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  ADD CONSTRAINT `fk_integrations_sales_channel` FOREIGN KEY (`sales_channel_id`) REFERENCES `sales_channels` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_integrations_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
@@ -4954,6 +4981,7 @@ ALTER TABLE `marketplace_fee_rules`
 --
 ALTER TABLE `marketplace_settlements`
   ADD CONSTRAINT `fk_marketplace_settlement_channel` FOREIGN KEY (`sales_channel_id`) REFERENCES `sales_channels` (`id`),
+  ADD CONSTRAINT `fk_marketplace_settlement_fin_tx` FOREIGN KEY (`financial_transaction_id`) REFERENCES `financial_transactions` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_marketplace_settlement_treasury` FOREIGN KEY (`treasury_account_id`) REFERENCES `treasury_accounts` (`id`) ON DELETE SET NULL;
 
 --
