@@ -1,0 +1,2 @@
+import { z } from 'zod';
+export const filtersSchema=z.object({start_date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),end_date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),compare:z.enum(['true','false']).optional(),granularity:z.enum(['day','week','month']).optional()}).refine(v=>!v.start_date||!v.end_date||v.start_date<=v.end_date,{message:'Tanggal mulai harus sebelum tanggal akhir.'});

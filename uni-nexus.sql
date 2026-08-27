@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2026 at 01:10 AM
+-- Generation Time: Aug 27, 2026 at 03:00 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -147,7 +147,8 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (40, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 18:25:06.723'),
 (41, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-26 19:38:37.190'),
 (42, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 07:45:57.293'),
-(43, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:04:48.933');
+(43, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:04:48.933'),
+(44, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:47:23.797');
 
 -- --------------------------------------------------------
 
@@ -1376,7 +1377,9 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (26, 'craft.customers.read', 'craft_customers', 'Lihat Pelanggan & Mitra Craft', 'Melihat data pelanggan, mitra, kontak, riwayat pesanan, dan informasi terkait di Uni-Inside Craft.', '2026-08-26 15:19:36.759'),
 (27, 'craft.customers.write', 'craft_customers', 'Kelola Pelanggan & Mitra Craft', 'Membuat, mengubah, mengaktifkan, menonaktifkan, serta mengelola pelanggan, mitra, kontak, dan harga khusus mitra Uni-Inside Craft.', '2026-08-26 15:19:36.782'),
 (28, 'craft.procurement.read', 'craft_procurement', 'Lihat Pengadaan Craft', 'Melihat pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, tagihan pemasok, dan riwayat pengadaan Uni-Inside Craft.', '2026-08-26 19:57:36.394'),
-(29, 'craft.procurement.write', 'craft_procurement', 'Kelola Pengadaan Craft', 'Membuat dan mengelola pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, dan tagihan pemasok Uni-Inside Craft.', '2026-08-26 19:57:36.475');
+(29, 'craft.procurement.write', 'craft_procurement', 'Kelola Pengadaan Craft', 'Membuat dan mengelola pemasok, permintaan pembelian, pesanan pembelian, penerimaan barang, dan tagihan pemasok Uni-Inside Craft.', '2026-08-26 19:57:36.475'),
+(30, 'craft.analytics.read', 'craft_analytics', 'Lihat Laporan & Analitik Craft', 'Melihat seluruh laporan dan analitik operasional Uni-Inside Craft.', '2026-08-27 09:20:16.880'),
+(31, 'craft.analytics.export', 'craft_analytics', 'Ekspor Laporan Craft', 'Menghasilkan dan mengunduh laporan Craft dalam format PDF, XLSX, atau CSV.', '2026-08-27 09:20:17.137');
 
 -- --------------------------------------------------------
 
@@ -2062,6 +2065,23 @@ CREATE TABLE `report_definitions` (
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `report_definitions`
+--
+
+INSERT INTO `report_definitions` (`id`, `organization_id`, `business_unit_id`, `report_code`, `name`, `report_type`, `config_json`, `is_custom`, `is_active`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'CRAFT_ANALYTICS_OVERVIEW', 'Ringkasan Analitik Craft', 'overview', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"overview\"}', 0, 1, NULL, '2026-08-27 09:20:17.190', '2026-08-27 09:20:17.190'),
+(2, 1, 1, 'CRAFT_SALES_ANALYTICS', 'Analitik Penjualan', 'sales', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"sales\"}', 0, 1, NULL, '2026-08-27 09:20:18.222', '2026-08-27 09:20:18.222'),
+(3, 1, 1, 'CRAFT_ORDER_ANALYTICS', 'Analitik Pesanan', 'orders', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"orders\"}', 0, 1, NULL, '2026-08-27 09:20:18.247', '2026-08-27 09:20:18.247'),
+(4, 1, 1, 'CRAFT_PRODUCT_ANALYTICS', 'Analitik Produk', 'products', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"products\"}', 0, 1, NULL, '2026-08-27 09:20:18.333', '2026-08-27 09:20:18.333'),
+(5, 1, 1, 'CRAFT_CHANNEL_ANALYTICS', 'Analitik Kanal Penjualan', 'channels', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"channels\"}', 0, 1, NULL, '2026-08-27 09:20:18.358', '2026-08-27 09:20:18.358'),
+(6, 1, 1, 'CRAFT_CUSTOMER_ANALYTICS', 'Analitik Pelanggan & Mitra', 'customers', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"customers\"}', 0, 1, NULL, '2026-08-27 09:20:18.381', '2026-08-27 09:20:18.381'),
+(7, 1, 1, 'CRAFT_PRODUCTION_ANALYTICS', 'Analitik Produksi', 'production', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"production\"}', 0, 1, NULL, '2026-08-27 09:20:18.407', '2026-08-27 09:20:18.407'),
+(8, 1, 1, 'CRAFT_PRINTER_ANALYTICS', 'Analitik Printer', 'printers', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"printers\"}', 0, 1, NULL, '2026-08-27 09:20:18.432', '2026-08-27 09:20:18.432'),
+(9, 1, 1, 'CRAFT_MATERIAL_ANALYTICS', 'Analitik Material', 'materials', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"materials\"}', 0, 1, NULL, '2026-08-27 09:20:18.459', '2026-08-27 09:20:18.459'),
+(10, 1, 1, 'CRAFT_PROCUREMENT_ANALYTICS', 'Analitik Pengadaan', 'procurement', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"procurement\"}', 0, 1, NULL, '2026-08-27 09:20:18.482', '2026-08-27 09:20:18.482'),
+(11, 1, 1, 'CRAFT_PROFITABILITY_ANALYTICS', 'Analitik Profitabilitas', 'profitability', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"profitability\"}', 0, 1, NULL, '2026-08-27 09:20:18.504', '2026-08-27 09:20:18.504');
+
 -- --------------------------------------------------------
 
 --
@@ -2161,6 +2181,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 27, '2026-08-26 15:19:36.805'),
 (1, 28, '2026-08-26 19:57:36.549'),
 (1, 29, '2026-08-26 19:57:36.549'),
+(1, 30, '2026-08-27 09:20:17.164'),
+(1, 31, '2026-08-27 09:20:17.164'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2190,6 +2212,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 27, '2026-08-26 15:19:36.805'),
 (2, 28, '2026-08-26 19:57:36.549'),
 (2, 29, '2026-08-26 19:57:36.549'),
+(2, 30, '2026-08-27 09:20:17.164'),
+(2, 31, '2026-08-27 09:20:17.164'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2219,6 +2243,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 27, '2026-08-26 15:19:36.805'),
 (3, 28, '2026-08-26 19:57:36.549'),
 (3, 29, '2026-08-26 19:57:36.549'),
+(3, 30, '2026-08-27 09:20:17.164'),
+(3, 31, '2026-08-27 09:20:17.164'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2247,6 +2273,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 27, '2026-08-26 15:19:36.805'),
 (7, 28, '2026-08-26 19:57:36.549'),
 (7, 29, '2026-08-26 19:57:36.549'),
+(7, 30, '2026-08-27 09:20:17.164'),
+(7, 31, '2026-08-27 09:20:17.164'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -2274,7 +2302,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 26, '2026-08-26 15:19:36.805'),
 (8, 27, '2026-08-26 15:19:36.805'),
 (8, 28, '2026-08-26 19:57:36.549'),
-(8, 29, '2026-08-26 19:57:36.549');
+(8, 29, '2026-08-26 19:57:36.549'),
+(8, 30, '2026-08-27 09:20:17.164'),
+(8, 31, '2026-08-27 09:20:17.164');
 
 -- --------------------------------------------------------
 
@@ -2696,7 +2726,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 08:04:48.928', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 08:04:48.928', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 08:47:23.788', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 08:47:23.788', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -3965,7 +3995,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4259,7 +4289,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -4451,7 +4481,7 @@ ALTER TABLE `quotation_template_items`
 -- AUTO_INCREMENT for table `report_definitions`
 --
 ALTER TABLE `report_definitions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `report_exports`

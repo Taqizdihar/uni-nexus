@@ -1,0 +1,1 @@
+import {api} from '../../lib/api'; const base='/craft/analytics'; export const craftAnalyticsApi={overview:()=>api.get<any>(`${base}/overview`),sales:()=>api.get<any>(`${base}/sales`),orders:()=>api.get<any>(`${base}/orders`),list:(path:string)=>api.get<any>(`${base}/${path}`)};

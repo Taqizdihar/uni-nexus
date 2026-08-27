@@ -30,6 +30,7 @@ import { CraftMaterials } from "./pages/craft/Materials";
 import { CraftFinance } from "./pages/craft/Finance";
 import { CraftCustomers } from "./pages/craft/Customers";
 import { CraftProcurement } from "./pages/craft/Procurement";
+import { CraftAnalytics } from "./pages/craft/Analytics";
 import { StudioProjects } from "./pages/studio/Projects";
 import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
@@ -178,17 +179,7 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route
-          path="craft/analytics"
-          element={
-            <PlannedModulePage
-              title="Laporan & Analitik"
-              description="Wawasan analitik tingkat lanjut."
-              stage="Lanjutan"
-              icon={FileText}
-            />
-          }
-        />
+        <Route path="craft/analytics/*" element={<PermissionGate permission="craft.analytics.read"><CraftAnalytics /></PermissionGate>} />
         <Route
           path="craft/marketplace"
           element={
