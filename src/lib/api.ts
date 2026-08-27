@@ -77,4 +77,5 @@ export const api = {
     }),
   delete: <T>(endpoint: string, options?: RequestInit) => request<T>(endpoint, { ...options, method: 'DELETE' }),
   getBlob: (endpoint: string, options?: RequestInit) => requestBlob(endpoint, { ...options, method: 'GET' }),
+  postBlob: (endpoint: string, body: unknown, options?: RequestInit) => requestBlob(endpoint, { ...options, method: 'POST', headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) }, body: JSON.stringify(body) }),
 };

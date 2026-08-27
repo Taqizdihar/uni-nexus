@@ -40,6 +40,7 @@ import { StudioEquipment } from "./pages/studio/Equipment";
 import { StudioBilling } from "./pages/studio/Billing";
 import { StudioVendors } from "./pages/studio/Vendors";
 import { StudioFinance } from "./pages/studio/Finance";
+import { StudioAnalytics } from "./pages/studio/Analytics";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -245,14 +246,11 @@ const router = createBrowserRouter(
           }
         />
         <Route
-          path="studio/analytics"
+          path="studio/analytics/*"
           element={
-            <PlannedModulePage
-              title="Laporan & Analitik"
-              description="Metrik performa studio."
-              stage="Lanjutan"
-              icon={FileText}
-            />
+            <PermissionGate permission="studio.analytics.read">
+              <StudioAnalytics />
+            </PermissionGate>
           }
         />
         <Route
