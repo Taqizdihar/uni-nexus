@@ -39,6 +39,7 @@ import { StudioServices } from "./pages/studio/Services";
 import { StudioEquipment } from "./pages/studio/Equipment";
 import { StudioBilling } from "./pages/studio/Billing";
 import { StudioVendors } from "./pages/studio/Vendors";
+import { StudioFinance } from "./pages/studio/Finance";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -236,25 +237,11 @@ const router = createBrowserRouter(
         />
         <Route path="studio/vendors/*" element={<PermissionGate permission="studio.vendors.read"><StudioVendors /></PermissionGate>} />
         <Route
-          path="studio/finance"
-          element={
-            <PlannedModulePage
-              title="Keuangan Studio"
-              description="Lacak profitabilitas proyek, pengeluaran studio, dan pendapatan."
-              stage="Tahap Berikutnya"
-              icon={Wallet}
-            />
-          }
-        />
-        <Route
           path="studio/finance/*"
           element={
-            <PlannedModulePage
-              title="Keuangan Studio"
-              description="Lacak profitabilitas proyek, pengeluaran studio, dan pendapatan."
-              stage="Tahap Berikutnya"
-              icon={Wallet}
-            />
+            <PermissionGate permission="studio.finance.read">
+              <StudioFinance />
+            </PermissionGate>
           }
         />
         <Route

@@ -17,6 +17,7 @@
     "smoke:studio-equipment": "tsx scripts/smoke-studio-equipment.ts",
     "smoke:studio-billing": "tsx scripts/smoke-studio-billing.ts",
     "smoke:studio-vendors": "tsx scripts/smoke-studio-vendors.ts",
+    "smoke:studio-finance": "tsx scripts/smoke-studio-finance.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
@@ -27,6 +28,7 @@
     "browser:studio-equipment": "node scripts/browser-studio-equipment.mjs",
     "browser:studio-billing": "node scripts/browser-studio-billing.mjs",
     "browser:studio-vendors": "node scripts/browser-studio-vendors.mjs",
+    "browser:studio-finance": "node scripts/browser-studio-finance.mjs",
     "automation:worker": "node dist/workers/craft-automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/craft-automation.worker.ts",
     "start": "node dist/server.js"
