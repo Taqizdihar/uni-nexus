@@ -5,6 +5,7 @@ import { CornerDownLeft } from 'lucide-react';
 import studioDarkLogo from '../../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Dark Mode.png';
 import craftDarkLogo from '../../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Dark Mode 2.png';
 import { AnimatedBrandText } from '../../components/common/AnimatedBrandText';
+import FloatingLines from '../../components/common/FloatingLines';
 
 export function Landing() {
   const navigate = useNavigate();
@@ -22,8 +23,20 @@ export function Landing() {
 
   return (
     <div className="min-h-screen dark-theme flex flex-col relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--nexus-yellow)]/5 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* FloatingLines animated background */}
+      <div className="absolute inset-0" style={{ zIndex: 0, opacity: 0.35 }}>
+        <FloatingLines
+          linesGradient={['#FFD43B', '#FFF7CC', '#FFFFFF']}
+          enabledWaves={['top', 'middle', 'bottom']}
+          lineCount={[10, 15, 20]}
+          lineDistance={[8, 6, 4]}
+          bendRadius={5.0}
+          bendStrength={-0.5}
+          interactive={true}
+          parallax={true}
+          mixBlendMode="screen"
+        />
+      </div>
       
       <header className="px-6 md:px-10 py-6 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-4 md:gap-6">
@@ -39,7 +52,7 @@ export function Landing() {
           />
         </div>
         <div className="flex gap-4 items-center">
-          <Link to="/register" className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wider">
+          <Link to="/register" className="text-sm font-medium text-white hover:text-white transition-colors uppercase tracking-wider">
             Daftar
           </Link>
         </div>
@@ -55,13 +68,13 @@ export function Landing() {
             <AnimatedBrandText text="UNI-NEXUS" />
           </h1>
           
-          <div className="text-2xl md:text-3xl text-gray-400 font-light tracking-wide space-x-4">
+          <div className="text-2xl md:text-3xl font-bold tracking-wide space-x-4">
             <span className="text-white">Nexus.</span>
-            <span>Ordo.</span>
+            <span className="text-gray-300">Ordo.</span>
             <span className="text-[var(--nexus-yellow)]">Opus.</span>
           </div>
           
-          <p className="text-gray-400 max-w-2xl mx-auto pt-8 text-lg font-light leading-relaxed">
+          <p className="text-white max-w-2xl mx-auto pt-8 text-lg font-light leading-relaxed">
             Sistem terpusat untuk pengelolaan operasional dan keuangan Uni-Inside Studio. 
             Menghubungkan proses produksi 3D dan layanan kreatif dalam satu ekosistem terpadu.
           </p>
@@ -75,7 +88,7 @@ export function Landing() {
         </div>
       </main>
 
-      <footer className="py-8 text-center text-xs text-gray-600 relative z-10 tracking-wider">
+      <footer className="py-8 text-center text-xs text-white relative z-10 tracking-wider">
         © {new Date().getFullYear()} UNI-INSIDE STUDIO. HAK CIPTA DILINDUNGI.
       </footer>
     </div>
