@@ -27,7 +27,6 @@ import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
 import { CraftProducts } from "./pages/craft/Products";
 import { CraftMaterials } from "./pages/craft/Materials";
-import { CraftCalculator } from "./pages/craft/Calculator";
 import { CraftFinance } from "./pages/craft/Finance";
 import { CraftCustomers } from "./pages/craft/Customers";
 import { CraftProcurement } from "./pages/craft/Procurement";
@@ -158,9 +157,7 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route path="craft/finance" element={<CraftFinance />} />
-        <Route path="craft/finance/calculator" element={<CraftCalculator />} />
-        <Route path="craft/finance/*" element={<CraftFinance />} />
+        <Route path="craft/finance/*" element={<PermissionGate permission="craft.finance.read"><CraftFinance /></PermissionGate>} />
         <Route
           path="craft/customers/*"
           element={

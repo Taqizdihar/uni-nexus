@@ -68,7 +68,7 @@ export const recordPaymentSchema = z.object({
   payment_date: z.string(),
   amount: z.number().positive(),
   payment_method_id: z.number().int().positive(),
-  treasury_account_id: z.number().int().positive().nullable().optional(),
+  treasury_account_id: z.number().int().positive(),
   reference_number: z.string().nullable().optional(),
   notes: z.string().nullable().optional()
 });

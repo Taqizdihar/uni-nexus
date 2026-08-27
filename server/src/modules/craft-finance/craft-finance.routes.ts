@@ -1,0 +1,6 @@
+import { Router } from 'express';
+import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { CraftFinanceController } from './craft-finance.controller';
+const c=new CraftFinanceController(); export const craftFinanceRoutes=Router(); craftFinanceRoutes.use(requireAuth);
+craftFinanceRoutes.get('/overview',requirePermission('craft.finance.read'),c.overview); craftFinanceRoutes.get('/references',requirePermission('craft.finance.read'),c.references); craftFinanceRoutes.get('/treasury',requirePermission('craft.finance.read'),c.treasury); craftFinanceRoutes.get('/transactions',requirePermission('craft.finance.read'),c.transactions); craftFinanceRoutes.get('/receivables',requirePermission('craft.finance.read'),c.receivables); craftFinanceRoutes.get('/payables',requirePermission('craft.finance.read'),c.payables);
+craftFinanceRoutes.post('/treasury',requirePermission('craft.finance.write'),c.createTreasury); craftFinanceRoutes.patch('/treasury/:id/status',requirePermission('craft.finance.write'),c.status); craftFinanceRoutes.post('/invoices/:id/pay',requirePermission('craft.finance.write'),c.payCustomer); craftFinanceRoutes.post('/supplier-invoices/:id/pay',requirePermission('craft.finance.write'),c.paySupplier); craftFinanceRoutes.post('/income',requirePermission('craft.finance.write'),c.income);

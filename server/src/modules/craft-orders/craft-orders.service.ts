@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import { OrderPriorityService } from './order-priority.service';
 import { PartnerPricingService } from '../craft-customers/partner-pricing.service';
 
@@ -22,6 +23,7 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
 };
 
 export class CraftOrdersService {
+  private readonly financePosting = new FinancePostingService();
   private priorityService = new OrderPriorityService();
   private partnerPricing = new PartnerPricingService();
 
@@ -402,7 +404,7 @@ export class CraftOrdersService {
     await connection.beginTransaction();
     try {
       const [invoices]: any = await connection.execute(
-        `SELECT i.id, i.total_amount, i.paid_amount, o.customer_party_id, o.order_code
+        `SELECT i.id, i.total_amount, i.paid_amount, i.balance_due, o.customer_party_id, o.order_code
          FROM invoices i
          JOIN craft_orders o ON i.source_type = 'craft_order' AND i.source_id = o.id
          WHERE o.id = ? AND o.business_unit_id = ? AND i.status_code != 'void'
@@ -411,43 +413,14 @@ export class CraftOrdersService {
       );
       if (!invoices.length) throw new AppError(409, 'INVOICE_NOT_FOUND', 'Tidak ada invoice aktif untuk pesanan ini.');
       const invoice = invoices[0];
-      const newPaidAmount = Number(invoice.paid_amount) + Number(data.amount);
-      if (newPaidAmount > Number(invoice.total_amount) + 0.01) {
-        throw new AppError(400, 'PAYMENT_EXCEEDS_BALANCE', 'Jumlah pembayaran melebihi sisa tagihan.');
-      }
-      const [methods]: any = await connection.execute('SELECT id FROM payment_methods WHERE id = ? AND is_active = 1', [data.payment_method_id]);
-      if (!methods.length) throw new AppError(400, 'INVALID_PAYMENT_METHOD', 'Metode pembayaran tidak valid atau tidak aktif.');
-      if (data.treasury_account_id) {
-        const [accounts]: any = await connection.execute(
-          'SELECT id FROM treasury_accounts WHERE id = ? AND is_active = 1 AND (business_unit_id = ? OR business_unit_id IS NULL)',
-          [data.treasury_account_id, businessUnitId],
-        );
-        if (!accounts.length) throw new AppError(400, 'INVALID_TREASURY_ACCOUNT', 'Akun kas yang dipilih tidak valid atau tidak aktif.');
-      }
-      const [paymentCount]: any = await connection.execute('SELECT COUNT(*) AS count FROM payments WHERE invoice_id = ?', [invoice.id]);
-      const paymentCode = `PAY-${invoice.order_code}-${(Number(paymentCount[0].count) + 1).toString().padStart(2, '0')}`;
-      const [paymentResult]: any = await connection.execute(
-        `INSERT INTO payments (
-          organization_id, business_unit_id, payment_code, invoice_id, party_id, payment_method_id, treasury_account_id,
-          payment_direction, payment_date, amount, reference_number, status_code, notes, received_by
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, 'in', ?, ?, ?, 'confirmed', ?, ?)`,
-        [
-          organizationId, businessUnitId, paymentCode, invoice.id, invoice.customer_party_id, data.payment_method_id, data.treasury_account_id || null,
-          data.payment_date, data.amount, data.reference_number || null, data.notes || null, userId,
-        ],
-      );
-      const invoiceStatus = newPaidAmount >= Number(invoice.total_amount) - 0.01 ? 'paid' : 'partial';
-      const balanceDue = Math.max(0, Number(invoice.total_amount) - newPaidAmount);
-      await connection.execute(
-        `UPDATE invoices SET paid_amount = ?, balance_due = ?, status_code = ?, paid_at = IF(? = 'paid', UTC_TIMESTAMP(), paid_at) WHERE id = ?`,
-        [newPaidAmount, balanceDue, invoiceStatus, invoiceStatus, invoice.id],
-      );
-      await connection.execute(
-        'UPDATE craft_orders SET paid_amount = ?, payment_status_code = ? WHERE id = ?',
-        [newPaidAmount, invoiceStatus, orderId],
-      );
+      if (!data.treasury_account_id) throw new AppError(400, 'TREASURY_ACCOUNT_REQUIRED', 'Akun kas wajib dipilih untuk pembayaran baru.');
+      const paymentId = await this.financePosting.postCustomerPayment(connection, { organizationId, businessUnitId, userId }, {
+        invoiceId: invoice.id, partyId: invoice.customer_party_id, paymentMethodId: data.payment_method_id,
+        treasuryAccountId: data.treasury_account_id, amount: data.amount, paymentDate: data.payment_date,
+        referenceNumber: data.reference_number, notes: data.notes,
+      }, orderId);
       await connection.commit();
-      return Number(paymentResult.insertId);
+      return paymentId;
     } catch (error) {
       await connection.rollback();
       throw error;

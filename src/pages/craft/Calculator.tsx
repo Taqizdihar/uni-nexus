@@ -5,14 +5,14 @@ import { formatCurrency } from '../../lib/utils';
 import { Calculator as CalcIcon, RefreshCw, Save } from 'lucide-react';
 
 export function CraftCalculator() {
-  const [materialCostPerGram, setMaterialCostPerGram] = useState<number>(170); // Rp 170.000 / 1000g
-  const [materialUsage, setMaterialUsage] = useState<number>(50); // 50g
-  const [printingTimeHours, setPrintingTimeHours] = useState<number>(3);
-  const [electricityCostPerHour, setElectricityCostPerHour] = useState<number>(500);
-  const [laborCostPerHour, setLaborCostPerHour] = useState<number>(15000);
-  const [packagingCost, setPackagingCost] = useState<number>(5000);
-  const [marketplaceFeePercent, setMarketplaceFeePercent] = useState<number>(6.5);
-  const [desiredMarginPercent, setDesiredMarginPercent] = useState<number>(50);
+  const [materialCostPerGram, setMaterialCostPerGram] = useState<number>(0);
+  const [materialUsage, setMaterialUsage] = useState<number>(0);
+  const [printingTimeHours, setPrintingTimeHours] = useState<number>(0);
+  const [electricityCostPerHour, setElectricityCostPerHour] = useState<number>(0);
+  const [laborCostPerHour, setLaborCostPerHour] = useState<number>(0);
+  const [packagingCost, setPackagingCost] = useState<number>(0);
+  const [marketplaceFeePercent, setMarketplaceFeePercent] = useState<number>(0);
+  const [desiredMarginPercent, setDesiredMarginPercent] = useState<number>(0);
 
   // Calculations
   const totalMaterialCost = materialCostPerGram * materialUsage;
@@ -23,16 +23,16 @@ export function CraftCalculator() {
   
   // Base price before marketplace fee based on desired margin
   // Margin = (Price - Cost) / Price  => Price = Cost / (1 - Margin)
-  const priceBeforeFee = baseProductionCost / (1 - (desiredMarginPercent / 100));
+  const priceBeforeFee = desiredMarginPercent >= 100 ? 0 : baseProductionCost / (1 - (desiredMarginPercent / 100));
   
   // Final price to cover marketplace fee
   // Final Price - (Final Price * Fee) = Price Before Fee  => Final Price = Price Before Fee / (1 - Fee)
-  const recommendedPrice = priceBeforeFee / (1 - (marketplaceFeePercent / 100));
+  const recommendedPrice = marketplaceFeePercent >= 100 ? 0 : priceBeforeFee / (1 - (marketplaceFeePercent / 100));
   
   const marketplaceFeeAmount = recommendedPrice * (marketplaceFeePercent / 100);
   const netRevenue = recommendedPrice - marketplaceFeeAmount;
   const projectedProfit = netRevenue - baseProductionCost;
-  const actualMargin = (projectedProfit / recommendedPrice) * 100;
+  const actualMargin = recommendedPrice ? (projectedProfit / recommendedPrice) * 100 : 0;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto h-full pb-12">
@@ -67,7 +67,7 @@ export function CraftCalculator() {
                     onChange={(e) => setMaterialCostPerGram(Number(e.target.value))}
                     className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[var(--nexus-yellow)]"
                   />
-                  <p className="text-xs text-gray-500">misal: 170.000 / 1000g = 170</p>
+                  <p className="text-xs text-gray-500">Isi biaya aktual atau gunakan tarif yang telah ditetapkan organisasi.</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Penggunaan Material (g)</label>

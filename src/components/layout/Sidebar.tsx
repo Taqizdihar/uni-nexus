@@ -178,14 +178,23 @@ const craftNav: NavGroup[] = [
         name: "Keuangan",
         icon: CircleDollarSign,
         path: "/app/craft/finance",
+        permission: "craft.finance.read",
         subItems: [
           { name: "Ringkasan Keuangan", path: "/app/craft/finance" },
           { name: "Transaksi", path: "/app/craft/finance/transactions" },
+          { name: "Kas & Bank", path: "/app/craft/finance/treasury" },
+          { name: "Pendapatan", path: "/app/craft/finance/income" },
+          { name: "Pengeluaran", path: "/app/craft/finance/expenses" },
+          { name: "Piutang Pelanggan", path: "/app/craft/finance/receivables" },
+          { name: "Hutang Pemasok", path: "/app/craft/finance/payables" },
+          { name: "HPP & Profitabilitas", path: "/app/craft/finance/profitability" },
           {
             name: "Kalkulator Biaya Produk",
             path: "/app/craft/finance/calculator",
           },
           { name: "Arus Kas", path: "/app/craft/finance/cash-flow" },
+          { name: "Anggaran", path: "/app/craft/finance/budgets" },
+          { name: "Jurnal & Periode", path: "/app/craft/finance/accounting" },
         ],
       },
       {
