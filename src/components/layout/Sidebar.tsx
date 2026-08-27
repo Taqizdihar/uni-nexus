@@ -303,6 +303,7 @@ const studioNav: NavGroup[] = [
         name: "Penawaran & Penagihan",
         icon: FileText,
         path: "/app/studio/billing",
+        permission: "studio.billing.read",
         subItems: [
           { name: "Penawaran", path: "/app/studio/billing/quotations" },
           { name: "Invoice", path: "/app/studio/billing/invoices" },

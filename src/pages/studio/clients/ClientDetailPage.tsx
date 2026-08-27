@@ -27,6 +27,7 @@ export function ClientDetailPage() {
   const { hasPermission } = useAuth();
   const canWrite = hasPermission('studio.clients.write');
   const canCreateProject = hasPermission('studio.projects.write');
+  const canCreateQuotation = hasPermission('studio.billing.write');
 
   const [detail, setDetail] = React.useState<ClientDetailResponse | null>(null);
   const [tab, setTab] = React.useState<TabKey>('summary');
@@ -93,6 +94,9 @@ export function ClientDetailPage() {
           <>
             {canCreateProject && isActive && (
               <Button onClick={() => navigate(`/app/studio/projects/new?client=${clientId}`)}><Plus className="h-4 w-4" /> Proyek Baru</Button>
+            )}
+            {canCreateQuotation && isActive && (
+              <Button variant="outline" onClick={() => navigate(`/app/studio/billing/quotations/new?client=${clientId}`)}><Plus className="h-4 w-4" /> Buat Penawaran</Button>
             )}
             {canWrite && <Button variant="outline" onClick={() => navigate(`/app/studio/clients/${clientId}/edit`)}><Pencil className="h-4 w-4" /> Edit Klien</Button>}
             {canWrite && isActive && (

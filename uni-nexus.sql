@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2026 at 09:45 AM
+-- Generation Time: Aug 27, 2026 at 02:12 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -158,7 +158,9 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (127, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 14:59:44.108'),
 (134, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 15:31:09.659'),
 (135, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 15:57:55.904'),
-(136, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 16:05:16.181');
+(136, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 16:05:16.181'),
+(192, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 20:13:25.623'),
+(238, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 20:52:12.331');
 
 -- --------------------------------------------------------
 
@@ -1456,7 +1458,9 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (38, 'studio.services.read', 'studio_services', 'Lihat Layanan Studio', 'Melihat katalog layanan, kategori, paket, harga dasar, dan penggunaan layanan Uni-Inside Studio.', '2026-08-27 15:54:03.433'),
 (39, 'studio.services.write', 'studio_services', 'Kelola Layanan Studio', 'Membuat, mengubah, mengaktifkan, menonaktifkan, dan mengelola paket layanan Uni-Inside Studio.', '2026-08-27 15:54:03.477'),
 (40, 'studio.equipment.read', 'studio_equipment', 'Lihat Peralatan & Aset Studio', 'Melihat inventaris aset, penggunaan proyek, penanggung jawab, nilai, dan riwayat perawatan Uni-Inside Studio.', '2026-08-27 16:45:45.203'),
-(41, 'studio.equipment.write', 'studio_equipment', 'Kelola Peralatan & Aset Studio', 'Membuat dan memperbarui aset, mengatur status, penugasan proyek, penanggung jawab, serta perawatan aset Uni-Inside Studio.', '2026-08-27 16:45:45.235');
+(41, 'studio.equipment.write', 'studio_equipment', 'Kelola Peralatan & Aset Studio', 'Membuat dan memperbarui aset, mengatur status, penugasan proyek, penanggung jawab, serta perawatan aset Uni-Inside Studio.', '2026-08-27 16:45:45.235'),
+(42, 'studio.billing.read', 'studio_billing', 'Lihat Penawaran & Penagihan Studio', 'Melihat penawaran, invoice, jadwal pembayaran, dokumen komersial, dan tagihan belum dibayar Uni-Inside Studio.', '2026-08-27 21:12:05.951'),
+(43, 'studio.billing.write', 'studio_billing', 'Kelola Penawaran & Penagihan Studio', 'Membuat dan mengelola penawaran, invoice, jadwal pembayaran, serta lifecycle penagihan Uni-Inside Studio.', '2026-08-27 21:12:05.978');
 
 -- --------------------------------------------------------
 
@@ -2270,6 +2274,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 39, '2026-08-27 15:54:03.507'),
 (1, 40, '2026-08-27 16:45:45.265'),
 (1, 41, '2026-08-27 16:45:45.265'),
+(1, 42, '2026-08-27 21:12:06.005'),
+(1, 43, '2026-08-27 21:12:06.005'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2311,6 +2317,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 39, '2026-08-27 15:54:03.507'),
 (2, 40, '2026-08-27 16:45:45.265'),
 (2, 41, '2026-08-27 16:45:45.265'),
+(2, 42, '2026-08-27 21:12:06.005'),
+(2, 43, '2026-08-27 21:12:06.005'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2352,10 +2360,14 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 39, '2026-08-27 15:54:03.507'),
 (3, 40, '2026-08-27 16:45:45.265'),
 (3, 41, '2026-08-27 16:45:45.265'),
+(3, 42, '2026-08-27 21:12:06.005'),
+(3, 43, '2026-08-27 21:12:06.005'),
 (6, 38, '2026-08-27 15:54:03.507'),
 (6, 39, '2026-08-27 15:54:03.507'),
 (6, 40, '2026-08-27 16:45:45.265'),
 (6, 41, '2026-08-27 16:45:45.265'),
+(6, 42, '2026-08-27 21:12:06.005'),
+(6, 43, '2026-08-27 21:12:06.005'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2851,7 +2863,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 16:05:16.178', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 16:05:16.178', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 20:52:12.327', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 20:52:12.327', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -4127,25 +4139,25 @@ ALTER TABLE `user_sessions`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `asset_maintenance_records`
 --
 ALTER TABLE `asset_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `asset_project_assignments`
 --
 ALTER TABLE `asset_project_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4241,7 +4253,7 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `domain_events`
 --
 ALTER TABLE `domain_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -4409,7 +4421,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4427,7 +4439,7 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -4445,7 +4457,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -4679,7 +4691,7 @@ ALTER TABLE `stock_reservations`
 -- AUTO_INCREMENT for table `studio_projects`
 --
 ALTER TABLE `studio_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `studio_project_services`

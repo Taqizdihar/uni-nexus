@@ -87,6 +87,39 @@ export class StudioProjectsService {
     );
   }
 
+  /**
+   * Controlled internal transition used by another Studio domain inside its
+   * already-open transaction.  Billing uses this for the commercial hand-off
+   * (lead → quotation → approved) instead of writing project status directly.
+   */
+  async transitionFromCommercial(connection: PoolConnection, projectId: number, target: ProjectStatus, userId: number, studio: BusinessUnitContext, reason: string | null = null) {
+    const project = await loadProjectForUpdate(connection, projectId, studio);
+    const current = project.status_code as ProjectStatus;
+    if (current === target) return { id: projectId, status_code: target, changed: false };
+    if (!(PROJECT_TRANSITIONS[current] || []).includes(target)) {
+      throw new AppError(409, 'INVALID_PROJECT_TRANSITION', `Proyek tidak dapat berpindah dari status "${current}" ke "${target}".`);
+    }
+    const setters: string[] = ['status_code = ?'];
+    const params: unknown[] = [target];
+    if (target === 'completed') setters.push('completed_at = UTC_TIMESTAMP(3)');
+    if (current === 'completed' && target === 'review') setters.push('completed_at = NULL');
+    if (target === 'in_progress' && !project.start_date) setters.push(`start_date = ${STUDIO_LOCAL_DATE_SQL}`);
+    await connection.execute(`UPDATE studio_projects SET ${setters.join(', ')} WHERE id = ?`, [...params, projectId] as any[]);
+    await this.recordStatusChange(connection, projectId, current, target, reason, userId);
+    const reference = projectRef(project);
+    await writeProjectAudit(
+      connection, studio, userId, 'studio.project_status_change', reference,
+      `Status proyek ${project.project_code}: ${current} → ${target} dari proses komersial.`,
+      { status_code: current }, { status_code: target, reason, source: 'studio_billing' },
+    );
+    await publishProjectEvent(connection, studio, 'studio.project.status_changed', reference, userId, {
+      project: { id: projectId, project_code: project.project_code, project_name: project.project_name, status_code: target, old_status: current, new_status: target, client_party_id: Number(project.client_party_id), priority_code: project.priority_code, contract_value: toNumber(project.contract_value) },
+    });
+    const specific = STATUS_EVENTS[target];
+    if (specific) await publishProjectEvent(connection, studio, specific, reference, userId, { project: { id: projectId, project_code: project.project_code, status_code: target } });
+    return { id: projectId, status_code: target, changed: true };
+  }
+
   /** Everything a new project needs is written atomically — never a half-created project. */
   async createProject(input: CreateProjectInput, userId: number, studio: BusinessUnitContext) {
     return withTransaction(async connection => {

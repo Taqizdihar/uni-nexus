@@ -37,6 +37,7 @@ import { StudioProjects } from "./pages/studio/Projects";
 import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
 import { StudioEquipment } from "./pages/studio/Equipment";
+import { StudioBilling } from "./pages/studio/Billing";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -225,25 +226,11 @@ const router = createBrowserRouter(
           }
         />
         <Route
-          path="studio/billing"
-          element={
-            <PlannedModulePage
-              title="Penawaran & Penagihan"
-              description="Kelola penawaran proyek, invoice, dan jadwal pembayaran."
-              stage="Tahap Berikutnya"
-              icon={FileText}
-            />
-          }
-        />
-        <Route
           path="studio/billing/*"
           element={
-            <PlannedModulePage
-              title="Penawaran & Penagihan"
-              description="Kelola penawaran proyek, invoice, dan jadwal pembayaran."
-              stage="Tahap Berikutnya"
-              icon={FileText}
-            />
+            <PermissionGate permission="studio.billing.read">
+              <StudioBilling />
+            </PermissionGate>
           }
         />
         <Route

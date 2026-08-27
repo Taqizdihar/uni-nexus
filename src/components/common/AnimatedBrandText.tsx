@@ -1,89 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '../../lib/utils';
 
 interface AnimatedBrandTextProps {
   className?: string;
   text?: string;
-  /** Time the Technique font remains visible before the next Cube wave. */
-  techniqueIdleTime?: number;
+  glow?: boolean;
 }
 
 export function AnimatedBrandText({ 
   className, 
   text = "UNI-NEXUS",
-  techniqueIdleTime = 2000,
+  glow = true,
 }: AnimatedBrandTextProps) {
-  // Array of font families for each letter: 'font-sans' (default) or 'font-["Cube"]'
-  const [fonts, setFonts] = useState<string[]>(Array(text.length).fill(''));
+  const [fonts, setFonts] = useState<string[]>(() => Array(text.length).fill('Technique'));
   const [animatingIndices, setAnimatingIndices] = useState<Set<number>>(new Set());
+  const animationIdRef = useRef(0);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    const waveDelay = 150; // Delay between each letter's animation
-    const idleTime = 5000; // 5 seconds idle
-
-    let isMounted = true;
-
-    const animateWave = async (toCube: boolean) => {
-      for (let i = 0; i < text.length; i++) {
-        if (!isMounted) return;
-        
-        setAnimatingIndices((prev) => new Set(prev).add(i));
-        setFonts((prev) => {
-          const newFonts = [...prev];
-          newFonts[i] = toCube ? 'font-["Cube"] text-[0.33em]' : '';
-          return newFonts;
-        });
-
-        setTimeout(() => {
-          if (!isMounted) return;
-          setAnimatingIndices((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(i);
-            return newSet;
-          });
-        }, 500);
-
-        await new Promise((resolve) => setTimeout(resolve, waveDelay));
-      }
-    };
-
-    const runLoop = async () => {
-      while (isMounted) {
-        await animateWave(true);
-        if (!isMounted) break;
-        
-        await new Promise((resolve) => setTimeout(resolve, idleTime));
-        if (!isMounted) break;
-        
-        await animateWave(false);
-        if (!isMounted) break;
-        
-        await new Promise((resolve) => setTimeout(resolve, techniqueIdleTime));
-      }
-    };
-
-    timeoutId = setTimeout(() => {
-      if (isMounted) runLoop();
-    }, techniqueIdleTime === 2000 ? 1000 : techniqueIdleTime - 1000);
-
     return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
+      // Invalidate any in-progress wave when the component is unmounted.
+      animationIdRef.current += 1;
     };
-  }, [text, techniqueIdleTime]);
+  }, []);
+
+  const animateWave = async (toCube: boolean) => {
+    const animationId = ++animationIdRef.current;
+    const waveDelay = 150;
+    const jumpDuration = 500;
+
+    setAnimatingIndices(new Set());
+
+    for (let i = 0; i < text.length; i++) {
+      if (animationId !== animationIdRef.current) return;
+
+      setAnimatingIndices((prev) => new Set(prev).add(i));
+      setFonts((prev) => {
+        const newFonts = [...prev];
+        newFonts[i] = toCube ? 'Cube' : 'Technique';
+        return newFonts;
+      });
+
+      window.setTimeout(() => {
+        if (animationId !== animationIdRef.current) return;
+        setAnimatingIndices((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(i);
+          return newSet;
+        });
+      }, jumpDuration);
+
+      await new Promise((resolve) => window.setTimeout(resolve, waveDelay));
+    }
+  };
 
   return (
-    <span className={cn("inline-flex items-center", className)}>
+    <span
+      className={cn("inline-flex items-center", className)}
+      onPointerEnter={() => void animateWave(true)}
+      onPointerLeave={() => void animateWave(false)}
+    >
       {text.split('').map((char, index) => (
         <span
           key={index}
           className={cn(
             "inline-block",
-            fonts[index] === '' ? "font-['Technique'] glow-text-bright-gold" : fonts[index],
+            fonts[index] === 'Cube' ? "font-['Cube'] text-[0.33em]" : cn("font-['Technique']", glow && "glow-text-bright-gold"),
             animatingIndices.has(index) ? "animate-wave-jump" : ""
           )}
-          style={{ whiteSpace: 'pre' }}
+          style={{
+            fontFamily: fonts[index] === 'Cube' ? 'Cube' : 'Technique',
+            whiteSpace: 'pre',
+          }}
         >
           {char}
         </span>

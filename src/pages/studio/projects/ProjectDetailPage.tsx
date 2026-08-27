@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertTriangle, Ban, CalendarClock, History, Pencil, RefreshCw, User } from 'lucide-react';
+import { AlertTriangle, Ban, CalendarClock, FilePlus2, History, Pencil, RefreshCw, User } from 'lucide-react';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { useAuth } from '../../../context/AuthContext';
@@ -36,6 +36,7 @@ export function ProjectDetailPage() {
   const projectId = Number(useParams().id);
   const { hasPermission } = useAuth();
   const canWrite = hasPermission('studio.projects.write');
+  const canCreateQuotation = hasPermission('studio.billing.write');
 
   const [detail, setDetail] = React.useState<ProjectDetailResponse | null>(null);
   const [activity, setActivity] = React.useState<ProjectActivityEntry[]>([]);
@@ -118,17 +119,20 @@ export function ProjectDetailPage() {
         title={project.project_name}
         description={`Klien: ${project.client_name}${project.project_type ? ` · ${project.project_type}` : ''}`}
         back={() => navigate('/app/studio/projects')}
-        actions={canWrite ? (
+        actions={canWrite || canCreateQuotation ? (
           <>
-            {project.status_code !== 'cancelled' && (
-              <Button variant="outline" onClick={() => navigate(`/app/studio/projects/${projectId}/edit`)}><Pencil className="h-4 w-4" /> Edit</Button>
+            {canCreateQuotation && project.status_code !== 'cancelled' && (
+              <Button variant="outline" onClick={() => navigate(`/app/studio/billing/quotations/new?project=${projectId}`)}><FilePlus2 className="h-4 w-4" /> Buat Penawaran</Button>
             )}
-            {project.available_transitions.map(status => (
+            {project.status_code !== 'cancelled' && (
+              canWrite && <Button variant="outline" onClick={() => navigate(`/app/studio/projects/${projectId}/edit`)}><Pencil className="h-4 w-4" /> Edit</Button>
+            )}
+            {canWrite && project.available_transitions.map(status => (
               <Button key={status} variant={status === 'completed' || status === 'paid' ? 'primary' : 'outline'} onClick={() => { setDialogError(null); setPendingStatus(status); }}>
                 <RefreshCw className="h-4 w-4" /> {statusLabels[status]}
               </Button>
             ))}
-            {project.can_cancel && (
+            {canWrite && project.can_cancel && (
               <Button variant="outline" className="border-red-200 text-red-700 hover:bg-red-50" onClick={() => { setDialogError(null); setCancelling(true); }}>
                 <Ban className="h-4 w-4" /> Batalkan Proyek
               </Button>

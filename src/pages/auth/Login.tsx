@@ -60,8 +60,8 @@ export function Login() {
       
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
         <Link to="/" className="flex flex-col items-center group mb-8">
-          <span className="text-5xl md:text-6xl font-bold tracking-[0.2em] text-white glow-text">
-            <AnimatedBrandText text="UNI-NEXUS" />
+          <span className="text-5xl md:text-6xl font-bold tracking-tight text-white glow-text">
+            <AnimatedBrandText text="UNI-NEXUS" glow />
           </span>
         </Link>
         

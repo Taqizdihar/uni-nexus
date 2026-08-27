@@ -53,8 +53,8 @@ export function Register() {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[var(--nexus-yellow)]/5 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
         <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
           <Link to="/" className="flex flex-col items-center group mb-6">
-            <span className="text-5xl md:text-6xl font-bold tracking-[0.2em] text-white glow-text">
-              <AnimatedBrandText text="UNI-NEXUS" />
+            <span className="text-5xl md:text-6xl font-bold tracking-tight text-white glow-text">
+              <AnimatedBrandText text="UNI-NEXUS" glow />
             </span>
           </Link>
           <div className="w-full max-w-md bg-[var(--nexus-charcoal)]/50 backdrop-blur-md p-8 rounded-2xl border border-gray-800 text-center">
@@ -87,8 +87,8 @@ export function Register() {
       
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
         <Link to="/" className="flex flex-col items-center group mb-6">
-          <span className="text-5xl md:text-6xl font-bold tracking-[0.2em] text-white glow-text">
-            <AnimatedBrandText text="UNI-NEXUS" />
+          <span className="text-5xl md:text-6xl font-bold tracking-tight text-white glow-text">
+            <AnimatedBrandText text="UNI-NEXUS" glow />
           </span>
         </Link>
         

@@ -65,7 +65,7 @@ export function Landing() {
           </p>
           
           <h1 className="text-6xl md:text-8xl font-['Technique'] tracking-tight text-white glow-text">
-            <AnimatedBrandText text="UNI-NEXUS" techniqueIdleTime={10000} />
+            <AnimatedBrandText text="UNI-NEXUS" />
           </h1>
           
           <div className="text-2xl md:text-3xl font-bold tracking-wide space-x-4">
