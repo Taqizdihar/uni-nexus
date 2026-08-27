@@ -39,6 +39,28 @@ export const requireAuth = async (req: AuthRequest, res: Response, next: NextFun
   }
 };
 
+/** Passes when the user holds at least one of the listed permissions. */
+export const requireAnyPermission = (...permissionCodes: string[]) => {
+  return (req: AuthRequest, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return next(new UnauthorizedError('Otentikasi diperlukan.'));
+    }
+
+    const granted: string[] = req.user.permissions || [];
+    if (!permissionCodes.some(code => granted.includes(code))) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: 'FORBIDDEN',
+          message: 'Anda tidak memiliki hak akses untuk tindakan ini.'
+        }
+      });
+    }
+
+    next();
+  };
+};
+
 export const requirePermission = (permissionCode: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {

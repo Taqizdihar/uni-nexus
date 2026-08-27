@@ -265,6 +265,7 @@ const studioNav: NavGroup[] = [
         name: "Proyek",
         icon: FolderKanban,
         path: "/app/studio/projects",
+        permission: "studio.projects.read",
         subItems: [
           { name: "Semua Proyek", path: "/app/studio/projects" },
           { name: "Proyek Aktif", path: "/app/studio/projects/active" },

@@ -191,8 +191,14 @@ const router = createBrowserRouter(
           }
         />
         <Route path="craft/automations/*" element={<PermissionGate permission="craft.automations.read"><CraftAutomations /></PermissionGate>} />
-        <Route path="studio/projects" element={<StudioProjects />} />
-        <Route path="studio/projects/*" element={<StudioProjects />} />
+        <Route
+          path="studio/projects/*"
+          element={
+            <PermissionGate permission="studio.projects.read">
+              <StudioProjects />
+            </PermissionGate>
+          }
+        />
         <Route path="studio/clients" element={<StudioClients />} />
         <Route path="studio/services" element={<StudioServices />} />
         <Route
