@@ -11,7 +11,7 @@ const controller = new StudioReferencesController();
  * Any Studio reader may use them, so future Clients, Services, Billing, Vendor
  * and Finance modules can reuse these selectors without new plumbing.
  */
-router.use(requireAuth, requireAnyPermission('studio.projects.read', 'studio.clients.read', 'studio.finance.read'));
+router.use(requireAuth, requireAnyPermission('studio.projects.read', 'studio.clients.read', 'studio.finance.read', 'studio.services.read'));
 
 router.get('/clients', controller.getClients);
 router.get('/services', controller.getServices);

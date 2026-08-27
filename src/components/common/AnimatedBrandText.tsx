@@ -4,11 +4,14 @@ import { cn } from '../../lib/utils';
 interface AnimatedBrandTextProps {
   className?: string;
   text?: string;
+  /** Time the Technique font remains visible before the next Cube wave. */
+  techniqueIdleTime?: number;
 }
 
 export function AnimatedBrandText({ 
   className, 
-  text = "UNI-NEXUS" 
+  text = "UNI-NEXUS",
+  techniqueIdleTime = 2000,
 }: AnimatedBrandTextProps) {
   // Array of font families for each letter: 'font-sans' (default) or 'font-["Cube"]'
   const [fonts, setFonts] = useState<string[]>(Array(text.length).fill(''));
@@ -56,19 +59,19 @@ export function AnimatedBrandText({
         await animateWave(false);
         if (!isMounted) break;
         
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, techniqueIdleTime));
       }
     };
 
     timeoutId = setTimeout(() => {
       if (isMounted) runLoop();
-    }, 1000);
+    }, techniqueIdleTime === 2000 ? 1000 : techniqueIdleTime - 1000);
 
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
     };
-  }, [text]);
+  }, [text, techniqueIdleTime]);
 
   return (
     <span className={cn("inline-flex items-center", className)}>

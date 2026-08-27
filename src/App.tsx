@@ -207,7 +207,14 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route path="studio/services" element={<StudioServices />} />
+        <Route
+          path="studio/services/*"
+          element={
+            <PermissionGate permission="studio.services.read">
+              <StudioServices />
+            </PermissionGate>
+          }
+        />
         <Route
           path="studio/equipment"
           element={

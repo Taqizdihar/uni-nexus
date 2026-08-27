@@ -41,10 +41,12 @@ export class StudioReferencesService {
 
   async getServices(studio: BusinessUnitContext) {
     const [rows]: any = await pool.execute(
-      `SELECT id, code, name, description, pricing_model, base_price, unit_label
-       FROM studio_services
-       WHERE business_unit_id = ? AND is_active = 1
-       ORDER BY name ASC LIMIT 300`,
+      `SELECT ss.id, ss.code, ss.name, ss.description, ss.pricing_model, ss.base_price, ss.unit_label,
+              ss.category_id, sc.name AS category_name
+       FROM studio_services ss
+       LEFT JOIN studio_service_categories sc ON sc.id = ss.category_id
+       WHERE ss.business_unit_id = ? AND ss.is_active = 1
+       ORDER BY ss.name ASC LIMIT 300`,
       [studio.id],
     );
     return (rows as any[]).map(row => ({ ...row, base_price: Number(row.base_price) }));

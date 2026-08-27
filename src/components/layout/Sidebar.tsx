@@ -274,7 +274,14 @@ const studioNav: NavGroup[] = [
         ],
       },
       { name: "Klien", icon: Users, path: "/app/studio/clients", permission: "studio.clients.read" },
-      { name: "Layanan", icon: Briefcase, path: "/app/studio/services" },
+      {
+        name: "Layanan", icon: Briefcase, path: "/app/studio/services", permission: "studio.services.read",
+        subItems: [
+          { name: "Katalog Layanan", path: "/app/studio/services" },
+          { name: "Kategori Layanan", path: "/app/studio/services/categories" },
+          { name: "Paket Layanan", path: "/app/studio/services/packages" },
+        ],
+      },
       {
         name: "Peralatan & Aset",
         icon: HardDrive,
