@@ -317,6 +317,14 @@ const studioNav: NavGroup[] = [
         name: "Vendor / Freelancer / Mitra",
         icon: Users,
         path: "/app/studio/vendors",
+        permission: "studio.vendors.read",
+        subItems: [
+          { name: "Semua Pihak", path: "/app/studio/vendors" },
+          { name: "Vendor", path: "/app/studio/vendors/vendor" },
+          { name: "Freelancer", path: "/app/studio/vendors/freelancers" },
+          { name: "Mitra Studio", path: "/app/studio/vendors/partners" },
+          { name: "Penugasan", path: "/app/studio/vendors/assignments" },
+        ],
       },
       {
         name: "Keuangan",

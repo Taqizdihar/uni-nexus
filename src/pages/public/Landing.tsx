@@ -60,8 +60,10 @@ export function Landing() {
 
       <main className="flex-1 flex flex-col items-center justify-center relative z-10 px-6 text-center">
         <div className="space-y-6 max-w-4xl">
-          <p className="text-[var(--nexus-yellow)] tracking-[0.3em] text-xs font-semibold uppercase">
-            Nexus Creationis et Productionis
+          <p className="tracking-wide text-[1.3125rem] font-semibold italic">
+            <span className="text-white">"From nexus,</span>{' '}
+            <span className="text-gray-300">cometh order,</span>{' '}
+            <span className="text-[var(--nexus-yellow)]">and thus, opus."</span>
           </p>
           
           <h1 className="text-6xl md:text-8xl font-['Technique'] tracking-tight text-white glow-text">

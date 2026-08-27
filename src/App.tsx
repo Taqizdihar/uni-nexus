@@ -38,6 +38,7 @@ import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
 import { StudioEquipment } from "./pages/studio/Equipment";
 import { StudioBilling } from "./pages/studio/Billing";
+import { StudioVendors } from "./pages/studio/Vendors";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -233,17 +234,7 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route
-          path="studio/vendors"
-          element={
-            <PlannedModulePage
-              title="Vendor / Mitra"
-              description="Kontraktor eksternal dan penyedia layanan."
-              stage="Tahap Berikutnya"
-              icon={Users}
-            />
-          }
-        />
+        <Route path="studio/vendors/*" element={<PermissionGate permission="studio.vendors.read"><StudioVendors /></PermissionGate>} />
         <Route
           path="studio/finance"
           element={
