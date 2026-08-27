@@ -5,6 +5,7 @@ import { ProductionMaterialsService } from './production-materials.service';
 import { ProductionQcService } from './production-qc.service';
 import { ProductionSchedulerService } from './production-scheduler.service';
 import { ProductionSyncService } from './production-sync.service';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type {
   CraftContext,
   CreatePrintJobInput,
@@ -270,6 +271,11 @@ export class ProductionJobsService {
       connection, craft, userId, 'production.job_ready', jobId, jobCode,
       `${jobCode} siap dicetak.`, { status_code: 'queued' }, { status_code: 'ready' },
     );
+    await domainEvents.publish(connection, {
+      eventKey: `production.job_created:${jobId}`, eventName: 'production.job_created', moduleCode: 'craft_production',
+      organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: jobId, entityCode: jobCode, actorUserId: userId,
+      payload: { context: { production: { id: jobId, job_code: jobCode, status_code: 'ready', order_id: source.order_id, queue_item_id: source.queue_item_id } } },
+    });
     return { id: jobId, job_code: jobCode, status_code: 'ready' as PrintJobStatus };
   }
 
@@ -737,6 +743,11 @@ export class ProductionJobsService {
       await this.sync.audit(connection, craft, userId, 'production.print_complete', id, job.job_code, `${job.job_code} selesai dicetak dan menunggu QC.`, { status_code: 'printing', printer_status: 'busy' }, { status_code: 'qc', printer_status: 'available', actual_print_minutes: actualMinutes, actual_material_g: actualGrams });
       await this.sync.audit(connection, craft, userId, 'production.qc_start', id, job.job_code, `Pemeriksaan QC ${job.job_code} disiapkan.`, undefined, { inspection_id: inspectionId, result_code: 'pending' });
       await this.sync.notify(connection, craft, 'production_qc_ready', 'info', 'Cetak selesai - menunggu QC', `${job.job_code} selesai dicetak dan siap diperiksa.`, id);
+      await domainEvents.publish(connection, {
+        eventKey: `production.job_completed:${id}`, eventName: 'production.job_completed', moduleCode: 'craft_production',
+        organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: id, entityCode: job.job_code, actorUserId: userId,
+        payload: { context: { production: { id, job_code: job.job_code, status_code: 'qc', actual_print_minutes: actualMinutes, actual_material_g: actualGrams } } },
+      });
       await connection.commit();
       return { message: 'Pencetakan fisik selesai. Pekerjaan menunggu kontrol kualitas.' };
     } catch (error) { await connection.rollback(); throw error; }

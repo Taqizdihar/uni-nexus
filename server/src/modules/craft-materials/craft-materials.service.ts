@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { pool } from "../../config/database";
 import { AppError, NotFoundError } from "../../shared/errors/AppError";
+import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
 import { CraftMaterialsRepository } from "./craft-materials.repository";
 import {
   applyFilamentBatchQuantityDelta,
@@ -196,6 +197,25 @@ export class CraftMaterialsService {
         "SKU material tersebut sudah digunakan.",
       );
     return error;
+  }
+
+  private async publishStockEvent(
+    connection: DbConnection, actor: MaterialActor, materialId: number, eventName: string,
+    previousAvailable: number | null, extra: Record<string, unknown> = {},
+  ) {
+    const [rows]: any = await connection.execute(
+      `SELECT m.sku,m.name,m.low_stock_threshold,COALESCE(SUM(mb.current_qty),0) available_qty
+       FROM materials m LEFT JOIN material_batches mb ON mb.material_id=m.id AND mb.status_code='available'
+       WHERE m.id=? AND m.business_unit_id=? AND m.deleted_at IS NULL GROUP BY m.id`,
+      [materialId, actor.businessUnitId],
+    );
+    if (!rows.length) return;
+    const material = rows[0]; const availableQty = value(material.available_qty); const threshold = value(material.low_stock_threshold);
+    const context = { material: { id: materialId, material_code: material.sku, name: material.name, available_qty: availableQty, reorder_point: threshold, ...extra } };
+    const publish = (name: string) => domainEvents.publish(connection as any, { eventKey: `${name}:${materialId}:${randomUUID()}`, eventName: name, moduleCode: 'craft_materials', organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, entityType: 'material', entityId: materialId, entityCode: material.sku, actorUserId: actor.id, payload: { context } });
+    await publish(eventName);
+    if (previousAvailable !== null && previousAvailable > threshold && availableQty <= threshold) await publish('material.low_stock');
+    if (previousAvailable !== null && previousAvailable > 0 && availableQty <= 0) await publish('material.out_of_stock');
   }
 
   async createMaterial(input: MaterialInput, actor: MaterialActor) {
@@ -707,6 +727,7 @@ export class CraftMaterialsService {
         undefined,
         { material_id: materialId, spool_id: spoolId },
       );
+      await this.publishStockEvent(connection, actor, materialId, "material.stock_received", null, { batch_code: finalBatchCode, quantity: input.quantity });
       await connection.commit();
       return {
         batch_id: batchId,
@@ -735,6 +756,12 @@ export class CraftMaterialsService {
         input.material_batch_id,
         actor.businessUnitId,
       );
+      const [beforeRows]: any = await connection.execute(
+        `SELECT COALESCE(SUM(mb.current_qty),0) available_qty FROM material_batches mb
+         JOIN materials m ON m.id=mb.material_id WHERE m.id=? AND m.business_unit_id=? AND mb.status_code='available'`,
+        [materialId, actor.businessUnitId],
+      );
+      const previousAvailable = value(beforeRows[0]?.available_qty);
       const delta = input.direction === "in" ? input.quantity : -input.quantity;
       const nextQuantity = value(batch.current_qty) + delta;
       if (
@@ -816,6 +843,7 @@ export class CraftMaterialsService {
         batch.batch_code,
         `Stok ${batch.material_sku} disesuaikan ${input.direction === "in" ? "masuk" : "keluar"} ${input.quantity} ${batch.unit_code}.`,
       );
+      await this.publishStockEvent(connection, actor, materialId, "material.stock_changed", previousAvailable, { direction: input.direction, quantity: input.quantity });
       await connection.commit();
       return { message: "Penyesuaian stok berhasil dicatat." };
     } catch (error) {
@@ -925,6 +953,12 @@ export class CraftMaterialsService {
         input.material_batch_id,
         actor.businessUnitId,
       );
+      const [beforeRows]: any = await connection.execute(
+        `SELECT COALESCE(SUM(mb.current_qty),0) available_qty FROM material_batches mb
+         JOIN materials m ON m.id=mb.material_id WHERE m.id=? AND m.business_unit_id=? AND mb.status_code='available'`,
+        [input.material_id, actor.businessUnitId],
+      );
+      const previousAvailable = value(beforeRows[0]?.available_qty);
       const nextQuantity = value(batch.current_qty) - input.quantity;
       if (
         nextQuantity < -0.0001 ||
@@ -983,6 +1017,7 @@ export class CraftMaterialsService {
         undefined,
         { waste_reason: input.waste_reason },
       );
+      await this.publishStockEvent(connection, actor, input.material_id, "material.waste_recorded", previousAvailable, { quantity: input.quantity, waste_reason: input.waste_reason });
       await connection.commit();
       return { id: wasteId, message: "Limbah material berhasil dicatat." };
     } catch (error) {

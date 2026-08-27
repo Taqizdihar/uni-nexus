@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2026 at 03:25 AM
+-- Generation Time: Aug 27, 2026 at 05:21 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -150,7 +150,10 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (43, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:04:48.933'),
 (44, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 08:47:23.797'),
 (45, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:10:33.483'),
-(46, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:16:51.338');
+(46, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:16:51.338'),
+(47, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:29:55.606'),
+(48, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 10:59:02.700'),
+(49, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 12:17:47.926');
 
 -- --------------------------------------------------------
 
@@ -164,13 +167,26 @@ CREATE TABLE `automation_rules` (
   `business_unit_id` bigint UNSIGNED DEFAULT NULL,
   `rule_code` varchar(80) NOT NULL,
   `name` varchar(180) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `module_code` varchar(60) NOT NULL,
+  `trigger_type` varchar(30) NOT NULL DEFAULT 'event' COMMENT 'event|schedule|sensor|manual',
   `trigger_event` varchar(100) NOT NULL,
+  `trigger_config_json` json DEFAULT NULL,
+  `schedule_timezone` varchar(64) DEFAULT NULL,
   `condition_json` json DEFAULT NULL,
   `action_json` json NOT NULL,
   `status_code` varchar(30) NOT NULL DEFAULT 'active' COMMENT 'draft|active|paused|disabled',
   `priority` int NOT NULL DEFAULT '100',
+  `cooldown_seconds` int UNSIGNED NOT NULL DEFAULT '0',
+  `max_retries` smallint UNSIGNED NOT NULL DEFAULT '0',
+  `next_run_at` datetime(3) DEFAULT NULL,
+  `last_run_at` datetime(3) DEFAULT NULL,
+  `last_success_at` datetime(3) DEFAULT NULL,
+  `last_failure_at` datetime(3) DEFAULT NULL,
+  `version_no` int UNSIGNED NOT NULL DEFAULT '1',
+  `is_system` tinyint(1) NOT NULL DEFAULT '0',
   `created_by` bigint UNSIGNED DEFAULT NULL,
+  `updated_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -184,12 +200,22 @@ CREATE TABLE `automation_rules` (
 CREATE TABLE `automation_runs` (
   `id` bigint UNSIGNED NOT NULL,
   `rule_id` bigint UNSIGNED NOT NULL,
+  `run_key` varchar(190) DEFAULT NULL,
+  `rule_version` int UNSIGNED NOT NULL DEFAULT '1',
+  `trigger_event` varchar(100) DEFAULT NULL,
   `trigger_entity_type` varchar(60) DEFAULT NULL,
   `trigger_entity_id` bigint UNSIGNED DEFAULT NULL,
+  `scheduled_for` datetime(3) DEFAULT NULL,
+  `initiated_by` bigint UNSIGNED DEFAULT NULL,
+  `attempt_no` smallint UNSIGNED NOT NULL DEFAULT '1',
+  `next_attempt_at` datetime(3) DEFAULT NULL,
+  `correlation_id` varchar(64) DEFAULT NULL,
+  `chain_depth` smallint UNSIGNED NOT NULL DEFAULT '0',
   `status_code` varchar(30) NOT NULL COMMENT 'queued|running|success|failed|skipped',
   `started_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `finished_at` datetime(3) DEFAULT NULL,
   `input_json` json DEFAULT NULL,
+  `rule_snapshot_json` json DEFAULT NULL,
   `result_json` json DEFAULT NULL,
   `error_message` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -524,6 +550,38 @@ CREATE TABLE `document_templates` (
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `domain_events`
+--
+
+CREATE TABLE `domain_events` (
+  `id` bigint UNSIGNED NOT NULL,
+  `organization_id` bigint UNSIGNED NOT NULL,
+  `business_unit_id` bigint UNSIGNED DEFAULT NULL,
+  `event_key` varchar(190) NOT NULL,
+  `event_name` varchar(100) NOT NULL,
+  `module_code` varchar(60) NOT NULL,
+  `entity_type` varchar(60) DEFAULT NULL,
+  `entity_id` bigint UNSIGNED DEFAULT NULL,
+  `entity_code` varchar(120) DEFAULT NULL,
+  `actor_user_id` bigint UNSIGNED DEFAULT NULL,
+  `correlation_id` varchar(64) DEFAULT NULL,
+  `causation_event_id` bigint UNSIGNED DEFAULT NULL,
+  `source_automation_run_id` bigint UNSIGNED DEFAULT NULL,
+  `chain_depth` smallint UNSIGNED NOT NULL DEFAULT '0',
+  `payload_json` json DEFAULT NULL,
+  `status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|processing|processed|failed',
+  `available_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `locked_at` datetime(3) DEFAULT NULL,
+  `locked_by` varchar(120) DEFAULT NULL,
+  `attempt_count` smallint UNSIGNED NOT NULL DEFAULT '0',
+  `processed_at` datetime(3) DEFAULT NULL,
+  `last_error` text,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -1386,7 +1444,10 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (31, 'craft.analytics.export', 'craft_analytics', 'Ekspor Laporan Craft', 'Menghasilkan dan mengunduh laporan Craft dalam format PDF, XLSX, atau CSV.', '2026-08-27 09:20:17.137'),
 (32, 'craft.marketplace.read', 'craft_marketplace', 'Lihat Marketplace & Kanal Penjualan', 'Melihat kanal penjualan, pemetaan produk, biaya marketplace, settlement, dan status integrasi Craft.', '2026-08-27 10:25:39.250'),
 (33, 'craft.marketplace.write', 'craft_marketplace', 'Kelola Marketplace & Kanal Penjualan', 'Mengelola kanal penjualan, pemetaan produk, aturan biaya marketplace, settlement, dan konfigurasi marketplace Craft.', '2026-08-27 10:25:39.281'),
-(34, 'craft.marketplace.sync', 'craft_marketplace', 'Sinkronisasi Marketplace Craft', 'Menjalankan impor atau sinkronisasi pesanan dan data marketplace ke UNI-NEXUS.', '2026-08-27 10:25:39.309');
+(34, 'craft.marketplace.sync', 'craft_marketplace', 'Sinkronisasi Marketplace Craft', 'Menjalankan impor atau sinkronisasi pesanan dan data marketplace ke UNI-NEXUS.', '2026-08-27 10:25:39.309'),
+(35, 'craft.automations.read', 'craft_automations', 'Lihat Otomasi Craft', 'Melihat aturan, status, template, dan riwayat eksekusi otomasi Uni-Inside Craft.', '2026-08-27 11:21:01.746'),
+(36, 'craft.automations.write', 'craft_automations', 'Kelola Otomasi Craft', 'Membuat, mengubah, mengaktifkan, menjeda, dan menonaktifkan aturan otomasi Uni-Inside Craft.', '2026-08-27 11:21:01.776'),
+(37, 'craft.automations.run', 'craft_automations', 'Jalankan Otomasi Craft', 'Menguji dan menjalankan aturan otomasi Uni-Inside Craft secara manual.', '2026-08-27 11:21:01.802');
 
 -- --------------------------------------------------------
 
@@ -2193,6 +2254,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 32, '2026-08-27 10:25:39.332'),
 (1, 33, '2026-08-27 10:25:39.332'),
 (1, 34, '2026-08-27 10:25:39.332'),
+(1, 35, '2026-08-27 11:21:01.831'),
+(1, 36, '2026-08-27 11:21:01.831'),
+(1, 37, '2026-08-27 11:21:01.831'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2227,6 +2291,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 32, '2026-08-27 10:25:39.332'),
 (2, 33, '2026-08-27 10:25:39.332'),
 (2, 34, '2026-08-27 10:25:39.332'),
+(2, 35, '2026-08-27 11:21:01.831'),
+(2, 36, '2026-08-27 11:21:01.831'),
+(2, 37, '2026-08-27 11:21:01.831'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2261,6 +2328,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 32, '2026-08-27 10:25:39.332'),
 (3, 33, '2026-08-27 10:25:39.332'),
 (3, 34, '2026-08-27 10:25:39.332'),
+(3, 35, '2026-08-27 11:21:01.831'),
+(3, 36, '2026-08-27 11:21:01.831'),
+(3, 37, '2026-08-27 11:21:01.831'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2294,6 +2364,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 32, '2026-08-27 10:25:39.332'),
 (7, 33, '2026-08-27 10:25:39.332'),
 (7, 34, '2026-08-27 10:25:39.332'),
+(7, 35, '2026-08-27 11:21:01.831'),
+(7, 36, '2026-08-27 11:21:01.831'),
+(7, 37, '2026-08-27 11:21:01.831'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -2326,7 +2399,10 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 31, '2026-08-27 09:20:17.164'),
 (8, 32, '2026-08-27 10:25:39.332'),
 (8, 33, '2026-08-27 10:25:39.332'),
-(8, 34, '2026-08-27 10:25:39.332');
+(8, 34, '2026-08-27 10:25:39.332'),
+(8, 35, '2026-08-27 11:21:01.831'),
+(8, 36, '2026-08-27 11:21:01.831'),
+(8, 37, '2026-08-27 11:21:01.831');
 
 -- --------------------------------------------------------
 
@@ -2748,7 +2824,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 10:16:51.333', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 10:16:51.333', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-27 12:17:47.919', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-27 12:17:47.919', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -2861,18 +2937,18 @@ CREATE TABLE `user_sessions` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_payable` (
-`balance_due` decimal(18,2)
+`supplier_invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_date` date
-,`paid_amount` decimal(18,2)
-,`status_code` varchar(30)
-,`supplier_invoice_id` bigint unsigned
 ,`supplier_invoice_number` varchar(120)
-,`supplier_name` varchar(200)
 ,`supplier_party_id` bigint unsigned
+,`supplier_name` varchar(200)
+,`invoice_date` date
+,`due_date` date
+,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -2882,18 +2958,18 @@ CREATE TABLE `v_accounts_payable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_receivable` (
-`balance_due` decimal(18,2)
+`invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_id` bigint unsigned
 ,`invoice_number` varchar(80)
-,`issue_date` date
-,`paid_amount` decimal(18,2)
 ,`party_id` bigint unsigned
 ,`party_name` varchar(200)
+,`issue_date` date
+,`due_date` date
 ,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -2903,20 +2979,20 @@ CREATE TABLE `v_accounts_receivable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_craft_order_priority` (
-`customer_name` varchar(200)
-,`customer_party_id` bigint unsigned
-,`deadline_at` datetime(3)
-,`id` bigint unsigned
-,`minutes_to_deadline` bigint
+`id` bigint unsigned
 ,`order_code` varchar(80)
-,`order_date` datetime(3)
-,`payment_status_code` varchar(30)
-,`priority_code` varchar(20)
-,`priority_score` decimal(10,3)
+,`customer_party_id` bigint unsigned
+,`customer_name` varchar(200)
 ,`sales_channel_id` bigint unsigned
 ,`sales_channel_name` varchar(100)
+,`order_date` datetime(3)
+,`deadline_at` datetime(3)
+,`priority_code` varchar(20)
+,`priority_score` decimal(10,3)
 ,`status_code` varchar(30)
+,`payment_status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`minutes_to_deadline` bigint
 );
 
 -- --------------------------------------------------------
@@ -2926,18 +3002,18 @@ CREATE TABLE `v_craft_order_priority` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_material_stock` (
-`available_qty` decimal(41,4)
+`material_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`color_name` varchar(100)
-,`low_stock_threshold` decimal(18,4)
-,`material_id` bigint unsigned
-,`material_type` varchar(80)
-,`name` varchar(180)
-,`reserved_qty` decimal(40,4)
 ,`sku` varchar(80)
-,`stock_status` varchar(12)
-,`total_qty` decimal(40,4)
+,`name` varchar(180)
+,`material_type` varchar(80)
+,`color_name` varchar(100)
 ,`unit_symbol` varchar(20)
+,`total_qty` decimal(40,4)
+,`reserved_qty` decimal(40,4)
+,`available_qty` decimal(41,4)
+,`low_stock_threshold` decimal(18,4)
+,`stock_status` varchar(12)
 );
 
 -- --------------------------------------------------------
@@ -2947,17 +3023,17 @@ CREATE TABLE `v_material_stock` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_printer_current_activity` (
-`estimated_finish_at` datetime(3)
+`printer_id` bigint unsigned
+,`printer_code` varchar(60)
+,`printer_name` varchar(150)
+,`printer_status` varchar(30)
+,`print_job_id` bigint unsigned
 ,`job_code` varchar(80)
 ,`job_name` varchar(200)
 ,`job_status` varchar(30)
-,`print_job_id` bigint unsigned
-,`printer_code` varchar(60)
-,`printer_id` bigint unsigned
-,`printer_name` varchar(150)
-,`printer_status` varchar(30)
 ,`progress_percent` decimal(6,2)
 ,`started_at` datetime(3)
+,`estimated_finish_at` datetime(3)
 );
 
 --
@@ -3008,15 +3084,21 @@ ALTER TABLE `automation_rules`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `rule_code` (`rule_code`),
   ADD KEY `fk_automation_rules_org` (`organization_id`),
-  ADD KEY `fk_automation_rules_bu` (`business_unit_id`),
-  ADD KEY `fk_automation_rules_user` (`created_by`);
+  ADD KEY `fk_automation_rules_user` (`created_by`),
+  ADD KEY `idx_automation_rules_due` (`business_unit_id`,`trigger_type`,`status_code`,`next_run_at`),
+  ADD KEY `idx_automation_rules_event` (`business_unit_id`,`trigger_event`,`status_code`),
+  ADD KEY `fk_automation_rules_updated_by` (`updated_by`);
 
 --
 -- Indexes for table `automation_runs`
 --
 ALTER TABLE `automation_runs`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_automation_runs_rule_time` (`rule_id`,`started_at`);
+  ADD UNIQUE KEY `uq_automation_run_key` (`run_key`),
+  ADD KEY `idx_automation_runs_rule_time` (`rule_id`,`started_at`),
+  ADD KEY `idx_automation_runs_queue` (`status_code`,`next_attempt_at`,`started_at`),
+  ADD KEY `idx_automation_runs_entity` (`trigger_entity_type`,`trigger_entity_id`,`started_at`),
+  ADD KEY `fk_automation_runs_initiated_by` (`initiated_by`);
 
 --
 -- Indexes for table `budgets`
@@ -3151,6 +3233,21 @@ ALTER TABLE `document_templates`
   ADD KEY `fk_document_templates_org` (`organization_id`),
   ADD KEY `fk_document_templates_bu` (`business_unit_id`),
   ADD KEY `fk_document_templates_user` (`created_by`);
+
+--
+-- Indexes for table `domain_events`
+--
+ALTER TABLE `domain_events`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_domain_events_event_key` (`event_key`),
+  ADD KEY `idx_domain_events_queue` (`status_code`,`available_at`,`id`),
+  ADD KEY `idx_domain_events_name` (`business_unit_id`,`event_name`,`status_code`),
+  ADD KEY `idx_domain_events_entity` (`entity_type`,`entity_id`,`created_at`),
+  ADD KEY `idx_domain_events_correlation` (`correlation_id`,`created_at`),
+  ADD KEY `fk_domain_events_org` (`organization_id`),
+  ADD KEY `fk_domain_events_actor` (`actor_user_id`),
+  ADD KEY `fk_domain_events_causation` (`causation_event_id`),
+  ADD KEY `fk_domain_events_automation_run` (`source_automation_run_id`);
 
 --
 -- Indexes for table `expenses`
@@ -4021,19 +4118,19 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
 --
 ALTER TABLE `automation_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `automation_runs`
 --
 ALTER TABLE `automation_runs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `budgets`
@@ -4075,7 +4172,7 @@ ALTER TABLE `chart_of_accounts`
 -- AUTO_INCREMENT for table `craft_orders`
 --
 ALTER TABLE `craft_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `craft_order_drafts`
@@ -4087,7 +4184,7 @@ ALTER TABLE `craft_order_drafts`
 -- AUTO_INCREMENT for table `craft_order_items`
 --
 ALTER TABLE `craft_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `craft_order_status_history`
@@ -4112,6 +4209,12 @@ ALTER TABLE `documents`
 --
 ALTER TABLE `document_templates`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `domain_events`
+--
+ALTER TABLE `domain_events`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -4153,13 +4256,13 @@ ALTER TABLE `goods_receipt_items`
 -- AUTO_INCREMENT for table `integrations`
 --
 ALTER TABLE `integrations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `integration_sync_logs`
 --
 ALTER TABLE `integration_sync_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `internal_transfers`
@@ -4213,19 +4316,19 @@ ALTER TABLE `login_history`
 -- AUTO_INCREMENT for table `marketplace_fee_rules`
 --
 ALTER TABLE `marketplace_fee_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlements`
 --
 ALTER TABLE `marketplace_settlements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlement_items`
 --
 ALTER TABLE `marketplace_settlement_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `master_options`
@@ -4279,7 +4382,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4297,7 +4400,7 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -4315,7 +4418,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -4714,12 +4817,14 @@ ALTER TABLE `audit_logs`
 ALTER TABLE `automation_rules`
   ADD CONSTRAINT `fk_automation_rules_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_automation_rules_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  ADD CONSTRAINT `fk_automation_rules_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_automation_rules_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `automation_runs`
 --
 ALTER TABLE `automation_runs`
+  ADD CONSTRAINT `fk_automation_runs_initiated_by` FOREIGN KEY (`initiated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_automation_runs_rule` FOREIGN KEY (`rule_id`) REFERENCES `automation_rules` (`id`) ON DELETE CASCADE;
 
 --
@@ -4826,6 +4931,16 @@ ALTER TABLE `document_templates`
   ADD CONSTRAINT `fk_document_templates_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_document_templates_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
   ADD CONSTRAINT `fk_document_templates_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `domain_events`
+--
+ALTER TABLE `domain_events`
+  ADD CONSTRAINT `fk_domain_events_actor` FOREIGN KEY (`actor_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_domain_events_automation_run` FOREIGN KEY (`source_automation_run_id`) REFERENCES `automation_runs` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_domain_events_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_domain_events_causation` FOREIGN KEY (`causation_event_id`) REFERENCES `domain_events` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_domain_events_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`);
 
 --
 -- Constraints for table `expenses`

@@ -32,6 +32,7 @@ import { CraftCustomers } from "./pages/craft/Customers";
 import { CraftProcurement } from "./pages/craft/Procurement";
 import { CraftAnalytics } from "./pages/craft/Analytics";
 import { CraftMarketplace } from "./pages/craft/Marketplace";
+import { CraftAutomations } from "./pages/craft/Automations";
 import { StudioProjects } from "./pages/studio/Projects";
 import { StudioClients } from "./pages/studio/Clients";
 import { StudioServices } from "./pages/studio/Services";
@@ -189,17 +190,7 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route
-          path="craft/automations"
-          element={
-            <PlannedModulePage
-              title="Otomasi"
-              description="Aturan dan pemicu alur kerja."
-              stage="Lanjutan"
-              icon={FileText}
-            />
-          }
-        />
+        <Route path="craft/automations/*" element={<PermissionGate permission="craft.automations.read"><CraftAutomations /></PermissionGate>} />
         <Route path="studio/projects" element={<StudioProjects />} />
         <Route path="studio/projects/*" element={<StudioProjects />} />
         <Route path="studio/clients" element={<StudioClients />} />

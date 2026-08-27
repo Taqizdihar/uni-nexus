@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { pool } from "../../config/database";
 import { AppError } from "../../shared/errors/AppError";
+import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
 import type { BusinessUnitContext } from "../craft-orders/craft-orders.helpers";
 import { CraftProcurementRepository } from "./craft-procurement.repository";
 import type {
@@ -705,6 +706,11 @@ export class CraftProcurementService {
         undefined,
         data,
       );
+      await domainEvents.publish(connection, {
+        eventKey: `procurement.request_created:${id}`, eventName: 'procurement.request_created', moduleCode: 'craft_procurement',
+        organizationId: actor.organizationId, businessUnitId: actor.id, entityType: 'purchase_request', entityId: id, entityCode: requestCode, actorUserId: actor.userId,
+        payload: { context: { procurement: { id, request_code: requestCode, status_code: 'draft', item_count: data.items.length } } },
+      });
       await connection.commit();
       return { id, request_code: requestCode };
     } catch (error) {

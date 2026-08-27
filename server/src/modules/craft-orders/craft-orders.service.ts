@@ -4,6 +4,7 @@ import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import { OrderPriorityService } from './order-priority.service';
 import { PartnerPricingService } from '../craft-customers/partner-pricing.service';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 
 type SqlConnection = Awaited<ReturnType<typeof pool.getConnection>>;
 
@@ -250,6 +251,21 @@ export class CraftOrdersService {
         [orderId, userId],
       );
       await this.priorityService.calculatePriority(orderId, connection);
+      const [createdOrders]: any = await connection.execute(
+        `SELECT priority_code FROM craft_orders WHERE id = ?`,
+        [orderId],
+      );
+      const [businessUnits]: any = await connection.execute(
+        'SELECT organization_id FROM business_units WHERE id = ? LIMIT 1',
+        [businessUnitId],
+      );
+      await domainEvents.publish(connection, {
+        eventKey: `order.created:${orderId}`,
+        eventName: 'order.created', moduleCode: 'craft_orders', organizationId: Number(businessUnits[0].organization_id),
+        businessUnitId, entityType: 'craft_order', entityId: orderId, entityCode: orderCode, actorUserId: userId,
+        correlationId: randomUUID(),
+        payload: { context: { order: { id: orderId, order_code: orderCode, customer_party_id: data.customer_party_id, sales_channel_id: data.sales_channel_id, order_type: data.order_type, deadline_at: data.deadline_at || null, priority: createdOrders[0]?.priority_code || data.priority_code, total_amount: totalAmount } } },
+      });
       if (data.draft_id) {
         await connection.execute(
           `UPDATE craft_order_drafts SET status_code = 'converted', converted_order_id = ?, converted_at = UTC_TIMESTAMP(), updated_by = ?
@@ -294,6 +310,15 @@ export class CraftOrdersService {
          VALUES (?, ?, ?, ?, ?)`,
         [orderId, oldStatus, statusCode, reason || null, userId],
       );
+      const [orderDetails]: any = await connection.execute('SELECT order_code,order_type,deadline_at,priority_code,total_amount FROM craft_orders WHERE id=?', [orderId]);
+      const [businessUnits]: any = await connection.execute('SELECT organization_id FROM business_units WHERE id=? LIMIT 1', [businessUnitId]);
+      await domainEvents.publish(connection, {
+        eventKey: `order.status_changed:${orderId}:${oldStatus}:${statusCode}:${randomUUID()}`,
+        eventName: 'order.status_changed', moduleCode: 'craft_orders', organizationId: Number(businessUnits[0].organization_id),
+        businessUnitId, entityType: 'craft_order', entityId: orderId, entityCode: orderDetails[0].order_code, actorUserId: userId,
+        correlationId: randomUUID(),
+        payload: { context: { order: { id: orderId, order_code: orderDetails[0].order_code, order_type: orderDetails[0].order_type, status_code: statusCode, old_status: oldStatus, new_status: statusCode, deadline_at: orderDetails[0].deadline_at, priority: orderDetails[0].priority_code, total_amount: Number(orderDetails[0].total_amount) } } },
+      });
       await connection.commit();
     } catch (error) {
       await connection.rollback();

@@ -237,7 +237,16 @@ const craftNav: NavGroup[] = [
           { name: "Riwayat Sinkronisasi", path: "/app/craft/marketplace/sync-history" },
         ],
       },
-      { name: "Otomasi", icon: Zap, path: "/app/craft/automations" },
+      {
+        name: "Otomasi", icon: Zap, path: "/app/craft/automations", permission: "craft.automations.read",
+        subItems: [
+          { name: "Ringkasan Otomasi", path: "/app/craft/automations" },
+          { name: "Aturan Otomasi", path: "/app/craft/automations/rules" },
+          { name: "Template Otomasi", path: "/app/craft/automations/templates" },
+          { name: "Riwayat Eksekusi", path: "/app/craft/automations/runs" },
+          { name: "Pemicu & Aksi", path: "/app/craft/automations/catalog" },
+        ],
+      },
     ],
   },
 ];

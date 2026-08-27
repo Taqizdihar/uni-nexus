@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import { CraftPrintersRepository } from './craft-printers.repository';
 import type { CompleteMaintenanceInput, HistoryFilters, IssueInput, IssueUpdateInput, PrinterFilters, PrinterInput, PrinterStatus, PrinterUpdateInput, ScheduleInput, ScheduleUpdateInput } from './craft-printers.types';
 
@@ -121,6 +122,7 @@ export class CraftPrintersService {
       }
       await connection.execute('UPDATE printers SET status_code = ? WHERE id = ?', [status, printerId]);
       await this.audit(connection, actor, status === 'offline' ? 'set_offline' : 'restore_available', 'printer', printerId, printer.code, `${printer.code} diubah menjadi ${status}.`, { status: printer.status_code }, { status });
+      await domainEvents.publish(connection, { eventKey: `printer.status_changed:${printerId}:${randomUUID()}`, eventName: 'printer.status_changed', moduleCode: 'craft_printers', organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, entityType: 'printer', entityId: printerId, entityCode: printer.code, actorUserId: actor.id, payload: { context: { printer: { id: printerId, code: printer.code, name: printer.name, status_code: status, old_status: printer.status_code } } } });
     });
     return this.getPrinter(printerId, actor);
   }
@@ -239,6 +241,7 @@ export class CraftPrintersService {
       const blocking = await this.repository.hasBlockingIssue(printerId, connection); const status: PrinterStatus = blocking ? 'error' : 'available';
       await connection.execute('UPDATE printers SET status_code = ? WHERE id = ?', [status, printerId]);
       await this.audit(connection, actor, 'maintenance_complete', 'maintenance_record', Number(record.insertId), printer.code, `Menyelesaikan perawatan ${input.maintenance_type} pada ${printer.code}.`, { status: 'maintenance' }, { status, schedule_id: schedule?.id || null });
+      await domainEvents.publish(connection, { eventKey: `printer.maintenance_recorded:${record.insertId}`, eventName: 'printer.maintenance_recorded', moduleCode: 'craft_printers', organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, entityType: 'printer', entityId: printerId, entityCode: printer.code, actorUserId: actor.id, payload: { context: { printer: { id: printerId, code: printer.code, name: printer.name, status_code: status } } } });
     });
     return this.getPrinter(printerId, actor);
   }
@@ -256,6 +259,7 @@ export class CraftPrintersService {
       const blocks = ['high', 'critical'].includes(input.severity_code);
       if (blocks && !active) await connection.execute(`UPDATE printers SET status_code = 'error' WHERE id = ? AND status_code <> 'maintenance'`, [printer.id]);
       await this.audit(connection, actor, 'issue_create', 'printer_issue', issueId, issueCode, `Mencatat masalah ${issueCode} pada ${printer.code}.`, undefined, input);
+      await domainEvents.publish(connection, { eventKey: `printer.issue_created:${issueId}`, eventName: 'printer.issue_created', moduleCode: 'craft_printers', organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, entityType: 'printer', entityId: printer.id, entityCode: printer.code, actorUserId: actor.id, payload: { context: { printer: { id: printer.id, code: printer.code, name: printer.name, status_code: blocks && !active ? 'error' : printer.status_code }, issue: { id: issueId, issue_code: issueCode, severity: input.severity_code } } } });
       return { ...(await this.repository.getIssue(issueId, actor.businessUnitId, connection)), printer_status_changed: blocks && !active && printer.status_code !== 'maintenance', guidance: blocks && active ? 'Pekerjaan fisik sedang aktif; hentikan atau selesaikan pekerjaan melalui Produksi sebelum mengubah status printer.' : undefined };
     });
   }

@@ -4,6 +4,7 @@ import { paddedCode, temporaryCode } from './craft-production.helpers';
 import { ProductionJobsService } from './production-jobs.service';
 import { ProductionMaterialsService } from './production-materials.service';
 import { ProductionSyncService } from './production-sync.service';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type { CraftContext, CreatePrintJobInput, FailPrintInput } from './craft-production.types';
 
 export class ProductionFailuresService {
@@ -93,6 +94,11 @@ export class ProductionFailuresService {
         { status_code: 'failed', printer_status: printerStatus, failure_id: failureId, material_wasted_g: input.material_wasted_qty ?? null },
       );
       await this.sync.notify(connection, craft, 'production_failure', 'error', 'Cetak gagal', `${job.job_code} gagal: ${input.description}`, jobId);
+      await domainEvents.publish(connection, {
+        eventKey: `production.job_failed:${failureId}`, eventName: 'production.job_failed', moduleCode: 'craft_production',
+        organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: jobId, entityCode: job.job_code, actorUserId: userId,
+        payload: { context: { production: { id: jobId, job_code: job.job_code, status_code: 'failed', failure_id: failureId, failure_type: input.failure_type, requires_reprint: Boolean(input.requires_reprint) } } },
+      });
       await connection.commit();
       return { failure_id: failureId, message: 'Kegagalan cetak berhasil dicatat.' };
     } catch (error) {

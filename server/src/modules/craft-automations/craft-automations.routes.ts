@@ -1,0 +1,25 @@
+import { Router } from 'express';
+import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { CraftAutomationsController } from './craft-automations.controller';
+
+const controller = new CraftAutomationsController();
+export const craftAutomationsRoutes = Router();
+craftAutomationsRoutes.use(requireAuth);
+craftAutomationsRoutes.get('/overview', requirePermission('craft.automations.read'), controller.overview);
+craftAutomationsRoutes.get('/catalog', requirePermission('craft.automations.read'), controller.catalog);
+craftAutomationsRoutes.get('/events', requirePermission('craft.automations.read'), controller.events);
+craftAutomationsRoutes.get('/templates', requirePermission('craft.automations.read'), controller.templates);
+craftAutomationsRoutes.post('/templates/:code/use', requirePermission('craft.automations.write'), controller.useTemplate);
+craftAutomationsRoutes.get('/runs', requirePermission('craft.automations.read'), controller.listRuns);
+craftAutomationsRoutes.get('/runs/:id', requirePermission('craft.automations.read'), controller.getRun);
+craftAutomationsRoutes.get('/rules', requirePermission('craft.automations.read'), controller.listRules);
+craftAutomationsRoutes.post('/rules', requirePermission('craft.automations.write'), controller.createRule);
+craftAutomationsRoutes.post('/rules/:id/activate', requirePermission('craft.automations.write'), controller.activate);
+craftAutomationsRoutes.post('/rules/:id/pause', requirePermission('craft.automations.write'), controller.pause);
+craftAutomationsRoutes.post('/rules/:id/resume', requirePermission('craft.automations.write'), controller.resume);
+craftAutomationsRoutes.post('/rules/:id/disable', requirePermission('craft.automations.write'), controller.disable);
+craftAutomationsRoutes.post('/rules/:id/duplicate', requirePermission('craft.automations.write'), controller.duplicate);
+craftAutomationsRoutes.post('/rules/:id/test', requirePermission('craft.automations.run'), controller.test);
+craftAutomationsRoutes.post('/rules/:id/run', requirePermission('craft.automations.run'), controller.run);
+craftAutomationsRoutes.get('/rules/:id', requirePermission('craft.automations.read'), controller.getRule);
+craftAutomationsRoutes.patch('/rules/:id', requirePermission('craft.automations.write'), controller.updateRule);

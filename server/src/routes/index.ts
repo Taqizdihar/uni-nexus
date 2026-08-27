@@ -15,6 +15,7 @@ import { craftProcurementRoutes } from '../modules/craft-procurement/craft-procu
 import { craftFinanceRoutes } from '../modules/craft-finance/craft-finance.routes';
 import { craftAnalyticsRoutes } from '../modules/craft-analytics/craft-analytics.routes';
 import { craftMarketplaceRoutes } from '../modules/craft-marketplace/craft-marketplace.routes';
+import { craftAutomationsRoutes } from '../modules/craft-automations/craft-automations.routes';
 
 const router = Router();
 
@@ -43,5 +44,6 @@ router.use('/craft/procurement', craftProcurementRoutes);
 router.use('/craft/finance', craftFinanceRoutes);
 router.use('/craft/analytics', craftAnalyticsRoutes);
 router.use('/craft/marketplace', craftMarketplaceRoutes);
+router.use('/craft/automations', craftAutomationsRoutes);
 
 export default router;
