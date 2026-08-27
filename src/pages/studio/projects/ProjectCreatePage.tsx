@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CalendarClock, ClipboardList, FileText, Layers, Save, StickyNote, Target, Users, Wallet } from 'lucide-react';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
@@ -35,7 +35,9 @@ const initialForm = {
 
 export function ProjectCreatePage() {
   const navigate = useNavigate();
-  const [form, setForm] = React.useState(initialForm);
+  const [searchParams] = useSearchParams();
+  const preselectedClientId = searchParams.get('client');
+  const [form, setForm] = React.useState(() => (preselectedClientId ? { ...initialForm, client_party_id: preselectedClientId } : initialForm));
   const [services, setServices] = React.useState<ProjectServiceDraft[]>([emptyServiceDraft()]);
   const [members, setMembers] = React.useState<ProjectMemberDraft[]>([]);
   const [milestones, setMilestones] = React.useState<ProjectMilestoneDraft[]>([]);
@@ -63,20 +65,32 @@ export function ProjectCreatePage() {
           studioProjectsApi.getProjectTypes(),
         ]);
         setServiceCatalog(catalog); setPackageCatalog(packages); setUsers(userOptions); setProjectTypes(types);
+
+        if (preselectedClientId) {
+          // Preselection is only trusted once confirmed against the canonical Studio
+          // Client reference list — a stale or inactive id just falls back to empty.
+          const clients = await studioReferencesApi.getClients(undefined, 500);
+          const match = clients.find(client => String(client.id) === preselectedClientId);
+          if (match) setClientOptions(current => [match, ...current.filter(item => item.id !== match.id)]);
+          else setValue('client_party_id', '');
+        }
       } catch (requestError) {
         setError(requestError instanceof Error ? requestError.message : 'Gagal memuat data pendukung.');
       } finally {
         setLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const subtotal = serviceSubtotal(services.filter(line => line.description.trim()));
   const contractValue = form.contract_value ? Number(form.contract_value) : 0;
   // A blank contract value inherits the scope subtotal; an explicit figure is preserved.
   const effectiveContractValue = contractValue > 0 ? contractValue : subtotal;
+  // A client preselected via ?client= is a starting point, not user input — it must not read as "dirty" on its own.
+  const baselineFormRef = React.useRef(preselectedClientId ? { ...initialForm, client_party_id: preselectedClientId } : initialForm);
   const isDirty = React.useMemo(() => (
-    JSON.stringify(form) !== JSON.stringify(initialForm)
+    JSON.stringify(form) !== JSON.stringify(baselineFormRef.current)
     || services.some(line => line.description.trim() || line.unit_price || line.service_id || line.package_id)
     || members.length > 0 || milestones.length > 0 || deliverables.length > 0
   ), [form, services, members, milestones, deliverables]);

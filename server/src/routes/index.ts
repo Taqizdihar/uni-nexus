@@ -18,6 +18,7 @@ import { craftMarketplaceRoutes } from '../modules/craft-marketplace/craft-marke
 import { craftAutomationsRoutes } from '../modules/craft-automations/craft-automations.routes';
 import { studioProjectsRoutes } from '../modules/studio-projects/studio-projects.routes';
 import { studioReferencesRoutes } from '../modules/studio-references/studio-references.routes';
+import { studioClientsRoutes } from '../modules/studio-clients/studio-clients.routes';
 
 const router = Router();
 
@@ -50,5 +51,6 @@ router.use('/craft/automations', craftAutomationsRoutes);
 
 router.use('/studio/projects', studioProjectsRoutes);
 router.use('/studio/references', studioReferencesRoutes);
+router.use('/studio/clients', studioClientsRoutes);
 
 export default router;

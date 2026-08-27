@@ -11,8 +11,14 @@ export interface StudioClientInput {
   legal_name?: string | null;
   email?: string | null;
   phone?: string | null;
+  website?: string | null;
   tax_id?: string | null;
+  address_line1?: string | null;
+  address_line2?: string | null;
   city?: string | null;
+  province?: string | null;
+  postal_code?: string | null;
+  country_code?: string | null;
   notes?: string | null;
 }
 
@@ -99,11 +105,14 @@ export class StudioClientService {
    */
   async createStudioClient(connection: PoolConnection, data: StudioClientInput, studio: BusinessUnitContext) {
     const [result]: any = await connection.execute(
-      `INSERT INTO parties (organization_id, code, party_kind, display_name, legal_name, email, phone, tax_id, city, notes, status_code)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')`,
+      `INSERT INTO parties (organization_id, code, party_kind, display_name, legal_name, email, phone, website, tax_id,
+                            address_line1, address_line2, city, province, postal_code, country_code, notes, status_code)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')`,
       [
         studio.organizationId, `TMP-${randomUUID()}`, data.party_kind || 'individual', data.display_name.trim(),
-        data.legal_name || null, data.email || null, data.phone || null, data.tax_id || null, data.city || null, data.notes || null,
+        data.legal_name || null, data.email || null, data.phone || null, data.website || null, data.tax_id || null,
+        data.address_line1 || null, data.address_line2 || null, data.city || null, data.province || null,
+        data.postal_code || null, data.country_code || 'ID', data.notes || null,
       ],
     );
     const partyId = Number(result.insertId);

@@ -18,6 +18,7 @@
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
     "browser:craft-marketplace": "node scripts/browser-craft-marketplace.mjs",
     "browser:studio-projects": "node scripts/browser-studio-projects.mjs",
+    "browser:studio-clients": "node scripts/browser-studio-clients.mjs",
     "automation:worker": "node dist/workers/craft-automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/craft-automation.worker.ts",
     "start": "node dist/server.js"

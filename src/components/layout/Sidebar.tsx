@@ -273,7 +273,7 @@ const studioNav: NavGroup[] = [
           { name: "Tahapan Proyek", path: "/app/studio/projects/milestones" },
         ],
       },
-      { name: "Klien", icon: Users, path: "/app/studio/clients" },
+      { name: "Klien", icon: Users, path: "/app/studio/clients", permission: "studio.clients.read" },
       { name: "Layanan", icon: Briefcase, path: "/app/studio/services" },
       {
         name: "Peralatan & Aset",
