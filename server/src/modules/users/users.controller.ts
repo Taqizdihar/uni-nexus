@@ -121,7 +121,7 @@ export class UsersController {
   static async removeAvatar(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       await UsersService.removeAvatar(req.user.id);
-      return sendSuccess(res, { message: 'Foto profil berhasil dihapus.' });
+      return sendSuccess(res, { message: 'Foto profil berhasil dihapus.', avatar_path: null });
     } catch (error) {
       next(error);
     }

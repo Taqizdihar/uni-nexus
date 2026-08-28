@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
-import { getAvatarUrl } from '../../lib/storage';
 import { Button } from '../../components/ui/Button';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
+import { UserAvatar } from '../../components/common/UserAvatar';
 import { User, Mail, Lock, ShieldCheck, Key, Camera, Trash2 } from 'lucide-react';
 
 const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
@@ -138,16 +138,10 @@ export function Profile() {
         <div className="col-span-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
             <div className="relative w-24 h-24 mx-auto mb-4 group">
-              {(avatarPreview || getAvatarUrl(user?.avatar_path)) ? (
-                <img
-                  src={avatarPreview || getAvatarUrl(user?.avatar_path)}
-                  alt=""
-                  className="w-24 h-24 rounded-full object-cover"
-                />
+              {avatarPreview ? (
+                <img src={avatarPreview} alt="" className="w-24 h-24 rounded-full object-cover" />
               ) : (
-                <div className="w-24 h-24 bg-[var(--nexus-yellow-deep)]/10 text-[var(--nexus-yellow-deep)] rounded-full flex items-center justify-center text-3xl font-bold">
-                  {user?.full_name?.charAt(0).toUpperCase()}
-                </div>
+                <UserAvatar user={user || {}} size="xl" />
               )}
               {isUploadingAvatar && (
                 <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center text-white text-xs">...</div>

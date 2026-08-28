@@ -38,6 +38,22 @@ export function toStorageKey(...segments: string[]): string {
   return segments.map(segment => segment.replace(/\\/g, '/')).join('/').replace(/\/+/g, '/');
 }
 
+/** Strips path separators/control characters and caps length for embedding in a physical filename. */
+export function safeOriginalNameSegment(originalName: string): string {
+  return path.basename(originalName).replace(/[^A-Za-z0-9._-]+/g, '_').slice(-120) || 'file';
+}
+
+/**
+ * For domains whose schema has no separate original-filename column, the display name rides
+ * along in the physical filename as `<uuid>__<safe-original-name>`. This recovers it for display
+ * and download headers; keys without the `__` marker (e.g. plain `<uuid>.ext`) fall back as-is.
+ */
+export function displayNameFromKey(key: string, fallback = 'file'): string {
+  const fileName = path.posix.basename(key);
+  const separator = fileName.indexOf('__');
+  return (separator === -1 ? fileName : fileName.slice(separator + 2)) || fallback;
+}
+
 /**
  * Resolves a storage key to an absolute path strictly inside `root`, rejecting traversal and
  * refusing to follow a symlink that would escape the root (checked via the parent directory's

@@ -114,7 +114,6 @@ export interface SupplierInvoiceInput {
   due_date?: string | null;
   total_amount: number;
   currency_code?: string;
-  document_path?: string | null;
   notes?: string | null;
 }
 

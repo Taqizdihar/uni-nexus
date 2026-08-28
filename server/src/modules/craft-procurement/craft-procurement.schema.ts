@@ -204,6 +204,5 @@ export const supplierInvoiceSchema = z.object({
     .optional()
     .default("IDR")
     .transform((value) => value.toUpperCase()),
-  document_path: nullableText(500),
   notes: nullableText(500),
 });

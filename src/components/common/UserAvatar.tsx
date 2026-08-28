@@ -4,7 +4,7 @@ import { getAvatarUrl } from '../../lib/storage';
 
 interface UserAvatarProps {
   user: { id?: number; full_name?: string; avatar_path?: string | null };
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
 }
 
@@ -14,7 +14,7 @@ const hash = (value: string) => [...value].reduce((total, char) => (total * 31 +
 
 export function UserAvatar({ user, size = 'md', className }: UserAvatarProps) {
   const [broken, setBroken] = useState(false);
-  const dimensions = { sm: 'w-6 h-6 text-[9px]', md: 'w-8 h-8 text-[11px]', lg: 'w-10 h-10 text-xs' };
+  const dimensions = { sm: 'w-6 h-6 text-[9px]', md: 'w-8 h-8 text-[11px]', lg: 'w-10 h-10 text-xs', xl: 'w-24 h-24 text-3xl' };
   const color = colors[hash(`${user.id || ''}:${user.full_name || ''}`) % colors.length];
   const avatarUrl = getAvatarUrl(user.avatar_path);
   useEffect(() => setBroken(false), [avatarUrl]);

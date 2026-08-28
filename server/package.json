@@ -22,6 +22,7 @@
     "smoke:studio-automations": "tsx scripts/smoke-studio-automations.ts",
     "smoke:dashboard": "tsx scripts/smoke-dashboard.ts",
     "smoke:storage": "tsx scripts/smoke-storage.ts",
+    "smoke:profile-avatar": "tsx scripts/smoke-profile-avatar.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "storage:orphan-scan": "tsx scripts/storage-orphan-scan.ts",
     "storage:migrate": "tsx scripts/migrate-local-storage.ts",

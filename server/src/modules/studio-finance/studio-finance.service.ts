@@ -1,9 +1,10 @@
+import { randomUUID } from 'crypto';
 import path from 'path';
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
-import { getStoragePolicy, sanitizeOriginalName, storageService } from '../../shared/storage';
+import { displayNameFromKey, getStoragePolicy, safeOriginalNameSegment, sanitizeOriginalName, storageService, toStorageKey } from '../../shared/storage';
 import type { StudioExpenseInput, StudioFinanceListFilters } from './studio-finance.types';
 import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit, publishStudioFinanceEvent } from './studio-finance.shared';
 import type { StudioFinanceContext } from './studio-finance.shared';
@@ -233,7 +234,8 @@ export class StudioFinanceService {
 
   private async insertExpense(connection: PoolConnection, ctx: StudioFinanceContext, data: StudioExpenseInput, status: 'draft' | 'approved') {
     const category=await this.category(connection,ctx,data.category_code,'expense');await this.assertProject(connection,data.studio_project_id || null,ctx);
-    const [result]:any=await connection.execute(`INSERT INTO expenses (organization_id,business_unit_id,expense_code,category_id,party_id,studio_project_id,expense_date,description,amount,tax_amount,currency_code,status_code,receipt_path,created_by,approved_by) VALUES (?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?)`,[ctx.organizationId,ctx.id,`TMP-${Date.now()}`,category.id,data.party_id || null,data.studio_project_id || null,toSqlDateTime(data.expense_date),data.description,data.amount,data.tax_amount || 0,'IDR',status,data.receipt_path || null,ctx.userId,status==='approved'?ctx.userId:null]);
+    // Receipt is never accepted as free text from the client — only the dedicated upload endpoint (uploadExpenseReceipt) may set this column.
+    const [result]:any=await connection.execute(`INSERT INTO expenses (organization_id,business_unit_id,expense_code,category_id,party_id,studio_project_id,expense_date,description,amount,tax_amount,currency_code,status_code,receipt_path,created_by,approved_by) VALUES (?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?)`,[ctx.organizationId,ctx.id,`TMP-${Date.now()}`,category.id,data.party_id || null,data.studio_project_id || null,toSqlDateTime(data.expense_date),data.description,data.amount,data.tax_amount || 0,'IDR',status,null,ctx.userId,status==='approved'?ctx.userId:null]);
     const id=Number(result.insertId),expenseCode=financeCode('EXP',id);await connection.execute('UPDATE expenses SET expense_code=? WHERE id=?',[expenseCode,id]);return { id,expense_code:expenseCode,category_id:Number(category.id) };
   }
 
@@ -277,7 +279,8 @@ export class StudioFinanceService {
    * removing it never touches Treasury, the posted Financial Transaction, or the expense amount.
    */
   async uploadExpenseReceipt(ctx: StudioFinanceContext, expenseId: number, file: Express.Multer.File) {
-    const key = storageService.buildKey('expense-receipts', path.extname(file.originalname), expenseId);
+    // `expenses` has no separate original-filename column, so it rides along in the physical key.
+    const key = toStorageKey('expense-receipts', String(expenseId), `${randomUUID()}__${safeOriginalNameSegment(file.originalname)}`);
     const stored = await storageService.saveUploadedFile({
       tempFilePath: file.path, originalName: file.originalname, mimeType: file.mimetype,
       policy: getStoragePolicy('expense_receipt'), key,
@@ -304,7 +307,7 @@ export class StudioFinanceService {
     if (!rows.length) throw new NotFoundError('Pengeluaran tidak ditemukan.');
     if (!rows[0].receipt_path) throw new NotFoundError('Bukti kwitansi belum tersedia untuk pengeluaran ini.');
     if (!(await storageService.exists(rows[0].receipt_path))) throw new NotFoundError('Berkas bukti kwitansi tidak ditemukan pada penyimpanan.');
-    const fileName = sanitizeOriginalName(`${rows[0].expense_code}-receipt${path.extname(rows[0].receipt_path)}`);
+    const fileName = sanitizeOriginalName(displayNameFromKey(rows[0].receipt_path, `${rows[0].expense_code}-receipt${path.extname(rows[0].receipt_path)}`));
     return { absolutePath: storageService.absolutePath(rows[0].receipt_path), fileName };
   }
 

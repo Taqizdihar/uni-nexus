@@ -3,7 +3,7 @@ import path from "path";
 import { pool } from "../../config/database";
 import { AppError } from "../../shared/errors/AppError";
 import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
-import { getStoragePolicy, sanitizeOriginalName, storageService } from "../../shared/storage";
+import { displayNameFromKey, getStoragePolicy, safeOriginalNameSegment, sanitizeOriginalName, storageService, toStorageKey } from "../../shared/storage";
 import type { BusinessUnitContext } from "../craft-orders/craft-orders.helpers";
 import { CraftProcurementRepository } from "./craft-procurement.repository";
 import type {
@@ -1537,7 +1537,9 @@ export class CraftProcurementService {
           data.total_amount,
           data.total_amount,
           data.currency_code || "IDR",
-          nullable(data.document_path),
+          // Document is never accepted as free text from the client — only the dedicated
+          // upload endpoint (uploadSupplierInvoiceDocument) may set this column.
+          null,
           nullable(data.notes),
         ],
       );
@@ -1618,10 +1620,11 @@ export class CraftProcurementService {
     file: Express.Multer.File,
     actor: ProcurementActor,
   ) {
-    const key = storageService.buildKey(
+    // `supplier_invoices` has no separate original-filename column, so it rides along in the key.
+    const key = toStorageKey(
       "supplier-invoices",
-      path.extname(file.originalname),
-      id,
+      String(id),
+      `${randomUUID()}__${safeOriginalNameSegment(file.originalname)}`,
     );
     const stored = await storageService.saveUploadedFile({
       tempFilePath: file.path,
@@ -1672,7 +1675,7 @@ export class CraftProcurementService {
     if (!documentPath || !(await storageService.exists(documentPath))) {
       throw new AppError(404, "INVOICE_DOCUMENT_NOT_AVAILABLE", "Dokumen tagihan belum tersedia.");
     }
-    const fileName = sanitizeOriginalName(`${rows[0].supplier_invoice_number}${path.extname(documentPath)}`);
+    const fileName = sanitizeOriginalName(displayNameFromKey(documentPath, `${rows[0].supplier_invoice_number}${path.extname(documentPath)}`));
     return { absolutePath: storageService.absolutePath(documentPath), fileName };
   }
 

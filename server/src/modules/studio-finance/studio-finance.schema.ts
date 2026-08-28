@@ -51,7 +51,6 @@ export const expenseSchema = z.object({
   party_id: optionalId,
   studio_project_id: optionalId,
   treasury_account_id: optionalId,
-  receipt_path: z.string().trim().max(500).nullable().optional(),
   status_code: z.enum(['draft', 'approved', 'paid']).default('draft'),
   direct_payment_confirmed: z.boolean().optional(),
 });

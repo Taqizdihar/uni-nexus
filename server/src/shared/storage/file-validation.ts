@@ -78,7 +78,8 @@ export function validateAgainstPolicy(policy: StoragePolicy, input: ValidateFile
   if (policy.contentValidation === 'pdf' && !matchesPdfSignature(input.headBuffer)) {
     throw new AppError(400, 'FILE_CONTENT_INVALID', 'Berkas bukan PDF yang valid.');
   }
-  if (['.docx', '.xlsx', '.pptx', '.zip'].includes(extension) && !matchesZipSignature(input.headBuffer)) {
+  // .3mf is a ZIP container (it's a 3D Manufacturing Format package), so the same signature applies.
+  if (['.docx', '.xlsx', '.pptx', '.zip', '.3mf'].includes(extension) && !matchesZipSignature(input.headBuffer)) {
     throw new AppError(400, 'FILE_CONTENT_INVALID', 'Berkas rusak atau bukan format yang didukung.');
   }
 
