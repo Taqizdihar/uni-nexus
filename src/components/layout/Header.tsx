@@ -1,18 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
-import { Bell, Search, UserCircle, ArrowLeftRight } from 'lucide-react';
+import { Bell, Search, UserCircle, ArrowLeftRight, LogOut } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import studioLogo from '../../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Light Mode.png';
 import craftLogo from '../../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 import { ActiveUsersPresence } from './ActiveUsersPresence';
 import { UserAvatar } from '../common/UserAvatar';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
 
 export function Header() {
   const { activeWorkspace, setWorkspace } = useWorkspace();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      // Leave the protected route before clearing auth state. Otherwise
+      // ProtectedRoute can redirect to /login during the async logout call.
+      navigate('/', { replace: true });
+      await logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const handleWorkspaceToggle = () => {
     const nextWorkspace = activeWorkspace === 'craft' ? 'studio' : 'craft';
@@ -128,12 +143,22 @@ export function Header() {
              <Link to="/app/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
                Preferensi
              </Link>
-             <button onClick={logout} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+             <button onClick={() => setIsLogoutDialogOpen(true)} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                Keluar
              </button>
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        open={isLogoutDialogOpen}
+        title="Keluar dari UNI-NEXUS?"
+        description="Anda akan keluar dari sesi saat ini dan kembali ke halaman utama."
+        confirmLabel="Ya, Keluar"
+        icon={LogOut}
+        isLoading={isLoggingOut}
+        onCancel={() => setIsLogoutDialogOpen(false)}
+        onConfirm={() => void handleLogout()}
+      />
     </header>
   );
 }

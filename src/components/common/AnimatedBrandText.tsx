@@ -12,7 +12,6 @@ export function AnimatedBrandText({
   text = "UNI-NEXUS",
   glow = true,
 }: AnimatedBrandTextProps) {
-  const [fonts, setFonts] = useState<string[]>(() => Array(text.length).fill('Technique'));
   const [animatingIndices, setAnimatingIndices] = useState<Set<number>>(new Set());
   const animationIdRef = useRef(0);
 
@@ -23,7 +22,7 @@ export function AnimatedBrandText({
     };
   }, []);
 
-  const animateWave = async (toCube: boolean) => {
+  const animateWave = async () => {
     const animationId = ++animationIdRef.current;
     const waveDelay = 150;
     const jumpDuration = 500;
@@ -34,12 +33,6 @@ export function AnimatedBrandText({
       if (animationId !== animationIdRef.current) return;
 
       setAnimatingIndices((prev) => new Set(prev).add(i));
-      setFonts((prev) => {
-        const newFonts = [...prev];
-        newFonts[i] = toCube ? 'Cube' : 'Technique';
-        return newFonts;
-      });
-
       window.setTimeout(() => {
         if (animationId !== animationIdRef.current) return;
         setAnimatingIndices((prev) => {
@@ -56,19 +49,19 @@ export function AnimatedBrandText({
   return (
     <span
       className={cn("inline-flex items-center", className)}
-      onPointerEnter={() => void animateWave(true)}
-      onPointerLeave={() => void animateWave(false)}
+      onPointerEnter={() => void animateWave()}
     >
       {text.split('').map((char, index) => (
         <span
           key={index}
           className={cn(
             "inline-block",
-            fonts[index] === 'Cube' ? "font-['Cube'] text-[0.33em]" : cn("font-['Technique']", glow && "glow-text-bright-gold"),
+            "font-['Technique']",
+            glow && "glow-text-bright-gold",
             animatingIndices.has(index) ? "animate-wave-jump" : ""
           )}
           style={{
-            fontFamily: fonts[index] === 'Cube' ? 'Cube' : 'Technique',
+            fontFamily: 'Technique',
             whiteSpace: 'pre',
           }}
         >
