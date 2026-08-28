@@ -106,7 +106,7 @@ export class UsersService {
 
   static async getAvailableRoles(forUserId?: number): Promise<any[]> {
     const [roles] = await pool.execute<any[]>(
-      'SELECT id, code, name FROM roles WHERE is_active = 1 AND code IN ("CEO", "COO", "CTO", "OPERATOR", "ENGINEER_3D")'
+      'SELECT id, code, name FROM roles WHERE is_active = 1 AND code IN ("CEO", "COO", "CTO", "SPECIALIST_STAFF", "ENGINEER_3D")'
     );
     
     // Check singleton occupancy

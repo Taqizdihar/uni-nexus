@@ -10,21 +10,43 @@ export interface DashboardKpi {
   comparison: { previous_value: number; delta_value: number; delta_percent: number | null } | null;
 }
 
+export interface DashboardNavigation {
+  finance_unified: boolean;
+  craft_orders: boolean;
+  craft_production: boolean;
+  craft_printers: boolean;
+  craft_materials: boolean;
+  studio_projects: boolean;
+  studio_billing: boolean;
+}
+
+export interface DashboardQuickLink {
+  id: number;
+  label: string;
+  url: string;
+  icon_key: string;
+  business_unit_code: 'CRAFT' | 'STUDIO' | 'SHARED' | null;
+}
+
 export interface DashboardOverview {
   generated_at: string;
   period: { range: DashboardRange; start_date: string; end_date: string; timezone: string };
   comparison_period: { start_date: string; end_date: string };
   available_currencies: string[];
   selected_currency: string | null;
-  visibility: Record<string, boolean>;
+  navigation: DashboardNavigation;
   kpis: DashboardKpi[];
   revenue_breakdown: { series: string[]; buckets: Array<{ label: string; craft?: number; studio?: number; shared?: number }> } | null;
   cash_flow: { cash_in: number; cash_out: number; net_cash_flow: number } | null;
   craft_summary: Record<string, number> | null;
   studio_summary: Record<string, number> | null;
   production: Array<{ id: number; job_code: string; job_name: string; progress_percent: number; started_at: string | null; estimated_finish_at: string | null; printer_code: string | null; printer_name: string | null }>;
-  attention: Array<{ id: string; severity: 'critical' | 'warning' | 'info'; title: string; description: string; entity_code: string; action_url: string; due_at: string | null }>;
-  quick_links: Array<{ id: number; label: string; url: string; icon_key: string }>;
+  attention: Array<{ id: string; severity: 'critical' | 'warning' | 'info'; title: string; description: string; entity_code: string; action_url: string | null; due_at: string | null }>;
+  quick_links: {
+    craft: DashboardQuickLink[];
+    studio: DashboardQuickLink[];
+    shared: DashboardQuickLink[];
+  };
   recent: {
     craft_orders: Array<{ id: number; order_code: string; customer_name: string; channel_name: string; item_summary: string; status_code: string; total_amount: number; currency_code: string; order_date: string }>;
     studio_projects: Array<{ id: number; project_code: string; project_name: string; client_name: string; project_type: string; status_code: string; deadline_at: string | null; contract_value: number; currency_code: string; payment_status_code: string }>;

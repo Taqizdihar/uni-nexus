@@ -27,3 +27,13 @@ export interface AccessibleBusinessUnits {
   studioId: number | null;
   sharedId: number | null;
 }
+
+export interface DashboardNavigation {
+  finance_unified: boolean;
+  craft_orders: boolean;
+  craft_production: boolean;
+  craft_printers: boolean;
+  craft_materials: boolean;
+  studio_projects: boolean;
+  studio_billing: boolean;
+}
