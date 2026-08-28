@@ -59,9 +59,8 @@ export const writeProjectAudit = async (
  * Publishes a Studio domain event to the shared transactional outbox.
  *
  * The worker dispatches events by (business_unit_id, event_name), so STUDIO events
- * can never match a CRAFT automation rule. Publishing is best-effort: a failure
- * here must never make a correct project write fail, and the module works fine
- * with the automation worker stopped.
+ * can never match a CRAFT automation rule. It participates in the source
+ * transaction, so a committed project mutation never silently loses its event.
  */
 export const publishProjectEvent = async (
   connection: PoolConnection,
@@ -71,7 +70,6 @@ export const publishProjectEvent = async (
   userId: number | null,
   payload: Record<string, unknown>,
 ) => {
-  try {
     await domainEvents.publish(connection, {
       eventName,
       moduleCode: STUDIO_PROJECTS_MODULE,
@@ -83,9 +81,6 @@ export const publishProjectEvent = async (
       actorUserId: userId,
       payload: { context: payload },
     });
-  } catch (error) {
-    console.error(`Failed to publish Studio domain event ${eventName}:`, error);
-  }
 };
 
 /** Loads and row-locks a project, scoped to the Studio business unit. */

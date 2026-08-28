@@ -3,7 +3,7 @@ import { pool } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import type { StudioExpenseInput, StudioFinanceListFilters } from './studio-finance.types';
-import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit } from './studio-finance.shared';
+import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit, publishStudioFinanceEvent } from './studio-finance.shared';
 import type { StudioFinanceContext } from './studio-finance.shared';
 
 const PAGE_LIMIT = 100;
@@ -183,7 +183,7 @@ export class StudioFinanceService {
       const [result]: any=await connection.execute(`INSERT INTO internal_transfers (organization_id,transfer_code,from_business_unit_id,to_business_unit_id,from_treasury_account_id,to_treasury_account_id,amount,currency_code,transfer_date,description,status_code,created_by) VALUES (?,?, ?,?,?,?,?,?,?,?,'completed',?)`,[ctx.organizationId,`TMP-${Date.now()}`,ctx.id,ctx.id,from.id,to.id,data.amount,from.currency_code,toSqlDateTime(data.transfer_date),data.description || null,ctx.userId]);
       const id=Number(result.insertId),transferCode=financeCode('TRF',id);await connection.execute('UPDATE internal_transfers SET transfer_code=? WHERE id=?',[transferCode,id]);await connection.execute('UPDATE treasury_accounts SET current_balance=current_balance-? WHERE id=?',[data.amount,from.id]);await connection.execute('UPDATE treasury_accounts SET current_balance=current_balance+? WHERE id=?',[data.amount,to.id]);
       const journalId=await this.journalTransfer(connection,ctx,{date:data.transfer_date,description:data.description || `Transfer ${transferCode}`,amount:data.amount,from,to,transferId:id});if(journalId)await connection.execute('UPDATE internal_transfers SET journal_entry_id=? WHERE id=?',[journalId,id]);
-      await writeStudioFinanceAudit(connection,ctx,ctx.userId,'studio.finance.transfer','internal_transfer',id,transferCode,`Transfer ${transferCode} antar kas Studio.`,undefined,{from:from.id,to:to.id,amount:data.amount}); return { id, transfer_code:transferCode };
+      await writeStudioFinanceAudit(connection,ctx,ctx.userId,'studio.finance.transfer','internal_transfer',id,transferCode,`Transfer ${transferCode} antar kas Studio.`,undefined,{from:from.id,to:to.id,amount:data.amount}); await publishStudioFinanceEvent(connection,ctx,'studio.finance.treasury_transfer_completed','internal_transfer',id,transferCode,ctx.userId,{ transfer: { id, transfer_code: transferCode, amount: data.amount, currency_code: from.currency_code } }); return { id, transfer_code:transferCode };
     });
   }
 
@@ -204,7 +204,7 @@ export class StudioFinanceService {
       else {const [schedules]:any=await connection.execute(`SELECT id FROM invoice_payment_schedules WHERE invoice_id=? AND amount-paid_amount>0.005 AND status_code NOT IN ('paid','cancelled') LIMIT 1 FOR UPDATE`,[invoiceId]);if(schedules.length)throw new AppError(409,'PAYMENT_SCHEDULE_REQUIRED','Pilih jadwal pembayaran yang ingin dialokasikan.');}
       const posted=await this.posting.postCustomerPayment(connection,ctx,{invoiceId,partyId:Number(invoice.party_id),paymentMethodId:data.payment_method_id,treasuryAccountId:data.treasury_account_id,amount:data.amount,paymentDate:toSqlDateTime(data.payment_date),paymentScheduleId:data.payment_schedule_id || null,categoryCode:'STUDIO_PROJECT',referenceNumber:data.reference_number,notes:data.notes},undefined,{categoryCode:'STUDIO_PROJECT',auditModule:STUDIO_FINANCE_MODULE,auditAction:'studio.finance.customer_payment',sourceType:'studio_customer_payment'});
       if(data.payment_schedule_id){const [schedules]:any=await connection.execute('SELECT amount,paid_amount FROM invoice_payment_schedules WHERE id=? FOR UPDATE',[data.payment_schedule_id]);const paid=asNumber(schedules[0].paid_amount)+asNumber(data.amount),balance=asNumber(schedules[0].amount)-paid,status=balance<=.01?'paid':'partial';await connection.execute(`UPDATE invoice_payment_schedules SET paid_amount=?,status_code=?,paid_at=IF(?='paid',UTC_TIMESTAMP(),paid_at) WHERE id=?`,[paid,status,status,data.payment_schedule_id]);}
-      if(invoice.source_type==='studio_project' && invoice.source_id)await this.syncProjectPaidAmount(connection,ctx,Number(invoice.source_id));
+      if(invoice.source_type==='studio_project' && invoice.source_id)await this.syncProjectPaidAmount(connection,ctx,Number(invoice.source_id)); await publishStudioFinanceEvent(connection,ctx,'studio.finance.payment_received','payment',Number(posted.paymentId),`PAY-${posted.paymentId}`,ctx.userId,{ payment: { id: Number(posted.paymentId), invoice_id: invoiceId, amount: data.amount, project_id: invoice.source_id ? Number(invoice.source_id) : null } });
       return { payment_id:posted.paymentId,transaction_id:posted.transactionId };
     });
   }

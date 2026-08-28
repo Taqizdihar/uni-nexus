@@ -2,6 +2,7 @@ import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
 import { getBusinessUnitByCode, type BusinessUnitContext } from '../../shared/utils/business-unit';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 
 export const STUDIO_FINANCE_MODULE = 'studio_finance';
 export const getStudioFinanceBusinessUnit = () => getBusinessUnitByCode('STUDIO');
@@ -53,5 +54,9 @@ export const writeStudioFinanceAudit = async (
     [studio.organizationId, studio.id, userId, STUDIO_FINANCE_MODULE, action, entityType, entityId, entityCode, description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)],
   );
 };
+
+/** Publishes finance facts only after cash posting succeeds in the same transaction. */
+export const publishStudioFinanceEvent = async (connection: PoolConnection, studio: BusinessUnitContext, eventName: string, entityType: string, entityId: number, entityCode: string, userId: number, payload: Record<string, unknown>) =>
+  domainEvents.publish(connection, { eventName, moduleCode: STUDIO_FINANCE_MODULE, organizationId: studio.organizationId, businessUnitId: studio.id, entityType, entityId, entityCode, actorUserId: userId, payload: { context: payload } });
 
 export type StudioFinanceContext = BusinessUnitContext & { userId: number; businessUnitId: number };

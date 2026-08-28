@@ -33,14 +33,17 @@ export class CraftAutomationsService {
     return { active_rules: Number(summary.active_rules || 0), paused_rules: Number(summary.paused_rules || 0), runs_today: Number(health.runs_today || 0), success_rate: success + failed ? Number((success / (success + failed) * 100).toFixed(1)) : null, failed_today: failed, pending_events: Number(health.pending_events || 0), health: { last_run: health.last_run || null, last_success: health.last_success || null, last_failure: health.last_failure || null, oldest_pending_event: health.oldest_pending_event || null, worker_warning: health.oldest_pending_event ? 'Event pending terdeteksi; worker mungkin tidak berjalan.' : null }, recent_runs: recent };
   }
 
-  async catalog() {
-    return { triggers: automationEventRegistry.all(), actions: automationActionRegistry.all(), operators: automationOperators, modules: [...new Set(automationEventRegistry.all().map((event) => event.module).concat(automationActionRegistry.all().map((action) => action.module)))] };
+  async catalog(businessUnitCode: 'CRAFT' | 'STUDIO' = 'CRAFT') {
+    const triggers = automationEventRegistry.all(businessUnitCode);
+    const actions = automationActionRegistry.all(businessUnitCode);
+    return { triggers, actions, operators: automationOperators, modules: [...new Set(triggers.map((event) => event.module).concat(actions.map((action) => action.module)))] };
   }
 
   async queueManualRun(ruleId: number, body: { event_id?: number; input?: Record<string, unknown> }, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) {
     const rule = await this.rules.get(ruleId, context.businessUnitId);
     if (rule.status_code !== 'active') throw new AppError(409, 'RULE_NOT_ACTIVE', 'Hanya aturan aktif yang dapat dijalankan.');
-    const required = automationActionRegistry.requiredPermissions(rule.action_json.actions);
+    const businessUnitCode = context.businessUnitId === (await (await import('../studio-projects/studio-projects.helpers')).getStudioBusinessUnit()).id ? 'STUDIO' : 'CRAFT';
+    const required = automationActionRegistry.requiredPermissions(rule.action_json.actions, businessUnitCode);
     const missing = required.filter((permission) => !actor.permissions.includes(permission));
     if (missing.length) throw new AppError(403, 'AUTOMATION_ACTION_PERMISSION_REQUIRED', 'Izin aksi otomasi belum lengkap.', { missing_permissions: missing });
     let input = body.input || {}; let event: any = null;

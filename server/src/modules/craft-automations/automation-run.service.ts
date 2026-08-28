@@ -6,6 +6,7 @@ import { AutomationSkippedError, sanitizeAutomationError } from '../../shared/au
 import { automationEventRegistry } from '../../shared/automation/automation-event-registry';
 import { MAX_AUTOMATION_CHAIN_DEPTH } from '../../shared/automation/domain-event-outbox.service';
 import { normalizeRule, normalizeRun } from './craft-automations.repository';
+import { UsersService } from '../users/users.service';
 
 const snapshot = (rule: any) => ({ version: rule.version_no, trigger: { type: rule.trigger_type, event: rule.trigger_event, config: rule.trigger_config_json, timezone: rule.schedule_timezone }, conditions: rule.condition_json, actions: rule.action_json, reliability: { cooldown_seconds: Number(rule.cooldown_seconds || 0), max_retries: Number(rule.max_retries || 0), priority: Number(rule.priority || 100) } });
 const retryDelayMinutes = (attempt: number) => [1, 5, 15][Math.min(Math.max(0, attempt - 1), 2)];
@@ -32,6 +33,21 @@ export class AutomationRunService {
     } catch (error) { await connection.rollback(); throw error; } finally { connection.release(); }
   }
 
+  private async businessUnitCode(businessUnitId: number): Promise<'CRAFT' | 'STUDIO'> {
+    const [rows]: any = await pool.execute('SELECT code FROM business_units WHERE id=? AND is_active=1 LIMIT 1', [businessUnitId]);
+    return String(rows[0]?.code || 'CRAFT').toUpperCase() === 'STUDIO' ? 'STUDIO' : 'CRAFT';
+  }
+
+  private async validateLiveOwner(rule: any, actions: any[], businessUnitCode: 'CRAFT' | 'STUDIO') {
+    if (!rule.created_by) return { valid: false, missing: [`${businessUnitCode.toLowerCase()}.automations.write`], reason: 'AUTOMATION_OWNER_REQUIRED' };
+    const owner = await UsersService.getAuthPrincipal(Number(rule.created_by));
+    const required = [...new Set([`${businessUnitCode.toLowerCase()}.automations.write`, ...automationActionRegistry.requiredPermissions(actions, businessUnitCode)])];
+    if (!owner || owner.status_code !== 'active' || owner.approval_status_code !== 'approved') return { valid: false, missing: required, reason: 'AUTOMATION_ACTION_PERMISSION_REVOKED' };
+    const permissions = Array.isArray(owner.permissions) ? owner.permissions : [];
+    const missing = required.filter((permission) => !permissions.includes(permission));
+    return { valid: !missing.length, missing, reason: 'AUTOMATION_ACTION_PERMISSION_REVOKED' };
+  }
+
   private async finish(run: any, rule: any, status: 'success' | 'failed' | 'skipped', result: Record<string, unknown>, errorMessage: string | null = null) {
     await pool.execute(`UPDATE automation_runs SET status_code=?,finished_at=UTC_TIMESTAMP(3),result_json=?,error_message=?,next_attempt_at=NULL WHERE id=?`, [status, JSON.stringify(result), errorMessage, run.id]);
     const timestampColumn = status === 'success' ? 'last_success_at' : status === 'failed' ? 'last_failure_at' : null;
@@ -53,6 +69,7 @@ export class AutomationRunService {
     const rule = normalizeRule(ruleRows[0]);
     const ruleSnapshot: any = parseJson(run.rule_snapshot_json, snapshot(rule));
     const actions = ruleSnapshot.actions?.actions || rule.action_json.actions || [];
+    const businessUnitCode = await this.businessUnitCode(Number(rule.business_unit_id));
     const triggerEvent = run.trigger_event || rule.trigger_event;
     const input = parseJson<Record<string, any>>(run.input_json, {});
     const eventId = Number(input._automation_event_id || 0);
@@ -60,12 +77,14 @@ export class AutomationRunService {
     if (eventId) { const [events]: any = await pool.execute('SELECT * FROM domain_events WHERE id=?', [eventId]); event = events[0] || null; }
 
     if (rule.status_code !== 'active') { await this.finish(run, rule, 'skipped', { reason: 'RULE_NOT_ACTIVE', rule_status: rule.status_code }); return { status: 'skipped' }; }
+    const owner = await this.validateLiveOwner(rule, actions, businessUnitCode);
+    if (!owner.valid) { await this.finish(run, rule, 'skipped', { reason: owner.reason, missing_permissions: owner.missing }); return { status: 'skipped' }; }
     if (Number(run.chain_depth || 0) > MAX_AUTOMATION_CHAIN_DEPTH) { await this.finish(run, rule, 'skipped', { reason: 'AUTOMATION_CHAIN_LIMIT', chain_depth: run.chain_depth }); return { status: 'skipped' }; }
     if (Number(rule.cooldown_seconds || 0) > 0 && run.trigger_entity_id) {
       const [recent]: any = await pool.execute(`SELECT id FROM automation_runs WHERE rule_id=? AND trigger_entity_type <=> ? AND trigger_entity_id=? AND status_code='success' AND id<>? AND started_at>=DATE_SUB(UTC_TIMESTAMP(), INTERVAL ? SECOND) LIMIT 1`, [rule.id, run.trigger_entity_type || null, run.trigger_entity_id, run.id, Number(rule.cooldown_seconds)]);
       if (recent.length) { await this.finish(run, rule, 'skipped', { reason: 'COOLDOWN_ACTIVE', cooldown_seconds: Number(rule.cooldown_seconds), previous_run_id: Number(recent[0].id) }); return { status: 'skipped' }; }
     }
-    const condition = automationEventRegistry.get(triggerEvent) ? automationConditionEngine.evaluate(triggerEvent, ruleSnapshot.conditions || null, input) : { matched: true, evaluations: [] };
+    const condition = automationEventRegistry.get(triggerEvent, businessUnitCode) ? automationConditionEngine.evaluate(triggerEvent, ruleSnapshot.conditions || null, input) : { matched: true, evaluations: [] };
     if (!condition.matched) { await this.finish(run, rule, 'skipped', { reason: 'CONDITIONS_NOT_MET', conditions_matched: false, evaluations: condition.evaluations }); return { status: 'skipped' }; }
 
     const results: any[] = [];
@@ -73,7 +92,7 @@ export class AutomationRunService {
       for (const action of actions) {
         const definition = automationActionRegistry.get(action.type);
         try {
-          const result = await automationActionRegistry.execute(action, { rule, run, event, input, organizationId: Number(rule.organization_id), businessUnitId: Number(rule.business_unit_id), actorUserId: rule.created_by === null ? null : Number(rule.created_by) });
+          const result = await automationActionRegistry.execute(action, { rule, run, event, input, organizationId: Number(rule.organization_id), businessUnitId: Number(rule.business_unit_id), businessUnitCode, actorUserId: rule.created_by === null ? null : Number(rule.created_by) });
           results.push({ type: action.type, status: result.status || 'success', ...result });
         } catch (error) {
           if (error instanceof AutomationSkippedError) { results.push({ type: action.type, status: 'skipped', reason: error.code, message: error.message }); if (!action.continue_on_error) break; continue; }

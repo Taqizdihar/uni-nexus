@@ -45,7 +45,7 @@ async function run() {
     const [overview, projects, services, commercial, profitability, receivables, vendors, equipment] = await Promise.all([analytics.overview(ctx,filters),analytics.projects(ctx,filters),analytics.services(ctx,filters),analytics.commercial(ctx,filters),analytics.profitability(ctx,filters),analytics.receivables(ctx,filters),analytics.vendors(ctx,filters),analytics.equipment(ctx,filters)]);
     const after = (await pool.execute(`SELECT updated_at,status_code FROM studio_projects WHERE id=?`,[projectId]) as any)[0][0];
     assert(before.updated_at.getTime() === after.updated_at.getTime() && before.status_code === after.status_code, 'Analytics GET mutated a source project.');
-    assert(projects.funnel.find(item => item.label === 'completed')?.value >= 1, 'Project funnel did not use status history.');
+    assert(Number(projects.funnel.find(item => item.label === 'completed')?.value || 0) >= 1, 'Project funnel did not use status history.');
     assert((services.rows as Array<{ name: string }>).some(row => row.name.includes(tag)), 'Service snapshot row is absent.');
     assert((commercial.collection as { cash_collected: number }).cash_collected >= 4000000, 'Cash collection is not distinct from invoice value.');
     assert((profitability.rows as Array<{ id: number; recorded_contract_margin: number; cash_margin: number }>).some(row => row.id === projectId && row.recorded_contract_margin === 7000000 && row.cash_margin === 1000000), 'Project profitability has incorrect contract/cash margin.');

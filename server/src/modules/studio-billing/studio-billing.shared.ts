@@ -93,7 +93,6 @@ export const publishBillingEvent = async (
   actorUserId: number | null,
   payload: Record<string, unknown>,
 ) => {
-  try {
     await domainEvents.publish(connection, {
       eventName,
       moduleCode: STUDIO_BILLING_MODULE,
@@ -106,10 +105,6 @@ export const publishBillingEvent = async (
       correlationId: randomUUID(),
       payload: { context: payload },
     });
-  } catch (error) {
-    // Commercial writes remain valid if the optional automation outbox is unavailable.
-    console.error(`Failed to publish Studio Billing domain event ${eventName}:`, error);
-  }
 };
 
 export const loadStudioProjectForBilling = async (connection: PoolConnection, projectId: number, studio: BusinessUnitContext) => {

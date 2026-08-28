@@ -1,0 +1,25 @@
+import { Router } from 'express';
+import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { StudioAutomationsController } from './studio-automations.controller';
+
+const controller = new StudioAutomationsController();
+export const studioAutomationsRoutes = Router();
+studioAutomationsRoutes.use(requireAuth);
+studioAutomationsRoutes.get('/overview', requirePermission('studio.automations.read'), controller.overview);
+studioAutomationsRoutes.get('/catalog', requirePermission('studio.automations.read'), controller.catalog);
+studioAutomationsRoutes.get('/events', requirePermission('studio.automations.read'), controller.events);
+studioAutomationsRoutes.get('/templates', requirePermission('studio.automations.read'), controller.templates);
+studioAutomationsRoutes.post('/templates/:code/use', requirePermission('studio.automations.write'), controller.useTemplate);
+studioAutomationsRoutes.get('/runs', requirePermission('studio.automations.read'), controller.listRuns);
+studioAutomationsRoutes.get('/runs/:id', requirePermission('studio.automations.read'), controller.getRun);
+studioAutomationsRoutes.get('/rules', requirePermission('studio.automations.read'), controller.listRules);
+studioAutomationsRoutes.post('/rules', requirePermission('studio.automations.write'), controller.createRule);
+studioAutomationsRoutes.post('/rules/:id/activate', requirePermission('studio.automations.write'), controller.activate);
+studioAutomationsRoutes.post('/rules/:id/pause', requirePermission('studio.automations.write'), controller.pause);
+studioAutomationsRoutes.post('/rules/:id/resume', requirePermission('studio.automations.write'), controller.resume);
+studioAutomationsRoutes.post('/rules/:id/disable', requirePermission('studio.automations.write'), controller.disable);
+studioAutomationsRoutes.post('/rules/:id/duplicate', requirePermission('studio.automations.write'), controller.duplicate);
+studioAutomationsRoutes.post('/rules/:id/test', requirePermission('studio.automations.run'), controller.test);
+studioAutomationsRoutes.post('/rules/:id/run', requirePermission('studio.automations.run'), controller.run);
+studioAutomationsRoutes.get('/rules/:id', requirePermission('studio.automations.read'), controller.getRule);
+studioAutomationsRoutes.patch('/rules/:id', requirePermission('studio.automations.write'), controller.updateRule);

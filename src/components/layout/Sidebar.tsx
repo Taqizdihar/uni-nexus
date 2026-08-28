@@ -367,7 +367,14 @@ const studioNav: NavGroup[] = [
   },
   {
     label: "SISTEM",
-    items: [{ name: "Otomasi", icon: Zap, path: "/app/studio/automations" }],
+    items: [{ name: "Otomasi", icon: Zap, path: "/app/studio/automations", permission: "studio.automations.read", subItems: [
+      { name: "Ringkasan Otomasi", path: "/app/studio/automations" },
+      { name: "Aturan Otomasi", path: "/app/studio/automations/rules" },
+      { name: "Template Otomasi", path: "/app/studio/automations/templates" },
+      { name: "Riwayat Eksekusi", path: "/app/studio/automations/runs" },
+      { name: "Pemicu & Aksi", path: "/app/studio/automations/catalog" },
+      { name: "Inbox Event", path: "/app/studio/automations/events" },
+    ] }],
   },
 ];
 

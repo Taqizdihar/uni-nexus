@@ -41,6 +41,7 @@ import { StudioBilling } from "./pages/studio/Billing";
 import { StudioVendors } from "./pages/studio/Vendors";
 import { StudioFinance } from "./pages/studio/Finance";
 import { StudioAnalytics } from "./pages/studio/Analytics";
+import { StudioAutomations } from "./pages/studio/Automations";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -253,17 +254,7 @@ const router = createBrowserRouter(
             </PermissionGate>
           }
         />
-        <Route
-          path="studio/automations"
-          element={
-            <PlannedModulePage
-              title="Otomasi"
-              description="Otomasi alur kerja studio."
-              stage="Lanjutan"
-              icon={FileText}
-            />
-          }
-        />
+        <Route path="studio/automations/*" element={<PermissionGate permission="studio.automations.read"><StudioAutomations /></PermissionGate>} />
         <Route
           path="*"
           element={

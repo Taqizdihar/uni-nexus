@@ -4,7 +4,7 @@ import { studioVendorsService } from '../src/modules/studio-vendors/studio-vendo
 import { getStudioBusinessUnit } from '../src/modules/studio-projects/studio-projects.helpers';
 import { studioClientService } from '../src/shared/party/studio-client.service';
 
-const assert = (value: unknown, message: string): asserts value => { if (!value) throw new Error(message); };
+const assert: (value: unknown, message: string) => asserts value = (value, message) => { if (!value) throw new Error(message); };
 const suffix = randomBytes(4).toString('hex').toUpperCase();
 async function actor() { const [rows]: any = await pool.execute(`SELECT DISTINCT u.id FROM users u JOIN user_roles ur ON ur.user_id = u.id JOIN role_permissions rp ON rp.role_id = ur.role_id JOIN permissions p ON p.id = rp.permission_id WHERE u.deleted_at IS NULL AND u.status_code = 'active' AND u.approval_status_code = 'approved' AND p.code = 'studio.vendors.write' LIMIT 1`); assert(rows.length, 'No active user has studio.vendors.write.'); return Number(rows[0].id); }
 async function run() {
