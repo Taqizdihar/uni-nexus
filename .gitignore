@@ -6,10 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
-server/uploads/products/
-server/uploads/designs/
-uploads/products/
-uploads/designs/
+server/uploads/**
+!server/uploads/.gitkeep
 artifacts/craft-materials-browser-*/
 server/storage/tmp/marketplace/
 server/storage/studio/

@@ -2,6 +2,7 @@ import { pool } from '../../config/database';
 import { ValidationError, NotFoundError, UnauthorizedError } from '../../shared/errors/AppError';
 import { UserResponse } from './users.types';
 import bcrypt from 'bcryptjs';
+import { storageService } from '../../shared/storage';
 
 export class UsersService {
   static async getAuthPrincipal(id: number): Promise<any> {
@@ -345,5 +346,39 @@ export class UsersService {
       'UPDATE users SET password_hash = ?, password_changed_at = CURRENT_TIMESTAMP(3), must_change_password = 0 WHERE id = ?',
       [password_hash, id]
     );
+  }
+
+  static async replaceAvatar(id: number, file: Express.Multer.File): Promise<UserResponse> {
+    const [users] = await pool.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
+    if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+    const saved = await storageService.saveUploadedFile('avatar', file);
+    const previous = users[0].avatar_path as string | null;
+    try {
+      await pool.execute('UPDATE users SET avatar_path = ? WHERE id = ? AND deleted_at IS NULL', [saved.key, id]);
+    } catch (error) {
+      await storageService.delete(saved.key);
+      throw error;
+    }
+    // The new key is durable before the old object is removed.
+    await storageService.delete(previous);
+    return this.getUserById(id);
+  }
+
+  static async deleteAvatar(id: number): Promise<UserResponse> {
+    const connection = await pool.getConnection();
+    let previous: string | null = null;
+    try {
+      await connection.beginTransaction();
+      const [users] = await connection.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL FOR UPDATE', [id]);
+      if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+      previous = users[0].avatar_path || null;
+      await connection.execute('UPDATE users SET avatar_path = NULL WHERE id = ?', [id]);
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally { connection.release(); }
+    await storageService.delete(previous);
+    return this.getUserById(id);
   }
 }

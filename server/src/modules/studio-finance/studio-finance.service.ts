@@ -1,6 +1,7 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
+import { storageService } from '../../shared/storage';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import type { StudioExpenseInput, StudioFinanceListFilters } from './studio-finance.types';
 import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit, publishStudioFinanceEvent } from './studio-finance.shared';
@@ -231,7 +232,7 @@ export class StudioFinanceService {
 
   private async insertExpense(connection: PoolConnection, ctx: StudioFinanceContext, data: StudioExpenseInput, status: 'draft' | 'approved') {
     const category=await this.category(connection,ctx,data.category_code,'expense');await this.assertProject(connection,data.studio_project_id || null,ctx);
-    const [result]:any=await connection.execute(`INSERT INTO expenses (organization_id,business_unit_id,expense_code,category_id,party_id,studio_project_id,expense_date,description,amount,tax_amount,currency_code,status_code,receipt_path,created_by,approved_by) VALUES (?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?)`,[ctx.organizationId,ctx.id,`TMP-${Date.now()}`,category.id,data.party_id || null,data.studio_project_id || null,toSqlDateTime(data.expense_date),data.description,data.amount,data.tax_amount || 0,'IDR',status,data.receipt_path || null,ctx.userId,status==='approved'?ctx.userId:null]);
+    const [result]:any=await connection.execute(`INSERT INTO expenses (organization_id,business_unit_id,expense_code,category_id,party_id,studio_project_id,expense_date,description,amount,tax_amount,currency_code,status_code,receipt_path,created_by,approved_by) VALUES (?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?)`,[ctx.organizationId,ctx.id,`TMP-${Date.now()}`,category.id,data.party_id || null,data.studio_project_id || null,toSqlDateTime(data.expense_date),data.description,data.amount,data.tax_amount || 0,'IDR',status,null,ctx.userId,status==='approved'?ctx.userId:null]);
     const id=Number(result.insertId),expenseCode=financeCode('EXP',id);await connection.execute('UPDATE expenses SET expense_code=? WHERE id=?',[expenseCode,id]);return { id,expense_code:expenseCode,category_id:Number(category.id) };
   }
 
@@ -269,6 +270,37 @@ export class StudioFinanceService {
   async createBudget(ctx:StudioFinanceContext,data:any){if(data.period_end<data.period_start)throw new AppError(400,'INVALID_BUDGET_PERIOD','Akhir periode anggaran tidak boleh mendahului awalnya.');return withStudioFinanceTransaction(async connection=>{const total=data.items.reduce((sum:number,item:any)=>sum+asNumber(item.allocated_amount),0);const [result]:any=await connection.execute(`INSERT INTO budgets (organization_id,business_unit_id,budget_code,name,period_start,period_end,status_code,total_amount,created_by) VALUES (?,?,?, ?,?,?, 'draft',?,?)`,[ctx.organizationId,ctx.id,`TMP-${Date.now()}`,data.name,data.period_start,data.period_end,total,ctx.userId]);const id=Number(result.insertId),budgetCode=financeCode('BDG',id);await connection.execute('UPDATE budgets SET budget_code=? WHERE id=?',[budgetCode,id]);for(const item of data.items)await connection.execute('INSERT INTO budget_items (budget_id,category_id,name,allocated_amount,notes) VALUES (?,?,?,?,?)',[id,item.category_id || null,item.name,item.allocated_amount,item.notes || null]);await writeStudioFinanceAudit(connection,ctx,ctx.userId,'studio.finance.budget_create','budget',id,budgetCode,`Membuat anggaran ${budgetCode}.`,undefined,{total,item_count:data.items.length});return{id,budget_code:budgetCode};});}
 
   async approveBudget(ctx:StudioFinanceContext,budgetId:number){return withStudioFinanceTransaction(async connection=>{const [rows]:any=await connection.execute('SELECT budget_code,status_code FROM budgets WHERE id=? AND organization_id=? AND business_unit_id=? FOR UPDATE',[budgetId,ctx.organizationId,ctx.id]);if(!rows.length)throw new AppError(404,'BUDGET_NOT_FOUND','Anggaran tidak ditemukan.');if(rows[0].status_code!=='draft')throw new AppError(409,'BUDGET_NOT_DRAFT','Hanya anggaran draf yang dapat disetujui.');await connection.execute(`UPDATE budgets SET status_code='approved',approved_by=? WHERE id=?`,[ctx.userId,budgetId]);await writeStudioFinanceAudit(connection,ctx,ctx.userId,'studio.finance.budget_approve','budget',budgetId,rows[0].budget_code,`Menyetujui anggaran ${rows[0].budget_code}.`);return{id:budgetId,status_code:'approved'};});}
+
+  async replaceExpenseReceipt(ctx: StudioFinanceContext, expenseId: number, file: Express.Multer.File) {
+    const [available]: any = await pool.execute('SELECT id FROM expenses WHERE id = ? AND organization_id = ? AND business_unit_id = ?', [expenseId, ctx.organizationId, ctx.id]);
+    if (!available.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
+    const saved = await storageService.saveUploadedFile('expense_receipt', file, { expenseId });
+    let previous: string | null = null;
+    try {
+      await withStudioFinanceTransaction(async connection => {
+        const [rows]: any = await connection.execute('SELECT expense_code,receipt_path FROM expenses WHERE id = ? AND organization_id = ? AND business_unit_id = ? FOR UPDATE', [expenseId, ctx.organizationId, ctx.id]);
+        if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
+        previous = rows[0].receipt_path || null;
+        await connection.execute('UPDATE expenses SET receipt_path = ? WHERE id = ?', [saved.key, expenseId]);
+        await writeStudioFinanceAudit(connection, ctx, ctx.userId, 'studio.finance.expense_receipt_upload', 'expense', expenseId, rows[0].expense_code, `Mengunggah bukti pengeluaran ${rows[0].expense_code}.`, { receipt_path: previous }, { receipt_path: saved.key });
+      });
+    } catch (error) { await storageService.delete(saved.key); throw error; }
+    await storageService.delete(previous);
+    return { id: expenseId, receipt_path: saved.key, file_name: saved.original_name };
+  }
+
+  async removeExpenseReceipt(ctx: StudioFinanceContext, expenseId: number) {
+    let previous: string | null = null;
+    await withStudioFinanceTransaction(async connection => {
+      const [rows]: any = await connection.execute('SELECT expense_code,receipt_path FROM expenses WHERE id = ? AND organization_id = ? AND business_unit_id = ? FOR UPDATE', [expenseId, ctx.organizationId, ctx.id]);
+      if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
+      previous = rows[0].receipt_path || null;
+      await connection.execute('UPDATE expenses SET receipt_path = NULL WHERE id = ?', [expenseId]);
+      await writeStudioFinanceAudit(connection, ctx, ctx.userId, 'studio.finance.expense_receipt_remove', 'expense', expenseId, rows[0].expense_code, `Menghapus bukti pengeluaran ${rows[0].expense_code}.`, { receipt_path: previous }, { receipt_path: null });
+    });
+    await storageService.delete(previous);
+    return { id: expenseId, receipt_path: null };
+  }
 
   async accounting(ctx:StudioFinanceContext){const [journals,periods]:any=await Promise.all([pool.execute(`SELECT j.id,j.journal_number,j.entry_date,j.description,j.source_type,j.source_id,j.status_code,COALESCE(SUM(l.debit_amount),0) debit_amount,COALESCE(SUM(l.credit_amount),0) credit_amount FROM journal_entries j LEFT JOIN journal_lines l ON l.journal_entry_id=j.id WHERE j.organization_id=? AND j.business_unit_id=? GROUP BY j.id ORDER BY j.entry_date DESC,j.id DESC LIMIT 300`,[ctx.organizationId,ctx.id]),pool.execute(`SELECT id,period_code,start_date,end_date,status_code FROM financial_periods WHERE organization_id=? ORDER BY start_date DESC LIMIT 100`,[ctx.organizationId])]);return{journals:journals[0].map((row:any)=>({...row,debit_amount:asNumber(row.debit_amount),credit_amount:asNumber(row.credit_amount),is_balanced:Math.abs(asNumber(row.debit_amount)-asNumber(row.credit_amount))<=.01})),periods:periods[0]};}
 }

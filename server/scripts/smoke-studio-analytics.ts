@@ -5,6 +5,7 @@ import { pool } from '../src/config/database';
 import { StudioAnalyticsService } from '../src/modules/studio-analytics/studio-analytics.service';
 import { StudioAnalyticsExportService } from '../src/modules/studio-analytics/studio-analytics-export.service';
 import { normalizeFilters, studioAnalyticsContext } from '../src/modules/studio-analytics/studio-analytics.shared';
+import { storageService } from '../src/shared/storage';
 
 const assert: (condition: unknown, message: string) => asserts condition = (condition, message) => { if (!condition) throw new Error(message); };
 const tag = `SA-${randomBytes(4).toString('hex').toUpperCase()}`;
@@ -14,7 +15,7 @@ const days = (amount: number) => { const date = new Date(`${day}T00:00:00Z`); da
 
 async function run() {
   const ctx = await studioAnalyticsContext(1); const analytics = new StudioAnalyticsService();
-  let partyId = 0, serviceId = 0, projectId = 0, quoteId = 0, invoiceId = 0, assignmentId = 0, assetId = 0;
+  let partyId = 0, serviceId = 0, projectId = 0, quoteId = 0, invoiceId = 0, assignmentId = 0, assetId = 0, reportExportId = 0, reportStorageKey = '';
   try {
     const connection = await pool.getConnection();
     try {
@@ -54,6 +55,7 @@ async function run() {
     assert((equipment.rows as Array<{ id: number; utilization_percent: number }>).some(row => row.id === assetId && row.utilization_percent > 0 && row.utilization_percent <= 100), 'Asset utilization is not overlap-safe.');
     assert((overview.kpis as { commercial: Array<{ label: string; value: number }> }).commercial.some(item => item.label === 'Kas Terkumpul' && item.value >= 4000000), 'Overview omitted customer cash collection.');
     const exportResult = await new StudioAnalyticsExportService(analytics).export(ctx, 'overview', 'csv', { ...filters, projectType: tag }, 1);
+    reportExportId = Number(exportResult.report_export_id || 0); reportStorageKey = exportResult.storage_key || '';
     assert(exportResult.contentType.startsWith('text/csv') && exportResult.body.length > 10, 'CSV export did not return downloadable content.');
     const [users]: any = await pool.execute(`SELECT DISTINCT u.id FROM users u JOIN user_roles ur ON ur.user_id=u.id JOIN role_permissions rp ON rp.role_id=ur.role_id JOIN permissions permission ON permission.id=rp.permission_id WHERE u.status_code='active' AND u.approval_status_code='approved' AND permission.code='studio.analytics.read' LIMIT 1`);
     if (users.length) {
@@ -66,6 +68,7 @@ async function run() {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
+      if (reportExportId) await connection.execute(`DELETE FROM report_exports WHERE id=?`, [reportExportId]);
       if (assetId) { await connection.execute(`DELETE FROM asset_maintenance_records WHERE asset_id=?`,[assetId]); await connection.execute(`DELETE FROM asset_project_assignments WHERE asset_id=?`,[assetId]); await connection.execute(`DELETE FROM assets WHERE id=?`,[assetId]); }
       await connection.execute(`DELETE FROM financial_transactions WHERE transaction_code LIKE ?`,[`${tag}%`]);
       if (invoiceId) { await connection.execute(`DELETE FROM invoice_payment_schedules WHERE invoice_id=?`,[invoiceId]); await connection.execute(`DELETE FROM invoice_items WHERE invoice_id=?`,[invoiceId]); await connection.execute(`DELETE FROM invoices WHERE id=?`,[invoiceId]); }
@@ -76,6 +79,7 @@ async function run() {
       await connection.execute(`DELETE FROM audit_logs WHERE module_code='studio_analytics' AND new_values LIKE ?`,[`%${tag}%`]);
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; } finally { connection.release(); }
+    await storageService.delete(reportStorageKey);
   }
 }
 run().then(() => pool.end()).catch(async error => { console.error(error); await pool.end(); process.exit(1); });

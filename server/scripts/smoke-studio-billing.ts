@@ -1,6 +1,4 @@
 import { randomBytes } from 'node:crypto';
-import { readdir, rm } from 'node:fs/promises';
-import path from 'node:path';
 import { pool } from '../src/config/database';
 import { studioInvoiceService } from '../src/modules/studio-billing/studio-invoice.service';
 import { studioBillingRepository } from '../src/modules/studio-billing/studio-billing.repository';
@@ -8,6 +6,7 @@ import { getStudioBillingBusinessUnit } from '../src/modules/studio-billing/stud
 import { studioQuotationService } from '../src/modules/studio-billing/studio-quotation.service';
 import { studioQuotationTemplateService } from '../src/modules/studio-billing/studio-quotation-template.service';
 import { studioClientService } from '../src/shared/party/studio-client.service';
+import { storageService } from '../src/shared/storage';
 
 const assert: (condition: unknown, message: string) => asserts condition = (condition, message) => { if (!condition) throw new Error(message); };
 const token = randomBytes(4).toString('hex').toUpperCase();
@@ -23,33 +22,19 @@ async function billingActor() {
   return Number(rows[0].id);
 }
 
-/** Remove only unreferenced files/metadata left by an interrupted Billing smoke run. */
+/** Remove only unreferenced metadata/files left by an interrupted Billing smoke run. */
 async function cleanupOrphanBillingArtifacts() {
   const [orphanDocuments]: any = await pool.execute(
     `SELECT d.id, d.storage_path FROM documents d
      LEFT JOIN quotations q ON d.entity_type = 'quotation' AND q.id = d.entity_id
      LEFT JOIN invoices i ON d.entity_type = 'invoice' AND i.id = d.entity_id
-     WHERE d.storage_path LIKE 'studio/billing/%'
+     WHERE (d.storage_path LIKE 'quotations/%' OR d.storage_path LIKE 'invoices/%')
        AND ((d.entity_type = 'quotation' AND q.id IS NULL) OR (d.entity_type = 'invoice' AND i.id IS NULL))`,
   );
   if (orphanDocuments.length) {
     await pool.execute(`DELETE FROM documents WHERE id IN (${orphanDocuments.map(() => '?').join(',')})`, orphanDocuments.map((document: any) => document.id));
   }
-  const [documents]: any = await pool.execute(`SELECT storage_path FROM documents WHERE storage_path LIKE 'studio/billing/%'`);
-  const referenced = new Set((documents as any[]).map(document => String(document.storage_path).replace(/\\/g, '/')));
-  const root = path.resolve(process.cwd(), 'storage', 'studio', 'billing');
-  const visit = async (directory: string): Promise<void> => {
-    try {
-      const entries = await readdir(directory, { withFileTypes: true });
-      await Promise.all(entries.map(async entry => {
-        const target = path.join(directory, entry.name);
-        if (entry.isDirectory()) return visit(target);
-        const relative = path.relative(path.resolve(process.cwd(), 'storage'), target).replace(/\\/g, '/');
-        if (!referenced.has(relative)) await rm(target, { force: true });
-      }));
-    } catch { /* Billing storage has not been created yet. */ }
-  };
-  await visit(root);
+  await Promise.all(orphanDocuments.map((document: any) => storageService.delete(String(document.storage_path))));
 }
 
 async function run() {
@@ -171,7 +156,7 @@ async function run() {
       if (partyId) { await connection.execute('DELETE FROM party_roles WHERE party_id = ?', [partyId]); await connection.execute('DELETE FROM parties WHERE id = ?', [partyId]); }
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; } finally { connection.release(); }
-    for (const storagePath of documentPaths) await rm(path.resolve(process.cwd(), 'storage', storagePath), { force: true });
+    for (const storagePath of documentPaths) await storageService.delete(storagePath);
   }
 }
 

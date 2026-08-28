@@ -1,12 +1,13 @@
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
 import { pool } from '../../config/database';
+import { storageService } from '../../shared/storage';
 import { safeText } from './studio-analytics.shared';
 import type { AnalyticsExportFormat, AnalyticsReport, StudioAnalyticsContext, StudioAnalyticsFilters } from './studio-analytics.types';
 import { StudioAnalyticsService } from './studio-analytics.service';
 
 type ReportData = Record<string, unknown>;
-type ExportResult = { body: Buffer; contentType: string; filename: string };
+type ExportResult = { body: Buffer; contentType: string; filename: string; report_export_id?: number; storage_key?: string };
 
 const titles: Record<AnalyticsReport, string> = {
   overview: 'Ringkasan Analitik', projects: 'Proyek', clients: 'Klien', services: 'Layanan', commercial: 'Penawaran dan Penagihan', revenue: 'Pendapatan dan Arus Kas', profitability: 'Profitabilitas', receivables: 'Piutang', vendors: 'Vendor dan Freelancer', equipment: 'Peralatan dan Aset',
@@ -35,8 +36,8 @@ export class StudioAnalyticsExportService {
     return this.analytics[report](ctx, filters) as Promise<ReportData>;
   }
 
-  private async audit(ctx: StudioAnalyticsContext, userId: number, report: AnalyticsReport, format: AnalyticsExportFormat, filters: StudioAnalyticsFilters) {
-    await pool.execute(
+  private async audit(ctx: StudioAnalyticsContext, userId: number, report: AnalyticsReport, format: AnalyticsExportFormat, filters: StudioAnalyticsFilters, connection: { execute: typeof pool.execute } = pool) {
+    await connection.execute(
       `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_code,description,new_values)
        VALUES (?,?,?,?,?,'analytics_export',?,'Mengekspor laporan Studio Analytics.',?)`,
       [ctx.organizationId, ctx.id, userId, 'studio_analytics', 'studio.analytics_export', `${report}:${format}`, JSON.stringify({ report, format, start_date: filters.startDate, end_date: filters.endDate, currency: filters.currency || null, client_id: filters.clientId || null, service_id: filters.serviceId || null, project_type: filters.projectType || null })],
@@ -89,7 +90,24 @@ export class StudioAnalyticsExportService {
     if (format === 'csv') result = { body: this.csv(title, rows), contentType: 'text/csv; charset=utf-8', filename: `${base}.csv` };
     else if (format === 'xlsx') result = { body: await this.xlsx(title, data, rows), contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename: `${base}.xlsx` };
     else result = { body: await this.pdf(title, data, rows), contentType: 'application/pdf', filename: `${base}.pdf` };
-    await this.audit(ctx, userId, report, format, filters);
+    const saved = await storageService.writeBuffer('report_export', result.body, result.filename);
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [inserted]: any = await connection.execute(
+        `INSERT INTO report_exports (organization_id,business_unit_id,report_name,export_format,filter_json,storage_path,status_code,generated_by)
+         VALUES (?,?,?,?,?,?,'generated',?)`,
+        [ctx.organizationId, ctx.id, title, format, JSON.stringify({ start_date: filters.startDate, end_date: filters.endDate, currency: filters.currency || null, client_id: filters.clientId || null, service_id: filters.serviceId || null, project_type: filters.projectType || null }), saved.key, userId],
+      );
+      await this.audit(ctx, userId, report, format, filters, connection);
+      await connection.commit();
+      result.report_export_id = Number(inserted.insertId);
+      result.storage_key = saved.key;
+    } catch (error) {
+      await connection.rollback();
+      await storageService.delete(saved.key);
+      throw error;
+    } finally { connection.release(); }
     return result;
   }
 }

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
 import { StudioFinanceController } from './studio-finance.controller';
+import { createUpload } from '../../shared/storage';
 
 const controller = new StudioFinanceController();
 const READ = requirePermission('studio.finance.read');
@@ -27,6 +28,9 @@ studioFinanceRoutes.post('/transfers',WRITE,controller.transfer);
 studioFinanceRoutes.post('/income',WRITE,controller.income);
 studioFinanceRoutes.post('/invoices/:id/payments',WRITE,controller.payInvoice);
 studioFinanceRoutes.post('/expenses',WRITE,controller.createExpense);
+studioFinanceRoutes.post('/expenses/:id/receipt',WRITE,createUpload('expense_receipt').single('file'),controller.uploadExpenseReceipt);
+studioFinanceRoutes.get('/expenses/:id/receipt',READ,controller.downloadExpenseReceipt);
+studioFinanceRoutes.delete('/expenses/:id/receipt',WRITE,controller.removeExpenseReceipt);
 studioFinanceRoutes.post('/expenses/:id/approve',WRITE,controller.approveExpense);
 studioFinanceRoutes.post('/expenses/:id/pay',WRITE,controller.payExpense);
 studioFinanceRoutes.post('/expenses/:id/reverse',WRITE,controller.reverseExpense);

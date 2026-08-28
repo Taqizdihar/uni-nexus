@@ -9,6 +9,7 @@ import {
   printProfileSchema, printProfileUpdateSchema, productSchema, productUpdateSchema, variantSchema, variantUpdateSchema,
 } from './craft-products.schema';
 import { CraftProductsService, type ProductActor } from './craft-products.service';
+import { storageService } from '../../shared/storage';
 
 function id(value: string | string[] | undefined, code: string, label: string) {
   if (Array.isArray(value)) throw new AppError(400, code, `${label} tidak valid.`);
@@ -106,8 +107,7 @@ export class CraftProductsController {
     try {
       const actor = await this.actor(req);
       const image = await this.service.getProductImage(id(req.params.id, 'INVALID_PRODUCT_ID', 'ID produk'), actor.businessUnitId);
-      res.setHeader('Cache-Control', 'private, max-age=3600');
-      res.sendFile(image.filePath, { headers: { 'Content-Disposition': `inline; filename="${image.filename}"` } });
+      await storageService.streamToResponse(res, image.storageKey, { filename: image.filename, disposition: 'inline', cacheControl: 'private, max-age=3600' });
     } catch (error) { next(error); }
   };
 
@@ -195,7 +195,7 @@ export class CraftProductsController {
     try {
       const actor = await this.actor(req);
       const design = await this.service.downloadDesignFile(id(req.params.designId, 'INVALID_DESIGN_ID', 'ID desain'), actor.businessUnitId);
-      res.download(design.filePath, design.filename);
+      await storageService.streamToResponse(res, design.storageKey, { filename: design.filename });
     } catch (error) { next(error); }
   };
 

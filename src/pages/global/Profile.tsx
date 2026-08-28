@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
 import { Button } from '../../components/ui/Button';
-import { User, Mail, Lock, ShieldCheck, Key } from 'lucide-react';
+import { User, Mail, Lock, ShieldCheck, Key, Upload, Trash2 } from 'lucide-react';
+import { UserAvatar } from '../../components/common/UserAvatar';
 
 export function Profile() {
   const { user, checkAuth } = useAuth();
@@ -24,6 +25,28 @@ export function Profile() {
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [profileMsg, setProfileMsg] = useState({ type: '', text: '' });
   const [passwordMsg, setPasswordMsg] = useState({ type: '', text: '' });
+  const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
+  const [avatarMsg, setAvatarMsg] = useState({ type: '', text: '' });
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setIsUpdatingAvatar(true); setAvatarMsg({ type: '', text: '' });
+    try {
+      const data = new FormData(); data.set('avatar', file);
+      await api.post('/profile/avatar', data);
+      await checkAuth();
+      setAvatarMsg({ type: 'success', text: 'Foto profil berhasil diperbarui.' });
+    } catch (error: any) { setAvatarMsg({ type: 'error', text: error.message || 'Gagal mengunggah foto profil.' }); }
+    finally { setIsUpdatingAvatar(false); event.target.value = ''; }
+  };
+
+  const handleAvatarDelete = async () => {
+    setIsUpdatingAvatar(true); setAvatarMsg({ type: '', text: '' });
+    try { await api.delete('/profile/avatar'); await checkAuth(); setAvatarMsg({ type: 'success', text: 'Foto profil dihapus.' }); }
+    catch (error: any) { setAvatarMsg({ type: 'error', text: error.message || 'Gagal menghapus foto profil.' }); }
+    finally { setIsUpdatingAvatar(false); }
+  };
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,15 +99,21 @@ export function Profile() {
         {/* Sidebar Profile Card */}
         <div className="col-span-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-            <div className="w-24 h-24 bg-[var(--nexus-yellow-deep)]/10 text-[var(--nexus-yellow-deep)] rounded-full mx-auto flex items-center justify-center text-3xl font-bold mb-4">
-              {user?.full_name?.charAt(0).toUpperCase()}
-            </div>
+            <UserAvatar user={user || {}} size="xl" className="mx-auto mb-4" />
             <h2 className="text-lg font-bold text-gray-900">{user?.full_name}</h2>
             <p className="text-gray-500 text-sm mb-4">{user?.email}</p>
             
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[var(--nexus-cream-soft)] text-[var(--nexus-yellow-deep)] border border-[var(--nexus-yellow)]/30">
               <ShieldCheck className="w-4 h-4" />
               {user?.role?.name || 'Pengguna'}
+            </div>
+            <div className="mt-5 space-y-2">
+              {avatarMsg.text && <p className={`text-xs ${avatarMsg.type === 'success' ? 'text-emerald-700' : 'text-red-700'}`}>{avatarMsg.text}</p>}
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <Upload className="w-4 h-4" /> {isUpdatingAvatar ? 'Memproses...' : 'Upload/Ubah Foto'}
+                <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={isUpdatingAvatar} onChange={handleAvatarUpload} />
+              </label>
+              {user?.avatar_path && <button type="button" disabled={isUpdatingAvatar} onClick={handleAvatarDelete} className="mx-auto flex items-center gap-2 text-sm text-red-600 hover:text-red-700"><Trash2 className="w-4 h-4" /> Hapus Foto</button>}
             </div>
           </div>
         </div>

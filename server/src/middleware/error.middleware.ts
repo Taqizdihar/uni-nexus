@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../shared/errors/AppError';
 import { env } from '../config/env';
+import multer from 'multer';
 
 export const errorHandler = (
   err: Error,
@@ -8,6 +9,9 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({ success: false, error: { code: 'FILE_TOO_LARGE', message: 'Ukuran file melebihi batas unggahan.' } });
+  }
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,

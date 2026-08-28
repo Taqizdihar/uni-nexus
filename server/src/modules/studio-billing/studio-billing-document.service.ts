@@ -1,10 +1,8 @@
-import { createWriteStream, existsSync } from 'fs';
-import { access, mkdir, stat } from 'fs/promises';
-import path from 'path';
 import PDFDocument from 'pdfkit';
 import type { PoolConnection } from 'mysql2/promise';
 import type { Response } from 'express';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { storageService } from '../../shared/storage';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { studioBillingRepository } from './studio-billing.repository';
 import { toNumber, writeBillingAudit } from './studio-billing.shared';
@@ -33,7 +31,6 @@ interface PdfRecord {
   project_name?: string | null;
 }
 
-const STORAGE_ROOT = path.resolve(process.cwd(), 'storage', 'studio', 'billing');
 const money = (value: number, currency = 'IDR') => new Intl.NumberFormat('id-ID', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
 const dateValue = (value?: string | Date | null) => value instanceof Date ? value.toISOString().slice(0, 10) : value ? String(value).slice(0, 10) : null;
 const dateLabel = (value?: string | Date | null) => {
@@ -44,24 +41,19 @@ const dateLabel = (value?: string | Date | null) => {
 const safeName = (value: string) => value.replace(/[^A-Za-z0-9_-]/g, '_');
 
 export class StudioBillingDocumentService {
-  private filePath(type: DocumentType, number: string) {
+  private fileName(type: DocumentType, number: string) {
     const fileName = `${type}-${safeName(number)}.pdf`;
-    const target = path.resolve(STORAGE_ROOT, `${type}s`, fileName);
-    if (!target.startsWith(`${STORAGE_ROOT}${path.sep}`)) throw new AppError(400, 'INVALID_DOCUMENT_PATH', 'Path dokumen tidak valid.');
-    return { target, fileName, storagePath: path.posix.join('studio', 'billing', `${type}s`, fileName) };
+    return fileName;
   }
 
-  private async renderToFile(type: DocumentType, record: PdfRecord, lines: PdfLine[]) {
-    const file = this.filePath(type, record.document_number);
-    await mkdir(path.dirname(file.target), { recursive: true });
+  private async renderToBuffer(type: DocumentType, record: PdfRecord, lines: PdfLine[]) {
     const doc = new PDFDocument({ size: 'A4', margin: 48, bufferPages: true, info: { Title: `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${record.document_number}`, Author: 'UNI-INSIDE Studio' } });
-    const stream = createWriteStream(file.target);
-    doc.pipe(stream);
+    const chunks: Buffer[] = [];
+    doc.on('data', (chunk: Buffer) => chunks.push(Buffer.from(chunk)));
+    const result = new Promise<Buffer>((resolve, reject) => { doc.once('end', () => resolve(Buffer.concat(chunks))); doc.once('error', reject); });
     this.drawPdf(doc, type, record, lines);
     doc.end();
-    await new Promise<void>((resolve, reject) => { stream.once('finish', resolve); stream.once('error', reject); doc.once('error', reject); });
-    const fileStat = await stat(file.target);
-    return { ...file, size: Number(fileStat.size) };
+    return result;
   }
 
   private drawPdf(doc: PDFKit.PDFDocument, type: DocumentType, record: PdfRecord, lines: PdfLine[]) {
@@ -169,23 +161,30 @@ export class StudioBillingDocumentService {
       [studio.organizationId, studio.id, type, type, id],
     );
     if (existing.length) {
-      const existingPath = this.filePath(type, number).target;
-      if (existsSync(existingPath)) return existing[0];
+      try { if (await storageService.exists(existing[0].storage_path)) return existing[0]; }
+      catch { /* Legacy/unavailable document is regenerated into canonical storage. */ }
     }
-    const output = await this.renderToFile(type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })));
+    const fileName = this.fileName(type, number);
+    const body = await this.renderToBuffer(type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })));
+    const output = await storageService.writeBuffer(type === 'quotation' ? 'quotation_pdf' : 'invoice_pdf', body, fileName);
     const version = existing.length ? Number(existing[0].version_no) : 1;
-    if (existing.length) {
-      await connection.execute(`UPDATE documents SET document_code = ?, title = ?, file_name = ?, storage_path = ?, mime_type = 'application/pdf', file_size_bytes = ?, uploaded_by = ? WHERE id = ?`, [number, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.fileName, output.storagePath, output.size, userId, existing[0].id]);
-    } else {
-      await connection.execute(
-        `INSERT INTO documents (organization_id, business_unit_id, document_code, document_type, title, file_name, storage_path, mime_type, file_size_bytes, entity_type, entity_id, version_no, is_template, uploaded_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, 'application/pdf', ?, ?, ?, ?, 0, ?)`,
-        [studio.organizationId, studio.id, number, type, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.fileName, output.storagePath, output.size, type, id, version, userId],
-      );
+    try {
+      if (existing.length) {
+        await connection.execute(`UPDATE documents SET document_code = ?, title = ?, file_name = ?, storage_path = ?, mime_type = 'application/pdf', file_size_bytes = ?, uploaded_by = ? WHERE id = ?`, [number, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, userId, existing[0].id]);
+      } else {
+        await connection.execute(
+          `INSERT INTO documents (organization_id, business_unit_id, document_code, document_type, title, file_name, storage_path, mime_type, file_size_bytes, entity_type, entity_id, version_no, is_template, uploaded_by)
+           VALUES (?, ?, ?, ?, ?, ?, ?, 'application/pdf', ?, ?, ?, ?, 0, ?)`,
+          [studio.organizationId, studio.id, number, type, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, type, id, version, userId],
+        );
+      }
+      if (type === 'invoice') await connection.execute('UPDATE invoices SET pdf_path = ? WHERE id = ?', [output.key, id]);
+      await writeBillingAudit(connection, studio, userId, type === 'quotation' ? 'studio.quotation_pdf_generate' : 'studio.invoice_pdf_generate', type, id, number, `Membuat PDF resmi ${type === 'quotation' ? 'penawaran' : 'invoice'} ${number}.`);
+    } catch (error) {
+      await storageService.delete(output.key);
+      throw error;
     }
-    if (type === 'invoice') await connection.execute('UPDATE invoices SET pdf_path = ? WHERE id = ?', [output.storagePath, id]);
-    await writeBillingAudit(connection, studio, userId, type === 'quotation' ? 'studio.quotation_pdf_generate' : 'studio.invoice_pdf_generate', type, id, number, `Membuat PDF resmi ${type === 'quotation' ? 'penawaran' : 'invoice'} ${number}.`);
-    return { storage_path: output.storagePath, file_name: output.fileName };
+    return { storage_path: output.key, file_name: output.original_name };
   }
 
   async preview(type: DocumentType, header: any, items: any[], res: Response) {
@@ -204,14 +203,8 @@ export class StudioBillingDocumentService {
   async sendOfficial(type: DocumentType, id: number, studio: BusinessUnitContext, res: Response) {
     const document = await studioBillingRepository.getDocument(type, id, studio);
     if (!document) throw new NotFoundError('PDF resmi belum tersedia untuk dokumen ini.');
-    const expectedRoot = path.resolve(STORAGE_ROOT);
-    const expectedName = path.basename(String(document.file_name));
-    const target = path.resolve(STORAGE_ROOT, `${type}s`, expectedName);
-    if (!target.startsWith(`${expectedRoot}${path.sep}`)) throw new AppError(400, 'INVALID_DOCUMENT_PATH', 'Path dokumen tidak valid.');
-    try { await access(target); } catch { throw new NotFoundError('File PDF tidak ditemukan di penyimpanan aman.'); }
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${expectedName}"`);
-    res.sendFile(target);
+    if (!await storageService.exists(document.storage_path)) throw new NotFoundError('File PDF tidak ditemukan di penyimpanan aman.');
+    await storageService.streamToResponse(res, document.storage_path, { filename: document.file_name, mimeType: 'application/pdf' });
   }
 }
 

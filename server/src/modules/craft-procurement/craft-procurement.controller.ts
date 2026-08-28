@@ -3,6 +3,7 @@ import PDFDocument from "pdfkit";
 import { z } from "zod";
 import { AppError } from "../../shared/errors/AppError";
 import { sendSuccess } from "../../shared/utils/response";
+import { storageService } from '../../shared/storage';
 import { getCraftBusinessUnit } from "../craft-orders/craft-orders.helpers";
 import {
   contactSchema,
@@ -611,19 +612,29 @@ export class CraftProcurementController {
           "SUPPLIER_INVOICE_NOT_FOUND",
           "Tagihan pemasok tidak ditemukan.",
         );
-      if (
-        !invoice.document_path ||
-        !String(invoice.document_path).startsWith("/uploads/")
-      )
+      if (!invoice.document_path)
         throw new AppError(
           404,
           "INVOICE_DOCUMENT_NOT_AVAILABLE",
           "Dokumen tagihan belum tersedia.",
         );
-      res.redirect(String(invoice.document_path));
+      await storageService.streamToResponse(res, String(invoice.document_path), { filename: `supplier-invoice-${invoice.supplier_invoice_number || invoice.id}` });
     } catch (error) {
       next(error);
     }
+  };
+  uploadInvoiceDocument = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.file) throw new AppError(400, 'DOCUMENT_REQUIRED', 'Pilih dokumen tagihan terlebih dahulu.');
+      const actor = await this.actor(req);
+      sendSuccess(res, await this.service.replaceSupplierInvoiceDocument(id(req.params.id, 'ID tagihan'), req.file, actor));
+    } catch (error) { next(error); }
+  };
+  removeInvoiceDocument = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actor = await this.actor(req);
+      sendSuccess(res, await this.service.removeSupplierInvoiceDocument(id(req.params.id, 'ID tagihan'), actor));
+    } catch (error) { next(error); }
   };
   history = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -17,6 +17,7 @@ import { studioProjectMilestonesService } from './studio-project-milestones.serv
 import { studioProjectServicesService } from './studio-project-services.service';
 import { studioProjectsService } from './studio-projects.service';
 import type { DeliverableStatus, ProjectStatus } from './studio-projects.types';
+import { storageService } from '../../shared/storage';
 
 const asValidationError = (error: unknown, message: string) =>
   error instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', message, error.issues) : error;
@@ -268,7 +269,7 @@ export class StudioProjectsController {
       const file = (req as any).file;
       if (!file) throw new AppError(400, 'FILE_REQUIRED', 'File hasil kerja wajib diunggah.');
       const studio = await getStudioBusinessUnit();
-      sendSuccess(res, await studioProjectDeliverablesService.attachFile(this.projectId(req), parseNumericId(req.params.deliverableId, 'ID deliverable'), file.filename, actorId(req), studio));
+      sendSuccess(res, await studioProjectDeliverablesService.attachFile(this.projectId(req), parseNumericId(req.params.deliverableId, 'ID deliverable'), file, actorId(req), studio));
     } catch (error) { next(error); }
   };
 
@@ -276,9 +277,7 @@ export class StudioProjectsController {
     try {
       const studio = await getStudioBusinessUnit();
       const target = await studioProjectDeliverablesService.getDownloadTarget(this.projectId(req), parseNumericId(req.params.deliverableId, 'ID deliverable'), studio);
-      // Quote-escaped filename keeps the header well-formed for any original name.
-      res.setHeader('Content-Disposition', `attachment; filename="${target.fileName.replace(/["\\]/g, '_')}"`);
-      res.sendFile(target.absolutePath, error => { if (error) next(error); });
+      await storageService.streamToResponse(res, target.storageKey, { filename: target.fileName });
     } catch (error) { next(error); }
   };
 

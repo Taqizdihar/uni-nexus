@@ -1,23 +1,12 @@
-import path from 'path';
-import { unlink } from 'fs/promises';
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { displayNameFromKey, storageService } from '../../shared/storage';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { assertSafeExternalUrl, displayFileName, toSqlDateTime } from './studio-projects.helpers';
 import { StudioProjectsRepository } from './studio-projects.repository';
 import { assertProjectMutable, loadProjectForUpdate, projectRef, publishProjectEvent, withTransaction, writeProjectAudit } from './studio-projects.shared';
 import type { DeliverableStatus } from './studio-projects.types';
-
-/** Deliverable files live outside the public uploads tree and are only served through an authenticated route. */
-export const DELIVERABLE_STORAGE_ROOT = path.resolve(__dirname, '../../../storage');
-export const DELIVERABLE_MAX_BYTES = 25 * 1024 * 1024;
-export const DELIVERABLE_ALLOWED_EXTENSIONS = new Set(['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.zip', '.docx', '.xlsx', '.pptx']);
-
-export const deliverableDirectory = (projectId: number) => path.join(DELIVERABLE_STORAGE_ROOT, 'studio', 'projects', String(projectId), 'deliverables');
-
-/** Storage paths are stored relative to the storage root so the root can move safely. */
-export const relativeStoragePath = (projectId: number, fileName: string) => `studio/projects/${projectId}/deliverables/${fileName}`;
 
 interface DeliverableInput {
   milestone_id?: number | null;
@@ -160,8 +149,15 @@ export class StudioProjectDeliverablesService {
    * file is only removed once that succeeded, and a failed update removes the
    * freshly uploaded orphan instead.
    */
-  async attachFile(projectId: number, deliverableId: number, storedFileName: string, userId: number, studio: BusinessUnitContext) {
-    const newRelativePath = relativeStoragePath(projectId, storedFileName);
+  async attachFile(projectId: number, deliverableId: number, file: Express.Multer.File, userId: number, studio: BusinessUnitContext) {
+    const [targetRows]: any = await pool.execute(
+      `SELECT pd.id FROM project_deliverables pd JOIN studio_projects p ON p.id = pd.project_id
+       WHERE pd.id = ? AND pd.project_id = ? AND p.business_unit_id = ? AND p.deleted_at IS NULL LIMIT 1`,
+      [deliverableId, projectId, studio.id],
+    );
+    if (!targetRows.length) throw new NotFoundError('Deliverable proyek tidak ditemukan.');
+    const saved = await storageService.saveUploadedFile('project_deliverable', file, { projectId });
+    const newRelativePath = saved.key;
     let previousPath: string | null = null;
     try {
       const result = await withTransaction(async connection => {
@@ -179,34 +175,20 @@ export class StudioProjectDeliverablesService {
           `Mengunggah file untuk deliverable "${current.title}" pada proyek ${project.project_code}.`,
           { storage_path: current.storage_path }, { storage_path: newRelativePath },
         );
-        return { id: deliverableId, file_name: displayFileName(storedFileName) };
+        return { id: deliverableId, file_name: saved.original_name };
       });
 
       if (previousPath && previousPath !== newRelativePath) await this.removeStoredFile(previousPath);
       return result;
     } catch (error) {
-      await this.removeStoredFile(newRelativePath);
+      await storageService.delete(newRelativePath);
       throw error;
     }
   }
 
-  /** Resolves a stored path back to a real file, refusing anything outside the storage root. */
-  resolveStoredFile(storagePath: string) {
-    const absolute = path.resolve(DELIVERABLE_STORAGE_ROOT, storagePath);
-    const root = path.resolve(DELIVERABLE_STORAGE_ROOT);
-    if (absolute !== root && !absolute.startsWith(root + path.sep)) {
-      throw new AppError(400, 'INVALID_STORAGE_PATH', 'Lokasi file tidak valid.');
-    }
-    return absolute;
-  }
-
   private async removeStoredFile(storagePath: string | null) {
     if (!storagePath) return;
-    try {
-      await unlink(this.resolveStoredFile(storagePath));
-    } catch (error: any) {
-      if (error?.code !== 'ENOENT') console.error('Failed to remove Studio deliverable file:', error);
-    }
+    await storageService.delete(storagePath);
   }
 
   async getDownloadTarget(projectId: number, deliverableId: number, studio: BusinessUnitContext) {
@@ -220,9 +202,10 @@ export class StudioProjectDeliverablesService {
     );
     if (!rows.length) throw new NotFoundError('Deliverable proyek tidak ditemukan.');
     if (!rows[0].storage_path) throw new AppError(404, 'DELIVERABLE_FILE_MISSING', 'Deliverable ini belum memiliki file terunggah.');
+    if (!await storageService.exists(rows[0].storage_path)) throw new NotFoundError('File deliverable tidak ditemukan pada penyimpanan.');
     return {
-      absolutePath: this.resolveStoredFile(rows[0].storage_path),
-      fileName: displayFileName(path.basename(rows[0].storage_path)) || 'deliverable',
+      storageKey: rows[0].storage_path,
+      fileName: displayNameFromKey(rows[0].storage_path, 'deliverable'),
     };
   }
 

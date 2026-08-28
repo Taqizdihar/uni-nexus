@@ -1,20 +1,11 @@
 import { Router } from 'express';
-import multer from 'multer';
 import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
-import { AppError } from '../../shared/errors/AppError';
+import { createUpload } from '../../shared/storage';
 import { CraftMarketplaceController } from './craft-marketplace.controller';
 
 const router = Router();
 const controller = new CraftMarketplaceController();
-const importUpload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024, files: 1 },
-  fileFilter: (_req, file, callback) => {
-    const extension = file.originalname.toLowerCase().match(/\.(csv|xlsx)$/)?.[1];
-    if (!extension) return callback(new AppError(400, 'IMPORT_FILE_INVALID', 'Gunakan file CSV atau XLSX.'));
-    callback(null, true);
-  },
-});
+const importUpload = createUpload('marketplace_import');
 
 router.use(requireAuth);
 router.get('/overview', requirePermission('craft.marketplace.read'), controller.overview);

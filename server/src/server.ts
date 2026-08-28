@@ -1,8 +1,12 @@
 import app from './app';
 import { env } from './config/env';
 import { checkDatabaseConnection } from './config/database';
+import { cleanupStorageTemp, storageService } from './shared/storage';
 
 const startServer = async () => {
+  await storageService.bootstrap();
+  const cleanup = await cleanupStorageTemp();
+  console.log(`Local storage ready: ${storageService.root} (${cleanup.removed} stale temp file(s) removed)`);
   // Check DB connection on startup
   const isDbConnected = await checkDatabaseConnection();
   if (!isDbConnected) {

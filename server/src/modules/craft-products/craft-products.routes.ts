@@ -1,46 +1,13 @@
-import { mkdirSync } from 'fs';
-import path from 'path';
 import { Router } from 'express';
-import multer from 'multer';
 import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
-import { AppError } from '../../shared/errors/AppError';
+import { createUpload } from '../../shared/storage';
 import { CraftProductsController } from './craft-products.controller';
-import { DESIGN_UPLOAD_ROOT, PRODUCT_UPLOAD_ROOT } from './craft-products.service';
 
 const controller = new CraftProductsController();
 export const craftProductsRoutes = Router();
 
-const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp']);
-const designExtensions = new Set(['.stl', '.3mf', '.step', '.stp', '.scad', '.obj', '.blend']);
-
-const productImageUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, _file, callback) => {
-      const productId = String(req.params.id || 'invalid').replace(/[^0-9]/g, '') || 'invalid';
-      const target = path.join(PRODUCT_UPLOAD_ROOT, productId);
-      mkdirSync(target, { recursive: true });
-      callback(null, target);
-    },
-    filename: (_req, file, callback) => callback(null, `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${path.extname(file.originalname).toLowerCase()}`),
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (_req, file, callback) => {
-    if (!imageExtensions.has(path.extname(file.originalname).toLowerCase())) return callback(new AppError(400, 'UNSUPPORTED_IMAGE', 'Gunakan file JPG, JPEG, PNG, atau WEBP.'));
-    callback(null, true);
-  },
-});
-
-const designUpload = multer({
-  storage: multer.diskStorage({
-    destination: (_req, _file, callback) => { const target = path.join(DESIGN_UPLOAD_ROOT, '.tmp'); mkdirSync(target, { recursive: true }); callback(null, target); },
-    filename: (_req, file, callback) => callback(null, `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${path.extname(file.originalname).toLowerCase()}`),
-  }),
-  limits: { fileSize: 100 * 1024 * 1024 },
-  fileFilter: (_req, file, callback) => {
-    if (!designExtensions.has(path.extname(file.originalname).toLowerCase())) return callback(new AppError(400, 'UNSUPPORTED_DESIGN_FILE', 'Gunakan file STL, 3MF, STEP, SCAD, OBJ, atau BLEND.'));
-    callback(null, true);
-  },
-});
+const productImageUpload = createUpload('product_image');
+const designUpload = createUpload('product_design');
 
 craftProductsRoutes.use(requireAuth);
 

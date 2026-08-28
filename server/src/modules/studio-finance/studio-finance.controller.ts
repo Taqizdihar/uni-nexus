@@ -2,9 +2,11 @@ import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { AppError } from '../../shared/errors/AppError';
 import { sendSuccess } from '../../shared/utils/response';
+import { pool } from '../../config/database';
 import { budgetSchema, customerPaymentSchema, expenseSchema, externalPayoutSchema, incomeSchema, maintenancePaymentSchema, payExpenseSchema, reverseExpenseSchema, transferSchema, treasurySchema } from './studio-finance.schema';
 import { parseFinanceId } from './studio-finance.shared';
 import { studioFinanceService } from './studio-finance.service';
+import { storageService } from '../../shared/storage';
 import type { StudioFinanceListFilters } from './studio-finance.types';
 
 const actor = (req: Request) => Number((req as any).user?.id);
@@ -35,6 +37,9 @@ export class StudioFinanceController {
   receivables = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.receivables(await this.ctx(req),listFilters(req))); } catch(error) { next(error); } };
   expenses = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.listExpenses(await this.ctx(req),listFilters(req))); } catch(error) { next(error); } };
   createExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.createExpense(await this.ctx(req),expenseSchema.parse(req.body)),undefined,201); } catch(error) { next(validation(error,'Data pengeluaran tidak valid.')); } };
+  uploadExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => { try { if (!req.file) throw new AppError(400,'RECEIPT_REQUIRED','Pilih bukti pengeluaran terlebih dahulu.'); sendSuccess(res,await studioFinanceService.replaceExpenseReceipt(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),req.file)); } catch(error) { next(error); } };
+  downloadExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => { try { const ctx=await this.ctx(req); const expenseId=parseFinanceId(req.params.id,'ID pengeluaran'); const [rows]:any=await pool.execute('SELECT receipt_path,expense_code FROM expenses WHERE id=? AND organization_id=? AND business_unit_id=?',[expenseId,ctx.organizationId,ctx.id]); if(!rows.length) throw new AppError(404,'EXPENSE_NOT_FOUND','Pengeluaran tidak ditemukan.'); if(!rows[0].receipt_path) throw new AppError(404,'RECEIPT_NOT_FOUND','Bukti pengeluaran belum tersedia.'); await storageService.streamToResponse(res,rows[0].receipt_path,{filename:`receipt-${rows[0].expense_code}`}); } catch(error) { next(error); } };
+  removeExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.removeExpenseReceipt(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'))); } catch(error) { next(error); } };
   approveExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.approveExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'))); } catch(error) { next(error); } };
   payExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.payExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),payExpenseSchema.parse(req.body))); } catch(error) { next(validation(error,'Data pembayaran pengeluaran tidak valid.')); } };
   reverseExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.reverseExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),reverseExpenseSchema.parse(req.body))); } catch(error) { next(validation(error,'Data pembalikan pengeluaran tidak valid.')); } };

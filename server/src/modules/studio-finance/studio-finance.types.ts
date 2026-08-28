@@ -20,7 +20,6 @@ export interface StudioExpenseInput {
   party_id?: number | null;
   studio_project_id?: number | null;
   treasury_account_id?: number | null;
-  receipt_path?: string | null;
   status_code: 'draft' | 'approved' | 'paid';
   direct_payment_confirmed?: boolean;
 }

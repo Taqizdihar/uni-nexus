@@ -1,18 +1,13 @@
-import { createHash, randomUUID } from 'crypto';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { randomUUID } from 'crypto';
 import type { RowDataPacket } from 'mysql2';
 import { pool } from '../../config/database';
-import { env } from '../../config/env';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { storageService } from '../../shared/storage';
 import type {
   BomInput, BomUpdateInput, CategoryInput, CraftProductFilters, DesignInput, DesignUpdateInput,
   PrintProfileInput, ProductInput, ProductUpdateInput, VariantInput,
 } from './craft-products.types';
 import { CraftProductsRepository } from './craft-products.repository';
-
-export const PRODUCT_UPLOAD_ROOT = path.resolve(process.cwd(), env.UPLOAD_DIR, 'products');
-export const DESIGN_UPLOAD_ROOT = path.resolve(process.cwd(), env.UPLOAD_DIR, 'designs');
 
 export interface ProductActor {
   id: number;
@@ -24,18 +19,6 @@ export interface ProductActor {
 
 function cleanText(value: string | null | undefined) { return value?.trim() || null; }
 function duplicateError(error: any) { return error?.code === 'ER_DUP_ENTRY' || error?.errno === 1062; }
-
-async function removeFileQuietly(filePath: string | null | undefined) {
-  if (!filePath) return;
-  try { await fs.unlink(filePath); }
-  catch (error: any) { if (error?.code !== 'ENOENT') console.warn(`Could not remove Craft Product file ${filePath}:`, error?.message || error); }
-}
-
-function resolveStoredPath(storedPath: string, root: string) {
-  const resolved = path.resolve(path.dirname(root), storedPath);
-  if (!resolved.startsWith(`${path.dirname(root)}${path.sep}`)) throw new AppError(400, 'INVALID_STORAGE_PATH', 'Lokasi file tidak valid.');
-  return resolved;
-}
 
 export class CraftProductsService {
   readonly repository = new CraftProductsRepository();
@@ -202,21 +185,22 @@ export class CraftProductsService {
   }
 
   async saveProductImage(id: number, file: Express.Multer.File, actor: ProductActor) {
-    const relativePath = path.posix.join('products', String(id), file.filename);
+    await this.assertProduct(id, actor.businessUnitId);
+    const saved = await storageService.saveUploadedFile('product_image', file, { productId: id });
     let previousPath: string | null = null;
     try {
       await this.transaction(async connection => {
         const product = await this.assertProduct(id, actor.businessUnitId, connection);
         previousPath = product.image_path;
-        await this.repository.setProductImage(id, relativePath, connection);
-        await this.audit(actor, 'product.image_upload', 'product', id, product.sku, `Mengunggah gambar utama produk ${product.name}.`, { image_path: product.image_path }, { image_path: relativePath }, connection);
+        await this.repository.setProductImage(id, saved.key, connection);
+        await this.audit(actor, 'product.image_upload', 'product', id, product.sku, `Mengunggah gambar utama produk ${product.name}.`, { image_path: product.image_path }, { image_path: saved.key }, connection);
       });
     } catch (error) {
-      await removeFileQuietly(file.path);
+      await storageService.delete(saved.key);
       throw error;
     }
-    if (previousPath) await removeFileQuietly(resolveStoredPath(previousPath, PRODUCT_UPLOAD_ROOT));
-    return { image_path: relativePath };
+    await storageService.delete(previousPath);
+    return { image_path: saved.key };
   }
 
   async removeProductImage(id: number, actor: ProductActor) {
@@ -228,17 +212,15 @@ export class CraftProductsService {
       await this.repository.setProductImage(id, null, connection);
       await this.audit(actor, 'product.image_remove', 'product', id, product.sku, `Menghapus gambar utama produk ${product.name}.`, { image_path: previousPath }, { image_path: null }, connection);
     });
-    if (previousPath) await removeFileQuietly(resolveStoredPath(previousPath, PRODUCT_UPLOAD_ROOT));
+    await storageService.delete(previousPath);
     return { message: 'Gambar produk berhasil dihapus.' };
   }
 
   async getProductImage(id: number, businessUnitId: number) {
     const product = await this.assertProduct(id, businessUnitId);
     if (!product.image_path) throw new NotFoundError('Gambar produk belum tersedia.');
-    const filePath = resolveStoredPath(product.image_path, PRODUCT_UPLOAD_ROOT);
-    try { await fs.access(filePath); }
-    catch { throw new NotFoundError('Berkas gambar produk tidak ditemukan.'); }
-    return { filePath, filename: path.basename(filePath) };
+    if (!await storageService.exists(product.image_path)) throw new NotFoundError('Berkas gambar produk tidak ditemukan.');
+    return { storageKey: product.image_path, filename: 'product-image' };
   }
 
   private async nextCategoryCode(baseValue: string, businessUnitId: number, connection: Awaited<ReturnType<typeof pool.getConnection>>, excludeId?: number) {
@@ -398,25 +380,20 @@ export class CraftProductsService {
   }
 
   async uploadDesignFile(data: DesignInput, file: Express.Multer.File, actor: ProductActor) {
-    const ext = path.extname(file.originalname).toLowerCase().replace('.', '');
-    let finalPath: string | null = null;
+    if (data.variant_id && !data.product_id) throw new AppError(400, 'PRODUCT_REQUIRED_FOR_VARIANT', 'Produk wajib dipilih saat memilih varian.');
+    if (data.product_id) await this.assertProduct(data.product_id, actor.businessUnitId);
+    if (data.product_id && data.variant_id) await this.assertVariant(data.product_id, data.variant_id, actor.businessUnitId);
+    const saved = await storageService.saveUploadedFile('product_design', file, { productId: data.product_id ?? undefined });
     try {
       const result = await this.transaction(async connection => {
         if (data.variant_id && !data.product_id) throw new AppError(400, 'PRODUCT_REQUIRED_FOR_VARIANT', 'Produk wajib dipilih saat memilih varian.');
         if (data.product_id) await this.assertProduct(data.product_id, actor.businessUnitId, connection);
         if (data.product_id && data.variant_id) await this.assertVariant(data.product_id, data.variant_id, actor.businessUnitId, connection);
-        const destinationFolder = data.product_id ? String(data.product_id) : 'library';
-        const destination = path.join(DESIGN_UPLOAD_ROOT, destinationFolder);
-        await fs.mkdir(destination, { recursive: true });
-        finalPath = path.join(destination, file.filename);
-        await fs.rename(file.path, finalPath);
-        const content = await fs.readFile(finalPath);
-        const checksum = createHash('sha256').update(content).digest('hex');
         const id = await this.repository.createDesignFile({
           businessUnitId: actor.businessUnitId, productId: data.product_id ?? null, variantId: data.variant_id ?? null,
-          designCode: `DSN-${randomUUID()}`, name: data.name.trim(), fileType: ext, fileName: path.basename(file.originalname),
-          storagePath: path.posix.join('designs', destinationFolder, file.filename), versionLabel: cleanText(data.version_label), size: file.size,
-          checksum, isFinal: data.is_final ?? false, uploadedBy: actor.id, notes: cleanText(data.notes),
+          designCode: `DSN-${randomUUID()}`, name: data.name.trim(), fileType: saved.extension.replace('.', ''), fileName: saved.original_name,
+          storagePath: saved.key, versionLabel: cleanText(data.version_label), size: saved.size_bytes,
+          checksum: saved.checksum_sha256, isFinal: data.is_final ?? false, uploadedBy: actor.id, notes: cleanText(data.notes),
         }, connection);
         if (data.is_final) await this.repository.setDesignFinal(actor.businessUnitId, data.product_id ?? null, data.variant_id ?? null, id, connection);
         await this.audit(actor, 'design.upload', 'design_file', id, null, `Mengunggah file desain ${data.name.trim()}.`, null, { ...data, file_name: file.originalname, file_size_bytes: file.size }, connection);
@@ -424,7 +401,7 @@ export class CraftProductsService {
       });
       return result;
     } catch (error) {
-      await removeFileQuietly(finalPath || file.path);
+      await storageService.delete(saved.key);
       throw error;
     }
   }
@@ -450,10 +427,8 @@ export class CraftProductsService {
   async downloadDesignFile(id: number, businessUnitId: number) {
     const design = await this.repository.getDesignFile(id, businessUnitId);
     if (!design) throw new NotFoundError('File desain tidak ditemukan.');
-    const filePath = resolveStoredPath(design.storage_path, DESIGN_UPLOAD_ROOT);
-    try { await fs.access(filePath); }
-    catch { throw new NotFoundError('Berkas desain tidak ditemukan pada penyimpanan.'); }
-    return { filePath, filename: path.basename(design.file_name).replace(/[\\/:*?"<>|]/g, '_') };
+    if (!await storageService.exists(design.storage_path)) throw new NotFoundError('Berkas desain tidak ditemukan pada penyimpanan.');
+    return { storageKey: design.storage_path, filename: String(design.file_name).replace(/[\\/:*?"<>|]/g, '_') };
   }
 
   async deleteDesignFile(id: number, actor: ProductActor) {
@@ -465,7 +440,7 @@ export class CraftProductsService {
       await this.repository.deleteDesignFile(id, connection);
       await this.audit(actor, 'design.delete', 'design_file', id, design.design_code, `Menghapus metadata file desain ${design.name}.`, design, null, connection);
     });
-    if (storagePath) await removeFileQuietly(resolveStoredPath(storagePath, DESIGN_UPLOAD_ROOT));
+    await storageService.delete(storagePath);
     return { message: 'File desain berhasil dihapus.' };
   }
 
