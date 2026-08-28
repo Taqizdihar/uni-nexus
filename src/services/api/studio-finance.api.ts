@@ -7,6 +7,16 @@ const query = (filters: Record<string, string | number | undefined> = {}) => {
   Object.entries(filters).forEach(([key, value]) => { if (value !== undefined && value !== '') params.set(key, String(value)); });
   return params.size ? `?${params}` : '';
 };
+const download = (blob: Blob, filename: string) => {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+};
 
 export const studioFinanceApi = {
   overview: () => api.get<FinanceOverview>(`${BASE}/overview`),
@@ -24,6 +34,9 @@ export const studioFinanceApi = {
   approveExpense: (id: number) => api.post<{ id: number; status_code: string }>(`${BASE}/expenses/${id}/approve`, {}),
   payExpense: (id: number, payload: { treasury_account_id: number; payment_date: string; reference_number?: string | null; direct_payment_confirmed?: boolean }) => api.post<{ id: number; transaction_id: number }>(`${BASE}/expenses/${id}/pay`, payload),
   reverseExpense: (id: number, payload: { reversal_date: string; reason: string }) => api.post<{ id: number; status_code: string; reversal_transaction_id: number }>(`${BASE}/expenses/${id}/reverse`, payload),
+  uploadExpenseReceipt: (id: number, file: File) => { const data = new FormData(); data.set('receipt', file); return api.post<{ receipt_path: string }>(`${BASE}/expenses/${id}/receipt`, data); },
+  downloadExpenseReceipt: async (id: number) => download(await api.getBlob(`${BASE}/expenses/${id}/receipt`), `expense-receipt-${id}`),
+  removeExpenseReceipt: (id: number) => api.delete<{ message: string }>(`${BASE}/expenses/${id}/receipt`),
   payables: () => api.get<FinancePayable[]>(`${BASE}/payables`),
   payout: (id: number, payload: { amount: number; payment_date: string; treasury_account_id: number; category_code?: string; description?: string | null }) => api.post<{ expense_id: number; transaction_id: number; payment_status_code: string; remaining: number }>(`${BASE}/external-assignments/${id}/payouts`, payload),
   profitability: () => api.get<ProjectProfitability[]>(`${BASE}/profitability`),

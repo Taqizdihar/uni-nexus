@@ -1,12 +1,7 @@
 import { Router } from 'express';
-import multer from 'multer';
-import path from 'path';
-import { mkdirSync } from 'fs';
-import { randomUUID } from 'crypto';
 import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
-import { AppError } from '../../shared/errors/AppError';
 import { StudioProjectsController } from './studio-projects.controller';
-import { DELIVERABLE_ALLOWED_EXTENSIONS, DELIVERABLE_MAX_BYTES, deliverableDirectory } from './studio-project-deliverables.service';
+import { getStoragePolicy, singleFileUpload } from '../../shared/storage';
 
 const router = Router();
 const controller = new StudioProjectsController();
@@ -16,34 +11,7 @@ const WRITE = requirePermission('studio.projects.write');
 /** Quick client creation crosses into the Clients domain, so it needs that permission too. */
 const CLIENT_WRITE = requirePermission('studio.clients.write');
 
-/** Deliverable names are randomized on disk; the original name is kept after `__` for display. */
-const safeOriginalName = (originalName: string) =>
-  path.basename(originalName).replace(/[^A-Za-z0-9._-]+/g, '_').slice(-120) || 'file';
-
-const deliverableUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, _file, callback) => {
-      const projectId = Number.parseInt(String(req.params.id || ''), 10);
-      if (!Number.isInteger(projectId) || projectId <= 0) {
-        callback(new AppError(400, 'INVALID_ID', 'ID proyek tidak valid.'), '');
-        return;
-      }
-      const target = deliverableDirectory(projectId);
-      mkdirSync(target, { recursive: true });
-      callback(null, target);
-    },
-    filename: (_req, file, callback) => callback(null, `${Date.now()}-${randomUUID().slice(0, 8)}__${safeOriginalName(file.originalname)}`),
-  }),
-  limits: { fileSize: DELIVERABLE_MAX_BYTES, files: 1 },
-  fileFilter: (_req, file, callback) => {
-    const extension = path.extname(file.originalname).toLowerCase();
-    if (!DELIVERABLE_ALLOWED_EXTENSIONS.has(extension)) {
-      callback(new AppError(400, 'UNSUPPORTED_DELIVERABLE', 'Jenis file tidak didukung. Gunakan PDF, gambar, ZIP, DOCX, XLSX, atau PPTX. Untuk media besar gunakan tautan eksternal.'));
-      return;
-    }
-    callback(null, true);
-  },
-});
+const deliverableUpload = singleFileUpload(getStoragePolicy('project_deliverable'), 'file');
 
 router.use(requireAuth);
 
@@ -83,7 +51,7 @@ router.post('/:id/deliverables', WRITE, controller.createDeliverable);
 router.get('/:id/deliverables/:deliverableId/download', READ, controller.downloadDeliverableFile);
 router.patch('/:id/deliverables/:deliverableId', WRITE, controller.updateDeliverable);
 router.post('/:id/deliverables/:deliverableId/status', WRITE, controller.changeDeliverableStatus);
-router.post('/:id/deliverables/:deliverableId/file', WRITE, deliverableUpload.single('file'), controller.uploadDeliverableFile);
+router.post('/:id/deliverables/:deliverableId/file', WRITE, deliverableUpload, controller.uploadDeliverableFile);
 router.delete('/:id/deliverables/:deliverableId', WRITE, controller.deleteDeliverable);
 
 router.post('/:id/externals', WRITE, controller.addExternalAssignment);

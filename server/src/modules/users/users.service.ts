@@ -1,5 +1,7 @@
+import { readFile } from 'fs/promises';
 import { pool } from '../../config/database';
-import { ValidationError, NotFoundError, UnauthorizedError } from '../../shared/errors/AppError';
+import { AppError, ValidationError, NotFoundError, UnauthorizedError } from '../../shared/errors/AppError';
+import { getStoragePolicy, normalizeAvatarImage, storageService, validateAgainstPolicy } from '../../shared/storage';
 import { UserResponse } from './users.types';
 import bcrypt from 'bcryptjs';
 
@@ -345,5 +347,64 @@ export class UsersService {
       'UPDATE users SET password_hash = ?, password_changed_at = CURRENT_TIMESTAMP(3), must_change_password = 0 WHERE id = ?',
       [password_hash, id]
     );
+  }
+
+  /**
+   * Validates the uploaded image, normalizes it to a 512x512 WEBP, and finalizes it before
+   * touching the database — if the `UPDATE` fails, the freshly written avatar is deleted so it
+   * never becomes an orphan. The previous avatar is only removed once the new one is committed.
+   */
+  static async uploadAvatar(userId: number, file: Express.Multer.File): Promise<{ avatar_path: string }> {
+    try {
+      const buffer = await readFile(file.path);
+      validateAgainstPolicy(getStoragePolicy('avatar'), {
+        originalName: file.originalname, mimeType: file.mimetype, sizeBytes: buffer.length, headBuffer: buffer,
+      });
+
+      let webp: Buffer;
+      try {
+        webp = await normalizeAvatarImage(buffer);
+      } catch {
+        throw new AppError(400, 'FILE_CONTENT_INVALID', 'Foto tidak dapat diproses. Pastikan file adalah gambar yang valid.');
+      }
+
+      const key = storageService.buildKey('avatars', '.webp');
+      const stored = await storageService.finalizeBuffer(key, webp);
+
+      let previousPath: string | null = null;
+      try {
+        const [users] = await pool.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL', [userId]);
+        if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+        previousPath = users[0].avatar_path;
+        await pool.execute('UPDATE users SET avatar_path = ? WHERE id = ?', [stored.key, userId]);
+      } catch (error) {
+        await storageService.deleteQuietly(stored.key);
+        throw error;
+      }
+
+      if (previousPath && previousPath !== stored.key) await storageService.deleteQuietly(previousPath);
+      await pool.execute(
+        'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "profile.avatar_update", "Foto profil diperbarui.")',
+        [userId],
+      );
+      return { avatar_path: stored.key };
+    } finally {
+      // The original upload is never finalized directly (its pixels are re-encoded into a new
+      // WEBP buffer instead), so the temp file always needs its own cleanup.
+      await storageService.discardTempFile(file.path);
+    }
+  }
+
+  static async removeAvatar(userId: number): Promise<void> {
+    const [users] = await pool.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL', [userId]);
+    if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+    const previousPath = users[0].avatar_path;
+    if (!previousPath) return;
+    await pool.execute('UPDATE users SET avatar_path = NULL WHERE id = ?', [userId]);
+    await pool.execute(
+      'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "profile.avatar_remove", "Foto profil dihapus.")',
+      [userId],
+    );
+    await storageService.deleteQuietly(previousPath);
   }
 }

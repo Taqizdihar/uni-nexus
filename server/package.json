@@ -21,6 +21,10 @@
     "smoke:studio-analytics": "tsx scripts/smoke-studio-analytics.ts",
     "smoke:studio-automations": "tsx scripts/smoke-studio-automations.ts",
     "smoke:dashboard": "tsx scripts/smoke-dashboard.ts",
+    "smoke:storage": "tsx scripts/smoke-storage.ts",
+    "storage:doctor": "tsx scripts/storage-doctor.ts",
+    "storage:orphan-scan": "tsx scripts/storage-orphan-scan.ts",
+    "storage:migrate": "tsx scripts/migrate-local-storage.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
@@ -35,6 +39,7 @@
     "browser:studio-analytics": "node scripts/browser-studio-analytics.mjs",
     "browser:studio-automations": "node scripts/browser-studio-automations.mjs",
     "browser:dashboard": "node scripts/browser-dashboard.mjs",
+    "browser:storage": "node scripts/browser-storage.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"
@@ -55,6 +60,7 @@
     "multer": "^2.2.0",
     "mysql2": "^3.23.4",
     "pdfkit": "^0.20.1",
+    "sharp": "^0.35.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {

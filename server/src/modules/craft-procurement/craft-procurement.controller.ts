@@ -600,27 +600,27 @@ export class CraftProcurementController {
     next: NextFunction,
   ) => {
     try {
-      const craft = await getCraftBusinessUnit();
-      const invoice = await this.repository.getSupplierInvoice(
+      const document = await this.service.getSupplierInvoiceDocument(
         id(req.params.id, "ID tagihan"),
-        craft,
+        await this.actor(req),
       );
-      if (!invoice)
-        throw new AppError(
-          404,
-          "SUPPLIER_INVOICE_NOT_FOUND",
-          "Tagihan pemasok tidak ditemukan.",
-        );
-      if (
-        !invoice.document_path ||
-        !String(invoice.document_path).startsWith("/uploads/")
-      )
-        throw new AppError(
-          404,
-          "INVOICE_DOCUMENT_NOT_AVAILABLE",
-          "Dokumen tagihan belum tersedia.",
-        );
-      res.redirect(String(invoice.document_path));
+      res.download(document.absolutePath, document.fileName, error => { if (error) next(error); });
+    } catch (error) {
+      next(error);
+    }
+  };
+  uploadInvoiceDocument = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const file = (req as any).file as Express.Multer.File | undefined;
+      if (!file) throw new AppError(400, "FILE_REQUIRED", "Pilih dokumen tagihan terlebih dahulu.");
+      sendSuccess(res, await this.service.uploadSupplierInvoiceDocument(id(req.params.id, "ID tagihan"), file, await this.actor(req)));
+    } catch (error) {
+      next(error);
+    }
+  };
+  removeInvoiceDocument = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      sendSuccess(res, await this.service.removeSupplierInvoiceDocument(id(req.params.id, "ID tagihan"), await this.actor(req)));
     } catch (error) {
       next(error);
     }

@@ -3,9 +3,11 @@ import {
   requireAuth,
   requirePermission,
 } from "../../middleware/auth.middleware";
+import { getStoragePolicy, singleFileUpload } from "../../shared/storage";
 import { CraftProcurementController } from "./craft-procurement.controller";
 
 const controller = new CraftProcurementController();
+const supplierInvoiceDocumentUpload = singleFileUpload(getStoragePolicy("supplier_invoice_document"), "document");
 export const craftProcurementRoutes = Router();
 craftProcurementRoutes.use(requireAuth);
 
@@ -192,6 +194,17 @@ craftProcurementRoutes.get(
   "/invoices/:id/document",
   requirePermission("craft.procurement.read"),
   controller.downloadInvoiceDocument,
+);
+craftProcurementRoutes.post(
+  "/invoices/:id/document",
+  requirePermission("craft.procurement.write"),
+  supplierInvoiceDocumentUpload,
+  controller.uploadInvoiceDocument,
+);
+craftProcurementRoutes.delete(
+  "/invoices/:id/document",
+  requirePermission("craft.procurement.write"),
+  controller.removeInvoiceDocument,
 );
 craftProcurementRoutes.post(
   "/invoices/:id/void",

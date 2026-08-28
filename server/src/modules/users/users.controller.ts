@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UsersService } from './users.service';
 import { sendSuccess } from '../../shared/utils/response';
 import { AuthRequest } from '../../middleware/auth.middleware';
+import { AppError } from '../../shared/errors/AppError';
 
 export class UsersController {
   static async getUsers(req: AuthRequest, res: Response, next: NextFunction) {
@@ -101,6 +102,26 @@ export class UsersController {
     try {
       await UsersService.changePassword(req.user.id, req.body);
       return sendSuccess(res, { message: 'Kata sandi berhasil diubah.' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async uploadAvatar(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const file = (req as any).file as Express.Multer.File | undefined;
+      if (!file) throw new AppError(400, 'FILE_REQUIRED', 'Pilih foto profil terlebih dahulu.');
+      const result = await UsersService.uploadAvatar(req.user.id, file);
+      return sendSuccess(res, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async removeAvatar(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      await UsersService.removeAvatar(req.user.id);
+      return sendSuccess(res, { message: 'Foto profil berhasil dihapus.' });
     } catch (error) {
       next(error);
     }

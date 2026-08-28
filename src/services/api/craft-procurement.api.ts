@@ -154,6 +154,13 @@ export const craftProcurementApi = {
       await api.getBlob(`${BASE}/invoices/${id}/document`),
       `supplier-invoice-${id}`,
     ),
+  uploadSupplierInvoiceDocument: (id: number, file: File) => {
+    const data = new FormData();
+    data.set("document", file);
+    return api.post<{ document_path: string }>(`${BASE}/invoices/${id}/document`, data);
+  },
+  removeSupplierInvoiceDocument: (id: number) =>
+    api.delete<{ message: string }>(`${BASE}/invoices/${id}/document`),
   getProcurementHistory: (
     filters: Record<string, string | number | undefined> = {},
   ) =>

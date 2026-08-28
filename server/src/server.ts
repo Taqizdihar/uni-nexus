@@ -1,8 +1,11 @@
 import app from './app';
 import { env } from './config/env';
 import { checkDatabaseConnection } from './config/database';
+import { bootstrapStorage } from './shared/storage';
 
 const startServer = async () => {
+  await bootstrapStorage();
+
   // Check DB connection on startup
   const isDbConnected = await checkDatabaseConnection();
   if (!isDbConnected) {

@@ -38,6 +38,20 @@ export class StudioFinanceController {
   approveExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.approveExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'))); } catch(error) { next(error); } };
   payExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.payExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),payExpenseSchema.parse(req.body))); } catch(error) { next(validation(error,'Data pembayaran pengeluaran tidak valid.')); } };
   reverseExpense = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.reverseExpense(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),reverseExpenseSchema.parse(req.body))); } catch(error) { next(validation(error,'Data pembalikan pengeluaran tidak valid.')); } };
+  uploadExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => {
+    try {
+      const file = (req as any).file as Express.Multer.File | undefined;
+      if (!file) throw new AppError(400, 'FILE_REQUIRED', 'Pilih bukti kwitansi terlebih dahulu.');
+      sendSuccess(res,await studioFinanceService.uploadExpenseReceipt(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'),file));
+    } catch(error) { next(error); }
+  };
+  downloadExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => {
+    try {
+      const receipt = await studioFinanceService.getExpenseReceipt(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'));
+      res.download(receipt.absolutePath, receipt.fileName, error => { if (error) next(error); });
+    } catch(error) { next(error); }
+  };
+  removeExpenseReceipt = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.removeExpenseReceipt(await this.ctx(req),parseFinanceId(req.params.id,'ID pengeluaran'))); } catch(error) { next(error); } };
   payables = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.payables(await this.ctx(req))); } catch(error) { next(error); } };
   payout = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.payExternalAssignment(await this.ctx(req),parseFinanceId(req.params.id,'ID penugasan'),externalPayoutSchema.parse(req.body)),undefined,201); } catch(error) { next(validation(error,'Data payout eksternal tidak valid.')); } };
   maintenance = async (req: Request,res: Response,next: NextFunction) => { try { sendSuccess(res,await studioFinanceService.payMaintenance(await this.ctx(req),parseFinanceId(req.params.id,'ID pemeliharaan'),maintenancePaymentSchema.parse(req.body)),undefined,201); } catch(error) { next(validation(error,'Data pembayaran pemeliharaan tidak valid.')); } };

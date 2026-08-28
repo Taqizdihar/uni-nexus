@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
-import { unlink } from 'fs/promises';
 import { CraftOrdersRepository } from './craft-orders.repository';
 import { CraftOrdersService } from './craft-orders.service';
 import { OrderDocumentsService } from './order-documents.service';
@@ -8,14 +7,13 @@ import { OrderPriorityService } from './order-priority.service';
 import { pool } from '../../config/database';
 import { sendSuccess } from '../../shared/utils/response';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { getStoragePolicy, sanitizeOriginalName, storageService } from '../../shared/storage';
 import {
   createOrderSchema, updateOrderStatusSchema, updateOrderPrioritySchema, updateOrderSchema,
   createInvoiceSchema, recordPaymentSchema, enqueueOrderItemsSchema, quickCreateCustomerSchema, saveOrderDraftSchema,
 } from './craft-orders.schema';
 import { getCraftBusinessUnit } from './craft-orders.helpers';
 import { z } from 'zod';
-
-export const ORDER_UPLOAD_ROOT = path.resolve(__dirname, '../../../uploads');
 
 const parseOrderId = (value: string): number => {
   const id = Number.parseInt(value, 10);
@@ -303,20 +301,31 @@ export class CraftOrdersController {
   };
 
   uploadAttachment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const file = (req as any).file as Express.Multer.File | undefined;
     try {
       const craft = await getCraftBusinessUnit();
       const orderId = parseOrderId(req.params.id as string);
       if (!await this.repository.getOrderById(orderId, craft.id)) throw new NotFoundError('Pesanan tidak ditemukan');
-      const file = (req as any).file as Express.Multer.File | undefined;
       if (!file) throw new AppError(400, 'ATTACHMENT_REQUIRED', 'Pilih file lampiran terlebih dahulu.');
-      const storagePath = path.relative(ORDER_UPLOAD_ROOT, file.path).split(path.sep).join('/');
-      const [result]: any = await pool.execute(
-        `INSERT INTO order_attachments (order_id, file_name, file_type, storage_path, file_size_bytes, attachment_type, uploaded_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [orderId, file.originalname, file.mimetype || null, storagePath, file.size, req.body.attachment_type || 'reference', (req as any).user.id],
-      );
-      sendSuccess(res, { id: Number(result.insertId), file_name: file.originalname, file_type: file.mimetype, file_size_bytes: file.size }, undefined, 201);
+
+      const key = storageService.buildKey('order-attachments', path.extname(file.originalname), orderId);
+      const stored = await storageService.saveUploadedFile({
+        tempFilePath: file.path, originalName: file.originalname, mimeType: file.mimetype,
+        policy: getStoragePolicy('order_attachment'), key,
+      });
+      try {
+        const [result]: any = await pool.execute(
+          `INSERT INTO order_attachments (order_id, file_name, file_type, storage_path, file_size_bytes, attachment_type, uploaded_by)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [orderId, file.originalname, file.mimetype || null, stored.key, stored.sizeBytes, req.body.attachment_type || 'reference', (req as any).user.id],
+        );
+        sendSuccess(res, { id: Number(result.insertId), file_name: file.originalname, file_type: file.mimetype, file_size_bytes: stored.sizeBytes }, undefined, 201);
+      } catch (error) {
+        await storageService.deleteQuietly(stored.key);
+        throw error;
+      }
     } catch (error) {
+      if (file && !res.headersSent) await storageService.discardTempFile(file.path);
       next(error);
     }
   };
@@ -332,9 +341,8 @@ export class CraftOrdersController {
         [attachmentId, craft.id],
       );
       if (!rows.length) throw new NotFoundError('Lampiran tidak ditemukan');
-      const filePath = path.resolve(ORDER_UPLOAD_ROOT, rows[0].storage_path);
-      if (!filePath.startsWith(ORDER_UPLOAD_ROOT + path.sep)) throw new AppError(400, 'INVALID_ATTACHMENT_PATH', 'Lokasi lampiran tidak valid.');
-      res.download(filePath, rows[0].file_name, (error) => { if (error) next(error); });
+      if (!(await storageService.exists(rows[0].storage_path))) throw new NotFoundError('Berkas lampiran tidak ditemukan pada penyimpanan.');
+      res.download(storageService.absolutePath(rows[0].storage_path), sanitizeOriginalName(rows[0].file_name), (error) => { if (error) next(error); });
     } catch (error) {
       next(error);
     }
@@ -352,8 +360,7 @@ export class CraftOrdersController {
       );
       if (!rows.length) throw new NotFoundError('Lampiran tidak ditemukan');
       await pool.execute('DELETE FROM order_attachments WHERE id = ?', [attachmentId]);
-      const filePath = path.resolve(ORDER_UPLOAD_ROOT, rows[0].storage_path);
-      if (filePath.startsWith(ORDER_UPLOAD_ROOT + path.sep)) await unlink(filePath).catch(() => undefined);
+      await storageService.deleteQuietly(rows[0].storage_path);
       sendSuccess(res, { message: 'Lampiran berhasil dihapus.' });
     } catch (error) {
       next(error);

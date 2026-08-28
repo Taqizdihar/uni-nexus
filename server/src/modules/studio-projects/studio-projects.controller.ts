@@ -268,7 +268,7 @@ export class StudioProjectsController {
       const file = (req as any).file;
       if (!file) throw new AppError(400, 'FILE_REQUIRED', 'File hasil kerja wajib diunggah.');
       const studio = await getStudioBusinessUnit();
-      sendSuccess(res, await studioProjectDeliverablesService.attachFile(this.projectId(req), parseNumericId(req.params.deliverableId, 'ID deliverable'), file.filename, actorId(req), studio));
+      sendSuccess(res, await studioProjectDeliverablesService.attachFile(this.projectId(req), parseNumericId(req.params.deliverableId, 'ID deliverable'), file, actorId(req), studio));
     } catch (error) { next(error); }
   };
 

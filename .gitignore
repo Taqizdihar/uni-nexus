@@ -6,10 +6,21 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Canonical local storage root — never commit user/business files. Only .gitkeep is tracked;
+# category subdirectories (avatars/, products/, designs/, ...) are created at runtime.
+server/uploads/**
+!server/uploads/.gitkeep
+
+artifacts/craft-materials-browser-*/
+
+# Legacy storage roots predating the shared StorageService. Active code no longer writes here,
+# but the rules stay until any pre-existing local files from these paths are confirmed migrated
+# or removed (see server/scripts/migrate-local-storage.ts).
 server/uploads/products/
 server/uploads/designs/
 uploads/products/
 uploads/designs/
-artifacts/craft-materials-browser-*/
 server/storage/tmp/marketplace/
 server/storage/studio/
+server/storage/

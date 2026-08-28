@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
+import { getAvatarUrl } from '../../lib/storage';
 
 interface UserAvatarProps {
   user: { id?: number; full_name?: string; avatar_path?: string | null };
@@ -15,8 +16,10 @@ export function UserAvatar({ user, size = 'md', className }: UserAvatarProps) {
   const [broken, setBroken] = useState(false);
   const dimensions = { sm: 'w-6 h-6 text-[9px]', md: 'w-8 h-8 text-[11px]', lg: 'w-10 h-10 text-xs' };
   const color = colors[hash(`${user.id || ''}:${user.full_name || ''}`) % colors.length];
-  if (user.avatar_path && !broken) {
-    return <img src={user.avatar_path} alt="" onError={() => setBroken(true)} className={cn('rounded-full object-cover shrink-0', dimensions[size], className)} />;
+  const avatarUrl = getAvatarUrl(user.avatar_path);
+  useEffect(() => setBroken(false), [avatarUrl]);
+  if (avatarUrl && !broken) {
+    return <img src={avatarUrl} alt="" onError={() => setBroken(true)} className={cn('rounded-full object-cover shrink-0', dimensions[size], className)} />;
   }
   return <span aria-hidden="true" className={cn('rounded-full shrink-0 inline-flex items-center justify-center text-white font-bold', color, dimensions[size], className)}>{initials(user.full_name)}</span>;
 }

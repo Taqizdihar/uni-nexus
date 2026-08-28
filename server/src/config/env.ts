@@ -14,7 +14,11 @@ const envSchema = z.object({
   JWT_SECRET: z.string().default('change-this-development-secret'),
   JWT_EXPIRES_IN: z.string().default('8h'),
   CLIENT_URL: z.string().default('http://localhost:5173'),
+  // UPLOAD_DIR is deprecated in favor of STORAGE_DIR; kept so existing local .env files keep working.
   UPLOAD_DIR: z.string().default('uploads'),
+  STORAGE_DRIVER: z.enum(['local']).default('local'),
+  STORAGE_DIR: z.string().optional(),
+  STORAGE_PUBLIC_BASE_URL: z.string().default('/uploads'),
   BOOTSTRAP_CTO_EMAIL: z.string().email().optional(),
 });
 
@@ -25,4 +29,8 @@ if (!_env.success) {
   process.exit(1);
 }
 
-export const env = _env.data;
+export const env = {
+  ..._env.data,
+  // STORAGE_DIR wins when set; otherwise fall back to the legacy UPLOAD_DIR value.
+  STORAGE_DIR: _env.data.STORAGE_DIR || _env.data.UPLOAD_DIR,
+};

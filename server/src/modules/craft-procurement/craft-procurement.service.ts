@@ -1,7 +1,9 @@
 import { randomUUID } from "crypto";
+import path from "path";
 import { pool } from "../../config/database";
 import { AppError } from "../../shared/errors/AppError";
 import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
+import { getStoragePolicy, sanitizeOriginalName, storageService } from "../../shared/storage";
 import type { BusinessUnitContext } from "../craft-orders/craft-orders.helpers";
 import { CraftProcurementRepository } from "./craft-procurement.repository";
 import type {
@@ -1609,5 +1611,100 @@ export class CraftProcurementService {
     } finally {
       connection.release();
     }
+  }
+
+  async uploadSupplierInvoiceDocument(
+    id: number,
+    file: Express.Multer.File,
+    actor: ProcurementActor,
+  ) {
+    const key = storageService.buildKey(
+      "supplier-invoices",
+      path.extname(file.originalname),
+      id,
+    );
+    const stored = await storageService.saveUploadedFile({
+      tempFilePath: file.path,
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      policy: getStoragePolicy("supplier_invoice_document"),
+      key,
+    });
+
+    let previousPath: string | null = null;
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      const [rows]: any = await connection.execute(
+        "SELECT * FROM supplier_invoices WHERE id=? AND business_unit_id=? FOR UPDATE",
+        [id, actor.id],
+      );
+      if (!rows.length)
+        throw new AppError(404, "SUPPLIER_INVOICE_NOT_FOUND", "Tagihan pemasok tidak ditemukan.");
+      const invoice = rows[0];
+      previousPath = invoice.document_path;
+      await connection.execute("UPDATE supplier_invoices SET document_path=? WHERE id=?", [stored.key, id]);
+      await this.audit(
+        connection, actor, "supplier_invoice.document_upload", "supplier_invoice", id, invoice.supplier_invoice_number,
+        `Mengunggah dokumen tagihan pemasok ${invoice.supplier_invoice_number}.`,
+        { document_path: previousPath }, { document_path: stored.key },
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      await storageService.deleteQuietly(stored.key);
+      throw error;
+    } finally {
+      connection.release();
+    }
+    if (previousPath && previousPath !== stored.key) await storageService.deleteQuietly(previousPath);
+    return { document_path: stored.key };
+  }
+
+  async getSupplierInvoiceDocument(id: number, actor: ProcurementActor) {
+    const [rows]: any = await pool.execute(
+      "SELECT supplier_invoice_number,document_path FROM supplier_invoices WHERE id=? AND business_unit_id=?",
+      [id, actor.id],
+    );
+    if (!rows.length) throw new AppError(404, "SUPPLIER_INVOICE_NOT_FOUND", "Tagihan pemasok tidak ditemukan.");
+    const documentPath = rows[0].document_path;
+    // Older rows may still carry a static-URL-style value rather than a canonical storage key.
+    if (!documentPath || !(await storageService.exists(documentPath))) {
+      throw new AppError(404, "INVOICE_DOCUMENT_NOT_AVAILABLE", "Dokumen tagihan belum tersedia.");
+    }
+    const fileName = sanitizeOriginalName(`${rows[0].supplier_invoice_number}${path.extname(documentPath)}`);
+    return { absolutePath: storageService.absolutePath(documentPath), fileName };
+  }
+
+  async removeSupplierInvoiceDocument(id: number, actor: ProcurementActor) {
+    let removedPath: string | null = null;
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      const [rows]: any = await connection.execute(
+        "SELECT * FROM supplier_invoices WHERE id=? AND business_unit_id=? FOR UPDATE",
+        [id, actor.id],
+      );
+      if (!rows.length)
+        throw new AppError(404, "SUPPLIER_INVOICE_NOT_FOUND", "Tagihan pemasok tidak ditemukan.");
+      const invoice = rows[0];
+      removedPath = invoice.document_path;
+      if (removedPath) {
+        await connection.execute("UPDATE supplier_invoices SET document_path=NULL WHERE id=?", [id]);
+        await this.audit(
+          connection, actor, "supplier_invoice.document_remove", "supplier_invoice", id, invoice.supplier_invoice_number,
+          `Menghapus dokumen tagihan pemasok ${invoice.supplier_invoice_number}.`,
+          { document_path: removedPath }, { document_path: null },
+        );
+      }
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    if (removedPath) await storageService.deleteQuietly(removedPath);
+    return { message: "Dokumen tagihan pemasok berhasil dihapus." };
   }
 }

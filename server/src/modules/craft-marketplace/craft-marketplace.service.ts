@@ -8,6 +8,7 @@ import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import { CraftOrdersService } from '../craft-orders/craft-orders.service';
 import { marketplaceConnectorRegistry } from '../../shared/integrations/marketplace/MarketplaceConnectorRegistry';
+import { TEMP_DIR } from '../../shared/storage';
 import type { ImportColumnMapping, NormalizedImportItem, NormalizedImportOrder } from './craft-marketplace.types';
 
 type Connection = Awaited<ReturnType<typeof pool.getConnection>>;
@@ -23,7 +24,8 @@ interface ImportPreviewRecord {
   orders: NormalizedImportOrder[];
 }
 
-const IMPORT_ROOT = path.resolve(__dirname, '../../../storage/tmp/marketplace');
+/** A short-lived (45 min) CSV/XLSX import scratch buffer — not a domain file, so it lives under the shared temp root rather than getting its own category. */
+const IMPORT_ROOT = path.join(TEMP_DIR, 'marketplace-import');
 const IMPORT_EXPIRY_MS = 45 * 60 * 1000;
 const MAX_IMPORT_ROWS = 5000;
 const importPreviews = new Map<string, ImportPreviewRecord>();

@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { getStoragePolicy, singleFileUpload } from '../../shared/storage';
 import { StudioFinanceController } from './studio-finance.controller';
 
 const controller = new StudioFinanceController();
 const READ = requirePermission('studio.finance.read');
 const WRITE = requirePermission('studio.finance.write');
+const receiptUpload = singleFileUpload(getStoragePolicy('expense_receipt'), 'receipt');
 
 export const studioFinanceRoutes = Router();
 studioFinanceRoutes.use(requireAuth);
@@ -15,6 +17,7 @@ studioFinanceRoutes.get('/transactions',READ,controller.transactions);
 studioFinanceRoutes.get('/treasury',READ,controller.treasury);
 studioFinanceRoutes.get('/receivables',READ,controller.receivables);
 studioFinanceRoutes.get('/expenses',READ,controller.expenses);
+studioFinanceRoutes.get('/expenses/:id/receipt',READ,controller.downloadExpenseReceipt);
 studioFinanceRoutes.get('/payables',READ,controller.payables);
 studioFinanceRoutes.get('/profitability',READ,controller.profitability);
 studioFinanceRoutes.get('/cash-flow',READ,controller.cashFlow);
@@ -30,6 +33,8 @@ studioFinanceRoutes.post('/expenses',WRITE,controller.createExpense);
 studioFinanceRoutes.post('/expenses/:id/approve',WRITE,controller.approveExpense);
 studioFinanceRoutes.post('/expenses/:id/pay',WRITE,controller.payExpense);
 studioFinanceRoutes.post('/expenses/:id/reverse',WRITE,controller.reverseExpense);
+studioFinanceRoutes.post('/expenses/:id/receipt',WRITE,receiptUpload,controller.uploadExpenseReceipt);
+studioFinanceRoutes.delete('/expenses/:id/receipt',WRITE,controller.removeExpenseReceipt);
 studioFinanceRoutes.post('/external-assignments/:id/payouts',WRITE,controller.payout);
 studioFinanceRoutes.post('/maintenance/:id/pay',WRITE,controller.maintenance);
 studioFinanceRoutes.post('/budgets',WRITE,controller.createBudget);
