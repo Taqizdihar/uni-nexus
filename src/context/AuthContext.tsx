@@ -22,7 +22,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (token: string, user: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   hasPermission: (code: string) => boolean;
 }
@@ -38,7 +38,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(userData);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const sessionKey = sessionStorage.getItem('uni-nexus.presence.session');
+    if (sessionKey && localStorage.getItem('token')) {
+      try { await api.post('/presence/leave', { session_key: sessionKey }); } catch { /* TTL handles an unavailable server. */ }
+    }
     localStorage.removeItem('token');
     setUser(null);
   };
@@ -56,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(userData);
     } catch (error) {
       console.error('Auth check failed:', error);
-      logout();
+      void logout();
     } finally {
       setIsLoading(false);
     }

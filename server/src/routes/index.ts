@@ -26,6 +26,8 @@ import { studioVendorsRoutes } from '../modules/studio-vendors/studio-vendors.ro
 import { studioFinanceRoutes } from '../modules/studio-finance/studio-finance.routes';
 import { studioAnalyticsRoutes } from '../modules/studio-analytics/studio-analytics.routes';
 import { studioAutomationsRoutes } from '../modules/studio-automations/studio-automations.routes';
+import { dashboardRoutes } from '../modules/dashboard/dashboard.routes';
+import { presenceRoutes } from '../modules/presence/presence.routes';
 
 const router = Router();
 
@@ -42,6 +44,8 @@ router.get('/health', async (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/profile', profileRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/presence', presenceRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

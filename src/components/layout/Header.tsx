@@ -5,6 +5,8 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import studioLogo from '../../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Light Mode.png';
 import craftLogo from '../../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
+import { ActiveUsersPresence } from './ActiveUsersPresence';
+import { UserAvatar } from '../common/UserAvatar';
 
 export function Header() {
   const { activeWorkspace, setWorkspace } = useWorkspace();
@@ -62,9 +64,9 @@ export function Header() {
   }, []);
 
   return (
-    <header className="h-16 bg-white border-b border-[var(--nexus-border)] flex items-center justify-between px-6 shrink-0 z-20">
+    <header className="h-16 bg-white border-b border-[var(--nexus-border)] flex items-center justify-between px-3 sm:px-6 shrink-0 z-20 gap-3">
       <div className="flex-1 flex items-center gap-4">
-        <div className="relative w-96 group">
+        <div className="relative w-full max-w-96 group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[var(--nexus-yellow-deep)] transition-colors" />
           <input 
             id="global-search"
@@ -79,16 +81,18 @@ export function Header() {
         </div>
       </div>
       
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <ActiveUsersPresence />
         <button 
           onClick={handleWorkspaceToggle}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 hover:border-[var(--nexus-yellow)] hover:bg-[var(--nexus-cream-soft)] transition-all group"
+          data-testid="workspace-switch"
+          className="flex items-center gap-2 px-2 sm:px-4 py-1.5 rounded-full bg-white border border-gray-200 hover:border-[var(--nexus-yellow)] hover:bg-[var(--nexus-cream-soft)] transition-all group"
           title="Ganti Workspace"
         >
           <ArrowLeftRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-[var(--nexus-charcoal)] transition-colors" />
           <span className="text-xs text-gray-500 font-medium tracking-wide flex items-center gap-1.5">
             Workspace: 
-            <span className="text-[var(--nexus-charcoal)] font-bold flex items-center gap-1">
+            <span className="hidden md:flex text-[var(--nexus-charcoal)] font-bold items-center gap-1">
               {activeWorkspace === 'craft' ? (
                 <>
                   <img src={craftLogo} alt="Craft Logo" className="h-4 w-auto" />
@@ -111,11 +115,7 @@ export function Header() {
         
         <div className="relative group cursor-pointer">
           <button className="text-gray-500 hover:text-[var(--nexus-charcoal)] transition-colors flex items-center">
-            {user?.avatar_path ? (
-               <img src={user.avatar_path} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
-            ) : (
-               <UserCircle className="w-6 h-6" />
-            )}
+            {user ? <UserAvatar user={user} size="md" /> : <UserCircle className="w-6 h-6" />}
           </button>
           <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-1">
              <div className="px-4 py-2 border-b border-gray-50">

@@ -1,362 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
-import { formatCurrency } from '../../lib/utils';
-import { mockKPIs, revenueData, mockOrders, mockProjects, mockPrinters } from '../../data/mock';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, ArrowDownToLine, BadgeDollarSign, ExternalLink, ShoppingBag, Store, Folder } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { AlertCircle, ArrowDownRight, ArrowUpRight, BadgeDollarSign, ExternalLink, Folder, LockKeyhole, RefreshCw, ShoppingBag, Store, TrendingUp, Wallet, ArrowDownToLine, Link as LinkIcon } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { Link } from 'react-router-dom';
-import { craftMaterialsApi } from '../../services/api/craft-materials.api';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
+import { dashboardApi } from '../../services/api/dashboard.api';
+import type { DashboardKpi, DashboardOverview, DashboardRange } from '../../types/dashboard';
 
-function KPICard({ title, value, icon: Icon, trend, isGood, emphasize = false }: any) {
-  return (
-    <Card className={emphasize ? "border-[var(--nexus-yellow)] shadow-sm" : ""}>
-      <CardContent className="p-5">
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-[var(--nexus-muted)] uppercase tracking-wider">{title}</p>
-            <p className="text-2xl font-bold text-[var(--nexus-charcoal)]">{value}</p>
-          </div>
-          <div className={`p-2.5 rounded-lg ${emphasize ? 'bg-[var(--nexus-yellow)] text-black' : 'bg-gray-100 text-gray-600'}`}>
-            <Icon className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="mt-4 flex items-center gap-1.5 text-xs">
-          {trend.startsWith('+') ? (
-            <ArrowUpRight className={`w-3.5 h-3.5 ${isGood ? 'text-emerald-500' : 'text-red-500'}`} />
-          ) : (
-            <ArrowDownRight className={`w-3.5 h-3.5 ${isGood ? 'text-emerald-500' : 'text-red-500'}`} />
-          )}
-          <span className={isGood ? "text-emerald-600 font-medium" : "text-red-600 font-medium"}>
-            {trend.replace('+', '').replace('-', '')} {trend.startsWith('+') ? 'lebih tinggi' : 'lebih rendah'}
-          </span>
-          <span className="text-gray-400">vs bulan lalu</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
+const formatCurrency = (value: number, code = 'IDR') => new Intl.NumberFormat('id-ID', { style: 'currency', currency: code, maximumFractionDigits: code === 'IDR' ? 0 : 2 }).format(value || 0);
+const compactCurrency = (value: number, code = 'IDR') => new Intl.NumberFormat('id-ID', { style: 'currency', currency: code, notation: 'compact', maximumFractionDigits: 1 }).format(value || 0);
+const formatDateTime = (value: string | null) => value ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Jakarta' }).format(new Date(value)) : '—';
+const statusLabel = (value: string) => value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+function KpiCard({ item, icon: Icon }: { item?: DashboardKpi; icon: React.ElementType }) {
+  if (!item) return <Card className="border-gray-200"><CardContent className="p-5"><div className="flex justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Data Keuangan</p><p className="mt-2 text-sm text-gray-500">Tidak diizinkan</p></div><LockKeyhole className="w-5 h-5 text-gray-400" /></div></CardContent></Card>;
+  const comparison = item.comparison;
+  const delta = comparison?.delta_percent;
+  const positive = (comparison?.delta_value || 0) >= 0;
+  const directionGood = item.key === 'total_expenses' ? (comparison?.delta_value || 0) <= 0 : positive;
+  return <Card className={item.key === 'net_result' ? 'border-[var(--nexus-yellow)] shadow-sm' : ''}><CardContent className="p-5"><div className="flex justify-between gap-3"><div className="min-w-0"><p className="text-xs font-semibold text-[var(--nexus-muted)] uppercase tracking-wider">{item.label}</p><p className="mt-1 text-xl font-bold text-[var(--nexus-charcoal)] truncate" title={formatCurrency(item.value, item.currency_code)}>{formatCurrency(item.value, item.currency_code)}</p></div><div className="p-2.5 rounded-lg bg-gray-100 text-gray-600 shrink-0"><Icon className="w-5 h-5" /></div></div><div className="mt-4 flex items-center gap-1.5 text-xs min-h-4">{comparison ? <>{positive ? <ArrowUpRight className={directionGood ? 'w-3.5 h-3.5 text-emerald-500' : 'w-3.5 h-3.5 text-red-500'} /> : <ArrowDownRight className={directionGood ? 'w-3.5 h-3.5 text-emerald-500' : 'w-3.5 h-3.5 text-red-500'} />}<span className={directionGood ? 'font-medium text-emerald-600' : 'font-medium text-red-600'}>{delta === null ? 'Tanpa persentase pembanding' : `${Math.abs(delta).toFixed(1)}% dibanding periode sebelumnya`}</span></> : <span className="text-gray-400">Saldo saat ini</span>}</div></CardContent></Card>;
+}
+
+function SummaryRow({ label, value, tone }: { label: string; value?: number; tone?: string }) {
+  return <div className="flex justify-between items-center text-sm gap-3"><span className="text-gray-600">{label}</span><span className={`font-bold ${tone || ''}`}>{value === undefined ? '—' : value}</span></div>;
 }
 
 export function Dashboard() {
-  const [lowMaterialCount, setLowMaterialCount] = useState<number | null>(null);
-  useEffect(() => { void craftMaterialsApi.getLowStock().then((items) => setLowMaterialCount(items.length)).catch(() => setLowMaterialCount(null)); }, []);
-  const formatChartYAxis = (val: number) => {
-    if (val >= 1000000) return `Rp${(val / 1000000).toFixed(1)} jt`;
-    if (val >= 1000) return `Rp${val / 1000}k`;
-    return `Rp${val}`;
-  };
-
-  const activePrinter = mockPrinters.find(p => p.status === 'Busy');
-
-  return (
-    <div className="space-y-6 pb-12">
-      {/* Row 1: Header + Date Range */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Dasbor Global</h1>
-          <p className="text-sm text-[var(--nexus-muted)] mt-1">Ringkasan terpadu seluruh operasional Uni-Inside.</p>
-        </div>
-        <div className="flex gap-2">
-          <select className="bg-white border border-gray-200 rounded-md px-4 py-2 text-sm font-medium text-gray-700 outline-none focus:border-[var(--nexus-yellow)] shadow-sm">
-            <option>Hari Ini</option>
-            <option>Minggu Ini</option>
-            <option>Bulan Ini</option>
-            <option>Tahun Ini</option>
-            <option>Rentang Tanggal</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Row 2: KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard 
-          title="Total Kas" 
-          value={formatCurrency(mockKPIs.totalCash)} 
-          icon={Wallet} 
-          trend="+12.5%" 
-          isGood={true} 
-        />
-        <KPICard 
-          title="Pendapatan Kotor" 
-          value={formatCurrency(mockKPIs.grossRevenue)} 
-          icon={TrendingUp} 
-          trend="+8.2%" 
-          isGood={true} 
-        />
-        <KPICard 
-          title="Total Pengeluaran" 
-          value={formatCurrency(mockKPIs.totalExpenses)} 
-          icon={ArrowDownToLine} 
-          trend="-2.4%" 
-          isGood={true} 
-          emphasize={true}
-        />
-        <KPICard 
-          title="Pendapatan Bersih" 
-          value={formatCurrency(mockKPIs.netIncome)} 
-          icon={BadgeDollarSign} 
-          trend="+15.3%" 
-          isGood={true} 
-          emphasize={true}
-        />
-      </div>
-
-      {/* Row 3: Revenue Breakdown + Cash Flow */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 flex flex-col">
-          <CardHeader>
-            <CardTitle>Rincian Pendapatan</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 pt-6 min-h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E8E2D7" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#737373', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#737373', fontSize: 12}} tickFormatter={formatChartYAxis} />
-                <Tooltip 
-                  cursor={{fill: '#F5F1E8'}}
-                  contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}
-                  formatter={(value: number) => formatCurrency(value)}
-                />
-                <Legend iconType="circle" wrapperStyle={{paddingTop: '20px'}}/>
-                <Bar dataKey="Craft" fill="#FFD43B" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                <Bar dataKey="Studio" fill="#202020" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Ringkasan Arus Kas</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col justify-center gap-6">
-             <div className="space-y-2">
-               <div className="flex justify-between text-sm">
-                 <span className="text-gray-500">Pemasukan (In)</span>
-                 <span className="font-semibold text-emerald-600">{formatCurrency(120000000)}</span>
-               </div>
-               <div className="w-full bg-gray-100 rounded-full h-2">
-                  <div className="bg-emerald-500 h-2 rounded-full w-[70%]" />
-               </div>
-             </div>
-             
-             <div className="space-y-2">
-               <div className="flex justify-between text-sm">
-                 <span className="text-gray-500">Pengeluaran (Out)</span>
-                 <span className="font-semibold text-red-600">{formatCurrency(85000000)}</span>
-               </div>
-               <div className="w-full bg-gray-100 rounded-full h-2">
-                  <div className="bg-red-500 h-2 rounded-full w-[45%]" />
-               </div>
-             </div>
-
-             <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-               <span className="text-sm font-medium text-[var(--nexus-charcoal)]">Arus Bersih</span>
-               <span className="text-lg font-bold text-emerald-600">{formatCurrency(35000000)}</span>
-             </div>
-             
-             <Link to="/app/finance">
-               <Button variant="outline" className="w-full mt-2 text-xs">Lihat Laporan Bendahara</Button>
-             </Link>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Row 4: Operational Overviews */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Craft Overview */}
-        <Card>
-          <CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50">
-            <CardTitle className="text-sm">Ringkasan Craft</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 space-y-3">
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Pesanan Masuk</span>
-               <span className="font-bold">12</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Menunggu Produksi</span>
-               <span className="font-bold">8</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Sedang Dicetak</span>
-               <span className="font-bold text-[var(--nexus-yellow-deep)]">2</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Terlambat</span>
-               <span className="font-bold text-red-500">1</span>
-             </div>
-             <div className="flex justify-between items-center text-sm pt-2 border-t border-gray-100">
-               <span className="text-gray-600">Stok Mat. Menipis</span>
-               <span className="font-bold text-amber-500">{lowMaterialCount ?? '—'}</span>
-             </div>
-          </CardContent>
-        </Card>
-
-        {/* Studio Overview */}
-        <Card>
-          <CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50">
-            <CardTitle className="text-sm">Ringkasan Studio</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 space-y-3">
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Proyek Aktif</span>
-               <span className="font-bold">5</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Tenggat Mendekat</span>
-               <span className="font-bold text-amber-500">2</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Proyek Belum Lunas</span>
-               <span className="font-bold text-red-500">1</span>
-             </div>
-             <div className="flex justify-between items-center text-sm">
-               <span className="text-gray-600">Selesai (Bln)</span>
-               <span className="font-bold">4</span>
-             </div>
-          </CardContent>
-        </Card>
-
-        {/* Production Overview */}
-        <Card>
-          <CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50">
-            <CardTitle className="text-sm">Ringkasan Produksi</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 flex flex-col h-full">
-            {activePrinter ? (
-              <div className="space-y-4">
-                <div>
-                   <p className="text-xs text-gray-500 mb-1">Printer Aktif</p>
-                   <p className="font-semibold text-[var(--nexus-charcoal)] text-sm">{activePrinter.name}</p>
-                </div>
-                <div>
-                   <p className="text-xs text-gray-500 mb-1">Pekerjaan Saat Ini</p>
-                   <p className="font-medium text-[var(--nexus-charcoal)] text-sm">{activePrinter.currentJob}</p>
-                </div>
-                <div className="pt-2">
-                   <div className="flex justify-between text-xs mb-1.5">
-                     <span className="font-medium">{activePrinter.progress}% Selesai</span>
-                     <span className="text-gray-500">Est: {activePrinter.estimatedCompletion}</span>
-                   </div>
-                   <div className="w-full bg-gray-100 rounded-full h-1.5">
-                     <div 
-                        className="bg-[var(--nexus-yellow-deep)] h-1.5 rounded-full" 
-                        style={{ width: `${activePrinter.progress}%` }}
-                     />
-                   </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex-1 flex items-center justify-center text-sm text-gray-400">
-                Semua printer diam.
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Row 5: Requires Attention & Quick Access */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-amber-200">
-          <CardHeader className="py-4 border-b border-amber-100 bg-amber-50/30">
-            <CardTitle className="text-base text-amber-900">Perlu Perhatian</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 space-y-3">
-            <div className="flex items-start gap-3 p-2 hover:bg-amber-50/50 rounded transition-colors cursor-pointer">
-              <div className="w-2 h-2 mt-1.5 rounded-full bg-red-500 shrink-0" />
-              <p className="text-sm text-amber-900 leading-tight">Pesanan <span className="font-bold">NX-102</span> mungkin melewati tenggat hari ini.</p>
-            </div>
-            <div className="flex items-start gap-3 p-2 hover:bg-amber-50/50 rounded transition-colors cursor-pointer">
-              <div className="w-2 h-2 mt-1.5 rounded-full bg-amber-500 shrink-0" />
-              <p className="text-sm text-amber-900 leading-tight">PLA Black tersisa: 140g (Stok Menipis).</p>
-            </div>
-            <div className="flex items-start gap-3 p-2 hover:bg-amber-50/50 rounded transition-colors cursor-pointer">
-              <div className="w-2 h-2 mt-1.5 rounded-full bg-amber-500 shrink-0" />
-              <p className="text-sm text-amber-900 leading-tight">Invoice PRJ-2407-15 menunggu pembayaran akhir.</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50">
-            <CardTitle className="text-base">Akses Cepat</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 grid grid-cols-2 gap-3">
-            <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)] transition-colors">
-              <ShoppingBag className="w-4 h-4 text-orange-500" />
-              Shopee
-            </a>
-            <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)] transition-colors">
-              <Store className="w-4 h-4 text-black" />
-              TikTok Shop
-            </a>
-            <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)] transition-colors">
-              <Store className="w-4 h-4 text-green-500" />
-              Tokopedia
-            </a>
-            <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)] transition-colors">
-              <Folder className="w-4 h-4 text-blue-500" />
-              Google Drive
-            </a>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Row 6: Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between py-4">
-            <CardTitle className="text-base">Pesanan Craft Terbaru</CardTitle>
-            <Link to="/app/craft/orders" className="text-xs font-medium text-[var(--nexus-muted)] hover:text-black">Lihat Semua</Link>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-[var(--nexus-border)]">
-              {mockOrders.slice(0,3).map(order => (
-                <div key={order.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div>
-                    <p className="font-semibold text-sm text-[var(--nexus-charcoal)]">{order.id} - {order.product}</p>
-                    <p className="text-xs text-gray-500 mt-1">{order.customer} • {order.channel}</p>
-                  </div>
-                  <div className="text-right">
-                    <Badge variant={order.status === 'Sedang Diproduksi' || order.status === 'In Production' ? 'warning' : order.status === 'Selesai' || order.status === 'Completed' ? 'success' : 'default'} className="mb-1.5">
-                      {order.status}
-                    </Badge>
-                    <p className="text-xs font-medium text-gray-700">{formatCurrency(order.total)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between py-4">
-            <CardTitle className="text-base">Proyek Studio Aktif</CardTitle>
-            <Link to="/app/studio/projects" className="text-xs font-medium text-[var(--nexus-muted)] hover:text-black">Lihat Semua</Link>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-[var(--nexus-border)]">
-              {mockProjects.slice(0,3).map(project => (
-                <div key={project.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div>
-                    <p className="font-semibold text-sm text-[var(--nexus-charcoal)]">{project.id} - {project.client}</p>
-                    <p className="text-xs text-gray-500 mt-1">{project.type} • Tenggat {project.deadline}</p>
-                  </div>
-                  <div className="text-right">
-                    <Badge variant={project.status === 'Selesai' || project.status === 'Completed' ? 'success' : project.status === 'Tinjauan' || project.status === 'Review' ? 'info' : 'warning'} className="mb-1.5">
-                      {project.status}
-                    </Badge>
-                    <p className="text-xs font-medium text-gray-700">{formatCurrency(project.value)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [range, setRange] = useState<DashboardRange>('month');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState('');
+  const [data, setData] = useState<DashboardOverview | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async (signal?: AbortSignal) => {
+    setLoading(true); setError(null);
+    try {
+      const response = await dashboardApi.overview({ range, start_date: range === 'custom' ? startDate || undefined : undefined, end_date: range === 'custom' ? endDate || undefined : undefined, currency: selectedCurrency || undefined }, signal);
+      setData(response); if (!selectedCurrency && response.selected_currency) setSelectedCurrency(response.selected_currency);
+    } catch (reason: any) { if (reason?.name !== 'AbortError') setError(reason?.message || 'Dasbor tidak dapat dimuat.'); }
+    finally { if (!signal?.aborted) setLoading(false); }
+  }, [range, startDate, endDate, selectedCurrency]);
+  useEffect(() => { const controller = new AbortController(); void load(controller.signal); return () => controller.abort(); }, [load]);
+  useEffect(() => { const interval = window.setInterval(() => { if (!document.hidden) void load(); }, 60_000); return () => window.clearInterval(interval); }, [load]);
+  const kpis = useMemo(() => new Map((data?.kpis || []).map(item => [item.key, item])), [data]);
+  const cash = data?.cash_flow;
+  const cashMax = Math.max(cash?.cash_in || 0, cash?.cash_out || 0, 1);
+  const chart = data?.revenue_breakdown;
+  const iconMap: Record<string, React.ElementType> = { shopping_bag: ShoppingBag, store: Store, folder: Folder, link: LinkIcon };
+  const onRange = (value: DashboardRange) => { if (value === 'custom' && !startDate && !endDate) { const today = new Date().toISOString().slice(0, 10); setStartDate(today); setEndDate(today); } setRange(value); };
+  if (error) return <div className="min-h-[360px] grid place-items-center"><Card className="max-w-md"><CardContent className="p-8 text-center"><AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" /><h1 className="font-bold text-lg">Dasbor tidak dapat dimuat</h1><p className="text-sm text-gray-500 mt-2">{error}</p><Button className="mt-5" onClick={() => void load()}><RefreshCw className="w-4 h-4" />Coba Lagi</Button></CardContent></Card></div>;
+  if (loading && !data) return <div className="space-y-6 animate-pulse"><div className="h-16 bg-gray-200 rounded-xl" /><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-36 bg-gray-200 rounded-xl" />)}</div><div className="h-72 bg-gray-200 rounded-xl" /></div>;
+  return <div className="space-y-6 pb-12">
+    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4"><div><h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">Dasbor Global</h1><p className="text-sm text-[var(--nexus-muted)] mt-1">Ringkasan terpadu seluruh operasional Uni-Inside.</p>{data?.generated_at && <p className="text-xs text-gray-400 mt-1">Diperbarui {new Intl.DateTimeFormat('id-ID', { timeStyle: 'medium', timeZone: 'Asia/Jakarta' }).format(new Date(data.generated_at))}</p>}</div><div className="flex flex-wrap items-center gap-2"><select value={range} onChange={event => onRange(event.target.value as DashboardRange)} className="bg-white border border-gray-200 rounded-md px-3 py-2 text-sm font-medium text-gray-700"><option value="today">Hari Ini</option><option value="week">Minggu Ini</option><option value="month">Bulan Ini</option><option value="year">Tahun Ini</option><option value="custom">Rentang Tanggal</option></select>{range === 'custom' && <><input aria-label="Tanggal mulai" type="date" value={startDate} onChange={event => setStartDate(event.target.value)} className="border border-gray-200 rounded-md px-2 py-2 text-sm" /><input aria-label="Tanggal akhir" type="date" value={endDate} onChange={event => setEndDate(event.target.value)} className="border border-gray-200 rounded-md px-2 py-2 text-sm" /></>}{data?.available_currencies.length ? <select aria-label="Mata uang" value={selectedCurrency} onChange={event => setSelectedCurrency(event.target.value)} className="bg-white border border-gray-200 rounded-md px-3 py-2 text-sm font-medium text-gray-700">{data.available_currencies.map(value => <option key={value} value={value}>{value}</option>)}</select> : null}<Button size="sm" variant="outline" disabled={loading || (range === 'custom' && (!startDate || !endDate))} onClick={() => void load()}><RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />Muat Ulang</Button></div></div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><KpiCard item={kpis.get('total_cash')} icon={Wallet} /><KpiCard item={kpis.get('gross_revenue')} icon={TrendingUp} /><KpiCard item={kpis.get('total_expenses')} icon={ArrowDownToLine} /><KpiCard item={kpis.get('net_result')} icon={BadgeDollarSign} /></div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"><Card className="lg:col-span-2"><CardHeader><CardTitle>Rincian Pendapatan</CardTitle></CardHeader><CardContent className="pt-4 min-h-[300px]">{chart?.buckets.length ? <ResponsiveContainer width="100%" height={260}><BarChart data={chart.buckets} margin={{ top: 0, right: 0, left: -18, bottom: 0 }}><CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E8E2D7" /><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#737373', fontSize: 12 }} /><YAxis axisLine={false} tickLine={false} tickFormatter={value => compactCurrency(value, data?.selected_currency || 'IDR')} tick={{ fill: '#737373', fontSize: 12 }} /><Tooltip formatter={(value: number) => formatCurrency(value, data?.selected_currency || 'IDR')} /><Legend iconType="circle" />{chart.series.includes('CRAFT') && <Bar name="Craft" dataKey="craft" fill="#FFD43B" radius={[4, 4, 0, 0]} maxBarSize={40} />}{chart.series.includes('STUDIO') && <Bar name="Studio" dataKey="studio" fill="#202020" radius={[4, 4, 0, 0]} maxBarSize={40} />}{chart.series.includes('SHARED') && <Bar name="Shared" dataKey="shared" fill="#64748B" radius={[4, 4, 0, 0]} maxBarSize={40} />}</BarChart></ResponsiveContainer> : <div className="h-[260px] grid place-items-center text-sm text-gray-400">{data?.visibility.finance ? 'Belum ada data pendapatan pada periode ini.' : 'Data pendapatan tidak diizinkan.'}</div>}</CardContent></Card><Card><CardHeader><CardTitle>Ringkasan Arus Kas</CardTitle></CardHeader><CardContent className="flex flex-col justify-center gap-6">{cash ? <><div className="space-y-2"><div className="flex justify-between text-sm gap-3"><span className="text-gray-500">Pemasukan (In)</span><span className="font-semibold text-emerald-600">{formatCurrency(cash.cash_in, data?.selected_currency || 'IDR')}</span></div><div className="w-full bg-gray-100 rounded-full h-2"><div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${cash.cash_in / cashMax * 100}%` }} /></div></div><div className="space-y-2"><div className="flex justify-between text-sm gap-3"><span className="text-gray-500">Pengeluaran (Out)</span><span className="font-semibold text-red-600">{formatCurrency(cash.cash_out, data?.selected_currency || 'IDR')}</span></div><div className="w-full bg-gray-100 rounded-full h-2"><div className="bg-red-500 h-2 rounded-full" style={{ width: `${cash.cash_out / cashMax * 100}%` }} /></div></div><div className="pt-4 border-t border-gray-100 flex justify-between gap-3"><span className="text-sm font-medium">Arus Bersih</span><span className={cash.net_cash_flow >= 0 ? 'text-lg font-bold text-emerald-600' : 'text-lg font-bold text-red-600'}>{formatCurrency(cash.net_cash_flow, data?.selected_currency || 'IDR')}</span></div></> : <p className="py-12 text-center text-sm text-gray-400">Data arus kas tidak diizinkan.</p>}</CardContent></Card></div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4"><Card><CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50"><CardTitle className="text-sm">Ringkasan Craft</CardTitle></CardHeader><CardContent className="p-4 space-y-3"><SummaryRow label="Pesanan Masuk" value={data?.craft_summary?.orders_received} /><SummaryRow label="Menunggu Produksi" value={data?.craft_summary?.waiting_production} /><SummaryRow label="Sedang Dicetak" value={data?.craft_summary?.printing_now} tone="text-[var(--nexus-yellow-deep)]" /><SummaryRow label="Terlambat" value={data?.craft_summary?.overdue_orders} tone="text-red-500" /><SummaryRow label="Stok Mat. Menipis" value={data?.craft_summary?.low_stock} tone="text-amber-500" /></CardContent></Card><Card><CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50"><CardTitle className="text-sm">Ringkasan Studio</CardTitle></CardHeader><CardContent className="p-4 space-y-3"><SummaryRow label="Proyek Aktif" value={data?.studio_summary?.active_projects} /><SummaryRow label="Tenggat Mendekat" value={data?.studio_summary?.due_soon} tone="text-amber-500" /><SummaryRow label="Proyek Terlambat" value={data?.studio_summary?.overdue_projects} tone="text-red-500" /><SummaryRow label="Proyek Belum Lunas" value={data?.studio_summary?.unpaid_projects} tone="text-red-500" /><SummaryRow label="Selesai (Periode)" value={data?.studio_summary?.completed_in_period} /></CardContent></Card><Card><CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50"><CardTitle className="text-sm">Ringkasan Produksi</CardTitle></CardHeader><CardContent className="p-4 space-y-3">{data?.production.length ? data.production.map(job => <div key={job.id} className="border-b border-gray-100 last:border-0 pb-3 last:pb-0"><p className="font-semibold text-sm">{job.printer_name || 'Printer terbatas'}{job.printer_code ? ` · ${job.printer_code}` : ''}</p><p className="text-xs text-gray-500 mt-1">{job.job_code} · {job.job_name}</p><div className="flex justify-between text-xs mt-2"><span>{job.progress_percent}% selesai</span><span>{formatDateTime(job.estimated_finish_at)}</span></div><div className="w-full bg-gray-100 rounded-full h-1.5 mt-1"><div className="bg-[var(--nexus-yellow-deep)] h-1.5 rounded-full" style={{ width: `${Math.max(0, Math.min(100, job.progress_percent))}%` }} /></div></div>) : <div className="py-8 text-center text-sm text-gray-400">{data?.visibility.craft_production ? 'Tidak ada pekerjaan cetak yang sedang berjalan.' : 'Data produksi tidak diizinkan.'}</div>}</CardContent></Card></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6"><Card className="border-amber-200"><CardHeader className="py-4 border-b border-amber-100 bg-amber-50/30"><CardTitle className="text-base text-amber-900">Perlu Perhatian</CardTitle></CardHeader><CardContent className="p-3 space-y-1">{data?.attention.length ? data.attention.map(item => <Link to={item.action_url} key={item.id} className="flex items-start gap-3 p-2 rounded hover:bg-amber-50/60"><span className={`w-2 h-2 mt-1.5 rounded-full shrink-0 ${item.severity === 'critical' ? 'bg-red-500' : item.severity === 'warning' ? 'bg-amber-500' : 'bg-blue-500'}`} /><span className="text-sm text-amber-900 leading-tight"><strong>{item.title}:</strong> {item.description}</span></Link>) : <p className="py-5 text-center text-sm text-gray-400">Tidak ada perhatian operasional saat ini.</p>}</CardContent></Card><Card><CardHeader className="py-4 border-b border-gray-100 bg-gray-50/50"><CardTitle className="text-base">Akses Cepat</CardTitle></CardHeader><CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">{data?.quick_links.length ? data.quick_links.map(link => { const Icon = iconMap[link.icon_key] || LinkIcon; const internal = link.url.startsWith('/'); const content = <><Icon className="w-4 h-4 text-[var(--nexus-yellow-deep)]" /><span className="truncate">{link.label}</span>{!internal && <ExternalLink className="w-3.5 h-3.5 ml-auto text-gray-400" />}</>; return internal ? <Link key={link.id} to={link.url} className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)]">{content}</Link> : <a key={link.id} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-[var(--nexus-charcoal)]">{content}</a>; }) : <p className="col-span-full py-5 text-center text-sm text-gray-400">Belum ada akses cepat yang dikonfigurasi.</p>}</CardContent></Card></div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><Card><CardHeader className="flex flex-row items-center justify-between py-4"><CardTitle className="text-base">Pesanan Craft Terbaru</CardTitle>{data?.visibility.craft_orders && <Link to="/app/craft/orders" className="text-xs font-medium text-[var(--nexus-muted)] hover:text-black">Lihat Semua</Link>}</CardHeader><CardContent className="p-0"><div className="divide-y divide-[var(--nexus-border)]">{data?.recent.craft_orders.length ? data.recent.craft_orders.map(order => <Link to={`/app/craft/orders/${order.id}`} key={order.id} className="p-4 flex items-center justify-between gap-3 hover:bg-gray-50"><div className="min-w-0"><p className="font-semibold text-sm truncate">{order.order_code} · {order.item_summary || 'Tanpa item'}</p><p className="text-xs text-gray-500 mt-1 truncate">{order.customer_name} · {order.channel_name}</p></div><div className="text-right shrink-0"><Badge variant={order.status_code === 'completed' ? 'success' : order.status_code === 'in_production' ? 'warning' : 'default'} className="mb-1.5">{statusLabel(order.status_code)}</Badge><p className="text-xs font-medium text-gray-700">{formatCurrency(order.total_amount, order.currency_code)}</p></div></Link>) : <p className="p-6 text-center text-sm text-gray-400">{data?.visibility.craft_orders ? 'Belum ada pesanan.' : 'Data pesanan tidak diizinkan.'}</p>}</div></CardContent></Card><Card><CardHeader className="flex flex-row items-center justify-between py-4"><CardTitle className="text-base">Proyek Studio Aktif</CardTitle>{data?.visibility.studio_projects && <Link to="/app/studio/projects" className="text-xs font-medium text-[var(--nexus-muted)] hover:text-black">Lihat Semua</Link>}</CardHeader><CardContent className="p-0"><div className="divide-y divide-[var(--nexus-border)]">{data?.recent.studio_projects.length ? data.recent.studio_projects.map(project => <Link to={`/app/studio/projects/${project.id}`} key={project.id} className="p-4 flex items-center justify-between gap-3 hover:bg-gray-50"><div className="min-w-0"><p className="font-semibold text-sm truncate">{project.project_code} · {project.project_name}</p><p className="text-xs text-gray-500 mt-1 truncate">{project.client_name} · Tenggat {formatDateTime(project.deadline_at)}</p></div><div className="text-right shrink-0"><Badge variant={project.status_code === 'review' ? 'info' : 'warning'} className="mb-1.5">{statusLabel(project.status_code)}</Badge><p className="text-xs font-medium text-gray-700">{formatCurrency(project.contract_value, project.currency_code)}</p></div></Link>) : <p className="p-6 text-center text-sm text-gray-400">{data?.visibility.studio_projects ? 'Belum ada proyek aktif.' : 'Data proyek tidak diizinkan.'}</p>}</div></CardContent></Card></div>
+  </div>;
 }

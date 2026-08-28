@@ -51,7 +51,7 @@ const craftNav: NavGroup[] = [
   {
     label: "GLOBAL",
     items: [
-      { name: "Dasbor Global", icon: LayoutDashboard, path: "/app/dashboard" },
+      { name: "Dasbor Global", icon: LayoutDashboard, path: "/app/dashboard", permission: "dashboard.read" },
     ],
   },
   {
@@ -255,7 +255,7 @@ const studioNav: NavGroup[] = [
   {
     label: "GLOBAL",
     items: [
-      { name: "Dasbor Global", icon: LayoutDashboard, path: "/app/dashboard" },
+      { name: "Dasbor Global", icon: LayoutDashboard, path: "/app/dashboard", permission: "dashboard.read" },
     ],
   },
   {

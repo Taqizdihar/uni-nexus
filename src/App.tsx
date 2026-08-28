@@ -68,7 +68,7 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<Navigate to="/app/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<PermissionGate permission="dashboard.read"><Dashboard /></PermissionGate>} />
         <Route
           path="finance"
           element={
