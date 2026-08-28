@@ -14,6 +14,11 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/', { replace: true });
+  };
+
   const handleWorkspaceToggle = () => {
     const nextWorkspace = activeWorkspace === 'craft' ? 'studio' : 'craft';
     setWorkspace(nextWorkspace);
@@ -128,7 +133,7 @@ export function Header() {
              <Link to="/app/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
                Preferensi
              </Link>
-             <button onClick={logout} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+             <button onClick={handleLogout} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                Keluar
              </button>
           </div>
