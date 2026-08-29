@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 29, 2026 at 10:51 AM
+-- Generation Time: Aug 29, 2026 at 11:33 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -3051,25 +3051,24 @@ CREATE TABLE `users` (
   `must_change_password` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `profile_status` enum('active','busy','sick','on_leave') NOT NULL DEFAULT 'active' COMMENT 'User-facing profile status; independent from authentication/account lifecycle'
+  `deleted_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`, `profile_status`) VALUES
-(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987', 'active'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, NULL, 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL, 'active'),
-(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL, 'active'),
-(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL, 'active'),
-(5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL, 'active'),
-(6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL, 'active'),
-(7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL, 'active'),
-(8, 1, NULL, 'Siti Amany Fakhirah Riby', 'sitiamanyfakhirahriby', 'amanyfrss@gmail.com', '$2b$10$DInVMuTao6S.gXLHN1LDOesJsPICEsMBqaHg05T8in7xUYXOsW35O', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:19:35.785', 2, '2026-08-23 10:49:46.824', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:19:35.785', '2026-08-23 10:49:46.824', NULL, 'active'),
-(9, 1, NULL, 'Ahmad Ropaldo', 'ahmadropaldo', 'ahmadropaldo@gmail.com', '$2b$10$JBBoBb3h1j5idkGu0u.lSunIXGwWoLAmiPD7GzA18yEK5BAopsWOG', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:05.570', 2, '2026-08-23 10:49:42.815', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:38:38.035', NULL, 0, '2026-08-23 10:20:05.570', '2026-08-28 08:38:38.035', NULL, 'active'),
-(10, 1, NULL, 'Nadine Nathania Pelleng', 'nadinenathaniapelleng', 'nathaniapelleng15@gmail.com', '$2b$10$3PbnHpPuPG2Y.kt/TLzMLuH7ZbjA3VPM5lg4obU/yIqnxIVkO1CuC', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:42.456', 2, '2026-08-23 10:49:37.870', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:39:38.944', NULL, 0, '2026-08-23 10:20:42.456', '2026-08-28 08:39:38.944', NULL, 'active');
+INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, NULL, 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL),
+(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL),
+(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
+(5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
+(6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL),
+(7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL),
+(8, 1, NULL, 'Siti Amany Fakhirah Riby', 'sitiamanyfakhirahriby', 'amanyfrss@gmail.com', '$2b$10$DInVMuTao6S.gXLHN1LDOesJsPICEsMBqaHg05T8in7xUYXOsW35O', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:19:35.785', 2, '2026-08-23 10:49:46.824', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:19:35.785', '2026-08-23 10:49:46.824', NULL),
+(9, 1, NULL, 'Ahmad Ropaldo', 'ahmadropaldo', 'ahmadropaldo@gmail.com', '$2b$10$JBBoBb3h1j5idkGu0u.lSunIXGwWoLAmiPD7GzA18yEK5BAopsWOG', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:05.570', 2, '2026-08-23 10:49:42.815', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:38:38.035', NULL, 0, '2026-08-23 10:20:05.570', '2026-08-28 08:38:38.035', NULL),
+(10, 1, NULL, 'Nadine Nathania Pelleng', 'nadinenathaniapelleng', 'nathaniapelleng15@gmail.com', '$2b$10$3PbnHpPuPG2Y.kt/TLzMLuH7ZbjA3VPM5lg4obU/yIqnxIVkO1CuC', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:42.456', 2, '2026-08-23 10:49:37.870', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:39:38.944', NULL, 0, '2026-08-23 10:20:42.456', '2026-08-28 08:39:38.944', NULL);
 
 -- --------------------------------------------------------
 
@@ -3165,7 +3164,7 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (6, 1, 9, '8387d24c-f324-46be-9d54-1692088c4bd6', 'craft', '2026-08-28 01:38:38.262', '2026-08-28 01:45:42.168', '2026-08-28 01:45:43.044'),
 (7, 1, 9, '3ee7a301-60e6-4c8d-a44d-8613abdd0661', 'craft', '2026-08-28 01:39:00.069', '2026-08-28 01:39:04.747', '2026-08-28 01:39:10.984'),
 (8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180'),
-(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 10:50:53.899', NULL);
+(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 11:17:52.029', NULL);
 
 -- --------------------------------------------------------
 
@@ -3250,18 +3249,18 @@ CREATE TABLE `user_sessions` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_payable` (
-`supplier_invoice_id` bigint unsigned
+`balance_due` decimal(18,2)
 ,`business_unit_id` bigint unsigned
-,`supplier_invoice_number` varchar(120)
-,`supplier_party_id` bigint unsigned
-,`supplier_name` varchar(200)
-,`invoice_date` date
-,`due_date` date
-,`status_code` varchar(30)
-,`total_amount` decimal(18,2)
-,`paid_amount` decimal(18,2)
-,`balance_due` decimal(18,2)
 ,`days_overdue` int
+,`due_date` date
+,`invoice_date` date
+,`paid_amount` decimal(18,2)
+,`status_code` varchar(30)
+,`supplier_invoice_id` bigint unsigned
+,`supplier_invoice_number` varchar(120)
+,`supplier_name` varchar(200)
+,`supplier_party_id` bigint unsigned
+,`total_amount` decimal(18,2)
 );
 
 -- --------------------------------------------------------
@@ -3271,18 +3270,18 @@ CREATE TABLE `v_accounts_payable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_receivable` (
-`invoice_id` bigint unsigned
+`balance_due` decimal(18,2)
 ,`business_unit_id` bigint unsigned
+,`days_overdue` int
+,`due_date` date
+,`invoice_id` bigint unsigned
 ,`invoice_number` varchar(80)
+,`issue_date` date
+,`paid_amount` decimal(18,2)
 ,`party_id` bigint unsigned
 ,`party_name` varchar(200)
-,`issue_date` date
-,`due_date` date
 ,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
-,`paid_amount` decimal(18,2)
-,`balance_due` decimal(18,2)
-,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -3292,20 +3291,20 @@ CREATE TABLE `v_accounts_receivable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_craft_order_priority` (
-`id` bigint unsigned
-,`order_code` varchar(80)
+`customer_name` varchar(200)
 ,`customer_party_id` bigint unsigned
-,`customer_name` varchar(200)
-,`sales_channel_id` bigint unsigned
-,`sales_channel_name` varchar(100)
-,`order_date` datetime(3)
 ,`deadline_at` datetime(3)
+,`id` bigint unsigned
+,`minutes_to_deadline` bigint
+,`order_code` varchar(80)
+,`order_date` datetime(3)
+,`payment_status_code` varchar(30)
 ,`priority_code` varchar(20)
 ,`priority_score` decimal(10,3)
+,`sales_channel_id` bigint unsigned
+,`sales_channel_name` varchar(100)
 ,`status_code` varchar(30)
-,`payment_status_code` varchar(30)
 ,`total_amount` decimal(18,2)
-,`minutes_to_deadline` bigint
 );
 
 -- --------------------------------------------------------
@@ -3315,18 +3314,18 @@ CREATE TABLE `v_craft_order_priority` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_material_stock` (
-`material_id` bigint unsigned
+`available_qty` decimal(41,4)
 ,`business_unit_id` bigint unsigned
-,`sku` varchar(80)
-,`name` varchar(180)
-,`material_type` varchar(80)
 ,`color_name` varchar(100)
-,`unit_symbol` varchar(20)
-,`total_qty` decimal(40,4)
-,`reserved_qty` decimal(40,4)
-,`available_qty` decimal(41,4)
 ,`low_stock_threshold` decimal(18,4)
+,`material_id` bigint unsigned
+,`material_type` varchar(80)
+,`name` varchar(180)
+,`reserved_qty` decimal(40,4)
+,`sku` varchar(80)
 ,`stock_status` varchar(12)
+,`total_qty` decimal(40,4)
+,`unit_symbol` varchar(20)
 );
 
 -- --------------------------------------------------------
@@ -3336,17 +3335,17 @@ CREATE TABLE `v_material_stock` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_printer_current_activity` (
-`printer_id` bigint unsigned
-,`printer_code` varchar(60)
-,`printer_name` varchar(150)
-,`printer_status` varchar(30)
-,`print_job_id` bigint unsigned
+`estimated_finish_at` datetime(3)
 ,`job_code` varchar(80)
 ,`job_name` varchar(200)
 ,`job_status` varchar(30)
+,`print_job_id` bigint unsigned
+,`printer_code` varchar(60)
+,`printer_id` bigint unsigned
+,`printer_name` varchar(150)
+,`printer_status` varchar(30)
 ,`progress_percent` decimal(6,2)
 ,`started_at` datetime(3)
-,`estimated_finish_at` datetime(3)
 );
 
 --
