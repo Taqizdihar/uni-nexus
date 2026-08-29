@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 29, 2026 at 08:36 AM
+-- Generation Time: Aug 29, 2026 at 10:51 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -3033,9 +3033,11 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) NOT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `avatar_path` varchar(500) DEFAULT NULL,
+  `profile_banner_path` varchar(500) DEFAULT NULL,
+  `profile_status_code` varchar(30) NOT NULL DEFAULT 'default' COMMENT 'default|busy|sick|leave',
   `status_code` varchar(30) NOT NULL DEFAULT 'inactive' COMMENT 'active|inactive|suspended',
   `approval_status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|approved|rejected',
-  `registration_source` varchar(30) NOT NULL DEFAULT 'self_signup' COMMENT 'self_signup|admin_created|bootstrap|legacy',
+  `registration_source` varchar(30) NOT NULL DEFAULT 'self_signup' COMMENT 'self_signup|admin_created|bootstrap|legacy|reactivation',
   `approval_requested_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `approved_by` bigint UNSIGNED DEFAULT NULL,
   `approved_at` datetime(3) DEFAULT NULL,
@@ -3049,24 +3051,25 @@ CREATE TABLE `users` (
   `must_change_password` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  `deleted_at` datetime(3) DEFAULT NULL
+  `deleted_at` datetime(3) DEFAULT NULL,
+  `profile_status` enum('active','busy','sick','on_leave') NOT NULL DEFAULT 'active' COMMENT 'User-facing profile status; independent from authentication/account lifecycle'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL),
-(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL),
-(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
-(5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
-(6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL),
-(7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL),
-(8, 1, NULL, 'Siti Amany Fakhirah Riby', 'sitiamanyfakhirahriby', 'amanyfrss@gmail.com', '$2b$10$DInVMuTao6S.gXLHN1LDOesJsPICEsMBqaHg05T8in7xUYXOsW35O', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:19:35.785', 2, '2026-08-23 10:49:46.824', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:19:35.785', '2026-08-23 10:49:46.824', NULL),
-(9, 1, NULL, 'Ahmad Ropaldo', 'ahmadropaldo', 'ahmadropaldo@gmail.com', '$2b$10$JBBoBb3h1j5idkGu0u.lSunIXGwWoLAmiPD7GzA18yEK5BAopsWOG', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:20:05.570', 2, '2026-08-23 10:49:42.815', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:38:38.035', NULL, 0, '2026-08-23 10:20:05.570', '2026-08-28 08:38:38.035', NULL),
-(10, 1, NULL, 'Nadine Nathania Pelleng', 'nadinenathaniapelleng', 'nathaniapelleng15@gmail.com', '$2b$10$3PbnHpPuPG2Y.kt/TLzMLuH7ZbjA3VPM5lg4obU/yIqnxIVkO1CuC', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:20:42.456', 2, '2026-08-23 10:49:37.870', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:39:38.944', NULL, 0, '2026-08-23 10:20:42.456', '2026-08-28 08:39:38.944', NULL);
+INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`, `profile_status`) VALUES
+(1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987', 'active'),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, NULL, 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL, 'active'),
+(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL, 'active'),
+(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL, 'active'),
+(5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL, 'active'),
+(6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL, 'active'),
+(7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL, 'active'),
+(8, 1, NULL, 'Siti Amany Fakhirah Riby', 'sitiamanyfakhirahriby', 'amanyfrss@gmail.com', '$2b$10$DInVMuTao6S.gXLHN1LDOesJsPICEsMBqaHg05T8in7xUYXOsW35O', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:19:35.785', 2, '2026-08-23 10:49:46.824', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:19:35.785', '2026-08-23 10:49:46.824', NULL, 'active'),
+(9, 1, NULL, 'Ahmad Ropaldo', 'ahmadropaldo', 'ahmadropaldo@gmail.com', '$2b$10$JBBoBb3h1j5idkGu0u.lSunIXGwWoLAmiPD7GzA18yEK5BAopsWOG', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:05.570', 2, '2026-08-23 10:49:42.815', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:38:38.035', NULL, 0, '2026-08-23 10:20:05.570', '2026-08-28 08:38:38.035', NULL, 'active'),
+(10, 1, NULL, 'Nadine Nathania Pelleng', 'nadinenathaniapelleng', 'nathaniapelleng15@gmail.com', '$2b$10$3PbnHpPuPG2Y.kt/TLzMLuH7ZbjA3VPM5lg4obU/yIqnxIVkO1CuC', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:20:42.456', 2, '2026-08-23 10:49:37.870', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 08:39:38.944', NULL, 0, '2026-08-23 10:20:42.456', '2026-08-28 08:39:38.944', NULL, 'active');
 
 -- --------------------------------------------------------
 
@@ -3117,6 +3120,28 @@ INSERT INTO `user_business_units` (`user_id`, `business_unit_id`, `can_access`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_deletion_requests`
+--
+
+CREATE TABLE `user_deletion_requests` (
+  `id` bigint UNSIGNED NOT NULL,
+  `organization_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|revoked|approved|rejected',
+  `request_reason` varchar(500) DEFAULT NULL,
+  `requested_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `revoked_at` datetime(3) DEFAULT NULL,
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
+  `reviewed_at` datetime(3) DEFAULT NULL,
+  `review_note` varchar(500) DEFAULT NULL,
+  `pending_user_id` bigint UNSIGNED GENERATED ALWAYS AS ((case when (`status_code` = _utf8mb4'pending') then `user_id` else NULL end)) STORED,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_presence_sessions`
 --
 
@@ -3140,7 +3165,33 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (6, 1, 9, '8387d24c-f324-46be-9d54-1692088c4bd6', 'craft', '2026-08-28 01:38:38.262', '2026-08-28 01:45:42.168', '2026-08-28 01:45:43.044'),
 (7, 1, 9, '3ee7a301-60e6-4c8d-a44d-8613abdd0661', 'craft', '2026-08-28 01:39:00.069', '2026-08-28 01:39:04.747', '2026-08-28 01:39:10.984'),
 (8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180'),
-(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 08:32:49.214', NULL);
+(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 10:50:53.899', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_reactivation_requests`
+--
+
+CREATE TABLE `user_reactivation_requests` (
+  `id` bigint UNSIGNED NOT NULL,
+  `organization_id` bigint UNSIGNED NOT NULL,
+  `deleted_user_id` bigint UNSIGNED NOT NULL,
+  `requested_full_name` varchar(150) NOT NULL,
+  `requested_username` varchar(100) NOT NULL,
+  `requested_email` varchar(190) NOT NULL,
+  `requested_password_hash` varchar(255) DEFAULT NULL,
+  `requested_phone` varchar(50) DEFAULT NULL,
+  `requested_default_workspace_code` varchar(30) NOT NULL DEFAULT 'craft' COMMENT 'craft|studio',
+  `status_code` varchar(30) NOT NULL DEFAULT 'pending' COMMENT 'pending|approved|rejected',
+  `requested_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
+  `reviewed_at` datetime(3) DEFAULT NULL,
+  `review_note` varchar(500) DEFAULT NULL,
+  `pending_deleted_user_id` bigint UNSIGNED GENERATED ALWAYS AS ((case when (`status_code` = _utf8mb4'pending') then `deleted_user_id` else NULL end)) STORED,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -4336,6 +4387,16 @@ ALTER TABLE `user_business_units`
   ADD KEY `fk_user_bu_unit` (`business_unit_id`);
 
 --
+-- Indexes for table `user_deletion_requests`
+--
+ALTER TABLE `user_deletion_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_user_deletion_requests_pending_user` (`pending_user_id`),
+  ADD KEY `idx_user_deletion_requests_queue` (`organization_id`,`status_code`,`requested_at`),
+  ADD KEY `idx_user_deletion_requests_history` (`user_id`,`requested_at`),
+  ADD KEY `idx_user_deletion_requests_reviewer` (`reviewed_by`);
+
+--
 -- Indexes for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
@@ -4343,6 +4404,16 @@ ALTER TABLE `user_presence_sessions`
   ADD UNIQUE KEY `uq_user_presence_session` (`user_id`,`session_key`),
   ADD KEY `idx_user_presence_org_active` (`organization_id`,`left_at`,`last_seen_at`),
   ADD KEY `idx_user_presence_user_active` (`user_id`,`left_at`,`last_seen_at`);
+
+--
+-- Indexes for table `user_reactivation_requests`
+--
+ALTER TABLE `user_reactivation_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_user_reactivation_requests_pending_user` (`pending_deleted_user_id`),
+  ADD KEY `idx_user_reactivation_requests_queue` (`organization_id`,`status_code`,`requested_at`),
+  ADD KEY `idx_user_reactivation_requests_history` (`deleted_user_id`,`requested_at`),
+  ADD KEY `idx_user_reactivation_requests_reviewer` (`reviewed_by`);
 
 --
 -- Indexes for table `user_roles`
@@ -4992,10 +5063,22 @@ ALTER TABLE `users`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `user_deletion_requests`
+--
+ALTER TABLE `user_deletion_requests`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `user_reactivation_requests`
+--
+ALTER TABLE `user_reactivation_requests`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
@@ -5889,11 +5972,27 @@ ALTER TABLE `user_business_units`
   ADD CONSTRAINT `fk_user_bu_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `user_deletion_requests`
+--
+ALTER TABLE `user_deletion_requests`
+  ADD CONSTRAINT `fk_user_deletion_requests_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  ADD CONSTRAINT `fk_user_deletion_requests_reviewer` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_user_deletion_requests_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
   ADD CONSTRAINT `fk_user_presence_organization` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_presence_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_reactivation_requests`
+--
+ALTER TABLE `user_reactivation_requests`
+  ADD CONSTRAINT `fk_user_reactivation_requests_deleted_user` FOREIGN KEY (`deleted_user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `fk_user_reactivation_requests_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  ADD CONSTRAINT `fk_user_reactivation_requests_reviewer` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `user_roles`
