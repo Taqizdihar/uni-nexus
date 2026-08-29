@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 28, 2026 at 02:31 AM
+-- Generation Time: Aug 29, 2026 at 08:36 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -161,7 +161,6 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (136, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 16:05:16.181'),
 (192, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 20:13:25.623'),
 (238, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 20:52:12.331'),
-(243, 1, 2, 2, 'studio_billing', 'studio.quotation_pdf_generate', 'quotation', 33, 'QTN-000002', 'Membuat PDF resmi penawaran QTN-000002.', NULL, NULL, NULL, NULL, '2026-08-27 21:45:57.636'),
 (358, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 22:14:12.439'),
 (359, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 22:20:49.446'),
 (363, 1, 2, 2, 'studio_projects', 'studio.project_external_add', 'studio_project', 25, 'SMK-VND-C67914F7', 'Menambahkan kolaborator eksternal Vendor Smoke C67914F7 pada proyek SMK-VND-C67914F7.', NULL, '{\"party_id\": 43, \"agreed_fee\": 2000000, \"assignment_role\": \"freelancer\"}', NULL, NULL, '2026-08-27 22:54:08.269'),
@@ -250,7 +249,66 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (490, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:37:23.824'),
 (491, 1, NULL, 9, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:38:38.039'),
 (492, 1, NULL, 10, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:39:38.947'),
-(493, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:16:20.340');
+(493, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:16:20.340'),
+(494, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:43:02.501'),
+(495, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:49:56.861'),
+(496, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 12, 'TRS-000012', 'Saldo awal Bank Finance EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.624'),
+(497, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 12, 'TRS-000012', 'Membuat akun kas Studio TRS-000012.', NULL, '{\"name\": \"Bank Finance EE20233C\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 10:17:30.626'),
+(498, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 13, 'TRS-000013', 'Saldo awal Kas Finance EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.681'),
+(499, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 13, 'TRS-000013', 'Membuat akun kas Studio TRS-000013.', NULL, '{\"name\": \"Kas Finance EE20233C\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.682'),
+(500, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 6, 'TRF-000006', 'Transfer TRF-000006 antar kas Studio.', NULL, '{\"to\": 13, \"from\": 12, \"amount\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.703'),
+(501, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 10, 'PAY-000010', 'Mencatat pembayaran pelanggan PAY-000010.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.762'),
+(502, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 17, 'EXP-000017', 'Membuat pengeluaran EXP-000017.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 10:17:30.787'),
+(503, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 17, 'EXP-000017', 'Menyetujui pengeluaran EXP-000017.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.796'),
+(504, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 17, 'EXP-000017', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.810'),
+(505, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 17, 'EXP-000017', 'Membayar pengeluaran EXP-000017.', NULL, '{\"total\": 300000, \"transaction_id\": 39}', NULL, NULL, '2026-08-28 10:17:30.814'),
+(506, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 17, 'EXP-000017', 'Pembalikan EXP-000017: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.833'),
+(507, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 17, 'EXP-000017', 'Membalik pengeluaran EXP-000017.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 40}', NULL, NULL, '2026-08-28 10:17:30.837'),
+(508, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 18, 'EXP-000018', 'Payout Editor FIN-SMK-EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.855'),
+(509, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 18, 'EXP-000018', 'Membayar pengeluaran EXP-000018.', NULL, '{\"total\": 1000000, \"transaction_id\": 41}', NULL, NULL, '2026-08-28 10:17:30.859'),
+(510, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 16, 'ASSIGN-16', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.860'),
+(511, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 5, 'BDG-000005', 'Membuat anggaran BDG-000005.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 10:17:30.871'),
+(554, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 14, 'TRS-000014', 'Saldo awal Bank Finance 1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.317'),
+(555, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 14, 'TRS-000014', 'Membuat akun kas Studio TRS-000014.', NULL, '{\"name\": \"Bank Finance 1D15FCB7\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 11:33:46.318'),
+(556, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 15, 'TRS-000015', 'Saldo awal Kas Finance 1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.331'),
+(557, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 15, 'TRS-000015', 'Membuat akun kas Studio TRS-000015.', NULL, '{\"name\": \"Kas Finance 1D15FCB7\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.332'),
+(558, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 7, 'TRF-000007', 'Transfer TRF-000007 antar kas Studio.', NULL, '{\"to\": 15, \"from\": 14, \"amount\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.356'),
+(559, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 13, 'PAY-000013', 'Mencatat pembayaran pelanggan PAY-000013.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.419'),
+(560, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 19, 'EXP-000019', 'Membuat pengeluaran EXP-000019.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 11:33:46.447'),
+(561, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 19, 'EXP-000019', 'Menyetujui pengeluaran EXP-000019.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.454'),
+(562, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 19, 'EXP-000019', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.470'),
+(563, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 19, 'EXP-000019', 'Membayar pengeluaran EXP-000019.', NULL, '{\"total\": 300000, \"transaction_id\": 45}', NULL, NULL, '2026-08-28 11:33:46.474'),
+(564, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 19, 'EXP-000019', 'Pembalikan EXP-000019: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.494'),
+(565, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 19, 'EXP-000019', 'Membalik pengeluaran EXP-000019.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 46}', NULL, NULL, '2026-08-28 11:33:46.497'),
+(566, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 20, 'EXP-000020', 'Payout Editor FIN-SMK-1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.517'),
+(567, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 20, 'EXP-000020', 'Membayar pengeluaran EXP-000020.', NULL, '{\"total\": 1000000, \"transaction_id\": 47}', NULL, NULL, '2026-08-28 11:33:46.519'),
+(568, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 17, 'ASSIGN-17', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.521'),
+(569, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 6, 'BDG-000006', 'Membuat anggaran BDG-000006.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 11:33:46.535'),
+(594, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 14:24:33.142'),
+(616, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 16, 'TRS-000016', 'Saldo awal Bank Finance FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.350'),
+(617, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 16, 'TRS-000016', 'Membuat akun kas Studio TRS-000016.', NULL, '{\"name\": \"Bank Finance FECD739D\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 15:19:23.352'),
+(618, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 17, 'TRS-000017', 'Saldo awal Kas Finance FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.400'),
+(619, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 17, 'TRS-000017', 'Membuat akun kas Studio TRS-000017.', NULL, '{\"name\": \"Kas Finance FECD739D\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 15:19:23.401'),
+(620, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 8, 'TRF-000008', 'Transfer TRF-000008 antar kas Studio.', NULL, '{\"to\": 17, \"from\": 16, \"amount\": 1000000}', NULL, NULL, '2026-08-28 15:19:23.462'),
+(621, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 16, 'PAY-000016', 'Mencatat pembayaran pelanggan PAY-000016.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.574'),
+(622, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 25, 'EXP-000025', 'Membuat pengeluaran EXP-000025.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 15:19:23.640'),
+(623, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 25, 'EXP-000025', 'Menyetujui pengeluaran EXP-000025.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.682'),
+(624, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 25, 'EXP-000025', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.787'),
+(625, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 25, 'EXP-000025', 'Membayar pengeluaran EXP-000025.', NULL, '{\"total\": 300000, \"transaction_id\": 59}', NULL, NULL, '2026-08-28 15:19:23.841'),
+(626, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 25, 'EXP-000025', 'Pembalikan EXP-000025: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.931'),
+(627, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 25, 'EXP-000025', 'Membalik pengeluaran EXP-000025.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 60}', NULL, NULL, '2026-08-28 15:19:23.935'),
+(628, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 26, 'EXP-000026', 'Payout Editor FIN-SMK-FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:24.027'),
+(629, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 26, 'EXP-000026', 'Membayar pengeluaran EXP-000026.', NULL, '{\"total\": 1000000, \"transaction_id\": 61}', NULL, NULL, '2026-08-28 15:19:24.031'),
+(630, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 22, 'ASSIGN-22', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 15:19:24.033'),
+(631, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 7, 'BDG-000007', 'Membuat anggaran BDG-000007.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 15:19:24.097'),
+(633, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:29:09.845'),
+(634, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:37:56.930'),
+(635, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:38:11.764'),
+(636, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:38:58.066'),
+(637, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:47:32.560'),
+(638, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:49:55.928'),
+(639, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:50:17.952'),
+(640, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 15:14:36.146');
 
 -- --------------------------------------------------------
 
@@ -687,7 +745,13 @@ CREATE TABLE `domain_events` (
 
 INSERT INTO `domain_events` (`id`, `organization_id`, `business_unit_id`, `event_key`, `event_name`, `module_code`, `entity_type`, `entity_id`, `entity_code`, `actor_user_id`, `correlation_id`, `causation_event_id`, `source_automation_run_id`, `chain_depth`, `payload_json`, `status_code`, `available_at`, `locked_at`, `locked_by`, `attempt_count`, `processed_at`, `last_error`, `created_at`) VALUES
 (217, 1, 2, '5e2012e8-aa06-4fa8-91bc-a1fc54f5ec23', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 5, 'TRF-000005', 2, '333336a7-ea48-447a-a36d-79893b4348c5', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 5, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000005\"}}}', 'processed', '2026-08-28 01:30:53.259', NULL, NULL, 0, '2026-08-28 01:30:53.499', NULL, '2026-08-28 08:30:53.259'),
-(218, 1, 2, '145e89c2-fd47-4704-9f18-fac0edfd4e85', 'studio.finance.payment_received', 'studio_finance', 'payment', 8, 'PAY-8', 2, '6c515aab-5795-4c75-be67-e1716374cefe', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 8, \"amount\": 2000000, \"invoice_id\": 27, \"project_id\": 37}}}', 'processed', '2026-08-28 01:30:53.319', NULL, NULL, 0, '2026-08-28 01:30:53.502', NULL, '2026-08-28 08:30:53.319');
+(218, 1, 2, '145e89c2-fd47-4704-9f18-fac0edfd4e85', 'studio.finance.payment_received', 'studio_finance', 'payment', 8, 'PAY-8', 2, '6c515aab-5795-4c75-be67-e1716374cefe', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 8, \"amount\": 2000000, \"invoice_id\": 27, \"project_id\": 37}}}', 'processed', '2026-08-28 01:30:53.319', NULL, NULL, 0, '2026-08-28 01:30:53.502', NULL, '2026-08-28 08:30:53.319'),
+(233, 1, 2, 'c1b54d08-68a2-43d9-967b-46ba3c0c8a11', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 6, 'TRF-000006', 2, '11cddcc1-f93d-4b0b-982f-bfbf835666db', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 6, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000006\"}}}', 'processed', '2026-08-28 03:17:30.705', NULL, NULL, 0, '2026-08-28 03:17:31.194', NULL, '2026-08-28 10:17:30.705'),
+(234, 1, 2, '64306bf9-c0fc-4dfc-a890-2a5be1e1e366', 'studio.finance.payment_received', 'studio_finance', 'payment', 10, 'PAY-10', 2, '35baa373-5937-4a3b-9ee0-9000bc525e44', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 10, \"amount\": 2000000, \"invoice_id\": 33, \"project_id\": 40}}}', 'processed', '2026-08-28 03:17:30.770', NULL, NULL, 0, '2026-08-28 03:17:31.198', NULL, '2026-08-28 10:17:30.770'),
+(263, 1, 2, 'd63cfc26-6d5e-4c16-a927-6a9a10926259', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 7, 'TRF-000007', 2, 'd84c7524-8ee1-47fa-8fd8-a45a49cf6dfa', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 7, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000007\"}}}', 'processed', '2026-08-28 04:33:46.358', NULL, NULL, 0, '2026-08-28 04:33:46.644', NULL, '2026-08-28 11:33:46.358'),
+(264, 1, 2, 'adf292b0-6b82-40d9-90f5-7907e6740e5d', 'studio.finance.payment_received', 'studio_finance', 'payment', 13, 'PAY-13', 2, 'f1d9d175-a447-4bf0-a7cd-18612239fd1e', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 13, \"amount\": 2000000, \"invoice_id\": 42, \"project_id\": 43}}}', 'processed', '2026-08-28 04:33:46.429', NULL, NULL, 0, '2026-08-28 04:33:46.647', NULL, '2026-08-28 11:33:46.429'),
+(293, 1, 2, '0c938cf0-b9fe-4378-9129-c0a2240d102f', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 8, 'TRF-000008', 2, '9727565c-df46-4a52-bfe6-16708368ae5e', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 8, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000008\"}}}', 'processed', '2026-08-28 08:19:23.465', NULL, NULL, 0, '2026-08-28 08:19:27.948', NULL, '2026-08-28 15:19:23.465'),
+(294, 1, 2, '8833c576-5a80-4468-be54-974674799e6a', 'studio.finance.payment_received', 'studio_finance', 'payment', 16, 'PAY-16', 2, 'c57dc9a6-f3b3-4607-8d0b-11a72e8885c7', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 16, \"amount\": 2000000, \"invoice_id\": 55, \"project_id\": 50}}}', 'processed', '2026-08-28 08:19:23.585', NULL, NULL, 0, '2026-08-28 08:19:28.681', NULL, '2026-08-28 15:19:23.585');
 
 -- --------------------------------------------------------
 
@@ -2994,9 +3058,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-28 09:16:20.337', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-28 09:16:20.337', NULL),
-(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-23 10:50:09.750', NULL),
-(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-23 11:10:35.701', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL),
+(3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL),
+(4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
 (6, 1, NULL, 'Amadea Salsabila', 'amadeasalsabila', 'rilldmnti@gmail.com', '$2b$10$3iUttKFVotoqazxXHSJvfeB3g4zAgQ85KaqjUi6kJsD7oGyz/hdSK', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:17:33.382', 2, '2026-08-23 10:49:54.447', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:17:33.382', '2026-08-23 10:49:54.447', NULL),
 (7, 1, NULL, 'Cantika Anggi', 'cantikaanggi', 'cantikaanggianggraheni@gmail.com', '$2b$10$RB6gn.zNfGvtYdSuVOEIpuBziKzZ6DaOT1/g0IJZXaFI1yQYT4NPu', NULL, NULL, 'active', 'approved', 'self_signup', '2026-08-23 10:18:10.986', 2, '2026-08-23 10:49:50.871', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:18:10.986', '2026-08-23 10:49:50.871', NULL),
@@ -3072,10 +3136,11 @@ CREATE TABLE `user_presence_sessions` (
 --
 
 INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `session_key`, `workspace_code`, `connected_at`, `last_seen_at`, `left_at`) VALUES
-(1, 1, 2, '64392b0a-73c2-4f3b-9e89-4e456c3a8b59', 'craft', '2026-08-28 01:17:11.141', '2026-08-28 02:30:48.698', NULL),
+(1, 1, 2, '64392b0a-73c2-4f3b-9e89-4e456c3a8b59', 'craft', '2026-08-28 01:17:11.141', '2026-08-28 08:51:02.313', '2026-08-28 09:13:08.134'),
 (6, 1, 9, '8387d24c-f324-46be-9d54-1692088c4bd6', 'craft', '2026-08-28 01:38:38.262', '2026-08-28 01:45:42.168', '2026-08-28 01:45:43.044'),
 (7, 1, 9, '3ee7a301-60e6-4c8d-a44d-8613abdd0661', 'craft', '2026-08-28 01:39:00.069', '2026-08-28 01:39:04.747', '2026-08-28 01:39:10.984'),
-(8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180');
+(8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180'),
+(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 08:32:49.214', NULL);
 
 -- --------------------------------------------------------
 
@@ -4306,25 +4371,25 @@ ALTER TABLE `user_sessions`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `asset_maintenance_records`
 --
 ALTER TABLE `asset_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `asset_project_assignments`
 --
 ALTER TABLE `asset_project_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=494;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=641;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -4342,13 +4407,13 @@ ALTER TABLE `automation_runs`
 -- AUTO_INCREMENT for table `budgets`
 --
 ALTER TABLE `budgets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `budget_items`
 --
 ALTER TABLE `budget_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `business_units`
@@ -4360,7 +4425,7 @@ ALTER TABLE `business_units`
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `channel_product_mappings`
@@ -4408,7 +4473,7 @@ ALTER TABLE `design_files`
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `document_templates`
@@ -4420,19 +4485,19 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `domain_events`
 --
 ALTER TABLE `domain_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `filament_spools`
 --
 ALTER TABLE `filament_spools`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `financial_periods`
@@ -4444,19 +4509,19 @@ ALTER TABLE `financial_periods`
 -- AUTO_INCREMENT for table `financial_transactions`
 --
 ALTER TABLE `financial_transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `goods_receipts`
 --
 ALTER TABLE `goods_receipts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `goods_receipt_items`
 --
 ALTER TABLE `goods_receipt_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `integrations`
@@ -4474,43 +4539,43 @@ ALTER TABLE `integration_sync_logs`
 -- AUTO_INCREMENT for table `internal_transfers`
 --
 ALTER TABLE `internal_transfers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `inventory_movements`
 --
 ALTER TABLE `inventory_movements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `invoice_payment_schedules`
 --
 ALTER TABLE `invoice_payment_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `journal_entries`
 --
 ALTER TABLE `journal_entries`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `journal_lines`
 --
 ALTER TABLE `journal_lines`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `login_history`
@@ -4546,13 +4611,13 @@ ALTER TABLE `master_options`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `material_batches`
 --
 ALTER TABLE `material_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -4564,7 +4629,7 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `material_waste`
 --
 ALTER TABLE `material_waste`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -4588,7 +4653,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4606,13 +4671,13 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -4630,25 +4695,25 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `printers`
 --
 ALTER TABLE `printers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `printer_issues`
 --
 ALTER TABLE `printer_issues`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `printer_maintenance_records`
 --
 ALTER TABLE `printer_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `printer_maintenance_schedules`
 --
 ALTER TABLE `printer_maintenance_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `print_failures`
@@ -4690,7 +4755,7 @@ ALTER TABLE `production_queue_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `product_boms`
@@ -4714,7 +4779,7 @@ ALTER TABLE `product_categories`
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `project_deliverables`
@@ -4726,7 +4791,7 @@ ALTER TABLE `project_deliverables`
 -- AUTO_INCREMENT for table `project_external_assignments`
 --
 ALTER TABLE `project_external_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `project_milestones`
@@ -4738,25 +4803,25 @@ ALTER TABLE `project_milestones`
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `purchase_order_items`
 --
 ALTER TABLE `purchase_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `purchase_request_items`
 --
 ALTER TABLE `purchase_request_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `qc_inspections`
@@ -4786,31 +4851,31 @@ ALTER TABLE `qc_template_items`
 -- AUTO_INCREMENT for table `quick_links`
 --
 ALTER TABLE `quick_links`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `quotation_items`
 --
 ALTER TABLE `quotation_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `quotation_templates`
 --
 ALTER TABLE `quotation_templates`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `quotation_template_items`
 --
 ALTER TABLE `quotation_template_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `report_definitions`
@@ -4822,7 +4887,7 @@ ALTER TABLE `report_definitions`
 -- AUTO_INCREMENT for table `report_exports`
 --
 ALTER TABLE `report_exports`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -4852,31 +4917,31 @@ ALTER TABLE `service_package_items`
 -- AUTO_INCREMENT for table `stock_reservations`
 --
 ALTER TABLE `stock_reservations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studio_projects`
 --
 ALTER TABLE `studio_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `studio_project_services`
 --
 ALTER TABLE `studio_project_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `studio_project_status_history`
 --
 ALTER TABLE `studio_project_status_history`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `studio_services`
 --
 ALTER TABLE `studio_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `studio_service_categories`
@@ -4888,7 +4953,7 @@ ALTER TABLE `studio_service_categories`
 -- AUTO_INCREMENT for table `supplier_invoices`
 --
 ALTER TABLE `supplier_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -4912,7 +4977,7 @@ ALTER TABLE `transaction_categories`
 -- AUTO_INCREMENT for table `treasury_accounts`
 --
 ALTER TABLE `treasury_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `units_of_measure`
@@ -4930,7 +4995,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
