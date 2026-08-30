@@ -4,6 +4,49 @@ export const NOTIFICATION_SEVERITIES = ['info', 'success', 'warning', 'error', '
 export type NotificationSeverity = typeof NOTIFICATION_SEVERITIES[number];
 type DbExecutor = { execute: (sql: string, values?: any[]) => Promise<[any, any]> };
 
+/** Canonical notification modules that have a corresponding read permission. */
+export type CanonicalNotificationModule =
+  | 'craft_orders' | 'craft_production' | 'craft_products' | 'craft_customers'
+  | 'craft_printers' | 'craft_materials' | 'craft_finance' | 'craft_procurement'
+  | 'craft_marketplace' | 'craft_analytics'
+  | 'studio_projects' | 'studio_clients' | 'studio_finance' | 'studio_billing'
+  | 'studio_services' | 'studio_equipment' | 'studio_vendors' | 'studio_analytics'
+  | 'automations' | 'craft_automations' | 'studio_automations';
+
+const notificationModuleReadPermissions: Partial<Record<CanonicalNotificationModule, string>> = {
+  craft_orders: 'craft.orders.read',
+  craft_production: 'craft.production.read',
+  craft_products: 'craft.products.read',
+  craft_customers: 'craft.customers.read',
+  craft_printers: 'craft.printers.read',
+  craft_materials: 'craft.materials.read',
+  craft_finance: 'craft.finance.read',
+  craft_procurement: 'craft.procurement.read',
+  craft_marketplace: 'craft.marketplace.read',
+  craft_analytics: 'craft.analytics.read',
+  studio_projects: 'studio.projects.read',
+  studio_clients: 'studio.clients.read',
+  studio_finance: 'studio.finance.read',
+  studio_billing: 'studio.billing.read',
+  studio_services: 'studio.services.read',
+  studio_equipment: 'studio.equipment.read',
+  studio_vendors: 'studio.vendors.read',
+  studio_analytics: 'studio.analytics.read',
+};
+
+/** Resolves authorization from a canonical module, never from a translated label. */
+export const notificationReadPermissionForModule = (
+  moduleCode: string | null | undefined,
+  businessUnitCode: string = 'CRAFT',
+) => {
+  const module = String(moduleCode || '').trim().toLowerCase() as CanonicalNotificationModule;
+  const workspace = String(businessUnitCode).toUpperCase() === 'STUDIO' ? 'studio' : 'craft';
+  if (module === 'automations') return `${workspace}.automations.read`;
+  if (module === 'craft_automations') return 'craft.automations.read';
+  if (module === 'studio_automations') return 'studio.automations.read';
+  return notificationModuleReadPermissions[module] || null;
+};
+
 export type NotificationInput = {
   organizationId: number;
   businessUnitId?: number | null;
@@ -131,8 +174,8 @@ export class NotificationService {
         `INSERT INTO notifications (
           organization_id, business_unit_id, user_id, notification_type, module_code,
           severity_code, title, message, action_url, entity_type, entity_id, dedupe_key,
-          is_read, read_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NULL)`,
+          is_read, read_at, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NULL, UTC_TIMESTAMP(3))`,
         [
           value.organizationId, value.businessUnitId, Number(userId), value.notificationType, value.moduleCode,
           value.severityCode, value.title, value.message, value.actionUrl, value.entityType, value.entityId, value.dedupeKey,

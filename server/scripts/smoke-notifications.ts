@@ -7,8 +7,9 @@ import { env } from '../src/config/env';
 import { notificationService } from '../src/shared/notifications/notification.service';
 import { systemNotificationService } from '../src/shared/notifications/system-notification.service';
 import { systemNotificationSensorService } from '../src/shared/notifications/system-notification-sensor.service';
+import { formatSensorCurrency } from '../src/shared/notifications/system-notification-sensor.service';
 import { automationSensorService } from '../src/shared/automation/automation-sensor.service';
-import { automationActionRegistry } from '../src/shared/automation/automation-action-registry';
+import { automationActionRegistry, automationNotificationSourceFor } from '../src/shared/automation/automation-action-registry';
 import { AutomationWorker } from '../src/workers/automation.worker';
 import { jakartaBusinessDate, jakartaDayStartUtc } from '../src/shared/notifications/notification-time';
 
@@ -23,7 +24,7 @@ const tokenFor = (user: FixtureUser) => {
 async function main() {
   const suffix = randomUUID().slice(0, 10);
   const userIds: number[] = []; let roleId = 0; let server: Server | undefined; let baseUrl = ''; const legacyIds: number[] = [];
-  const orderIds: number[] = []; const eventIds: number[] = []; let automationRuleId = 0; let sensorDedupeLike = '';
+  const orderIds: number[] = []; const studioProjectIds: number[] = []; const eventIds: number[] = []; let automationRuleId = 0; let sensorDedupeLike = ''; let utcNotificationId = 0;
   const createUser = async (label: string, status = 'active', approval = 'approved'): Promise<FixtureUser> => {
     const username = `smokenotif_${label}_${suffix}`;
     const [result]: any = await pool.execute(
@@ -45,22 +46,40 @@ async function main() {
     const [units]: any = await pool.execute(`SELECT id,code FROM business_units WHERE code IN ('CRAFT','STUDIO') AND is_active=1`);
     const craftId = Number(units.find((unit: any) => unit.code === 'CRAFT')?.id); const studioId = Number(units.find((unit: any) => unit.code === 'STUDIO')?.id);
     assert(craftId && studioId, 'Craft and Studio business units are required.');
-    const [permissionRows]: any = await pool.execute(`SELECT id FROM permissions WHERE code='craft.orders.read' LIMIT 1`);
-    assert(permissionRows.length, 'craft.orders.read permission is required.');
+    const [permissionRows]: any = await pool.execute(`SELECT id,code FROM permissions WHERE code IN ('craft.orders.read','craft.automations.read','craft.printers.read')`);
+    const permissionIds = new Map<string, number>(permissionRows.map((row: any) => [String(row.code), Number(row.id)] as [string, number]));
+    for (const code of ['craft.orders.read', 'craft.automations.read', 'craft.printers.read']) assert(permissionIds.has(code), `${code} permission is required.`);
     const [roleResult]: any = await pool.execute(`INSERT INTO roles (organization_id,code,name,scope_code,is_system,is_active) VALUES (1,?,?, 'global',0,1)`, [`SMOKE_NOTIF_${suffix}`.toUpperCase(), `Smoke notifications ${suffix}`]);
     roleId = Number(roleResult.insertId);
-    await pool.execute('INSERT INTO role_permissions (role_id,permission_id) VALUES (?,?)', [roleId, permissionRows[0].id]);
+    for (const code of permissionIds.keys()) await pool.execute('INSERT INTO role_permissions (role_id,permission_id) VALUES (?,?)', [roleId, permissionIds.get(code)]);
 
     const primary = await createUser('primary'); const peer = await createUser('peer'); const noPermission = await createUser('no_permission');
     const noAccess = await createUser('no_access'); const inactive = await createUser('inactive', 'inactive'); const pending = await createUser('pending', 'inactive', 'pending'); const deleted = await createUser('deleted');
     for (const id of [primary.id, peer.id, noAccess.id, inactive.id, pending.id, deleted.id]) await pool.execute('INSERT INTO user_roles (user_id,role_id) VALUES (?,?)', [id, roleId]);
     for (const id of [primary.id, peer.id, noPermission.id, inactive.id, pending.id, deleted.id]) await pool.execute('INSERT INTO user_business_units (user_id,business_unit_id,can_access) VALUES (?,?,1)', [id, craftId]);
     await pool.execute('INSERT INTO user_business_units (user_id,business_unit_id,can_access) VALUES (?,?,1)', [noAccess.id, studioId]);
+    await pool.execute('INSERT INTO user_business_units (user_id,business_unit_id,can_access) VALUES (?,?,1)', [noPermission.id, studioId]);
 
     const direct = await notificationService.createForUser(primary.id, { organizationId: 1, notificationType: 'smoke', moduleCode: 'users', severityCode: 'info', title: `Direct ${suffix}`, message: 'Direct notification fixture', actionUrl: 'javascript:alert(1)' });
     assert.equal(direct.status, 'created');
     const [directRows]: any = await pool.execute('SELECT action_url,user_id FROM notifications WHERE id=?', [direct.id]);
     assert.equal(directRows[0].action_url, null, 'unsafe action URL was retained'); assert.equal(Number(directRows[0].user_id), primary.id);
+
+    const utcConnection = await pool.getConnection();
+    let originalTimeZone = 'SYSTEM';
+    try {
+      const [timeZoneRows]: any = await utcConnection.query('SELECT @@session.time_zone AS value');
+      originalTimeZone = String(timeZoneRows[0]?.value || 'SYSTEM');
+      await utcConnection.query("SET time_zone = '+07:00'");
+      const utcCreated = await notificationService.createForUser(primary.id, { organizationId: 1, notificationType: 'smoke', moduleCode: 'users', severityCode: 'info', title: `UTC ${suffix}`, message: 'UTC connection session fixture' }, {}, utcConnection);
+      assert.equal(utcCreated.status, 'created'); utcNotificationId = Number(utcCreated.id);
+      const [timestampRows]: any = await utcConnection.execute(`SELECT ABS(TIMESTAMPDIFF(SECOND, created_at, UTC_TIMESTAMP(3))) AS utc_delta, TIMESTAMPDIFF(HOUR, CURRENT_TIMESTAMP(3), UTC_TIMESTAMP(3)) AS session_offset FROM notifications WHERE id=?`, [utcNotificationId]);
+      assert(Number(timestampRows[0]?.utc_delta) <= 5, 'created_at followed the +07:00 session instead of UTC_TIMESTAMP(3)');
+      assert(Math.abs(Number(timestampRows[0]?.session_offset)) >= 6, 'UTC regression connection did not use a distinct +07:00 session');
+    } finally {
+      await utcConnection.query(`SET time_zone = '${originalTimeZone.replace(/'/g, "''")}'`);
+      utcConnection.release();
+    }
 
     await notificationService.createForUser(primary.id, { organizationId: 1, notificationType: 'smoke', moduleCode: `smoke_meta_old_${suffix.slice(0, 4)}`, severityCode: 'info', title: `Metadata old ${suffix}`, message: 'Metadata pagination fixture' });
     await notificationService.createForUser(primary.id, { organizationId: 1, notificationType: 'smoke', moduleCode: `smoke_meta_new_${suffix.slice(0, 4)}`, severityCode: 'info', title: `Metadata new ${suffix}`, message: 'Metadata pagination fixture' });
@@ -86,12 +105,34 @@ async function main() {
     assert.equal(Number(policyRows[0].count), 1, 'order.created system policy is not retry-safe or did not target an eligible recipient');
 
     const runId = 8_000_000 + Math.floor(Math.random() * 100_000);
-    const automation = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'workspace_broadcast', severity: 'info', title_template: `Automation ${suffix}`, message_template: 'Automation notification' } }, { rule: { trigger_event: 'order.created', action_json: { actions: [] }, created_by: primary.id }, run: { id: runId }, event: { entity_id: 12345, entity_type: 'craft_order' }, input: { order: { id: 12345, order_code: 'SMOKE' } }, organizationId: 1, businessUnitId: craftId, businessUnitCode: 'CRAFT', actorUserId: primary.id, actionIndex: 0 });
+    assert.deepEqual(automationNotificationSourceFor('event', 'order.created', 'CRAFT'), { moduleCode: 'craft_orders', permissionCode: 'craft.orders.read' });
+    assert.deepEqual(automationNotificationSourceFor('sensor', 'studio.invoice.overdue', 'STUDIO'), { moduleCode: 'studio_billing', permissionCode: 'studio.billing.read' });
+    assert.deepEqual(automationNotificationSourceFor('manual', 'order.created', 'CRAFT'), { moduleCode: 'automations', permissionCode: 'craft.automations.read' });
+    const automation = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'workspace_broadcast', module_code: 'users', severity: 'info', title_template: `Automation ${suffix}`, message_template: 'Automation notification' } }, { rule: { trigger_type: 'event', trigger_event: 'order.created', action_json: { actions: [] }, created_by: primary.id }, run: { id: runId }, event: { entity_id: 12345, entity_type: 'craft_order' }, input: { order: { id: 12345, order_code: 'SMOKE' } }, organizationId: 1, businessUnitId: craftId, businessUnitCode: 'CRAFT', actorUserId: primary.id, actionIndex: 0 });
     assert.equal(automation.status, 'success');
     const [automationRows]: any = await pool.execute('SELECT COUNT(*) AS count, COALESCE(SUM(user_id IS NULL),0) AS null_count FROM notifications WHERE title=?', [`Automation ${suffix}`]);
     const [automationFixtures]: any = await pool.execute(`SELECT user_id FROM notifications WHERE title=? AND user_id IN (${[primary.id, peer.id, noPermission.id, noAccess.id, inactive.id, pending.id, deleted.id].map(() => '?').join(',')})`, [`Automation ${suffix}`, primary.id, peer.id, noPermission.id, noAccess.id, inactive.id, pending.id, deleted.id]);
-    assert.deepEqual(automationFixtures.map((row: any) => Number(row.user_id)).sort((a: number, b: number) => a - b), [primary.id, peer.id, noPermission.id].sort((a, b) => a - b), 'automation broadcast did not respect account and workspace eligibility');
-    assert(Number(automationRows[0].count) >= 3 && Number(automationRows[0].null_count) === 0, 'automation created a shared NULL recipient row');
+    assert.deepEqual(automationFixtures.map((row: any) => Number(row.user_id)).sort((a: number, b: number) => a - b), [primary.id, peer.id].sort((a, b) => a - b), 'automation broadcast leaked to a workspace user without source permission');
+    const [automationModuleRows]: any = await pool.execute('SELECT DISTINCT module_code FROM notifications WHERE title=?', [`Automation ${suffix}`]);
+    assert.deepEqual(automationModuleRows.map((row: any) => row.module_code), ['craft_orders'], 'config.module_code bypassed the canonical event source module');
+    assert(Number(automationRows[0].count) >= 2 && Number(automationRows[0].null_count) === 0, 'automation created a shared NULL recipient row');
+
+    const unauthorizedSpecific = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'specific_user', user_id: noPermission.id, module_code: 'users', severity: 'info', title_template: `Specific blocked ${suffix}`, message_template: 'Must not be delivered' } }, { rule: { trigger_type: 'event', trigger_event: 'order.created' }, run: { id: runId + 1 }, event: { entity_id: 12345, entity_type: 'craft_order' }, input: { order: { id: 12345, order_code: 'SMOKE' } }, organizationId: 1, businessUnitId: craftId, businessUnitCode: 'CRAFT', actorUserId: primary.id, actionIndex: 0 });
+    assert.deepEqual(unauthorizedSpecific, { status: 'skipped', reason: 'RECIPIENT_INELIGIBLE' }, 'specific_user without source permission was not skipped');
+
+    const [parties]: any = await pool.execute('SELECT id FROM parties WHERE organization_id=1 ORDER BY id LIMIT 1');
+    assert(parties.length, 'An existing party is required for the isolated Studio project fixture.');
+    const [projectResult]: any = await pool.execute(`INSERT INTO studio_projects (business_unit_id,project_code,client_party_id,project_name,status_code,priority_code,currency_code,contract_value,project_manager_user_id,created_by) VALUES (?,?,? ,?,'lead','normal','IDR',0,?,?)`, [studioId, `SMOKE-NOTIF-${suffix}`, Number(parties[0].id), `Notification PM ${suffix}`, noPermission.id, primary.id]);
+    const projectId = Number(projectResult.insertId); studioProjectIds.push(projectId);
+    const unauthorizedManager = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'project_manager', module_code: 'users', severity: 'info', title_template: `PM blocked ${suffix}`, message_template: 'Must not be delivered' } }, { rule: { trigger_type: 'event', trigger_event: 'studio.project.created' }, run: { id: runId + 2 }, event: { entity_id: projectId, entity_type: 'studio_project' }, input: { project: { id: projectId, project_code: `SMOKE-NOTIF-${suffix}`, project_name: `Notification PM ${suffix}` } }, organizationId: 1, businessUnitId: studioId, businessUnitCode: 'STUDIO', actorUserId: primary.id, actionIndex: 0 });
+    assert.deepEqual(unauthorizedManager, { status: 'skipped', reason: 'RECIPIENT_INELIGIBLE' }, 'project manager without source permission was not skipped');
+
+    const manualNotification = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'specific_user', user_id: primary.id, module_code: 'craft_orders', severity: 'info', title_template: `Manual automation ${suffix}`, message_template: 'Automation-source authorization' } }, { rule: { trigger_type: 'manual', trigger_event: 'order.created' }, run: { id: runId + 3 }, event: null, input: {}, organizationId: 1, businessUnitId: craftId, businessUnitCode: 'CRAFT', actorUserId: primary.id, actionIndex: 0 });
+    assert.equal(manualNotification.status, 'success');
+    const scheduledNotification = await automationActionRegistry.execute({ type: 'notification.create', config: { recipient_scope: 'specific_user', user_id: primary.id, module_code: 'craft_orders', severity: 'info', title_template: `Scheduled automation ${suffix}`, message_template: 'Automation-source authorization' } }, { rule: { trigger_type: 'schedule', trigger_event: 'schedule' }, run: { id: runId + 4 }, event: null, input: {}, organizationId: 1, businessUnitId: craftId, businessUnitCode: 'CRAFT', actorUserId: primary.id, actionIndex: 0 });
+    assert.equal(scheduledNotification.status, 'success');
+    const [automationSourceRows]: any = await pool.execute(`SELECT DISTINCT module_code FROM notifications WHERE title IN (?,?) ORDER BY module_code`, [`Manual automation ${suffix}`, `Scheduled automation ${suffix}`]);
+    assert.deepEqual(automationSourceRows.map((row: any) => row.module_code), ['automations'], 'manual/scheduled notification spoofed a domain module');
 
     // Built-in state notifications use the canonical sensor query, but do not
     // require a matching user-created automation rule.
@@ -119,15 +160,63 @@ async function main() {
     assert.equal(new Set(sensorRows.map((row: any) => row.dedupe_key)).size, sensorRows.length, 'sensor dedupe keys were not recipient-specific');
     for (const excluded of [noPermission.id, noAccess.id, inactive.id, pending.id, deleted.id]) assert(!sensorRows.some((row: any) => Number(row.user_id) === excluded), 'excluded user received a sensor notification');
 
+    const originalCandidatesForIsolation = automationSensorService.candidates;
+    const attemptedPolicyEvents: string[] = [];
+    const printerCandidate = { entityType: 'printer', entityId: 777001, entityCode: 'SMOKE-PRINTER', context: { printer: { id: 777001, name: 'Smoke printer', status_code: 'error' } } };
+    automationSensorService.candidates = (async (eventName, businessUnitId) => {
+      if (businessUnitId !== craftId) return [];
+      attemptedPolicyEvents.push(eventName);
+      if (eventName === 'order.deadline_approaching') throw new Error('controlled sensor policy failure');
+      return eventName === 'printer.maintenance_due' ? [printerCandidate] : [];
+    }) as typeof automationSensorService.candidates;
+    try {
+      const isolatedPass = await systemNotificationSensorService.runOnce(new Date('2026-08-30T11:00:00.000Z'));
+      assert(attemptedPolicyEvents.includes('printer.maintenance_due'), 'sensor policy loop stopped after an earlier query failure');
+      assert.equal(isolatedPass.failedPolicies, 1, 'sensor policy failure was not observable');
+      assert(isolatedPass.created >= 2, 'a valid later sensor policy did not deliver notifications');
+    } finally { automationSensorService.candidates = originalCandidatesForIsolation; }
+
+    const originalCreateForWorkspace = notificationService.createForWorkspace;
+    let candidateDeliveryAttempts = 0;
+    const secondPrinterCandidate = { entityType: 'printer', entityId: 777002, entityCode: 'SMOKE-PRINTER-2', context: { printer: { id: 777002, name: 'Smoke printer 2', status_code: 'error' } } };
+    automationSensorService.candidates = (async (eventName, businessUnitId) => eventName === 'printer.maintenance_due' && businessUnitId === craftId ? [printerCandidate, secondPrinterCandidate] : []) as typeof automationSensorService.candidates;
+    notificationService.createForWorkspace = (async (input, options, connection) => {
+      candidateDeliveryAttempts += 1;
+      if (candidateDeliveryAttempts === 1) throw new Error('controlled candidate delivery failure');
+      return originalCreateForWorkspace.call(notificationService, input, options, connection);
+    }) as typeof notificationService.createForWorkspace;
+    try {
+      const candidateIsolationPass = await systemNotificationSensorService.runOnce(new Date('2026-08-30T12:00:00.000Z'));
+      assert.equal(candidateIsolationPass.failedCandidates, 1, 'bad sensor candidate was not counted');
+      assert(candidateDeliveryAttempts >= 2 && candidateIsolationPass.created >= 2, 'a bad sensor candidate stopped the next candidate delivery');
+    } finally {
+      automationSensorService.candidates = originalCandidatesForIsolation;
+      notificationService.createForWorkspace = originalCreateForWorkspace;
+    }
+
     // The worker invokes the pass once at startup and then throttles it.
     const originalSensorPass = systemNotificationSensorService.runOnce;
     let sensorInvocationCount = 0;
-    systemNotificationSensorService.runOnce = async () => { sensorInvocationCount += 1; return { businessUnits: 0, candidates: 0, created: 0, bucket: '2026-08-30' }; };
+    systemNotificationSensorService.runOnce = async () => { sensorInvocationCount += 1; return { businessUnits: 0, policiesChecked: 0, candidates: 0, created: 0, failedPolicies: 0, failedCandidates: 0, bucket: '2026-08-30' }; };
     try {
       const worker = new AutomationWorker();
       assert.equal((await worker.runBuiltInNotificationSensors(new Date('2026-08-30T10:00:00.000Z'))).status, 'ran');
       assert.equal((await worker.runBuiltInNotificationSensors(new Date('2026-08-30T10:00:01.000Z'))).status, 'throttled');
       assert.equal(sensorInvocationCount, 1, 'built-in sensor pass was not throttled');
+    } finally { systemNotificationSensorService.runOnce = originalSensorPass; }
+
+    let fatalSensorInvocations = 0;
+    systemNotificationSensorService.runOnce = async () => {
+      fatalSensorInvocations += 1;
+      if (fatalSensorInvocations === 1) throw new Error('controlled fatal sensor pass failure');
+      return { businessUnits: 0, policiesChecked: 0, candidates: 0, created: 0, failedPolicies: 0, failedCandidates: 0, bucket: '2026-08-30' };
+    };
+    try {
+      const retryWorker = new AutomationWorker();
+      await assert.rejects(() => retryWorker.runBuiltInNotificationSensors(new Date('2026-08-30T13:00:00.000Z')));
+      assert.equal((await retryWorker.runBuiltInNotificationSensors(new Date('2026-08-30T13:00:01.000Z'))).status, 'throttled');
+      assert.equal((await retryWorker.runBuiltInNotificationSensors(new Date('2026-08-30T13:01:01.000Z'))).status, 'ran');
+      assert.equal(fatalSensorInvocations, 2, 'fatal sensor failure caused a one-second retry storm or did not retry');
     } finally { systemNotificationSensorService.runOnce = originalSensorPass; }
 
     // Controlled legacy fixture: personal endpoints must ignore and never mutate old broadcast rows.
@@ -155,6 +244,10 @@ async function main() {
     assert.equal((await request(token, `/notifications/${peerNotification.id}/read`, 'PATCH', {})).response.status, 404, 'another user mutated a notification');
     assert.equal((await request(token, `/notifications/${legacyIds[0]}/read`, 'PATCH', {})).response.status, 404, 'legacy broadcast row was mutated as a personal row');
     const allRead = await request(token, '/notifications/mark-all-read', 'POST', {}); assert.equal(allRead.response.status, 200); assert(Number(allRead.json.data.affected_count) >= 1);
+    assert.equal((await request(token, `/notifications/${utcNotificationId}/unread`, 'PATCH', {})).response.status, 200);
+    assert.equal((await request(token, `/notifications/${utcNotificationId}/read`, 'PATCH', {})).response.status, 200);
+    const [readTimestampRows]: any = await pool.execute('SELECT read_at, ABS(TIMESTAMPDIFF(SECOND, read_at, UTC_TIMESTAMP(3))) AS utc_delta FROM notifications WHERE id=?', [utcNotificationId]);
+    assert(readTimestampRows[0]?.read_at && Number(readTimestampRows[0]?.utc_delta) <= 5, 'read_at was not written as a UTC instant');
 
     // A system-notification failure must not prevent the configured rule from
     // being queued or the source event from being marked processed.
@@ -189,6 +282,9 @@ async function main() {
     assert.equal(jakartaBusinessDate(new Date('2026-08-30T17:00:00.000Z')), '2026-08-31');
     assert.equal(jakartaDayStartUtc(new Date('2026-08-30T16:59:00.000Z')).toISOString(), '2026-08-29T17:00:00.000Z');
     assert.equal(jakartaDayStartUtc(new Date('2026-08-30T17:00:00.000Z')).toISOString(), '2026-08-30T17:00:00.000Z');
+    assert.equal(formatSensorCurrency(1_000_000, 'IDR'), new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(1_000_000));
+    assert.equal(formatSensorCurrency(1_000_000, 'USD'), new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'USD' }).format(1_000_000));
+    assert(!formatSensorCurrency(1_000_000, 'not-a-currency').includes('Rp'), 'unknown currency was falsely labeled as Rupiah');
     console.log('Notifications smoke: PASS');
   } finally {
     if (server) await new Promise<void>((resolve) => server!.close(() => resolve()));
@@ -198,6 +294,7 @@ async function main() {
       await pool.execute(`DELETE FROM notifications WHERE user_id IN (${placeholders})`, userIds);
       if (legacyIds.length) await pool.execute(`DELETE FROM notifications WHERE id IN (${legacyIds.map(() => '?').join(',')})`, legacyIds);
       if (orderIds.length) await pool.execute(`DELETE FROM craft_orders WHERE id IN (${orderIds.map(() => '?').join(',')})`, orderIds);
+      if (studioProjectIds.length) await pool.execute(`DELETE FROM studio_projects WHERE id IN (${studioProjectIds.map(() => '?').join(',')})`, studioProjectIds);
       if (eventIds.length) await pool.execute(`DELETE FROM domain_events WHERE id IN (${eventIds.map(() => '?').join(',')})`, eventIds);
       if (automationRuleId) await pool.execute('DELETE FROM automation_rules WHERE id=?', [automationRuleId]);
       await pool.execute(`DELETE FROM user_business_units WHERE user_id IN (${placeholders})`, userIds);

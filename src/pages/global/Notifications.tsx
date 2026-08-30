@@ -9,7 +9,7 @@ const severityOptions: Array<'all' | NotificationSeverity> = ['all', 'info', 'su
 
 export function Notifications() {
   const navigate = useNavigate();
-  const { unreadCount, criticalUnreadCount, todayCount, markRead, markAllRead, refresh, refreshVersion } = useNotifications();
+  const { unreadCount, criticalUnreadCount, todayCount, markRead, markUnread, markAllRead, refresh, refreshVersion } = useNotifications();
   const [items, setItems] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +30,8 @@ export function Notifications() {
     if (query) params.set('q', query);
     try {
       const response = await api.get<NotificationsList>(`/notifications?${params.toString()}`);
+      const lastPage = Math.max(1, response.pagination.total_pages);
+      if (page > lastPage) { setPage(lastPage); return; }
       setItems(response.items); setPagination(response.pagination);
     } catch { setError('Notifikasi tidak dapat dimuat.'); }
     finally { setLoading(false); }
@@ -45,26 +47,27 @@ export function Notifications() {
   }, []);
 
   useEffect(() => { void load(); }, [load, refreshVersion]);
-  useEffect(() => { void loadMetadata(); }, [loadMetadata]);
+  useEffect(() => { void loadMetadata(); }, [loadMetadata, refreshVersion]);
   useEffect(() => { const timer = window.setTimeout(() => { setPage(1); setQuery(search.trim()); }, 250); return () => window.clearTimeout(timer); }, [search]);
   const availableModules = moduleMetadata.map((item) => item.code);
 
   const updateLocalRead = (id: number, isRead: boolean) => setItems((current) => current.map((item) => item.id === id ? { ...item, is_read: isRead, read_at: isRead ? new Date().toISOString() : null } : item));
   const openNotification = async (notification: AppNotification) => {
     const action = safeNotificationActionUrl(notification.action_url);
-    try { await markRead(notification); updateLocalRead(notification.id, true); }
+    try { await markRead(notification); updateLocalRead(notification.id, true); await load(); }
     catch { setError('Status notifikasi tidak dapat diperbarui.'); }
     if (action) action.startsWith('/app/') ? navigate(action) : window.open(action, '_blank', 'noopener,noreferrer');
   };
   const toggleRead = async (notification: AppNotification, event: MouseEvent) => {
     event.stopPropagation();
     try {
-      if (notification.is_read) { await api.patch(`/notifications/${notification.id}/unread`, {}); updateLocalRead(notification.id, false); await refresh(); }
+      if (notification.is_read) { await markUnread(notification); updateLocalRead(notification.id, false); }
       else { await markRead(notification); updateLocalRead(notification.id, true); }
+      await load();
     } catch { await refresh(); setError('Status notifikasi tidak dapat diperbarui.'); }
   };
   const markEverythingRead = async () => {
-    try { await markAllRead(); setItems((current) => current.map((item) => ({ ...item, is_read: true, read_at: item.read_at || new Date().toISOString() }))); }
+    try { await markAllRead(); await load(); }
     catch { setError('Notifikasi tidak dapat diperbarui.'); }
   };
 

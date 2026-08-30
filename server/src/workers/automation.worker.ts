@@ -15,8 +15,9 @@ const ruleSnapshot = (rule: any) => ({ version: rule.version_no, trigger: { type
 export class AutomationWorker {
   readonly id = `automation-${process.pid}-${randomUUID().slice(0, 8)}`;
   readonly runs = new AutomationRunService();
-  private lastSensorRunAt: number | null = null;
+  private nextSensorAttemptAt = 0;
   private readonly sensorIntervalMs = 5 * 60 * 1000;
+  private readonly sensorRetryIntervalMs = 60 * 1000;
 
   async recoverStaleLocks() {
     await Promise.all([
@@ -72,9 +73,15 @@ export class AutomationWorker {
   async processRuns(batchSize = 10) { const ids = await this.runs.claim(limit(batchSize), this.id); for (const id of ids) await this.runs.execute(id); return ids.length; }
   async runBuiltInNotificationSensors(now = new Date()) {
     const timestamp = now.getTime();
-    if (this.lastSensorRunAt !== null && timestamp - this.lastSensorRunAt < this.sensorIntervalMs) return { status: 'throttled' as const, created: 0 };
-    this.lastSensorRunAt = timestamp;
-    return { status: 'ran' as const, ...(await systemNotificationSensorService.runOnce(now)) };
+    if (timestamp < this.nextSensorAttemptAt) return { status: 'throttled' as const, created: 0 };
+    try {
+      const result = await systemNotificationSensorService.runOnce(now);
+      this.nextSensorAttemptAt = timestamp + this.sensorIntervalMs;
+      return { status: 'ran' as const, ...result };
+    } catch (error) {
+      this.nextSensorAttemptAt = timestamp + this.sensorRetryIntervalMs;
+      throw error;
+    }
   }
   async processOnce() {
     await this.recoverStaleLocks();

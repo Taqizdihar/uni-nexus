@@ -15,6 +15,7 @@ type NotificationContextValue = {
   refreshRecent: () => Promise<void>;
   refresh: () => Promise<void>;
   markRead: (notification: AppNotification) => Promise<void>;
+  markUnread: (notification: AppNotification) => Promise<void>;
   markAllRead: () => Promise<number>;
 };
 const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
@@ -65,6 +66,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     try { await api.patch(`/notifications/${notification.id}/read`, {}); }
     catch (error) { await refresh(); throw error; }
   }, [refresh]);
+  const markUnread = useCallback(async (notification: AppNotification) => {
+    if (!notification.is_read) return;
+    setRecentNotifications((items) => items.map((item) => item.id === notification.id ? { ...item, is_read: false, read_at: null } : item));
+    setSummary((current) => ({ ...current, unread_count: current.unread_count + 1, critical_unread_count: notification.severity_code === 'critical' ? current.critical_unread_count + 1 : current.critical_unread_count }));
+    try { await api.patch(`/notifications/${notification.id}/unread`, {}); }
+    catch (error) { await refresh(); throw error; }
+  }, [refresh]);
   const markAllRead = useCallback(async () => {
     try {
       const result = await api.post<{ affected_count: number }>('/notifications/mark-all-read', {});
@@ -76,7 +84,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       throw error;
     }
   }, [refresh]);
-  const value = useMemo(() => ({ unreadCount: summary.unread_count, criticalUnreadCount: summary.critical_unread_count, todayCount: summary.today_count, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markAllRead }), [summary, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markAllRead]);
+  const value = useMemo(() => ({ unreadCount: summary.unread_count, criticalUnreadCount: summary.critical_unread_count, todayCount: summary.today_count, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markUnread, markAllRead }), [summary, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markUnread, markAllRead]);
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 

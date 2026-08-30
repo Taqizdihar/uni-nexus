@@ -13,7 +13,7 @@ import { AutomationSkippedError, AutomationValidationError } from './automation-
 import { automationEventRegistry } from './automation-event-registry';
 import { buildAutomationDomainEvent, parseJson } from './automation-context';
 import { domainEvents } from './domain-event-outbox.service';
-import { notificationService } from '../notifications/notification.service';
+import { notificationReadPermissionForModule, notificationService } from '../notifications/notification.service';
 
 export type AutomationRisk = 'informational' | 'operational' | 'data_change';
 export interface AutomationAction { type: string; config?: Record<string, unknown>; continue_on_error?: boolean; }
@@ -67,6 +67,29 @@ const orderIdFor = (context: AutomationExecutionContext) => Number(context.input
 const materialIdFor = (context: AutomationExecutionContext) => Number(context.input.material?.id || context.input.material_id || (context.event?.entity_type === 'material' ? context.event.entity_id : 0));
 const projectIdFor = (context: AutomationExecutionContext) => Number(context.input.project?.id || context.input.project_id || context.input.quotation?.project_id || (context.event?.entity_type === 'studio_project' ? context.event.entity_id : 0));
 const quotationIdFor = (context: AutomationExecutionContext) => Number(context.input.quotation?.id || context.input.quotation_id || (context.event?.entity_type === 'quotation' ? context.event.entity_id : 0));
+
+export type AutomationNotificationSource = {
+  moduleCode: string;
+  permissionCode: string;
+};
+
+/**
+ * Event and sensor notifications are authorized against the registry's source
+ * module. Manual and scheduled notifications are authorized as Automation
+ * output, regardless of any user-supplied presentation module.
+ */
+export const automationNotificationSourceFor = (
+  triggerType: string | null | undefined,
+  triggerEvent: string | null | undefined,
+  businessUnitCode: 'CRAFT' | 'STUDIO',
+): AutomationNotificationSource | null => {
+  const definition = triggerEvent ? automationEventRegistry.get(triggerEvent, businessUnitCode) : undefined;
+  const isDomainTrigger = triggerType === 'event' || triggerType === 'sensor' || (!triggerType && Boolean(definition));
+  const moduleCode = isDomainTrigger ? definition?.module : 'automations';
+  if (!moduleCode) return null;
+  const permissionCode = notificationReadPermissionForModule(moduleCode, businessUnitCode);
+  return permissionCode ? { moduleCode, permissionCode } : null;
+};
 
 export class AutomationActionRegistry {
   all(businessUnitCode?: string) {
@@ -127,6 +150,8 @@ export class AutomationActionRegistry {
   private async createNotification(config: Record<string, unknown>, context: AutomationExecutionContext) {
     const title = template(config.title_template, context.rule.trigger_event, context.input).slice(0, 180);
     const message = template(config.message_template, context.rule.trigger_event, context.input);
+    const source = automationNotificationSourceFor(context.rule.trigger_type, context.rule.trigger_event, context.businessUnitCode);
+    if (!source) throw new AutomationSkippedError('NOTIFICATION_SOURCE_UNRESOLVED', 'Sumber modul notifikasi otomasi tidak dapat ditentukan secara aman.');
     const scope = String(config.recipient_scope || 'workspace_broadcast');
     let userId = scope === 'specific_user' ? Number(config.user_id || 0) || null : null;
     if (scope === 'project_manager') {
@@ -141,18 +166,18 @@ export class AutomationActionRegistry {
       ? String(config.severity) as 'info' | 'success' | 'warning' | 'error' | 'critical' : 'info';
     const input = {
       organizationId: context.organizationId, businessUnitId: context.businessUnitId,
-      notificationType: 'automation', moduleCode: String(config.module_code || 'automations'), severityCode: severity,
+      notificationType: 'automation', moduleCode: source.moduleCode, severityCode: severity,
       title, message, actionUrl: String(config.action_url || '') || null,
       entityType: context.event?.entity_type || null, entityId,
       dedupeKey: `automation:run:${context.run.id}:action:${Number(context.actionIndex || 0)}`,
     };
     if (scope === 'workspace_broadcast') {
-      const results = await notificationService.createForWorkspace(input, { businessUnitId: context.businessUnitId });
+      const results = await notificationService.createForWorkspace(input, { businessUnitId: context.businessUnitId, permissionCode: source.permissionCode });
       const created = results.filter((result) => result.status === 'created').length;
       return created ? { status: 'success', recipient_count: created } : { status: 'skipped', reason: 'NO_ELIGIBLE_RECIPIENTS' };
     }
     if (!userId) throw new AutomationSkippedError('NOTIFICATION_RECIPIENT_REQUIRED', 'Penerima notifikasi tidak valid.');
-    const result = await notificationService.createForUser(userId, input, { businessUnitId: context.businessUnitId });
+    const result = await notificationService.createForUser(userId, input, { businessUnitId: context.businessUnitId, permissionCode: source.permissionCode });
     return result.status === 'created' ? { status: 'success', notification_id: result.id } : { status: 'skipped', reason: result.reason };
   }
 

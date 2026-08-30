@@ -19,10 +19,11 @@ async function waitPort(profile, child) { const file = path.join(profile, 'DevTo
 function connect(url) { const socket = new WebSocket(url); let id = 0; const pending = new Map(); socket.addEventListener('message', async event => { const message = JSON.parse(typeof event.data === 'string' ? event.data : await event.data.text()); if (message.id && pending.has(message.id)) { const pendingRequest = pending.get(message.id); pending.delete(message.id); message.error ? pendingRequest.reject(new Error(message.error.message)) : pendingRequest.resolve(message.result || {}); } }); const ready = new Promise((resolve, reject) => { socket.addEventListener('open', resolve, { once: true }); socket.addEventListener('error', () => reject(new Error('Cannot connect to Chrome DevTools.')), { once: true }); }); return { socket, send: async (method, params = {}) => { await ready; return new Promise((resolve, reject) => { pending.set(++id, { resolve, reject }); socket.send(JSON.stringify({ id, method, params })); }); } }; }
 const evaluate = async (cdp, expression) => (await cdp.send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })).result?.value;
 async function waitFor(cdp, expression, timeout = 15_000) { const until = Date.now() + timeout; while (Date.now() < until) { if (await evaluate(cdp, expression)) return; await delay(250); } throw new Error(`Browser condition timed out: ${expression}`); }
+async function waitForReadState(db, id, expected, timeout = 5_000) { const until = Date.now() + timeout; while (Date.now() < until) { const [rows] = await db.execute('SELECT is_read FROM notifications WHERE id=?', [id]); if (Number(rows[0]?.is_read) === expected) return; await delay(100); } throw new Error(`Notification ${id} did not reach read state ${expected}.`); }
 
 async function run() {
-  const suffix = randomBytes(5).toString('hex'); const username = `browser_notif_${suffix}`; const title = `Notifikasi Browser ${suffix}`; const allReadTitle = `Tandai Semua Browser ${suffix}`;
-  const db = await database(); let userId = 0; let notificationId = 0; let allReadNotificationId = 0; let pollNotificationId = 0; let child; let profile;
+  const suffix = randomBytes(5).toString('hex'); const username = `browser_notif_${suffix}`; const title = `Notifikasi Browser ${suffix}`; const allReadTitle = `Tandai Semua Browser ${suffix}`; const liveModule = `smoke_live_${suffix}`; const liveTitle = `Live module ${suffix}`; const filterAllTitle = `Filter all read ${suffix}`;
+  const db = await database(); let userId = 0; let notificationId = 0; let allReadNotificationId = 0; let liveNotificationId = 0; let filterAllNotificationId = 0; let pollNotificationId = 0; let child; let profile;
   try {
     const [created] = await db.execute(`INSERT INTO users (organization_id,full_name,username,email,password_hash,status_code,approval_status_code,registration_source,default_workspace_code,approval_requested_at) VALUES (1,?,?,?,?,?,?, 'legacy','craft',CURRENT_TIMESTAMP(3))`, [`Browser Notifications`, username, `${username}@example.invalid`, '$2b$10$fixturehashonlyneverused', 'active', 'approved']);
     userId = Number(created.insertId);
@@ -38,8 +39,22 @@ async function run() {
     let state = await evaluate(cdp, `({href:location.href,readyState:document.readyState,title:document.querySelector('main h1')?.textContent?.trim(),body:document.body?.innerText || '',errors:window.__notificationErrors || [],badge:document.querySelector('button[aria-label="Buka notifikasi"] span')?.textContent,filters:[...document.querySelectorAll('select')].map(select => [...select.options].map(option => option.textContent)),metadataOptions:[...document.querySelectorAll('select')].flatMap(select => [...select.options].map(option => option.textContent)).filter(Boolean)})`);
     assert(state.title === 'Notifikasi', `Notification Center title mismatch: ${state.title}; url: ${state.href}; ready: ${state.readyState}; body: ${state.body?.slice(0, 240)}`); assert(state.body.includes(title), 'Notification fixture is missing from Notification Center.'); assert(state.badge === '1', `Unread badge mismatch: ${state.badge}`); assert(!state.errors.length, `Notification Center browser errors: ${state.errors.join('; ')}`);
     assert(state.filters.length >= 4, 'Notification filters did not render.'); assert(state.metadataOptions.includes('Pengguna'), 'Module dropdown did not use the notification metadata endpoint.');
-    await evaluate(cdp, `(function(){ const title = ${JSON.stringify(title)}; const row = [...document.querySelectorAll('[role="button"]')].find(element => element.textContent?.includes(title)); row?.click(); return Boolean(row); })()`); await delay(350);
-    const [readState] = await db.execute('SELECT is_read FROM notifications WHERE id=?', [notificationId]); assert(Number(readState[0]?.is_read) === 1, 'Opening a notification did not mark it read.');
+    await waitFor(cdp, `[...document.querySelectorAll('[role="button"],button')].some(element => element.textContent?.includes(${JSON.stringify(title)}))`);
+    const opened = await evaluate(cdp, `(function(){ const title = ${JSON.stringify(title)}; const row = [...document.querySelectorAll('[role="button"],button')].find(element => element.textContent?.includes(title)); row?.click(); return Boolean(row); })()`); assert(opened, 'Notification fixture row was not clickable.'); await waitForReadState(db, notificationId, 1);
+    const [live] = await db.execute(`INSERT INTO notifications (organization_id,user_id,notification_type,module_code,severity_code,title,message,action_url,is_read) VALUES (?,?, 'smoke',?,'info',?,'Live module fixture','/app/notifications',0)`, [1, userId, liveModule, liveTitle]); liveNotificationId = Number(live.insertId);
+    await evaluate(cdp, `window.dispatchEvent(new Event('focus'))`);
+    await waitFor(cdp, ` [...document.querySelectorAll('select option')].some(option => option.textContent?.trim() === ${JSON.stringify(`smoke live ${suffix}`)})`);
+    const setStatus = async (value) => evaluate(cdp, `(function(){ const select = document.querySelector('select'); if (!select) return false; const setter = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value')?.set; setter?.call(select, ${JSON.stringify(value)}); select.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+    await setStatus('unread'); await waitFor(cdp, `document.body.innerText.includes(${JSON.stringify(liveTitle)})`);
+    await evaluate(cdp, `(function(){ const row = [...document.querySelectorAll('[role="button"]')].find(element => element.textContent?.includes(${JSON.stringify(liveTitle)})); row?.querySelector('button')?.click(); return Boolean(row); })()`);
+    await waitFor(cdp, `!document.body.innerText.includes(${JSON.stringify(liveTitle)})`);
+    await setStatus('read'); await waitFor(cdp, `document.body.innerText.includes(${JSON.stringify(liveTitle)})`);
+    await evaluate(cdp, `(function(){ const row = [...document.querySelectorAll('[role="button"]')].find(element => element.textContent?.includes(${JSON.stringify(liveTitle)})); row?.querySelector('button')?.click(); return Boolean(row); })()`);
+    await waitFor(cdp, `!document.body.innerText.includes(${JSON.stringify(liveTitle)})`);
+    const [filterAll] = await db.execute(`INSERT INTO notifications (organization_id,user_id,notification_type,module_code,severity_code,title,message,action_url,is_read) VALUES (?,?, 'smoke',?,'info',?,'Filter mark-all fixture','/app/notifications',0)`, [1, userId, liveModule, filterAllTitle]); filterAllNotificationId = Number(filterAll.insertId);
+    await evaluate(cdp, `window.dispatchEvent(new Event('focus'))`); await setStatus('unread'); await waitFor(cdp, `document.body.innerText.includes(${JSON.stringify(filterAllTitle)})`);
+    await evaluate(cdp, `(function(){ const button = [...document.querySelectorAll('button')].find(element => element.textContent?.includes('Tandai Semua Dibaca')); button?.click(); return Boolean(button); })()`);
+    await waitFor(cdp, `!document.body.innerText.includes(${JSON.stringify(filterAllTitle)})`);
     await evaluate(cdp, `document.querySelector('button[aria-label="Buka notifikasi"]').click()`); await delay(150);
     state = await evaluate(cdp, `({open:!!document.querySelector('[role=dialog][aria-label="Notifikasi terbaru"]'),body:document.body.innerText})`); assert(state.open && state.body.includes(title), 'Bell did not open the latest-notifications popover.');
     await evaluate(cdp, `document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))`); await delay(100); assert(await evaluate(cdp, `!document.querySelector('[role=dialog][aria-label="Notifikasi terbaru"]')`), 'Escape did not close the notification popover.');
@@ -59,8 +74,13 @@ async function run() {
     if (child) child.kill(); if (profile) { await delay(300); await rm(profile, { recursive: true, force: true, maxRetries: 3, retryDelay: 150 }); }
     if (notificationId) await db.execute('DELETE FROM notifications WHERE id=?', [notificationId]);
     if (allReadNotificationId) await db.execute('DELETE FROM notifications WHERE id=?', [allReadNotificationId]);
+    if (liveNotificationId) await db.execute('DELETE FROM notifications WHERE id=?', [liveNotificationId]);
+    if (filterAllNotificationId) await db.execute('DELETE FROM notifications WHERE id=?', [filterAllNotificationId]);
     if (pollNotificationId) await db.execute('DELETE FROM notifications WHERE id=?', [pollNotificationId]);
-    if (userId) await db.execute('DELETE FROM users WHERE id=?', [userId]);
+    if (userId) {
+      await db.execute('DELETE FROM user_presence_sessions WHERE user_id=?', [userId]);
+      await db.execute('DELETE FROM users WHERE id=?', [userId]);
+    }
     await db.end();
   }
 }

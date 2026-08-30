@@ -1,6 +1,7 @@
 import { pool } from '../../config/database';
 import type { RowDataPacket } from 'mysql2';
 import { automationSensorService, type SensorCandidate } from '../automation/automation-sensor.service';
+import { sanitizeAutomationError } from '../automation/automation-errors';
 import { notificationService, type NotificationSeverity } from './notification.service';
 import { jakartaBusinessDate } from './notification-time';
 
@@ -17,14 +18,39 @@ export type SystemNotificationSensorPolicy = {
   dedupeIdentity?: (candidate: SensorCandidate) => { entityType: string; entityId: number };
 };
 
+export type SystemNotificationSensorRunResult = {
+  businessUnits: number;
+  policiesChecked: number;
+  candidates: number;
+  created: number;
+  failedPolicies: number;
+  failedCandidates: number;
+  bucket: string;
+};
+
 const contextValue = (candidate: SensorCandidate, path: string, fallback: string) => {
   const value = path.split('.').reduce<unknown>((current, key) => current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined, candidate.context);
   return value === undefined || value === null || value === '' ? fallback : String(value);
 };
 
-const amount = (candidate: SensorCandidate, path: string) => {
+/** Formats a sensor amount only when the candidate supplies a valid currency. */
+export const formatSensorCurrency = (amount: unknown, currencyCode?: unknown) => {
+  const numericAmount = Number(amount);
+  const fallback = Number.isFinite(numericAmount) ? numericAmount.toLocaleString('id-ID') : String(amount ?? '0');
+  const code = String(currencyCode || '').trim().toUpperCase();
+  if (!/^[A-Z]{3}$/.test(code) || !Number.isFinite(numericAmount)) return fallback;
+  try {
+    const supportedCurrencies = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('currency') : null;
+    if (supportedCurrencies && !supportedCurrencies.includes(code)) return fallback;
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: code }).format(numericAmount);
+  } catch {
+    return fallback;
+  }
+};
+
+const amount = (candidate: SensorCandidate, path: string, currencyPath = 'invoice.currency_code') => {
   const value = contextValue(candidate, path, '0');
-  return `Rp ${Number(value).toLocaleString('id-ID')}`;
+  return formatSensorCurrency(value, contextValue(candidate, currencyPath, ''));
 };
 
 const identity = (candidate: SensorCandidate) => ({ entityType: candidate.entityType, entityId: candidate.entityId });
@@ -53,32 +79,56 @@ export const systemNotificationSensorPolicies: SystemNotificationSensorPolicy[] 
 ];
 
 export class SystemNotificationSensorService {
-  async runOnce(now = new Date()) {
+  async runOnce(now = new Date()): Promise<SystemNotificationSensorRunResult> {
     const [rows] = await pool.execute('SELECT id, organization_id, code FROM business_units WHERE is_active = 1 ORDER BY id') as [BusinessUnit[], unknown];
+    let policiesChecked = 0;
     let candidateCount = 0;
     let createdCount = 0;
+    let failedPolicies = 0;
+    let failedCandidates = 0;
     const bucket = jakartaBusinessDate(now);
 
     for (const businessUnit of rows) {
       for (const policy of systemNotificationSensorPolicies) {
         if (String(businessUnit.code).toUpperCase() !== policy.workspaceCode) continue;
-        const candidates = await automationSensorService.candidates(policy.event, Number(businessUnit.id));
+        policiesChecked += 1;
+        let candidates: SensorCandidate[];
+        try {
+          candidates = await automationSensorService.candidates(policy.event, Number(businessUnit.id));
+        } catch (error) {
+          failedPolicies += 1;
+          console.warn('[notifications] sensor policy query failed', {
+            event: policy.event,
+            businessUnitId: Number(businessUnit.id),
+            error: sanitizeAutomationError(error),
+          });
+          continue;
+        }
         candidateCount += candidates.length;
         for (const candidate of candidates) {
-          const content = policy.content(candidate);
-          const target = policy.dedupeIdentity?.(candidate) || identity(candidate);
-          const dedupeKey = `system:sensor:${policy.event}:${Number(businessUnit.id)}:${target.entityType}:${target.entityId}:${bucket}`;
-          const outcomes = await notificationService.createForWorkspace({
-            organizationId: Number(businessUnit.organization_id), businessUnitId: Number(businessUnit.id),
-            notificationType: 'system', moduleCode: policy.moduleCode, severityCode: policy.severity,
-            title: content.title, message: content.message, actionUrl: policy.actionUrl,
-            entityType: candidate.entityType, entityId: candidate.entityId, dedupeKey,
-          }, { businessUnitId: Number(businessUnit.id), permissionCode: policy.permissionCode });
-          createdCount += outcomes.filter((outcome) => outcome.status === 'created').length;
+          try {
+            const content = policy.content(candidate);
+            const target = policy.dedupeIdentity?.(candidate) || identity(candidate);
+            const dedupeKey = `system:sensor:${policy.event}:${Number(businessUnit.id)}:${target.entityType}:${target.entityId}:${bucket}`;
+            const outcomes = await notificationService.createForWorkspace({
+              organizationId: Number(businessUnit.organization_id), businessUnitId: Number(businessUnit.id),
+              notificationType: 'system', moduleCode: policy.moduleCode, severityCode: policy.severity,
+              title: content.title, message: content.message, actionUrl: policy.actionUrl,
+              entityType: candidate.entityType, entityId: candidate.entityId, dedupeKey,
+            }, { businessUnitId: Number(businessUnit.id), permissionCode: policy.permissionCode });
+            createdCount += outcomes.filter((outcome) => outcome.status === 'created').length;
+          } catch (error) {
+            failedCandidates += 1;
+            console.warn('[notifications] sensor candidate delivery failed', {
+              event: policy.event,
+              businessUnitId: Number(businessUnit.id),
+              error: sanitizeAutomationError(error),
+            });
+          }
         }
       }
     }
-    return { businessUnits: rows.length, candidates: candidateCount, created: createdCount, bucket };
+    return { businessUnits: rows.length, policiesChecked, candidates: candidateCount, created: createdCount, failedPolicies, failedCandidates, bucket };
   }
 }
 

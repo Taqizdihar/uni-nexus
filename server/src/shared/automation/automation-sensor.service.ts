@@ -15,12 +15,12 @@ export class AutomationSensorService {
         return rows.map((row: any) => ({ entityType: 'printer', entityId: Number(row.id), entityCode: row.code, context: { printer: { id: Number(row.id), code: row.code, name: row.name, status_code: row.status_code, next_due_at: row.next_due_at } } }));
       }
       case 'finance.customer_invoice_overdue': {
-        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due FROM invoices WHERE business_unit_id=? AND status_code NOT IN ('paid','void','cancelled') AND balance_due>0 AND due_date<UTC_DATE()`, [businessUnitId]);
-        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due) } } }));
+        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due,currency_code FROM invoices WHERE business_unit_id=? AND status_code NOT IN ('paid','void','cancelled') AND balance_due>0 AND due_date<UTC_DATE()`, [businessUnitId]);
+        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), currency_code: row.currency_code } } }));
       }
       case 'procurement.supplier_invoice_overdue': {
-        const [rows]: any = await executor.execute(`SELECT id,supplier_invoice_number,due_date,balance_due FROM supplier_invoices WHERE business_unit_id=? AND status_code NOT IN ('paid','void','cancelled') AND balance_due>0 AND due_date<UTC_DATE()`, [businessUnitId]);
-        return rows.map((row: any) => ({ entityType: 'supplier_invoice', entityId: Number(row.id), entityCode: row.supplier_invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.supplier_invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due) } } }));
+        const [rows]: any = await executor.execute(`SELECT id,supplier_invoice_number,due_date,balance_due,currency_code FROM supplier_invoices WHERE business_unit_id=? AND status_code NOT IN ('paid','void','cancelled') AND balance_due>0 AND due_date<UTC_DATE()`, [businessUnitId]);
+        return rows.map((row: any) => ({ entityType: 'supplier_invoice', entityId: Number(row.id), entityCode: row.supplier_invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.supplier_invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), currency_code: row.currency_code } } }));
       }
       case 'studio.project.deadline_approaching': {
         const [rows]: any = await executor.execute(`SELECT id,project_code,project_name,status_code,priority_code,deadline_at,contract_value,project_manager_user_id FROM studio_projects
@@ -56,19 +56,19 @@ export class AutomationSensorService {
         return rows.map((row: any) => ({ entityType: 'quotation', entityId: Number(row.id), entityCode: row.quotation_number, context: { quotation: { id: Number(row.id), quotation_number: row.quotation_number, party_id: Number(row.party_id), project_id: row.project_id ? Number(row.project_id) : null, status_code: 'expired', valid_until: row.valid_until, total_amount: Number(row.total_amount), currency_code: row.currency_code } } }));
       }
       case 'studio.invoice.due_soon': {
-        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due,total_amount,status_code,source_id FROM invoices
+        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due,total_amount,status_code,source_id,currency_code FROM invoices
           WHERE business_unit_id=? AND status_code NOT IN ('draft','paid','void','refunded') AND balance_due>0 AND due_date BETWEEN UTC_DATE() AND DATE_ADD(UTC_DATE(), INTERVAL 3 DAY)`, [businessUnitId]);
-        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), total_amount: Number(row.total_amount), status_code: row.status_code, project_id: row.source_id ? Number(row.source_id) : null } } }));
+        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), total_amount: Number(row.total_amount), status_code: row.status_code, project_id: row.source_id ? Number(row.source_id) : null, currency_code: row.currency_code } } }));
       }
       case 'studio.invoice.overdue': {
-        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due,total_amount,status_code,source_id FROM invoices
+        const [rows]: any = await executor.execute(`SELECT id,invoice_number,due_date,balance_due,total_amount,status_code,source_id,currency_code FROM invoices
           WHERE business_unit_id=? AND status_code NOT IN ('draft','paid','void','refunded') AND balance_due>0 AND due_date<UTC_DATE()`, [businessUnitId]);
-        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), total_amount: Number(row.total_amount), status_code: row.status_code, project_id: row.source_id ? Number(row.source_id) : null } } }));
+        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, due_date: row.due_date, outstanding_amount: Number(row.balance_due), total_amount: Number(row.total_amount), status_code: row.status_code, project_id: row.source_id ? Number(row.source_id) : null, currency_code: row.currency_code } } }));
       }
       case 'studio.invoice.payment_schedule_due': {
-        const [rows]: any = await executor.execute(`SELECT ips.id schedule_id,ips.label,ips.due_date,ips.amount,ips.paid_amount,i.id,i.invoice_number,i.balance_due,i.source_id FROM invoice_payment_schedules ips
+        const [rows]: any = await executor.execute(`SELECT ips.id schedule_id,ips.label,ips.due_date,ips.amount,ips.paid_amount,i.id,i.invoice_number,i.balance_due,i.source_id,i.currency_code FROM invoice_payment_schedules ips
           JOIN invoices i ON i.id=ips.invoice_id WHERE i.business_unit_id=? AND ips.status_code NOT IN ('paid','cancelled') AND ips.amount>ips.paid_amount AND ips.due_date<=DATE_ADD(UTC_DATE(), INTERVAL 1 DAY)`, [businessUnitId]);
-        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, outstanding_amount: Number(row.balance_due), project_id: row.source_id ? Number(row.source_id) : null }, payment_schedule: { id: Number(row.schedule_id), label: row.label, due_date: row.due_date, amount: Number(row.amount), paid_amount: Number(row.paid_amount) } } }));
+        return rows.map((row: any) => ({ entityType: 'invoice', entityId: Number(row.id), entityCode: row.invoice_number, context: { invoice: { id: Number(row.id), invoice_code: row.invoice_number, outstanding_amount: Number(row.balance_due), project_id: row.source_id ? Number(row.source_id) : null, currency_code: row.currency_code }, payment_schedule: { id: Number(row.schedule_id), label: row.label, due_date: row.due_date, amount: Number(row.amount), paid_amount: Number(row.paid_amount) } } }));
       }
       case 'studio.asset.maintenance_due': {
         const [rows]: any = await executor.execute(`SELECT a.id,a.asset_code,a.name,a.status_code,m.next_due_at FROM assets a JOIN asset_maintenance_records m ON m.id=(SELECT lm.id FROM asset_maintenance_records lm WHERE lm.asset_id=a.id ORDER BY lm.performed_at DESC,lm.id DESC LIMIT 1)
