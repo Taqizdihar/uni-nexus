@@ -3,7 +3,7 @@ import type { Readable } from 'node:stream';
 export type StorageVisibility = 'public' | 'private';
 
 export type StoragePolicyName =
-  | 'avatar' | 'product_image' | 'product_design' | 'order_attachment'
+  | 'avatar' | 'profile_banner' | 'product_image' | 'product_design' | 'order_attachment'
   | 'project_deliverable' | 'generic_document' | 'quotation_pdf' | 'invoice_pdf'
   | 'payment_proof' | 'expense_receipt' | 'purchase_order_document'
   | 'supplier_invoice_document' | 'equipment_image' | 'maintenance_attachment'

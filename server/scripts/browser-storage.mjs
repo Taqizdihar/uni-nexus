@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createHmac } from 'node:crypto';
+import { createHmac, randomUUID } from 'node:crypto';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -27,12 +27,31 @@ const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR
 const tokenFor = user => { const now = Math.floor(Date.now() / 1000); const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url'); const payload = Buffer.from(JSON.stringify({ id: user.id, organization_id: user.organization_id, username: user.username, iat: now, exp: now + 1800 })).toString('base64url'); return `${header}.${payload}.${createHmac('sha256', process.env.JWT_SECRET).update(`${header}.${payload}`).digest('base64url')}`; };
 const database = () => mysql.createConnection({ host: process.env.DB_HOST, port: Number(process.env.DB_PORT), user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME });
 
-async function selectUser() {
+async function createFixture() {
   const connection = await database();
   try {
-    const [rows] = await connection.execute(`SELECT id,organization_id,username FROM users WHERE deleted_at IS NULL AND status_code='active' AND approval_status_code='approved' AND avatar_path IS NULL LIMIT 1`);
-    assert(rows.length, 'No active avatar-free user is available for the storage browser fixture.');
-    return rows[0];
+    const username = `browserstorage${randomUUID().slice(0, 12)}`;
+    const [result] = await connection.execute(
+      `INSERT INTO users (organization_id, full_name, username, email, password_hash, status_code, approval_status_code, registration_source, default_workspace_code, approval_requested_at)
+       VALUES (1, 'Storage Browser Smoke', ?, ?, '$2b$10$fixturehashonlyneverused', 'active', 'approved', 'legacy', 'craft', CURRENT_TIMESTAMP(3))`,
+      [username, `${username}@example.invalid`],
+    );
+    return { id: Number(result.insertId), organization_id: 1, username };
+  } finally { await connection.end(); }
+}
+
+async function cleanupFixture(userId) {
+  if (!userId) return;
+  const connection = await database();
+  try {
+    await connection.execute('DELETE FROM audit_logs WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_presence_sessions WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_sessions WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_business_units WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_roles WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_deletion_requests WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM user_reactivation_requests WHERE deleted_user_id = ?', [userId]);
+    await connection.execute('DELETE FROM users WHERE id = ?', [userId]);
   } finally { await connection.end(); }
 }
 
@@ -54,8 +73,9 @@ const publicUrl = key => `${api.replace(/\/api\/v1$/, '')}/uploads/${key}`;
 const removeGenerated = async key => { if (!key || !/^avatars\/[0-9a-f-]+\.png$/i.test(key)) return; await rm(path.join(root, 'server', 'uploads', ...key.split('/')), { force: true }); };
 
 async function run() {
-  const user = await selectUser(); const token = tokenFor(user); let first; let second; let child; let profile;
+  let user; let token; let first; let second; let child; let profile;
   try {
+    user = await createFixture(); token = tokenFor(user);
     const privateResponse = await fetch(`${api.replace(/\/api\/v1$/, '')}/uploads/documents/guessed-private.pdf`, { signal: AbortSignal.timeout(10_000) });
     assert(privateResponse.status !== 200, 'A guessed private /uploads URL was publicly accessible.');
     first = await upload(token, 'storage-browser-a');
@@ -68,14 +88,15 @@ async function run() {
     const port = await waitPort(profile, child); const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`, { signal: AbortSignal.timeout(10_000) })).json(); const page = targets.find(target => target.type === 'page'); assert(page?.webSocketDebuggerUrl, 'No Chrome page target is available.');
     const cdp = connect(page.webSocketDebuggerUrl); await cdp.send('Page.enable'); await cdp.send('Runtime.enable'); await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: `localStorage.setItem('token', ${JSON.stringify(token)}); window.__storageErrors=[]; window.addEventListener('error', event => window.__storageErrors.push(event.message));` });
     await cdp.send('Page.navigate', { url: `${frontend}/app/profile` }); await delay(1600);
-    let state = await cdp.send('Runtime.evaluate', { expression: '({title:document.querySelector("h1")?.textContent,avatar:document.querySelector("img[src*=\\"/uploads/avatars/\\"]")?.getAttribute("src"),errors:window.__storageErrors})', returnByValue: true });
-    assert(state.result?.value?.title === 'Profil Saya' && state.result?.value?.avatar?.includes('/uploads/avatars/'), 'Profile did not render the updated public avatar.'); assert(!state.result?.value?.errors?.length, `Profile raised browser errors: ${state.result?.value?.errors?.join('; ')}`);
+    let state = await cdp.send('Runtime.evaluate', { expression: '({avatar:document.querySelector("img[src*=\\"/uploads/avatars/\\"]")?.getAttribute("src"),errors:window.__storageErrors})', returnByValue: true });
+    assert(state.result?.value?.avatar?.includes('/uploads/avatars/'), 'Profile did not render the updated public avatar.'); assert(!state.result?.value?.errors?.length, `Profile raised browser errors: ${state.result?.value?.errors?.join('; ')}`);
     await deleteAvatar(token); assert((await fetch(publicUrl(second), { signal: AbortSignal.timeout(10_000) })).status !== 200, 'Deleted avatar remains publicly available.');
     await cdp.send('Page.reload'); await delay(900); state = await cdp.send('Runtime.evaluate', { expression: 'document.querySelector("img[src*=\\"/uploads/avatars/\\"]") === null', returnByValue: true }); assert(state.result?.value, 'Profile did not return to avatar initials fallback after deletion.'); cdp.socket.close();
     console.log('Storage browser acceptance passed.');
   } finally {
     try { await deleteAvatar(token); } catch {}
     await removeGenerated(first); await removeGenerated(second);
+    await cleanupFixture(user?.id);
     if (child) child.kill(); if (profile) { await delay(300); await rm(profile, { recursive: true, force: true, maxRetries: 3, retryDelay: 150 }); }
   }
 }

@@ -1,508 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { api } from '../../lib/api';
-import { Button } from '../../components/ui/Button';
-import { 
-  Users as UsersIcon, ShieldCheck, Clock, Ban, CheckCircle2, 
-  XCircle, UserCog, Trash2, Search, Filter 
-} from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Ban, CheckCircle2, Clock, ShieldCheck, Trash2, UserCog, Users as UsersIcon, XCircle } from 'lucide-react';
+import { api, ApiError } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { UserAvatar } from '../../components/common/UserAvatar';
+import { Button } from '../../components/ui/Button';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
+import { Modal } from '../../components/ui/Modal';
+
+type Role = { id: number; code: string; name: string };
+type ManagedUser = { id: number; full_name: string; username: string; email: string; avatar_path: string | null; profile_status_code?: string; status_code: string; approval_status_code: string; created_at: string; role?: { code: string; name: string } };
+type DeletionRequest = { id: number; user_id: number; full_name: string; username: string; email: string; avatar_path: string | null; profile_status_code?: string; requested_at: string; request_reason: string | null; role: { code: string; name: string } | null };
+type ReactivationRequest = { id: number; deleted_user_id: number; requested_full_name: string; requested_username: string; requested_email: string; requested_phone: string | null; requested_default_workspace_code: string; requested_at: string; archived_full_name: string; archived_username: string; archived_email: string; avatar_path: string | null; archived_role: { code: string; name: string } | null };
+type PendingAccessItem = { kind: 'signup'; user: ManagedUser } | { kind: 'reactivation'; request: ReactivationRequest };
+type Tab = 'active' | 'pending' | 'suspended' | 'deletions';
+type Feedback = { type: 'success' | 'error'; text: string } | null;
+
+const formatDate = (value: string) => new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
+const getMessage = (error: unknown, fallback: string) => error instanceof ApiError ? error.message : fallback;
 
 export function Users() {
-  const { user: currentUser, hasPermission, isLoading: authLoading } = useAuth();
-  const [users, setUsers] = useState<any[]>([]);
-  const [roles, setRoles] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('active'); // active, pending, suspended
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  // Modals state
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  
-  const [selectedRole, setSelectedRole] = useState('');
-  const [rejectReason, setRejectReason] = useState('');
-  const [feedbackMsg, setFeedbackMsg] = useState<{type: 'success' | 'error', text: string} | null>(null);
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const [users, setUsers] = useState<ManagedUser[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [deletionRequests, setDeletionRequests] = useState<DeletionRequest[]>([]);
+  const [reactivationRequests, setReactivationRequests] = useState<ReactivationRequest[]>([]);
+  const [tab, setTab] = useState<Tab>('active');
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<Feedback>(null);
+  const [selectedSignup, setSelectedSignup] = useState<ManagedUser | null>(null);
+  const [selectedReactivation, setSelectedReactivation] = useState<ReactivationRequest | null>(null);
+  const [selectedDeletion, setSelectedDeletion] = useState<DeletionRequest | null>(null);
+  const [selectedUser, setSelectedUser] = useState<ManagedUser | null>(null);
+  const [roleCode, setRoleCode] = useState('');
+  const [reviewNote, setReviewNote] = useState('');
+  const [isApprovalOpen, setIsApprovalOpen] = useState(false);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
+  const [isRoleOpen, setIsRoleOpen] = useState(false);
+  const [isDeletionDetailOpen, setIsDeletionDetailOpen] = useState(false);
+  const [isDeletionConfirmOpen, setIsDeletionConfirmOpen] = useState(false);
+  const [isManagementDeleteOpen, setIsManagementDeleteOpen] = useState(false);
+  const [isMutating, setIsMutating] = useState(false);
+  const isExecutive = ['CEO', 'COO', 'CTO'].includes(currentUser?.role?.code || '');
 
   const showFeedback = (type: 'success' | 'error', text: string) => {
-    setFeedbackMsg({ type, text });
-    setTimeout(() => setFeedbackMsg(null), 5000);
+    setFeedback({ type, text });
+    window.setTimeout(() => setFeedback(current => current?.text === text ? null : current), 5000);
   };
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      setIsLoading(true);
-      // Fetch all for simplicity, then filter in frontend or we could pass filters
-      const response = await api.get<any[]>('/users');
-      setUsers(response);
-    } catch (error) {
-      console.error('Failed to fetch users', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchRoles = async (forUserId?: number) => {
-    try {
-      const endpoint = forUserId ? `/users/roles/available?forUserId=${forUserId}` : '/users/roles/available';
-      const response = await api.get<any[]>(endpoint);
-      setRoles(response);
-    } catch (error) {
-      showFeedback('error', 'Gagal memuat daftar peran.');
-    }
+      const [userRows, roleRows, deletionRows, reactivationRows] = await Promise.all([
+        api.get<ManagedUser[]>('/users'), api.get<Role[]>('/users/roles/available'),
+        api.get<DeletionRequest[]>('/users/deletion-requests'), api.get<ReactivationRequest[]>('/users/reactivation-requests'),
+      ]);
+      setUsers(userRows); setRoles(roleRows); setDeletionRequests(deletionRows); setReactivationRequests(reactivationRows);
+    } catch (error) { showFeedback('error', getMessage(error, 'Gagal memuat manajemen pengguna.')); }
+    finally { setLoading(false); }
   };
 
   useEffect(() => {
-    if (!authLoading && hasPermission('users.manage')) {
-      fetchUsers();
-      fetchRoles();
-    }
-  }, [authLoading, hasPermission]);
+    if (!authLoading && currentUser?.permissions?.includes('users.manage')) void fetchData();
+  }, [authLoading, currentUser?.id]);
 
-  const handleApprove = async () => {
-    try {
-      await api.post(`/users/${selectedUser.id}/approve`, { roleCode: selectedRole });
-      setIsApproveModalOpen(false);
-      fetchUsers();
-      fetchRoles(); // Refresh roles to check singleton occupancy
-      showFeedback('success', 'Pengguna berhasil disetujui.');
-    } catch (error: any) {
-      showFeedback('error', error.message || 'Gagal menyetujui pengguna');
-    }
+  const pendingItems = useMemo<PendingAccessItem[]>(() => [
+    ...users.filter(user => user.approval_status_code === 'pending').map(user => ({ kind: 'signup' as const, user })),
+    ...reactivationRequests.map(request => ({ kind: 'reactivation' as const, request })),
+  ], [reactivationRequests, users]);
+  const matches = (parts: Array<string | null | undefined>) => parts.some(part => part?.toLowerCase().includes(query.toLowerCase()));
+  const activeUsers = users.filter(user => user.status_code === 'active' && user.approval_status_code === 'approved' && matches([user.full_name, user.email, user.username]));
+  const suspendedUsers = users.filter(user => (user.status_code === 'suspended' || user.approval_status_code === 'rejected') && matches([user.full_name, user.email, user.username]));
+  const visiblePending = pendingItems.filter(item => item.kind === 'signup' ? matches([item.user.full_name, item.user.email, item.user.username]) : matches([item.request.requested_full_name, item.request.requested_email, item.request.archived_email]));
+  const visibleDeletion = deletionRequests.filter(request => matches([request.full_name, request.email, request.username]));
+
+  const perform = async (work: () => Promise<void>, success: string) => {
+    if (isMutating) return;
+    setIsMutating(true);
+    try { await work(); await fetchData(); showFeedback('success', success); }
+    catch (error) { showFeedback('error', getMessage(error, 'Tindakan tidak dapat diproses.')); }
+    finally { setIsMutating(false); }
   };
 
-  const handleReject = async () => {
-    try {
-      await api.post(`/users/${selectedUser.id}/reject`, { reason: rejectReason });
-      setIsRejectModalOpen(false);
-      fetchUsers();
-      showFeedback('success', 'Pengguna berhasil ditolak.');
-    } catch (error: any) {
-      showFeedback('error', error.message || 'Gagal menolak pengguna');
-    }
-  };
-  
-  const handleUpdateRole = async () => {
-    try {
-      await api.patch(`/users/${selectedUser.id}/role`, { roleCode: selectedRole });
-      setIsRoleModalOpen(false);
-      fetchUsers();
-      fetchRoles();
-      showFeedback('success', 'Peran pengguna berhasil diperbarui.');
-    } catch (error: any) {
-      showFeedback('error', error.message || 'Gagal mengubah role');
-    }
-  };
+  const approveSignup = () => selectedSignup && void perform(async () => { await api.post(`/users/${selectedSignup.id}/approve`, { roleCode }); setIsApprovalOpen(false); }, 'Akun berhasil disetujui.');
+  const rejectSignup = () => selectedSignup && void perform(async () => { await api.post(`/users/${selectedSignup.id}/reject`, { reason: reviewNote }); setIsRejectOpen(false); }, 'Pengajuan akun ditolak.');
+  const approveReactivation = () => selectedReactivation && void perform(async () => { await api.post(`/users/reactivation-requests/${selectedReactivation.id}/approve`, { roleCode, review_note: reviewNote }); setIsApprovalOpen(false); }, 'Aktivasi ulang akun berhasil disetujui.');
+  const rejectReactivation = () => selectedReactivation && void perform(async () => { await api.post(`/users/reactivation-requests/${selectedReactivation.id}/reject`, { review_note: reviewNote }); setIsRejectOpen(false); }, 'Pengajuan aktivasi ulang ditolak.');
+  const reviewDeletion = (decision: 'approve' | 'reject') => selectedDeletion && void perform(async () => { await api.post(`/users/deletion-requests/${selectedDeletion.id}/${decision}`, { review_note: reviewNote }); setIsDeletionConfirmOpen(false); setIsDeletionDetailOpen(false); }, decision === 'approve' ? 'Akun berhasil diarsipkan.' : 'Pengajuan penghapusan ditolak.');
+  const saveRole = () => selectedUser && void perform(async () => { await api.patch(`/users/${selectedUser.id}/role`, { roleCode }); setIsRoleOpen(false); }, 'Peran pengguna diperbarui.');
+  const toggleStatus = (user: ManagedUser) => void perform(async () => { await api.patch(`/users/${user.id}/status`, { status_code: user.status_code === 'active' ? 'suspended' : 'active' }); }, user.status_code === 'active' ? 'Akun ditangguhkan.' : 'Akun diaktifkan kembali.');
+  const archiveDirectly = () => selectedUser && void perform(async () => { await api.delete(`/users/${selectedUser.id}`); setIsManagementDeleteOpen(false); }, 'Akun berhasil diarsipkan.');
 
-  const handleUpdateStatus = async (userId: number, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
-    try {
-      await api.patch(`/users/${userId}/status`, { status_code: newStatus });
-      fetchUsers();
-      showFeedback('success', newStatus === 'active' ? 'Akun berhasil diaktifkan kembali.' : 'Akun berhasil ditangguhkan.');
-    } catch (error: any) {
-      showFeedback('error', error.message || 'Gagal mengubah status');
-    }
-  };
+  const openSignupApproval = (user: ManagedUser) => { setSelectedSignup(user); setSelectedReactivation(null); setRoleCode(''); setReviewNote(''); setIsApprovalOpen(true); };
+  const openReactivationApproval = (request: ReactivationRequest) => { setSelectedReactivation(request); setSelectedSignup(null); setRoleCode(''); setReviewNote(''); setIsApprovalOpen(true); };
+  const openSignupReject = (user: ManagedUser) => { setSelectedSignup(user); setSelectedReactivation(null); setReviewNote(''); setIsRejectOpen(true); };
+  const openReactivationReject = (request: ReactivationRequest) => { setSelectedReactivation(request); setSelectedSignup(null); setReviewNote(''); setIsRejectOpen(true); };
 
-  const handleDelete = async () => {
-    if (!selectedUser) return;
-    try {
-      await api.delete(`/users/${selectedUser.id}`);
-      setIsDeleteDialogOpen(false);
-      fetchUsers();
-      showFeedback('success', 'Pengguna berhasil dihapus.');
-    } catch (error: any) {
-      setIsDeleteDialogOpen(false);
-      showFeedback('error', error.message || 'Gagal menghapus pengguna');
-    }
-  };
+  const tabs: Array<{ value: Tab; label: string; icon: React.ElementType; count?: number }> = [
+    { value: 'active', label: 'Pengguna Aktif', icon: ShieldCheck, count: users.filter(user => user.status_code === 'active' && user.approval_status_code === 'approved').length },
+    { value: 'pending', label: 'Menunggu Persetujuan', icon: Clock, count: pendingItems.length },
+    { value: 'suspended', label: 'Ditangguhkan / Ditolak', icon: Ban },
+    { value: 'deletions', label: 'Pengajuan Penghapusan', icon: Trash2, count: deletionRequests.length },
+  ];
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          user.username?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (!matchesSearch) return false;
-    
-    if (activeTab === 'active') {
-      return user.status_code === 'active' && user.approval_status_code === 'approved';
-    } else if (activeTab === 'pending') {
-      return user.approval_status_code === 'pending';
-    } else {
-      return user.status_code === 'suspended' || user.approval_status_code === 'rejected';
-    }
-  });
+  return <div className="p-4 sm:p-8"><div className="mb-7"><h1 className="flex items-center gap-2 text-2xl font-bold text-[var(--nexus-charcoal)]"><UsersIcon className="h-6 w-6 text-[var(--nexus-yellow-deep)]" /> Manajemen Pengguna</h1><p className="mt-1 text-sm text-gray-500">Kelola akses, peran, persetujuan, dan pengajuan siklus hidup akun.</p></div>
+    {feedback && <div role="status" className={`mb-5 flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${feedback.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-red-200 bg-red-50 text-red-700'}`}>{feedback.type === 'success' ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}{feedback.text}</div>}
+    <section className="overflow-hidden rounded-2xl border border-[var(--nexus-border)] bg-white shadow-sm"><div className="flex overflow-x-auto border-b border-gray-100 bg-gray-50/70 p-3">{tabs.map(item => { const Icon = item.icon; return <button key={item.value} type="button" onClick={() => setTab(item.value)} className={`mr-2 inline-flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${tab === item.value ? 'border border-gray-200 bg-white text-[var(--nexus-yellow-deep)] shadow-sm' : 'text-gray-500 hover:bg-gray-100'}`}><Icon className="h-4 w-4" />{item.label}{item.count ? <span className="rounded-full bg-[var(--nexus-yellow)]/20 px-2 py-0.5 text-xs text-[var(--nexus-charcoal)]">{item.count}</span> : null}</button>; })}</div>
+      <div className="border-b border-gray-100 p-4"><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Cari nama, username, atau email..." className="w-full max-w-md rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[var(--nexus-yellow)] focus:outline-none" /></div>
+      {loading ? <div className="p-10 text-center text-sm text-gray-500">Memuat data pengguna…</div> : tab === 'pending' ? <PendingList items={visiblePending} onApproveSignup={openSignupApproval} onRejectSignup={openSignupReject} onApproveReactivation={openReactivationApproval} onRejectReactivation={openReactivationReject} /> : tab === 'deletions' ? <DeletionList items={visibleDeletion} onOpen={request => { setSelectedDeletion(request); setReviewNote(''); setIsDeletionDetailOpen(true); }} /> : <UsersTable users={tab === 'active' ? activeUsers : suspendedUsers} tab={tab} currentUserId={currentUser?.id} onRole={user => { setSelectedUser(user); setRoleCode(user.role?.code || ''); setIsRoleOpen(true); }} onStatus={toggleStatus} onDelete={user => { setSelectedUser(user); setIsManagementDeleteOpen(true); }} />}
+    </section>
 
-  return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--nexus-charcoal)] flex items-center gap-2">
-            <UsersIcon className="w-6 h-6 text-[var(--nexus-yellow-deep)]" />
-            Manajemen Pengguna
-          </h1>
-          <p className="text-gray-500 mt-1">Kelola akses, peran, dan persetujuan akun pengguna</p>
-        </div>
-      </div>
+    <Modal open={isApprovalOpen} title={selectedReactivation ? 'Setujui Aktivasi Ulang' : 'Persetujuan Akun'} onClose={() => !isMutating && setIsApprovalOpen(false)} busy={isMutating}><div className="space-y-4 p-5">{selectedReactivation ? <IdentitySummary title="Akun arsip" name={selectedReactivation.archived_full_name} username={selectedReactivation.archived_username} email={selectedReactivation.archived_email} avatar_path={selectedReactivation.avatar_path} extra={<p className="mt-3 text-sm text-gray-600">Permintaan baru: <strong>{selectedReactivation.requested_full_name}</strong> · @{selectedReactivation.requested_username} · {selectedReactivation.requested_email}</p>} /> : selectedSignup && <IdentitySummary title="Pengajuan akun" name={selectedSignup.full_name} username={selectedSignup.username} email={selectedSignup.email} avatar_path={selectedSignup.avatar_path} />}<RoleSelect roles={roles} value={roleCode} onChange={setRoleCode} /><label className="block"><span className="mb-1 block text-sm font-medium text-gray-700">Catatan peninjauan (opsional)</span><textarea value={reviewNote} maxLength={500} rows={3} onChange={event => setReviewNote(event.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" /></label><div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => setIsApprovalOpen(false)} disabled={isMutating}>Batal</Button><Button type="button" onClick={selectedReactivation ? approveReactivation : approveSignup} disabled={!roleCode || isMutating}>{isMutating ? 'Memproses...' : 'Setujui & Berikan Akses'}</Button></div></div></Modal>
+    <Modal open={isRejectOpen} title={selectedReactivation ? 'Tolak Aktivasi Ulang' : 'Tolak Pengajuan Akun'} onClose={() => !isMutating && setIsRejectOpen(false)} busy={isMutating}><div className="space-y-4 p-5"><p className="text-sm text-gray-600">{selectedReactivation ? 'Akun arsip akan tetap tidak aktif; kata sandi yang diajukan akan dihapus.' : 'Pengajuan akun ini akan ditolak.'}</p><label className="block"><span className="mb-1 block text-sm font-medium text-gray-700">Catatan peninjauan (opsional)</span><textarea value={reviewNote} maxLength={500} rows={3} onChange={event => setReviewNote(event.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" /></label><div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => setIsRejectOpen(false)} disabled={isMutating}>Batal</Button><Button type="button" className="bg-red-600 text-white hover:bg-red-700" onClick={selectedReactivation ? rejectReactivation : rejectSignup} disabled={isMutating}>{isMutating ? 'Memproses...' : 'Tolak Pengajuan'}</Button></div></div></Modal>
+    <Modal open={isRoleOpen} title="Ubah Peran Pengguna" onClose={() => !isMutating && setIsRoleOpen(false)} busy={isMutating}><div className="space-y-4 p-5">{selectedUser && <IdentitySummary title="Pengguna" name={selectedUser.full_name} username={selectedUser.username} email={selectedUser.email} avatar_path={selectedUser.avatar_path} />}<RoleSelect roles={roles} value={roleCode} onChange={setRoleCode} currentRole={selectedUser?.role} /><div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => setIsRoleOpen(false)} disabled={isMutating}>Batal</Button><Button type="button" onClick={saveRole} disabled={!roleCode || isMutating}>Simpan Perubahan</Button></div></div></Modal>
+    <Modal open={isDeletionDetailOpen} title="Pengajuan Penghapusan Akun" onClose={() => !isMutating && setIsDeletionDetailOpen(false)} busy={isMutating}><div className="space-y-4 p-5">{selectedDeletion && <><IdentitySummary title="Akun yang meminta penghapusan" name={selectedDeletion.full_name} username={selectedDeletion.username} email={selectedDeletion.email} avatar_path={selectedDeletion.avatar_path} extra={<p className="mt-3 text-sm text-gray-600">Diajukan: {formatDate(selectedDeletion.requested_at)}<br />Alasan: {selectedDeletion.request_reason || 'Tidak ada alasan'}</p>} /><label className="block"><span className="mb-1 block text-sm font-medium text-gray-700">Catatan peninjauan (opsional)</span><textarea value={reviewNote} maxLength={500} rows={3} onChange={event => setReviewNote(event.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" /></label>{!isExecutive && <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">Hanya CEO, COO, atau CTO yang dapat menyetujui atau menolak pengajuan ini.</p>}<div className="flex flex-wrap justify-end gap-3"><Button type="button" variant="outline" className="text-red-700" onClick={() => reviewDeletion('reject')} disabled={isMutating || !isExecutive}>Tolak Pengajuan</Button><Button type="button" className="bg-red-600 text-white hover:bg-red-700" onClick={() => setIsDeletionConfirmOpen(true)} disabled={isMutating || !isExecutive}>Setujui Penghapusan</Button></div></>}</div></Modal>
+    <ConfirmDialog open={isDeletionConfirmOpen} title="Setujui penghapusan akun?" description="Akun akan diarsipkan, aksesnya dicabut, dan foto/banner publiknya dibersihkan setelah perubahan database tersimpan." confirmLabel="Arsipkan Akun" variant="danger" isLoading={isMutating} onConfirm={() => reviewDeletion('approve')} onCancel={() => setIsDeletionConfirmOpen(false)} />
+    <ConfirmDialog open={isManagementDeleteOpen} title="Arsipkan pengguna?" description={<>Pengguna <strong>{selectedUser?.full_name}</strong> akan kehilangan akses aktif; riwayat ERP tetap dipertahankan.</>} confirmLabel="Arsipkan Pengguna" variant="danger" isLoading={isMutating} onConfirm={archiveDirectly} onCancel={() => setIsManagementDeleteOpen(false)} />
+  </div>;
+}
 
-      {feedbackMsg && (
-        <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 text-sm font-medium ${feedbackMsg.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
-          {feedbackMsg.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
-          {feedbackMsg.text}
-        </div>
-      )}
+function UsersTable({ users, tab, currentUserId, onRole, onStatus, onDelete }: { users: ManagedUser[]; tab: Tab; currentUserId?: number; onRole: (user: ManagedUser) => void; onStatus: (user: ManagedUser) => void; onDelete: (user: ManagedUser) => void }) {
+  return <div className="overflow-x-auto"><table className="w-full min-w-[720px] text-left text-sm"><thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500"><tr><th className="px-5 py-3">Pengguna</th><th className="px-5 py-3">Peran</th><th className="px-5 py-3">Status</th><th className="px-5 py-3">Terdaftar</th><th className="px-5 py-3 text-right">Aksi</th></tr></thead><tbody className="divide-y divide-gray-100">{users.length ? users.map(user => <tr key={user.id}><td className="px-5 py-4"><div className="flex items-center gap-3"><UserAvatar user={user} size="lg" /><div><p className="font-medium text-gray-900">{user.full_name}</p><p className="text-xs text-gray-500">@{user.username} · {user.email}</p></div></div></td><td className="px-5 py-4">{user.role?.name || <span className="text-gray-400">Belum ditentukan</span>}</td><td className="px-5 py-4"><StatusPill user={user} /></td><td className="px-5 py-4 text-gray-500">{formatDate(user.created_at)}</td><td className="px-5 py-4 text-right">{user.id === currentUserId ? <span className="text-xs text-gray-400">Akun Anda</span> : <div className="flex justify-end gap-2">{tab === 'active' && <><button type="button" title="Ubah peran" onClick={() => onRole(user)} className="rounded p-2 text-gray-500 hover:bg-[var(--nexus-cream-soft)]"><UserCog className="h-4 w-4" /></button><button type="button" title="Tangguhkan" onClick={() => onStatus(user)} className="rounded p-2 text-orange-600 hover:bg-orange-50"><Ban className="h-4 w-4" /></button></>}{tab === 'suspended' && user.status_code === 'suspended' && <Button type="button" size="sm" variant="outline" onClick={() => onStatus(user)}>Aktifkan</Button>}<button type="button" title="Arsipkan" onClick={() => onDelete(user)} className="rounded p-2 text-red-600 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div>}</td></tr>) : <tr><td colSpan={5} className="px-5 py-10 text-center text-gray-500">Tidak ada pengguna yang ditemukan.</td></tr>}</tbody></table></div>;
+}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-        <div className="border-b border-gray-100 p-4 flex gap-4 bg-gray-50/50">
-          <button 
-            onClick={() => setActiveTab('active')}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center gap-2 ${activeTab === 'active' ? 'bg-white text-[var(--nexus-yellow-deep)] shadow-sm border border-gray-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            Pengguna Aktif
-            <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">
-              {users.filter(u => u.status_code === 'active' && u.approval_status_code === 'approved').length}
-            </span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('pending')}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center gap-2 ${activeTab === 'pending' ? 'bg-white text-orange-600 shadow-sm border border-gray-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
-          >
-            <Clock className="w-4 h-4" />
-            Menunggu Persetujuan
-            {users.filter(u => u.approval_status_code === 'pending').length > 0 && (
-              <span className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs font-bold">
-                {users.filter(u => u.approval_status_code === 'pending').length}
-              </span>
-            )}
-          </button>
-          <button 
-            onClick={() => setActiveTab('suspended')}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-colors flex items-center gap-2 ${activeTab === 'suspended' ? 'bg-white text-red-600 shadow-sm border border-gray-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
-          >
-            <Ban className="w-4 h-4" />
-            Ditangguhkan / Ditolak
-          </button>
-        </div>
+function PendingList({ items, onApproveSignup, onRejectSignup, onApproveReactivation, onRejectReactivation }: { items: PendingAccessItem[]; onApproveSignup: (user: ManagedUser) => void; onRejectSignup: (user: ManagedUser) => void; onApproveReactivation: (request: ReactivationRequest) => void; onRejectReactivation: (request: ReactivationRequest) => void }) {
+  return <div className="divide-y divide-gray-100">{items.length ? items.map(item => item.kind === 'signup' ? <div key={`signup-${item.user.id}`} className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-3"><UserAvatar user={item.user} size="lg" /><div><p className="font-medium text-gray-900">{item.user.full_name}</p><p className="text-xs text-gray-500">@{item.user.username} · {item.user.email}</p><p className="mt-1 inline-flex rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700">Pendaftaran Baru</p></div></div><div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => onRejectSignup(item.user)} className="text-red-700">Tolak</Button><Button size="sm" onClick={() => onApproveSignup(item.user)}>Setujui</Button></div></div> : <div key={`reactivation-${item.request.id}`} className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-3"><UserAvatar user={{ full_name: item.request.archived_full_name, avatar_path: item.request.avatar_path }} size="lg" /><div><p className="font-medium text-gray-900">{item.request.requested_full_name}</p><p className="text-xs text-gray-500">Meminta @ {item.request.requested_username} · {item.request.requested_email}</p><p className="mt-1 inline-flex rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">Aktivasi Ulang</p></div></div><div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => onRejectReactivation(item.request)} className="text-red-700">Tolak</Button><Button size="sm" onClick={() => onApproveReactivation(item.request)}>Tinjau</Button></div></div>) : <div className="p-10 text-center text-sm text-gray-500">Tidak ada pengajuan akses yang menunggu.</div>}</div>;
+}
 
-        <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
-          <div className="relative w-96">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input 
-              type="text"
-              placeholder="Cari nama atau email..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[var(--nexus-yellow)] focus:ring-1 focus:ring-[var(--nexus-yellow)]"
-            />
-          </div>
-        </div>
+function DeletionList({ items, onOpen }: { items: DeletionRequest[]; onOpen: (request: DeletionRequest) => void }) {
+  return <div className="divide-y divide-gray-100">{items.length ? items.map(item => <button key={item.id} type="button" onClick={() => onOpen(item)} className="flex w-full items-center justify-between gap-4 p-5 text-left hover:bg-gray-50"><div className="flex min-w-0 items-center gap-3"><UserAvatar user={item} size="lg" /><div className="min-w-0"><p className="truncate font-medium text-gray-900">{item.full_name}</p><p className="truncate text-xs text-gray-500">@{item.username} · {item.email}</p><p className="mt-1 text-xs text-gray-500">{formatDate(item.requested_at)}{item.request_reason ? ` · ${item.request_reason}` : ''}</p></div></div><span className="shrink-0 text-sm font-medium text-[var(--nexus-yellow-deep)]">Tinjau</span></button>) : <div className="p-10 text-center text-sm text-gray-500">Tidak ada pengajuan penghapusan yang menunggu.</div>}</div>;
+}
 
-        {isLoading ? (
-           <div className="p-8 text-center text-gray-500">Memuat data pengguna...</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500">
-                  <th className="px-6 py-4 font-semibold">Pengguna</th>
-                  <th className="px-6 py-4 font-semibold">Peran & Akses</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold">Tanggal Daftar</th>
-                  <th className="px-6 py-4 font-semibold text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                      Tidak ada pengguna yang ditemukan.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50/50 transition-colors group">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          {user.avatar_path ? (
-                            <img src={user.avatar_path} alt="" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-[var(--nexus-yellow-deep)]/10 text-[var(--nexus-yellow-deep)] flex items-center justify-center font-bold text-sm">
-                              {user.full_name.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <div className="font-medium text-gray-900">{user.full_name}</div>
-                            <div className="text-xs text-gray-500">{user.email}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        {user.role ? (
-                          <div className="flex items-center gap-2">
-                            <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                            <span className="text-sm font-medium text-gray-700">{user.role.name}</span>
-                          </div>
-                        ) : (
-                          <span className="text-xs text-gray-400 italic">Belum ditentukan</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        {user.approval_status_code === 'pending' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
-                            <Clock className="w-3.5 h-3.5" />
-                            Menunggu
-                          </span>
-                        ) : user.approval_status_code === 'rejected' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
-                            <XCircle className="w-3.5 h-3.5" />
-                            Ditolak
-                          </span>
-                        ) : user.status_code === 'active' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            Aktif
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
-                            <Ban className="w-3.5 h-3.5" />
-                            Ditangguhkan
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        {new Date(user.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-2 transition-opacity">
-                          {activeTab === 'pending' && (
-                            <>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setSelectedRole('');
-                                  setIsApproveModalOpen(true);
-                                }}
-                              >
-                                Setujui
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                className="text-red-600 border-red-200 hover:bg-red-50"
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setRejectReason('');
-                                  setIsRejectModalOpen(true);
-                                }}
-                              >
-                                Tolak
-                              </Button>
-                            </>
-                          )}
-                          
-                          {activeTab === 'active' && (
-                            <>
-                              {user.id === currentUser?.id ? (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200" title="Ini adalah akun Anda">
-                                  Akun Anda
-                                </span>
-                              ) : (
-                                <>
-                                  <button 
-                                    onClick={() => {
-                                      setSelectedUser(user);
-                                      setSelectedRole(user.role?.code || '');
-                                      fetchRoles(user.id);
-                                      setIsRoleModalOpen(true);
-                                    }}
-                                    className="p-1.5 text-gray-400 hover:text-[var(--nexus-yellow-deep)] transition-colors rounded-md hover:bg-[var(--nexus-cream-soft)]"
-                                    title="Ubah Peran"
-                                  >
-                                    <UserCog className="w-4 h-4" />
-                                  </button>
-                                  <button 
-                                    onClick={() => handleUpdateStatus(user.id, user.status_code)}
-                                    className="p-1.5 text-gray-400 hover:text-orange-600 transition-colors rounded-md hover:bg-orange-50"
-                                    title="Tangguhkan"
-                                  >
-                                    <Ban className="w-4 h-4" />
-                                  </button>
-                                  <button 
-                                    onClick={() => {
-                                      setSelectedUser(user);
-                                      setIsDeleteDialogOpen(true);
-                                    }}
-                                    className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-md hover:bg-red-50"
-                                    title="Hapus"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                </>
-                              )}
-                            </>
-                          )}
-                          
-                          {activeTab === 'suspended' && (
-                             <>
-                              {user.status_code === 'suspended' && (
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  onClick={() => handleUpdateStatus(user.id, user.status_code)}
-                                >
-                                  Aktifkan Kembali
-                                </Button>
-                              )}
-                              <button 
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setIsDeleteDialogOpen(true);
-                                }}
-                                className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-md hover:bg-red-50"
-                                title="Hapus"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+function IdentitySummary({ title, name, username, email, avatar_path, extra }: { title: string; name: string; username: string; email: string; avatar_path: string | null; extra?: React.ReactNode }) {
+  return <div className="rounded-xl bg-[var(--nexus-cream-soft)] p-4"><p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">{title}</p><div className="flex items-center gap-3"><UserAvatar user={{ full_name: name, avatar_path }} size="lg" /><div className="min-w-0"><p className="truncate font-medium text-gray-900">{name}</p><p className="truncate text-xs text-gray-500">@{username} · {email}</p></div></div>{extra}</div>;
+}
 
-      {/* Approve Modal */}
-      {isApproveModalOpen && selectedUser && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-[var(--nexus-charcoal)] flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                Persetujuan Akun
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">
-                Pilih peran (role) untuk memberikan hak akses kepada <strong>{selectedUser.full_name}</strong>.
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Pilih Peran Sistem</label>
-                <select 
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-[var(--nexus-yellow)] focus:ring-1 focus:ring-[var(--nexus-yellow)]"
-                >
-                  <option value="" disabled>-- Pilih Peran --</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.code}>{role.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setIsApproveModalOpen(false)}>Batal</Button>
-              <Button onClick={handleApprove} disabled={!selectedRole}>Setujui & Berikan Akses</Button>
-            </div>
-          </div>
-        </div>
-      )}
+function RoleSelect({ roles, value, onChange, currentRole }: { roles: Role[]; value: string; onChange: (value: string) => void; currentRole?: { code: string; name: string } }) {
+  const entries = currentRole && !roles.some(role => role.code === currentRole.code) ? [...roles, { id: -1, code: currentRole.code, name: `${currentRole.name} (Saat Ini)` }] : roles;
+  return <label className="block"><span className="mb-1 block text-sm font-medium text-gray-700">Pilih Peran Sistem</span><select value={value} onChange={event => onChange(event.target.value)} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"><option value="" disabled>-- Pilih Peran --</option>{entries.map(role => <option key={role.id} value={role.code}>{role.name}</option>)}</select></label>;
+}
 
-      {/* Reject Modal */}
-      {isRejectModalOpen && selectedUser && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-[var(--nexus-charcoal)] flex items-center gap-2">
-                <XCircle className="w-5 h-5 text-red-500" />
-                Tolak Permintaan Akun
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">
-                Anda akan menolak permintaan pembuatan akun dari <strong>{selectedUser.full_name}</strong>.
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Alasan Penolakan (Opsional)</label>
-                <textarea 
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-[var(--nexus-yellow)] focus:ring-1 focus:ring-[var(--nexus-yellow)]"
-                  rows={3}
-                  placeholder="Bukan karyawan aktif..."
-                />
-              </div>
-            </div>
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setIsRejectModalOpen(false)}>Batal</Button>
-              <Button onClick={handleReject} className="bg-red-600 hover:bg-red-700 text-white">Tolak Akun</Button>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Change Role Modal */}
-      {isRoleModalOpen && selectedUser && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-[var(--nexus-charcoal)] flex items-center gap-2">
-                <UserCog className="w-5 h-5 text-[var(--nexus-yellow-deep)]" />
-                Ubah Peran Pengguna
-              </h3>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Pilih Peran Baru</label>
-                <select 
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-[var(--nexus-yellow)] focus:ring-1 focus:ring-[var(--nexus-yellow)]"
-                >
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.code}>{role.name}</option>
-                  ))}
-                  {/* Keep current role if not in available (e.g. singleton) to allow keeping it */}
-                  {selectedUser.role && !roles.find(r => r.code === selectedUser.role.code) && (
-                     <option value={selectedUser.role.code}>{selectedUser.role.name} (Saat Ini)</option>
-                  )}
-                </select>
-              </div>
-            </div>
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setIsRoleModalOpen(false)}>Batal</Button>
-              <Button onClick={handleUpdateRole}>Simpan Perubahan</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Dialog */}
-      <ConfirmDialog 
-        open={isDeleteDialogOpen}
-        title="Hapus Pengguna?"
-        description={
-          <>
-            Pengguna <strong>{selectedUser?.full_name}</strong> akan dihapus dari akses aktif UNI-NEXUS. Riwayat sistem dan data terkait tetap dipertahankan.
-          </>
-        }
-        confirmLabel="Hapus Pengguna"
-        variant="danger"
-        onConfirm={handleDelete}
-        onCancel={() => setIsDeleteDialogOpen(false)}
-      />
-    </div>
-  );
+function StatusPill({ user }: { user: ManagedUser }) {
+  if (user.approval_status_code === 'rejected') return <span className="rounded-full bg-red-50 px-2.5 py-1 text-xs text-red-700">Ditolak</span>;
+  if (user.status_code === 'active') return <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700">Aktif</span>;
+  if (user.status_code === 'suspended') return <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs text-orange-700">Ditangguhkan</span>;
+  return <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-700">Tidak Aktif</span>;
 }

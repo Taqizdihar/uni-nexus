@@ -23,6 +23,14 @@ app.use('/uploads/avatars', express.static(storageService.safeResolve('avatars/.
     res.setHeader('Cache-Control', 'public, max-age=3600');
   },
 }));
+app.use('/uploads/profile-banners', express.static(storageService.safeResolve('profile-banners/.placeholder').replace(/[\\/]\.placeholder$/, ''), {
+  index: false,
+  fallthrough: true,
+  setHeaders: res => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+  },
+}));
 
 // Routes
 app.use('/api/v1', routes);

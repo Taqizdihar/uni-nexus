@@ -23,6 +23,7 @@
     "smoke:dashboard": "tsx scripts/smoke-dashboard.ts",
     "smoke:storage": "tsx scripts/smoke-storage.ts",
     "smoke:profile-avatar": "tsx scripts/smoke-profile-avatar.ts",
+    "smoke:profile-v2": "tsx scripts/smoke-profile-v2.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",

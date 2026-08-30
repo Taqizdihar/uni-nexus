@@ -21,7 +21,9 @@ export class StorageService {
 
   getPublicUrl(key: string) {
     this.driver.safeResolve(key);
-    if (!key.startsWith('avatars/')) throw new AppError(400, 'FILE_NOT_PUBLIC', 'File ini tidak dapat diakses secara publik.');
+    if (!key.startsWith('avatars/') && !key.startsWith('profile-banners/')) {
+      throw new AppError(400, 'FILE_NOT_PUBLIC', 'File ini tidak dapat diakses secara publik.');
+    }
     return `${storagePublicBaseUrl}/${key}`;
   }
 

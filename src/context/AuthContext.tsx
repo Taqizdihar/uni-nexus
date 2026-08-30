@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../lib/api';
 
-interface User {
+export interface AuthUser {
   id: number;
   organization_id: number;
   username: string;
@@ -9,7 +9,10 @@ interface User {
   email: string;
   phone?: string | null;
   avatar_path?: string | null;
+  profile_banner_path?: string | null;
+  profile_status_code?: 'default' | 'busy' | 'sick' | 'leave';
   default_workspace_code: string;
+  password_changed_at?: string | null;
   role?: {
     code: string;
     name: string;
@@ -18,10 +21,10 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string, user: User) => void;
+  login: (token: string, user: AuthUser) => void;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   hasPermission: (code: string) => boolean;
@@ -30,10 +33,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const login = (token: string, userData: User) => {
+  const login = (token: string, userData: AuthUser) => {
     localStorage.setItem('token', token);
     setUser(userData);
   };
@@ -56,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const userData = await api.get<User>('/auth/me');
+      const userData = await api.get<AuthUser>('/auth/me');
       setUser(userData);
     } catch (error) {
       console.error('Auth check failed:', error);

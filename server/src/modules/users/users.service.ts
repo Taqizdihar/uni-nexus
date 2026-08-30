@@ -1,384 +1,282 @@
-import { pool } from '../../config/database';
-import { ValidationError, NotFoundError, UnauthorizedError } from '../../shared/errors/AppError';
-import { UserResponse } from './users.types';
+import type { PoolConnection } from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
+import { pool } from '../../config/database';
+import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
+import { AccountLifecycleService } from './account-lifecycle.service';
+import type { ProfileStatusCode, UpdateProfileInput } from './users.schema';
+import { UserResponse } from './users.types';
+
+const SINGLETON_ROLES = ['CEO', 'COO', 'CTO'];
+const domainConflict = (code: string, message: string) => new AppError(409, code, message);
+
+const userSelect = `
+  SELECT u.id, u.organization_id, u.full_name, u.username, u.email, u.phone,
+         u.avatar_path, u.profile_banner_path, u.profile_status_code, u.default_workspace_code,
+         u.status_code, u.approval_status_code, u.registration_source,
+         u.approval_requested_at, u.approved_at, u.created_at, u.last_login_at, u.password_changed_at,
+         r.code AS role_code, r.name AS role_name
+  FROM users u
+  LEFT JOIN user_roles ur ON u.id = ur.user_id
+  LEFT JOIN roles r ON ur.role_id = r.id AND r.is_active = 1
+`;
+
+const asUserResponse = (row: any): UserResponse => {
+  const { role_code, role_name, ...user } = row;
+  return { ...user, role: role_code ? { code: role_code, name: role_name } : undefined } as UserResponse;
+};
 
 export class UsersService {
-  static async getAuthPrincipal(id: number): Promise<any> {
+  static async getAuthPrincipal(id: number) {
     const [users] = await pool.execute<any[]>(
-      'SELECT id, organization_id, full_name, username, email, phone, avatar_path, status_code, approval_status_code, default_workspace_code FROM users WHERE id = ? AND deleted_at IS NULL',
-      [id]
+      `SELECT id, organization_id, full_name, username, email, phone, avatar_path, profile_banner_path,
+              profile_status_code, status_code, approval_status_code, default_workspace_code, password_changed_at
+       FROM users WHERE id = ? AND deleted_at IS NULL`, [id],
     );
-
-    if (!users || users.length === 0) {
-      return null;
-    }
-
+    if (!users.length) return null;
     const user = users[0];
-
     const [roles] = await pool.execute<any[]>(
-      `SELECT r.code, r.name 
-       FROM roles r
-       JOIN user_roles ur ON r.id = ur.role_id
-       WHERE ur.user_id = ? AND r.is_active = 1
-       LIMIT 1`,
-      [user.id]
+      `SELECT r.code, r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id
+       WHERE ur.user_id = ? AND r.is_active = 1 LIMIT 1`, [user.id],
     );
-    
     const role = roles[0] || null;
     let permissions: string[] = [];
-    
     if (role) {
-       const [perms] = await pool.execute<any[]>(
-         `SELECT p.code 
-          FROM permissions p
-          JOIN role_permissions rp ON p.id = rp.permission_id
-          JOIN user_roles ur ON rp.role_id = ur.role_id
-          WHERE ur.user_id = ?`,
-         [user.id]
-       );
-       permissions = perms.map(p => p.code);
+      const [perms] = await pool.execute<any[]>(
+        `SELECT DISTINCT p.code FROM permissions p
+         JOIN role_permissions rp ON p.id = rp.permission_id
+         JOIN user_roles ur ON rp.role_id = ur.role_id WHERE ur.user_id = ?`, [user.id],
+      );
+      permissions = perms.map(permission => permission.code);
     }
-    
-    return {
-       ...user,
-       role,
-       permissions
-    };
+    return { ...user, role, permissions };
   }
-  static async getUsers(filters?: any): Promise<UserResponse[]> {
-    let query = `
-      SELECT u.id, u.organization_id, u.full_name, u.username, u.email, u.phone, 
-             u.avatar_path, u.status_code, u.approval_status_code, u.registration_source, 
-             u.approval_requested_at, u.approved_at, u.created_at, u.last_login_at,
-             r.code as role_code, r.name as role_name
-      FROM users u
-      LEFT JOIN user_roles ur ON u.id = ur.user_id
-      LEFT JOIN roles r ON ur.role_id = r.id AND r.is_active = 1
-      WHERE u.deleted_at IS NULL
-    `;
-    const params: any[] = [];
-    
-    if (filters?.approval_status_code) {
-       query += ' AND u.approval_status_code = ?';
-       params.push(filters.approval_status_code);
-    }
-    if (filters?.status_code) {
-       query += ' AND u.status_code = ?';
-       params.push(filters.status_code);
-    }
-    
-    query += ' ORDER BY u.created_at DESC';
 
+  static async getUsers(filters?: Record<string, unknown>): Promise<UserResponse[]> {
+    let query = `${userSelect} WHERE u.deleted_at IS NULL`;
+    const params: any[] = [];
+    if (typeof filters?.approval_status_code === 'string') { query += ' AND u.approval_status_code = ?'; params.push(filters.approval_status_code); }
+    if (typeof filters?.status_code === 'string') { query += ' AND u.status_code = ?'; params.push(filters.status_code); }
+    query += ' ORDER BY u.created_at DESC';
     const [rows] = await pool.execute<any[]>(query, params);
-    
-    return rows.map(row => {
-      const { role_code, role_name, ...userData } = row;
-      return {
-        ...userData,
-        role: role_code ? { code: role_code, name: role_name } : undefined
-      };
-    });
+    return rows.map(asUserResponse);
   }
 
   static async getUserById(id: number): Promise<UserResponse> {
-    const [rows] = await pool.execute<any[]>(`
-      SELECT u.id, u.organization_id, u.full_name, u.username, u.email, u.phone, 
-             u.avatar_path, u.status_code, u.approval_status_code, u.registration_source, 
-             u.approval_requested_at, u.approved_at, u.created_at, u.last_login_at,
-             r.code as role_code, r.name as role_name
-      FROM users u
-      LEFT JOIN user_roles ur ON u.id = ur.user_id
-      LEFT JOIN roles r ON ur.role_id = r.id AND r.is_active = 1
-      WHERE u.id = ? AND u.deleted_at IS NULL
-    `, [id]);
-    
-    if (rows.length === 0) {
-      throw new NotFoundError('Pengguna tidak ditemukan.');
-    }
-    
-    const { role_code, role_name, ...userData } = rows[0];
-    return {
-      ...userData,
-      role: role_code ? { code: role_code, name: role_name } : undefined
-    };
+    const [rows] = await pool.execute<any[]>(`${userSelect} WHERE u.id = ? AND u.deleted_at IS NULL`, [id]);
+    if (!rows.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+    return asUserResponse(rows[0]);
   }
 
-  static async getAvailableRoles(forUserId?: number): Promise<any[]> {
+  static async getAvailableRoles(forUserId?: number) {
     const [roles] = await pool.execute<any[]>(
-      'SELECT id, code, name FROM roles WHERE is_active = 1 AND code IN ("CEO", "COO", "CTO", "SPECIALIST_STAFF", "ENGINEER_3D")'
+      'SELECT id, code, name FROM roles WHERE is_active = 1 AND code IN ("CEO", "COO", "CTO", "SPECIALIST_STAFF", "ENGINEER_3D")',
     );
-    
-    // Check singleton occupancy
-    const singletonRoles = ['CEO', 'COO', 'CTO'];
-    const availableRoles = [];
-    
+    const available: any[] = [];
     for (const role of roles) {
-      if (singletonRoles.includes(role.code)) {
-         const [occupants] = await pool.execute<any[]>(
-           `SELECT u.id FROM users u 
-            JOIN user_roles ur ON u.id = ur.user_id 
-            WHERE ur.role_id = ? AND u.deleted_at IS NULL`,
-           [role.id]
-         );
-         
-         const isOccupied = occupants.length > 0;
-         const isOccupiedByTargetUser = forUserId && occupants.some(o => o.id === forUserId);
-         
-         if (!isOccupied || isOccupiedByTargetUser) {
-            availableRoles.push(role);
-         }
-      } else {
-         availableRoles.push(role);
+      if (!SINGLETON_ROLES.includes(role.code)) { available.push(role); continue; }
+      const [occupants] = await pool.execute<any[]>(
+        `SELECT u.id FROM users u JOIN user_roles ur ON u.id = ur.user_id
+         WHERE ur.role_id = ? AND u.deleted_at IS NULL`, [role.id],
+      );
+      if (!occupants.length || (forUserId !== undefined && occupants.some(occupant => Number(occupant.id) === forUserId))) available.push(role);
+    }
+    return available;
+  }
+
+  /** Shares normal approval and reactivation role/access invariants in one transaction. */
+  static async assignRoleAndBusinessUnitAccess(connection: PoolConnection, userId: number, roleCode: string, managerId: number) {
+    const [roles] = await connection.execute<any[]>('SELECT id, code FROM roles WHERE code = ? AND is_active = 1 FOR UPDATE', [roleCode]);
+    if (!roles.length) throw new AppError(400, 'ROLE_INVALID', 'Role tidak valid.');
+    const role = roles[0];
+    if (SINGLETON_ROLES.includes(role.code)) {
+      const [occupants] = await connection.execute<any[]>(
+        `SELECT u.id FROM users u JOIN user_roles ur ON u.id = ur.user_id
+         WHERE ur.role_id = ? AND u.deleted_at IS NULL FOR UPDATE`, [role.id],
+      );
+      if (occupants.some(occupant => Number(occupant.id) !== userId)) {
+        throw domainConflict('ROLE_ALREADY_OCCUPIED', `Role ${roleCode} sudah digunakan oleh pengguna lain.`);
       }
     }
-    
-    return availableRoles;
+    await connection.execute('DELETE FROM user_roles WHERE user_id = ?', [userId]);
+    await connection.execute('INSERT INTO user_roles (user_id, role_id, assigned_by) VALUES (?, ?, ?)', [userId, role.id, managerId]);
+    const [businessUnits] = await connection.execute<any[]>('SELECT id FROM business_units WHERE is_active = 1');
+    await connection.execute('DELETE FROM user_business_units WHERE user_id = ?', [userId]);
+    for (const businessUnit of businessUnits) {
+      await connection.execute('INSERT INTO user_business_units (user_id, business_unit_id, can_access) VALUES (?, ?, 1)', [userId, businessUnit.id]);
+    }
   }
 
-  static async approveUser(id: number, roleCode: string, managerId: number): Promise<void> {
+  static async approveUser(id: number, roleCode: string, managerId: number) {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-
-      // Check if user exists and is pending
-      const [users] = await connection.execute<any[]>(
-        'SELECT id, approval_status_code, deleted_at FROM users WHERE id = ? FOR UPDATE',
-        [id]
-      );
-
-      if (users.length === 0 || users[0].deleted_at !== null) {
-         throw new NotFoundError('Pengguna tidak ditemukan.');
-      }
-      
-      const targetUser = users[0];
-
-      // Verify role
-      const [roles] = await connection.execute<any[]>(
-        'SELECT id, code FROM roles WHERE code = ? AND is_active = 1 FOR UPDATE',
-        [roleCode]
-      );
-
-      if (roles.length === 0) {
-         throw new ValidationError('Role tidak valid.');
-      }
-
-      const role = roles[0];
-      const singletonRoles = ['CEO', 'COO', 'CTO'];
-      
-      if (singletonRoles.includes(role.code)) {
-         const [occupants] = await connection.execute<any[]>(
-           `SELECT u.id FROM users u 
-            JOIN user_roles ur ON u.id = ur.user_id 
-            WHERE ur.role_id = ? AND u.deleted_at IS NULL`,
-           [role.id]
-         );
-         
-         if (occupants.length > 0 && !occupants.some(o => o.id === id)) {
-             throw new ValidationError(`Role ${roleCode} sudah digunakan oleh pengguna lain.`, 'ROLE_ALREADY_OCCUPIED');
-         }
-      }
-
-      // Assign role
-      await connection.execute('DELETE FROM user_roles WHERE user_id = ?', [id]);
-      await connection.execute('INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)', [id, role.id]);
-
-      // Approve user
+      const [users] = await connection.execute<any[]>('SELECT id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
+      if (!users.length || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
+      await this.assignRoleAndBusinessUnitAccess(connection, id, roleCode, managerId);
       await connection.execute(
-        `UPDATE users SET 
-         approval_status_code = 'approved', status_code = 'active', 
-         approved_by = ?, approved_at = CURRENT_TIMESTAMP(3),
-         rejected_by = NULL, rejected_at = NULL, rejection_reason = NULL
-         WHERE id = ?`,
-        [managerId, id]
+        `UPDATE users SET approval_status_code = 'approved', status_code = 'active', approved_by = ?, approved_at = CURRENT_TIMESTAMP(3),
+         rejected_by = NULL, rejected_at = NULL, rejection_reason = NULL WHERE id = ?`, [managerId, id],
       );
-      
-      // Access to business units
-      const [businessUnits] = await connection.execute<any[]>('SELECT id FROM business_units WHERE is_active = 1');
-      await connection.execute('DELETE FROM user_business_units WHERE user_id = ?', [id]);
-      for (const bu of businessUnits) {
-          await connection.execute('INSERT INTO user_business_units (user_id, business_unit_id, can_access) VALUES (?, ?, 1)', [id, bu.id]);
-      }
-
-      await connection.execute(
-        'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "approval", "Account approved")',
-         [managerId]
-      );
-
+      await this.audit(connection, 1, managerId, 'approval', 'Account approved');
       await connection.commit();
-    } catch (error) {
-      await connection.rollback();
-      throw error;
-    } finally {
-      connection.release();
-    }
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
   }
 
-  static async rejectUser(id: number, managerId: number, reason?: string): Promise<void> {
-     await pool.execute(
-       `UPDATE users SET 
-        approval_status_code = 'rejected', status_code = 'inactive', 
-        rejected_by = ?, rejected_at = CURRENT_TIMESTAMP(3), rejection_reason = ?
-        WHERE id = ? AND deleted_at IS NULL`,
-       [managerId, reason || null, id]
-     );
-     
-     await pool.execute(
-        'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "rejection", "Account rejected")',
-         [managerId]
-      );
+  static async rejectUser(id: number, managerId: number, reason?: string) {
+    const [result] = await pool.execute<any>(
+      `UPDATE users SET approval_status_code = 'rejected', status_code = 'inactive', rejected_by = ?,
+       rejected_at = CURRENT_TIMESTAMP(3), rejection_reason = ? WHERE id = ? AND deleted_at IS NULL`,
+      [managerId, reason?.trim() || null, id],
+    );
+    if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
+    await this.audit(pool as unknown as PoolConnection, 1, managerId, 'rejection', 'Account rejected');
   }
 
-  static async updateStatus(id: number, status_code: string, managerId: number): Promise<void> {
+  static async updateStatus(id: number, statusCode: string, managerId: number) {
+    if (!['active', 'inactive', 'suspended'].includes(statusCode)) throw new AppError(400, 'STATUS_INVALID', 'Status pengguna tidak valid.');
     if (id === managerId) {
-       // Check if manager is CTO
-       const managerPrincipal = await this.getAuthPrincipal(managerId);
-       if (managerPrincipal?.role?.code === 'CTO') {
-          throw new ValidationError('Akun Chief Technology Officer tidak dapat mengubah peran atau menonaktifkan dirinya sendiri.', 'CTO_SELF_PROTECTION');
-       }
-       throw new ValidationError('Anda tidak dapat mengubah status akun Anda sendiri.', 'CANNOT_SELF_MODIFY');
+      const principal = await this.getAuthPrincipal(managerId);
+      if (principal?.role?.code === 'CTO') throw new AppError(403, 'CTO_SELF_PROTECTION', 'Akun Chief Technology Officer tidak dapat mengubah status dirinya sendiri.');
+      throw new AppError(403, 'CANNOT_SELF_MODIFY', 'Anda tidak dapat mengubah status akun sendiri.');
     }
-    await pool.execute(
-      'UPDATE users SET status_code = ? WHERE id = ? AND deleted_at IS NULL',
-      [status_code, id]
-    );
+    const [result] = await pool.execute<any>('UPDATE users SET status_code = ? WHERE id = ? AND deleted_at IS NULL', [statusCode, id]);
+    if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
   }
 
-  static async updateRole(id: number, roleCode: string, managerId: number): Promise<void> {
-     if (id === managerId) {
-        const managerPrincipal = await this.getAuthPrincipal(managerId);
-        if (managerPrincipal?.role?.code === 'CTO') {
-           throw new ValidationError('Akun Chief Technology Officer tidak dapat mengubah peran atau menonaktifkan dirinya sendiri.', 'CTO_SELF_PROTECTION');
-        }
-     }
-     
-     const connection = await pool.getConnection();
-     try {
-       await connection.beginTransaction();
-
-       const [users] = await connection.execute<any[]>('SELECT id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
-       if (users.length === 0 || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
-
-       const [roles] = await connection.execute<any[]>('SELECT id, code FROM roles WHERE code = ? AND is_active = 1 FOR UPDATE', [roleCode]);
-       if (roles.length === 0) throw new ValidationError('Role tidak valid.');
-       const role = roles[0];
-
-       const singletonRoles = ['CEO', 'COO', 'CTO'];
-       if (singletonRoles.includes(role.code)) {
-          const [occupants] = await connection.execute<any[]>(
-            `SELECT u.id FROM users u 
-             JOIN user_roles ur ON u.id = ur.user_id 
-             WHERE ur.role_id = ? AND u.deleted_at IS NULL`,
-            [role.id]
-          );
-          if (occupants.length > 0 && !occupants.some(o => o.id === id)) {
-              throw new ValidationError(`Role ${roleCode} sudah digunakan oleh pengguna lain.`, 'ROLE_ALREADY_OCCUPIED');
-          }
-       }
-
-       await connection.execute('DELETE FROM user_roles WHERE user_id = ?', [id]);
-       await connection.execute('INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)', [id, role.id]);
-       
-       await connection.execute(
-        'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "role_change", "Role updated")',
-         [managerId]
-       );
-
-       await connection.commit();
-     } catch (error) {
-       await connection.rollback();
-       throw error;
-     } finally {
-       connection.release();
-     }
-  }
-
-  static async softDeleteUser(id: number, managerId: number): Promise<void> {
+  static async updateRole(id: number, roleCode: string, managerId: number) {
     if (id === managerId) {
-       const managerPrincipal = await this.getAuthPrincipal(managerId);
-       if (managerPrincipal?.role?.code === 'CTO') {
-          throw new ValidationError('Akun Chief Technology Officer tidak dapat menghapus dirinya sendiri.', 'CTO_SELF_PROTECTION');
-       }
-       throw new ValidationError('Anda tidak dapat menghapus akun Anda sendiri.', 'CANNOT_SELF_DELETE');
+      const principal = await this.getAuthPrincipal(managerId);
+      if (principal?.role?.code === 'CTO') throw new AppError(403, 'CTO_SELF_PROTECTION', 'Akun Chief Technology Officer tidak dapat mengubah peran dirinya sendiri.');
+      throw new AppError(403, 'CANNOT_SELF_MODIFY', 'Anda tidak dapat mengubah peran akun sendiri.');
     }
-    await pool.execute(
-      'UPDATE users SET deleted_at = CURRENT_TIMESTAMP(3) WHERE id = ?',
-      [id]
-    );
-    
-    await pool.execute(
-      'INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (1, ?, "users", "account_delete", "Account soft deleted")',
-       [managerId]
-    );
-  }
-
-  // Profile methods
-  static async updateProfile(id: number, data: any): Promise<void> {
-     const { full_name, username, email, phone, default_workspace_code } = data;
-     
-     // Check unique
-     const [existing] = await pool.execute<any[]>(
-        'SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ? AND deleted_at IS NULL',
-        [username.trim(), email.trim().toLowerCase(), id]
-     );
-     if (existing.length > 0) throw new ValidationError('Username atau email sudah digunakan.');
-     
-     await pool.execute(
-       'UPDATE users SET full_name = ?, username = ?, email = ?, phone = ?, default_workspace_code = ? WHERE id = ?',
-       [full_name, username.trim(), email.trim().toLowerCase(), phone || null, default_workspace_code || 'craft', id]
-     );
-  }
-
-  static async changePassword(id: number, data: any): Promise<void> {
-    const { currentPassword, newPassword } = data;
-    
-    const [users] = await pool.execute<any[]>('SELECT password_hash FROM users WHERE id = ?', [id]);
-    if (users.length === 0) throw new NotFoundError('Pengguna tidak ditemukan.');
-    
-    const isMatch = await bcrypt.compare(currentPassword, users[0].password_hash);
-    if (!isMatch) throw new ValidationError('Kata sandi saat ini tidak valid.');
-    
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(newPassword, salt);
-    
-    await pool.execute(
-      'UPDATE users SET password_hash = ?, password_changed_at = CURRENT_TIMESTAMP(3), must_change_password = 0 WHERE id = ?',
-      [password_hash, id]
-    );
-  }
-
-  static async replaceAvatar(id: number, file: Express.Multer.File): Promise<UserResponse> {
-    const [users] = await pool.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
-    if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
-    const saved = await storageService.saveUploadedFile('avatar', file);
-    const previous = users[0].avatar_path as string | null;
+    const connection = await pool.getConnection();
     try {
-      await pool.execute('UPDATE users SET avatar_path = ? WHERE id = ? AND deleted_at IS NULL', [saved.key, id]);
-    } catch (error) {
-      await storageService.delete(saved.key);
+      await connection.beginTransaction();
+      const [users] = await connection.execute<any[]>('SELECT id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
+      if (!users.length || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
+      await this.assignRoleAndBusinessUnitAccess(connection, id, roleCode, managerId);
+      await this.audit(connection, 1, managerId, 'role_change', 'Role updated');
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
+  }
+
+  static async softDeleteUser(id: number, managerId: number) {
+    if (id === managerId) {
+      const principal = await this.getAuthPrincipal(managerId);
+      if (principal?.role?.code === 'CTO') throw new AppError(403, 'CTO_SELF_PROTECTION', 'Akun Chief Technology Officer tidak dapat menghapus dirinya sendiri.');
+      throw new AppError(403, 'CANNOT_SELF_DELETE', 'Anda tidak dapat menghapus akun sendiri.');
+    }
+    const manager = await this.getAuthPrincipal(managerId);
+    if (!manager) throw new NotFoundError('Pengelola tidak ditemukan.');
+    const connection = await pool.getConnection();
+    let media: { avatar_path: string | null; profile_banner_path: string | null } | null = null;
+    try {
+      await connection.beginTransaction();
+      media = await AccountLifecycleService.archiveUser(connection, id, managerId, manager.organization_id);
+      await this.audit(connection, manager.organization_id, managerId, 'account_delete', 'Account archived by management');
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
+    for (const key of [media?.avatar_path, media?.profile_banner_path]) await storageService.delete(key).catch(() => undefined);
+  }
+
+  static async updateProfile(id: number, data: UpdateProfileInput): Promise<UserResponse> {
+    const provided = Object.entries(data).filter(([, value]) => value !== undefined);
+    if (!provided.length) throw new AppError(400, 'PROFILE_UPDATE_EMPTY', 'Tidak ada perubahan profil untuk disimpan.');
+    const [currentRows] = await pool.execute<any[]>('SELECT id, organization_id, full_name, username, email, phone, default_workspace_code FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
+    if (!currentRows.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+    const current = currentRows[0];
+    const next = {
+      full_name: data.full_name !== undefined ? data.full_name.trim() : current.full_name,
+      username: data.username !== undefined ? data.username.trim() : current.username,
+      email: data.email !== undefined ? data.email.trim().toLowerCase() : current.email,
+      phone: data.phone !== undefined ? (data.phone.trim() || null) : current.phone,
+      default_workspace_code: data.default_workspace_code !== undefined ? data.default_workspace_code : current.default_workspace_code,
+    };
+    const [identityRows] = await pool.execute<any[]>(
+      'SELECT id, username, email, deleted_at FROM users WHERE (username = ? OR email = ?) AND id != ?', [next.username, next.email, id],
+    );
+    for (const conflictRow of identityRows) {
+      if (conflictRow.email === next.email) throw domainConflict(conflictRow.deleted_at === null ? 'EMAIL_ALREADY_REGISTERED' : 'ARCHIVED_EMAIL_CONFLICT', conflictRow.deleted_at === null ? 'Email sudah terdaftar.' : 'Email terikat pada akun yang diarsipkan.');
+      if (conflictRow.username === next.username) throw domainConflict(conflictRow.deleted_at === null ? 'USERNAME_ALREADY_USED' : 'ARCHIVED_USERNAME_CONFLICT', conflictRow.deleted_at === null ? 'Username sudah digunakan.' : 'Username terikat pada akun yang diarsipkan.');
+    }
+    try {
+      await pool.execute(
+        'UPDATE users SET full_name = ?, username = ?, email = ?, phone = ?, default_workspace_code = ? WHERE id = ? AND deleted_at IS NULL',
+        [next.full_name, next.username, next.email, next.phone, next.default_workspace_code, id],
+      );
+    } catch (error: any) {
+      if (error?.code === 'ER_DUP_ENTRY') throw domainConflict('PROFILE_IDENTITY_CONFLICT', 'Email atau username sudah digunakan oleh akun lain.');
       throw error;
     }
-    // The new key is durable before the old object is removed.
-    await storageService.delete(previous);
+    await this.audit(pool as unknown as PoolConnection, current.organization_id, id, 'profile.update', 'Profile updated');
     return this.getUserById(id);
   }
 
-  static async deleteAvatar(id: number): Promise<UserResponse> {
+  static async updateProfileStatus(id: number, status: ProfileStatusCode): Promise<UserResponse> {
+    if (!['default', 'busy', 'sick', 'leave'].includes(status)) throw new AppError(400, 'PROFILE_STATUS_INVALID', 'Status profil tidak valid.');
+    const [result] = await pool.execute<any>('UPDATE users SET profile_status_code = ? WHERE id = ? AND deleted_at IS NULL', [status, id]);
+    if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
+    await this.audit(pool as unknown as PoolConnection, 1, id, 'profile.status_change', 'Profile status updated');
+    return this.getUserById(id);
+  }
+
+  static async changePassword(id: number, data: { currentPassword: string; newPassword: string }) {
+    const [users] = await pool.execute<any[]>('SELECT password_hash, organization_id FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
+    if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+    if (!(await bcrypt.compare(data.currentPassword, users[0].password_hash))) throw new AppError(400, 'CURRENT_PASSWORD_INVALID', 'Kata sandi saat ini tidak valid.');
+    const passwordHash = await bcrypt.hash(data.newPassword, 10);
+    await pool.execute('UPDATE users SET password_hash = ?, password_changed_at = CURRENT_TIMESTAMP(3), must_change_password = 0 WHERE id = ?', [passwordHash, id]);
+    await this.audit(pool as unknown as PoolConnection, users[0].organization_id, id, 'profile.password_change', 'Password changed');
+  }
+
+  private static async replaceProfileMedia(id: number, column: 'avatar_path' | 'profile_banner_path', policy: 'avatar' | 'profile_banner', file: Express.Multer.File) {
+    const saved = await storageService.saveUploadedFile(policy, file);
     const connection = await pool.getConnection();
     let previous: string | null = null;
     try {
       await connection.beginTransaction();
-      const [users] = await connection.execute<any[]>('SELECT avatar_path FROM users WHERE id = ? AND deleted_at IS NULL FOR UPDATE', [id]);
+      const [users] = await connection.execute<any[]>(`SELECT ${column}, organization_id FROM users WHERE id = ? AND deleted_at IS NULL FOR UPDATE`, [id]);
       if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
-      previous = users[0].avatar_path || null;
-      await connection.execute('UPDATE users SET avatar_path = NULL WHERE id = ?', [id]);
+      previous = users[0][column] || null;
+      await connection.execute(`UPDATE users SET ${column} = ? WHERE id = ?`, [saved.key, id]);
+      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_update' : 'profile.banner_update', 'Profile media updated');
       await connection.commit();
     } catch (error) {
       await connection.rollback();
+      await storageService.delete(saved.key).catch(() => undefined);
       throw error;
     } finally { connection.release(); }
-    await storageService.delete(previous);
+    await storageService.delete(previous).catch(error => console.warn('Old profile media cleanup failed:', error instanceof Error ? error.message : 'unknown error'));
     return this.getUserById(id);
+  }
+
+  private static async deleteProfileMedia(id: number, column: 'avatar_path' | 'profile_banner_path') {
+    const connection = await pool.getConnection();
+    let previous: string | null = null;
+    try {
+      await connection.beginTransaction();
+      const [users] = await connection.execute<any[]>(`SELECT ${column}, organization_id FROM users WHERE id = ? AND deleted_at IS NULL FOR UPDATE`, [id]);
+      if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+      previous = users[0][column] || null;
+      await connection.execute(`UPDATE users SET ${column} = NULL WHERE id = ?`, [id]);
+      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_delete' : 'profile.banner_delete', 'Profile media deleted');
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
+    await storageService.delete(previous).catch(error => console.warn('Profile media cleanup failed after committed deletion:', error instanceof Error ? error.message : 'unknown error'));
+    return this.getUserById(id);
+  }
+
+  static replaceAvatar(id: number, file: Express.Multer.File) { return this.replaceProfileMedia(id, 'avatar_path', 'avatar', file); }
+  static deleteAvatar(id: number) { return this.deleteProfileMedia(id, 'avatar_path'); }
+  static replaceBanner(id: number, file: Express.Multer.File) { return this.replaceProfileMedia(id, 'profile_banner_path', 'profile_banner', file); }
+  static deleteBanner(id: number) { return this.deleteProfileMedia(id, 'profile_banner_path'); }
+
+  private static async audit(connection: Pick<PoolConnection, 'execute'>, organizationId: number, userId: number, actionCode: string, description: string) {
+    await connection.execute(`INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (?, ?, 'users', ?, ?)`, [organizationId, userId, actionCode, description]);
   }
 }

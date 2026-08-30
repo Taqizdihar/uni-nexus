@@ -52,6 +52,8 @@ async function main() {
   assert(cleaned.removed >= 1, 'stale temp file was not cleaned');
   await assert.rejects(readFile(stale), { code: 'ENOENT' });
   assert.equal(storageService.getPublicUrl('avatars/example.webp'), '/uploads/avatars/example.webp');
+  assert.equal(storageService.getPublicUrl('profile-banners/example.webp'), '/uploads/profile-banners/example.webp');
+  await expectError(async () => { storageService.getPublicUrl('documents/private.pdf'); }, 'FILE_NOT_PUBLIC');
   console.log('Storage smoke: PASS');
 }
 
