@@ -12,3 +12,7 @@ export type NotificationListFilters = {
   page: number;
   limit: number;
 };
+
+export type NotificationMeta = {
+  modules: Array<{ code: string }>;
+};

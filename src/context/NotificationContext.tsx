@@ -10,6 +10,7 @@ type NotificationContextValue = {
   recentNotifications: AppNotification[];
   isLoading: boolean;
   error: string | null;
+  refreshVersion: number;
   refreshSummary: () => Promise<void>;
   refreshRecent: () => Promise<void>;
   refresh: () => Promise<void>;
@@ -24,6 +25,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const [recentNotifications, setRecentNotifications] = useState<AppNotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refreshVersion, setRefreshVersion] = useState(0);
 
   const refreshSummary = useCallback(async () => {
     if (!user) return;
@@ -38,7 +40,10 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     if (!user) return;
     setIsLoading(true); setError(null);
-    try { await Promise.all([refreshSummary(), refreshRecent()]); }
+    try {
+      await Promise.all([refreshSummary(), refreshRecent()]);
+      setRefreshVersion((current) => current + 1);
+    }
     catch { setError('Notifikasi tidak dapat dimuat.'); }
     finally { setIsLoading(false); }
   }, [refreshRecent, refreshSummary, user]);
@@ -61,12 +66,17 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     catch (error) { await refresh(); throw error; }
   }, [refresh]);
   const markAllRead = useCallback(async () => {
-    const result = await api.post<{ affected_count: number }>('/notifications/mark-all-read', {});
-    setRecentNotifications((items) => items.map((item) => ({ ...item, is_read: true, read_at: item.read_at || new Date().toISOString() })));
-    setSummary((current) => ({ ...current, unread_count: 0, critical_unread_count: 0 }));
-    return result.affected_count;
-  }, []);
-  const value = useMemo(() => ({ unreadCount: summary.unread_count, criticalUnreadCount: summary.critical_unread_count, todayCount: summary.today_count, recentNotifications, isLoading, error, refreshSummary, refreshRecent, refresh, markRead, markAllRead }), [summary, recentNotifications, isLoading, error, refreshSummary, refreshRecent, refresh, markRead, markAllRead]);
+    try {
+      const result = await api.post<{ affected_count: number }>('/notifications/mark-all-read', {});
+      setRecentNotifications((items) => items.map((item) => ({ ...item, is_read: true, read_at: item.read_at || new Date().toISOString() })));
+      setSummary((current) => ({ ...current, unread_count: 0, critical_unread_count: 0 }));
+      return result.affected_count;
+    } catch (error) {
+      await refresh();
+      throw error;
+    }
+  }, [refresh]);
+  const value = useMemo(() => ({ unreadCount: summary.unread_count, criticalUnreadCount: summary.critical_unread_count, todayCount: summary.today_count, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markAllRead }), [summary, recentNotifications, isLoading, error, refreshVersion, refreshSummary, refreshRecent, refresh, markRead, markAllRead]);
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 

@@ -6,6 +6,7 @@ import { automationSensorService } from '../shared/automation/automation-sensor.
 import { normalizeRule } from '../shared/automation/automation-repository';
 import { AutomationRunService } from '../shared/automation/automation-run.service';
 import { systemNotificationService } from '../shared/notifications/system-notification.service';
+import { systemNotificationSensorService } from '../shared/notifications/system-notification-sensor.service';
 
 const limit = (value: number) => Math.max(1, Math.min(value, 50));
 const ruleSnapshot = (rule: any) => ({ version: rule.version_no, trigger: { type: rule.trigger_type, event: rule.trigger_event, config: rule.trigger_config_json, timezone: rule.schedule_timezone }, conditions: rule.condition_json, actions: rule.action_json, reliability: { cooldown_seconds: Number(rule.cooldown_seconds || 0), max_retries: Number(rule.max_retries || 0), priority: Number(rule.priority || 100) } });
@@ -14,6 +15,8 @@ const ruleSnapshot = (rule: any) => ({ version: rule.version_no, trigger: { type
 export class AutomationWorker {
   readonly id = `automation-${process.pid}-${randomUUID().slice(0, 8)}`;
   readonly runs = new AutomationRunService();
+  private lastSensorRunAt: number | null = null;
+  private readonly sensorIntervalMs = 5 * 60 * 1000;
 
   async recoverStaleLocks() {
     await Promise.all([
@@ -36,7 +39,11 @@ export class AutomationWorker {
     try {
       // The shared worker remains the single domain-event claimant. Built-in
       // delivery is retry-safe through recipient-specific dedupe keys.
-      await systemNotificationService.dispatch(event);
+      try {
+        await systemNotificationService.dispatch(event);
+      } catch (error) {
+        console.warn('[automation] system notification dispatch failed:', sanitizeAutomationError(error));
+      }
       const [rules]: any = await pool.execute(`SELECT * FROM automation_rules WHERE business_unit_id=? AND trigger_type='event' AND trigger_event=? AND status_code='active' ORDER BY priority,id`, [event.business_unit_id, event.event_name]);
       for (const item of rules) await this.runs.queueFromEvent(normalizeRule(item), event);
       await pool.execute(`UPDATE domain_events SET status_code='processed',processed_at=UTC_TIMESTAMP(3),locked_at=NULL,locked_by=NULL,last_error=NULL WHERE id=? AND status_code='processing' AND locked_by=?`, [event.id, this.id]);
@@ -63,7 +70,25 @@ export class AutomationWorker {
   }
 
   async processRuns(batchSize = 10) { const ids = await this.runs.claim(limit(batchSize), this.id); for (const id of ids) await this.runs.execute(id); return ids.length; }
-  async processOnce() { await this.recoverStaleLocks(); const events = await this.claimEvents(); for (const event of events) await this.dispatchEvent(event); const schedules = await this.claimDueSchedules(); const runs = await this.processRuns(); return { events: events.length, schedules, runs }; }
+  async runBuiltInNotificationSensors(now = new Date()) {
+    const timestamp = now.getTime();
+    if (this.lastSensorRunAt !== null && timestamp - this.lastSensorRunAt < this.sensorIntervalMs) return { status: 'throttled' as const, created: 0 };
+    this.lastSensorRunAt = timestamp;
+    return { status: 'ran' as const, ...(await systemNotificationSensorService.runOnce(now)) };
+  }
+  async processOnce() {
+    await this.recoverStaleLocks();
+    const events = await this.claimEvents();
+    for (const event of events) await this.dispatchEvent(event);
+    try {
+      await this.runBuiltInNotificationSensors();
+    } catch (error) {
+      console.warn('[automation] built-in notification sensor pass failed:', sanitizeAutomationError(error));
+    }
+    const schedules = await this.claimDueSchedules();
+    const runs = await this.processRuns();
+    return { events: events.length, schedules, runs };
+  }
 }
 
 if (require.main === module) {

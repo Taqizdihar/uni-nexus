@@ -20,6 +20,7 @@ export type AppNotification = {
 
 export type NotificationSummary = { unread_count: number; critical_unread_count: number; today_count: number };
 export type NotificationsList = { items: AppNotification[]; pagination: { page: number; limit: number; total: number; total_pages: number } };
+export type NotificationMeta = { modules: Array<{ code: string }> };
 
 const moduleLabels: Record<string, string> = {
   craft_orders: 'Pesanan Craft', craft_production: 'Produksi Craft', craft_materials: 'Material Craft', craft_printers: 'Printer Craft', craft_procurement: 'Pengadaan Craft', craft_marketplace: 'Marketplace Craft', craft_finance: 'Keuangan Craft',

@@ -9,7 +9,7 @@ const severityOptions: Array<'all' | NotificationSeverity> = ['all', 'info', 'su
 
 export function Notifications() {
   const navigate = useNavigate();
-  const { unreadCount, criticalUnreadCount, todayCount, markRead, markAllRead, refresh } = useNotifications();
+  const { unreadCount, criticalUnreadCount, todayCount, markRead, markAllRead, refresh, refreshVersion } = useNotifications();
   const [items, setItems] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +21,7 @@ export function Notifications() {
   const [module, setModule] = useState('');
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
+  const [moduleMetadata, setModuleMetadata] = useState<Array<{ code: string }>>([]);
 
   const load = useCallback(async () => {
     setLoading(true); setError(null);
@@ -34,9 +35,19 @@ export function Notifications() {
     finally { setLoading(false); }
   }, [module, page, query, severity, status, workspace]);
 
-  useEffect(() => { void load(); void refresh(); }, [load, refresh]);
+  const loadMetadata = useCallback(async () => {
+    try {
+      const response = await api.get<{ modules: Array<{ code: string }> }>('/notifications/meta');
+      setModuleMetadata(response.modules);
+    } catch {
+      // The list remains usable if metadata is temporarily unavailable.
+    }
+  }, []);
+
+  useEffect(() => { void load(); }, [load, refreshVersion]);
+  useEffect(() => { void loadMetadata(); }, [loadMetadata]);
   useEffect(() => { const timer = window.setTimeout(() => { setPage(1); setQuery(search.trim()); }, 250); return () => window.clearTimeout(timer); }, [search]);
-  const availableModules = Array.from(new Set<string>(items.flatMap((item) => item.module_code ? [item.module_code] : [])));
+  const availableModules = moduleMetadata.map((item) => item.code);
 
   const updateLocalRead = (id: number, isRead: boolean) => setItems((current) => current.map((item) => item.id === id ? { ...item, is_read: isRead, read_at: isRead ? new Date().toISOString() : null } : item));
   const openNotification = async (notification: AppNotification) => {
@@ -50,7 +61,7 @@ export function Notifications() {
     try {
       if (notification.is_read) { await api.patch(`/notifications/${notification.id}/unread`, {}); updateLocalRead(notification.id, false); await refresh(); }
       else { await markRead(notification); updateLocalRead(notification.id, true); }
-    } catch { setError('Status notifikasi tidak dapat diperbarui.'); }
+    } catch { await refresh(); setError('Status notifikasi tidak dapat diperbarui.'); }
   };
   const markEverythingRead = async () => {
     try { await markAllRead(); setItems((current) => current.map((item) => ({ ...item, is_read: true, read_at: item.read_at || new Date().toISOString() }))); }
@@ -64,7 +75,7 @@ export function Notifications() {
     </section>
 
     <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      {[['Belum Dibaca', unreadCount, 'text-[var(--nexus-yellow-deep)]'], ['Kritis Belum Dibaca', criticalUnreadCount, 'text-red-700'], ['Hari Ini', todayCount, 'text-[var(--nexus-charcoal)']].map(([label, count, colour]) => <div key={String(label)} className="rounded-lg border border-[var(--nexus-border)] bg-white px-4 py-3 shadow-sm"><p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p><p className={`mt-1 text-2xl font-bold ${colour}`}>{count}</p></div>)}
+      {[['Belum Dibaca', unreadCount, 'text-[var(--nexus-yellow-deep)]'], ['Kritis Belum Dibaca', criticalUnreadCount, 'text-red-700'], ['Hari Ini', todayCount, 'text-[var(--nexus-charcoal)]']].map(([label, count, colour]) => <div key={String(label)} className="rounded-lg border border-[var(--nexus-border)] bg-white px-4 py-3 shadow-sm"><p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p><p className={`mt-1 text-2xl font-bold ${colour}`}>{count}</p></div>)}
     </section>
 
     <section className="rounded-lg border border-[var(--nexus-border)] bg-white p-4 shadow-sm">

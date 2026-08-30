@@ -1,6 +1,7 @@
 import { pool } from '../../config/database';
 import { NotFoundError } from '../../shared/errors/AppError';
-import type { NotificationListFilters } from './notifications.types';
+import type { NotificationListFilters, NotificationMeta } from './notifications.types';
+import { jakartaDayBoundsUtc, utcDateTimeSql } from '../../shared/notifications/notification-time';
 
 type Actor = { id: number; organization_id: number };
 
@@ -86,17 +87,33 @@ export class NotificationsService {
   }
 
   async summary(actor: Actor) {
+    const [dayStart, nextDayStart] = jakartaDayBoundsUtc();
+    const dayStartSql = utcDateTimeSql(dayStart);
+    const nextDayStartSql = utcDateTimeSql(nextDayStart);
     const where = baseWhere(actor);
     const [rows] = await pool.execute<any[]>(
       `SELECT
          COALESCE(SUM(n.is_read = 0), 0) AS unread_count,
          COALESCE(SUM(n.is_read = 0 AND n.severity_code = 'critical'), 0) AS critical_unread_count,
-         COALESCE(SUM(n.created_at >= DATE(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '+07:00'))), 0) AS today_count
+         COALESCE(SUM(n.created_at >= ? AND n.created_at < ?), 0) AS today_count
        FROM notifications n WHERE ${where.sql}`,
-      where.params,
+      [dayStartSql, nextDayStartSql, ...where.params],
     );
     const row = rows[0] || {};
     return { unread_count: Number(row.unread_count || 0), critical_unread_count: Number(row.critical_unread_count || 0), today_count: Number(row.today_count || 0) };
+  }
+
+  async meta(actor: Actor): Promise<NotificationMeta> {
+    const where = baseWhere(actor, ['n.module_code IS NOT NULL', "n.module_code <> ''"]);
+    const [rows] = await pool.execute<any[]>(
+      `SELECT DISTINCT n.module_code AS code
+       FROM notifications n
+       LEFT JOIN business_units bu ON bu.id = n.business_unit_id
+       WHERE ${where.sql}
+       ORDER BY n.module_code`,
+      where.params,
+    );
+    return { modules: rows.map((row) => ({ code: String(row.code) })) };
   }
 
   private async accessible(actor: Actor, notificationId: number) {

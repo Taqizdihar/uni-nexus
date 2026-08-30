@@ -12,6 +12,10 @@ export class NotificationsController {
     try { return sendSuccess(res, await notificationsService.summary(req.user)); }
     catch (error) { next(error); }
   }
+  static async meta(req: AuthRequest, res: Response, next: NextFunction) {
+    try { return sendSuccess(res, await notificationsService.meta(req.user)); }
+    catch (error) { next(error); }
+  }
   static async markRead(req: AuthRequest, res: Response, next: NextFunction) {
     try { return sendSuccess(res, await notificationsService.markRead(req.user, Number(req.params.id), true)); }
     catch (error) { next(error); }

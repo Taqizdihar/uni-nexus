@@ -149,7 +149,8 @@ export class NotificationService {
     const uniqueUserIds = [...new Set(userIds.map(Number).filter(Number.isInteger))];
     const outcomes = [] as Array<Awaited<ReturnType<NotificationService['createForUser']>>>;
     for (const userId of uniqueUserIds) {
-      const dedupeKey = input.dedupeKey ? `${input.dedupeKey}:user:${userId}`.slice(0, 190) : null;
+      const suffix = `:user:${userId}`;
+      const dedupeKey = input.dedupeKey ? `${input.dedupeKey.slice(0, 190 - suffix.length)}${suffix}` : null;
       outcomes.push(await this.createForUser(userId, { ...input, dedupeKey }, options, connection));
     }
     return outcomes;
