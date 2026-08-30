@@ -93,7 +93,6 @@ export class ProductionFailuresService {
         { status_code: job.status_code, printer_status: 'busy' },
         { status_code: 'failed', printer_status: printerStatus, failure_id: failureId, material_wasted_g: input.material_wasted_qty ?? null },
       );
-      await this.sync.notify(connection, craft, 'production_failure', 'error', 'Cetak gagal', `${job.job_code} gagal: ${input.description}`, jobId);
       await domainEvents.publish(connection, {
         eventKey: `production.job_failed:${failureId}`, eventName: 'production.job_failed', moduleCode: 'craft_production',
         organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: jobId, entityCode: job.job_code, actorUserId: userId,

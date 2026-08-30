@@ -5,6 +5,7 @@ import { automationScheduleService } from '../shared/automation/automation-sched
 import { automationSensorService } from '../shared/automation/automation-sensor.service';
 import { normalizeRule } from '../shared/automation/automation-repository';
 import { AutomationRunService } from '../shared/automation/automation-run.service';
+import { systemNotificationService } from '../shared/notifications/system-notification.service';
 
 const limit = (value: number) => Math.max(1, Math.min(value, 50));
 const ruleSnapshot = (rule: any) => ({ version: rule.version_no, trigger: { type: rule.trigger_type, event: rule.trigger_event, config: rule.trigger_config_json, timezone: rule.schedule_timezone }, conditions: rule.condition_json, actions: rule.action_json, reliability: { cooldown_seconds: Number(rule.cooldown_seconds || 0), max_retries: Number(rule.max_retries || 0), priority: Number(rule.priority || 100) } });
@@ -33,6 +34,9 @@ export class AutomationWorker {
 
   async dispatchEvent(event: any) {
     try {
+      // The shared worker remains the single domain-event claimant. Built-in
+      // delivery is retry-safe through recipient-specific dedupe keys.
+      await systemNotificationService.dispatch(event);
       const [rules]: any = await pool.execute(`SELECT * FROM automation_rules WHERE business_unit_id=? AND trigger_type='event' AND trigger_event=? AND status_code='active' ORDER BY priority,id`, [event.business_unit_id, event.event_name]);
       for (const item of rules) await this.runs.queueFromEvent(normalizeRule(item), event);
       await pool.execute(`UPDATE domain_events SET status_code='processed',processed_at=UTC_TIMESTAMP(3),locked_at=NULL,locked_by=NULL,last_error=NULL WHERE id=? AND status_code='processing' AND locked_by=?`, [event.id, this.id]);

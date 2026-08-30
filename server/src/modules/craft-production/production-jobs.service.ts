@@ -742,7 +742,6 @@ export class ProductionJobsService {
       await this.sync.addJobHistory(connection, id, 'printing', 'qc', userId, input.notes ?? 'Pencetakan fisik selesai; menunggu QC.', 100);
       await this.sync.audit(connection, craft, userId, 'production.print_complete', id, job.job_code, `${job.job_code} selesai dicetak dan menunggu QC.`, { status_code: 'printing', printer_status: 'busy' }, { status_code: 'qc', printer_status: 'available', actual_print_minutes: actualMinutes, actual_material_g: actualGrams });
       await this.sync.audit(connection, craft, userId, 'production.qc_start', id, job.job_code, `Pemeriksaan QC ${job.job_code} disiapkan.`, undefined, { inspection_id: inspectionId, result_code: 'pending' });
-      await this.sync.notify(connection, craft, 'production_qc_ready', 'info', 'Cetak selesai - menunggu QC', `${job.job_code} selesai dicetak dan siap diperiksa.`, id);
       await domainEvents.publish(connection, {
         eventKey: `production.job_completed:${id}`, eventName: 'production.job_completed', moduleCode: 'craft_production',
         organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: id, entityCode: job.job_code, actorUserId: userId,

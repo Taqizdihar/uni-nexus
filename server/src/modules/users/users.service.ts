@@ -6,6 +6,7 @@ import { storageService } from '../../shared/storage';
 import { AccountLifecycleService } from './account-lifecycle.service';
 import type { ProfileStatusCode, UpdateProfileInput } from './users.schema';
 import { UserResponse } from './users.types';
+import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
 
 const SINGLETON_ROLES = ['CEO', 'COO', 'CTO'];
 const domainConflict = (code: string, message: string) => new AppError(409, code, message);
@@ -111,13 +112,18 @@ export class UsersService {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-      const [users] = await connection.execute<any[]>('SELECT id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
+      const [users] = await connection.execute<any[]>('SELECT id, organization_id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
       if (!users.length || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
       await this.assignRoleAndBusinessUnitAccess(connection, id, roleCode, managerId);
       await connection.execute(
         `UPDATE users SET approval_status_code = 'approved', status_code = 'active', approved_by = ?, approved_at = CURRENT_TIMESTAMP(3),
          rejected_by = NULL, rejected_at = NULL, rejection_reason = NULL WHERE id = ?`, [managerId, id],
       );
+      await notifyBestEffort(() => notificationService.createForUser(id, {
+        organizationId: Number(users[0].organization_id), notificationType: 'system', moduleCode: 'users', severityCode: 'success',
+        title: 'Akun Anda disetujui', message: 'Akun UNI-NEXUS Anda telah aktif. Selamat datang!',
+        actionUrl: '/app/dashboard', entityType: 'user', entityId: id,
+      }, {}, connection));
       await this.audit(connection, 1, managerId, 'approval', 'Account approved');
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }

@@ -1,5 +1,6 @@
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import { asNumber } from './craft-production.helpers';
 import { ProductionSyncService } from './production-sync.service';
 import type { CraftContext, DbConnection, QcInspectionInput } from './craft-production.types';
@@ -155,7 +156,11 @@ export class ProductionQcService {
       else await this.sync.refreshQueueState(connection, job.queue_item_id ? Number(job.queue_item_id) : null);
       await this.sync.audit(connection, craft, userId, 'production.qc_fail', jobId, job.job_code, `${job.job_code} gagal QC.`, { status_code: 'qc', result_code: 'pending' }, { status_code: 'failed', result_code: 'fail', failure_id: failureId });
       await this.sync.audit(connection, craft, userId, 'production.failure', jobId, job.job_code, `Kegagalan QC dicatat untuk ${job.job_code}.`, undefined, { failure_id: failureId, failure_stage: 'qc' });
-      await this.sync.notify(connection, craft, 'production_failure', 'error', 'Pekerjaan gagal QC', `${job.job_code} gagal dalam pemeriksaan kualitas.`, jobId);
+      await domainEvents.publish(connection as any, {
+        eventKey: `production.job_failed:qc:${failureId}`, eventName: 'production.job_failed', moduleCode: 'craft_production',
+        organizationId: craft.organizationId, businessUnitId: craft.id, entityType: 'print_job', entityId: jobId, entityCode: job.job_code, actorUserId: userId,
+        payload: { context: { production: { id: jobId, job_code: job.job_code, status_code: 'failed', failure_id: failureId, failure_type: 'qc_failed', requires_reprint: input.requires_reprint !== false } } },
+      });
       await connection.commit();
       return { inspection_id: inspectionId, failure_id: failureId, message: 'QC gagal dan pekerjaan dicatat sebagai cetak gagal.' };
     } catch (error) {

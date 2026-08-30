@@ -5,6 +5,7 @@ import { env } from '../../config/env';
 import { AppError, UnauthorizedError } from '../../shared/errors/AppError';
 import { AccountLifecycleService } from '../users/account-lifecycle.service';
 import { UsersService } from '../users/users.service';
+import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
 
 type RegisterInput = {
   organization_id?: number;
@@ -82,6 +83,13 @@ export class AuthService {
         `INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description)
          VALUES (?, ?, 'users', ?, ?)`, [organizationId, userId, bootstrap ? 'bootstrap_cto' : 'signup_request', bootstrap ? 'CTO bootstrap registration' : 'User signup request'],
       );
+      if (!bootstrap) {
+        await notifyBestEffort(() => notificationService.createForExecutives({
+          organizationId, notificationType: 'system', moduleCode: 'users', severityCode: 'info',
+          title: 'Permohonan akun baru', message: `${fullName} mengajukan akun UNI-NEXUS dan menunggu peninjauan.`,
+          actionUrl: '/app/users', entityType: 'user', entityId: userId,
+        }, connection));
+      }
       await connection.commit();
       return { id: userId, full_name: fullName, username, email, bootstrap, approvalRequired: !bootstrap, approvalStatus: bootstrap ? 'approved' : 'pending' };
     } catch (error) {

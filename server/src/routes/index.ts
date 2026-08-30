@@ -28,6 +28,7 @@ import { studioAnalyticsRoutes } from '../modules/studio-analytics/studio-analyt
 import { studioAutomationsRoutes } from '../modules/studio-automations/studio-automations.routes';
 import { dashboardRoutes } from '../modules/dashboard/dashboard.routes';
 import { presenceRoutes } from '../modules/presence/presence.routes';
+import notificationsRoutes from '../modules/notifications/notifications.routes';
 
 const router = Router();
 
@@ -46,6 +47,7 @@ router.use('/users', usersRoutes);
 router.use('/profile', profileRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/presence', presenceRoutes);
+router.use('/notifications', notificationsRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

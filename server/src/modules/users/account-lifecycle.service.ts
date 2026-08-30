@@ -3,6 +3,7 @@ import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
 import { UsersService } from './users.service';
+import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
 
 const EXECUTIVE_ROLES = new Set(['CEO', 'COO', 'CTO']);
 type Reviewer = { id: number; organization_id: number; role?: { code: string } | null };
@@ -69,6 +70,11 @@ export class AccountLifecycleService {
          VALUES (?, ?, ?, 'pending')`, [actor.organization_id, actor.id, cleanReason],
       );
       await this.audit(connection, actor.organization_id, actor.id, 'account.deletion_request', 'user_deletion_request', result.insertId, 'Account deletion requested');
+      await notifyBestEffort(() => notificationService.createForExecutives({
+        organizationId: actor.organization_id, notificationType: 'system', moduleCode: 'users', severityCode: 'warning',
+        title: 'Pengajuan penghapusan akun', message: 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.',
+        actionUrl: '/app/users', entityType: 'user_deletion_request', entityId: Number(result.insertId),
+      }, connection));
       await connection.commit();
       return this.getCurrentDeletionRequest(actor.id);
     } catch (error: any) {
@@ -145,6 +151,11 @@ export class AccountLifecycleService {
           `UPDATE user_deletion_requests SET status_code = 'rejected', reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP(3), review_note = ? WHERE id = ?`,
           [reviewer.id, reviewNote?.trim() || null, requestId],
         );
+        await notifyBestEffort(() => notificationService.createForUser(Number(request.user_id), {
+          organizationId: reviewer.organization_id, notificationType: 'system', moduleCode: 'users', severityCode: 'info',
+          title: 'Pengajuan penghapusan ditolak', message: 'Pengajuan penghapusan akun Anda ditolak. Akun Anda tetap aktif.',
+          actionUrl: '/app/profile', entityType: 'user_deletion_request', entityId: requestId,
+        }, {}, connection));
       }
       await this.audit(connection, reviewer.organization_id, reviewer.id, decision === 'approve' ? 'account.deletion_request_approve' : 'account.deletion_request_reject', 'user_deletion_request', requestId, `Account deletion request ${decision}d`);
       await connection.commit();
@@ -183,6 +194,11 @@ export class AccountLifecycleService {
         [organizationId, input.deleted_user_id, input.full_name, input.username, input.email, input.password_hash, input.phone, input.default_workspace_code],
       );
       await this.audit(connection, organizationId, input.deleted_user_id, 'account.reactivation_request', 'user_reactivation_request', result.insertId, 'Account reactivation requested');
+      await notifyBestEffort(() => notificationService.createForExecutives({
+        organizationId, notificationType: 'system', moduleCode: 'users', severityCode: 'info',
+        title: 'Pengajuan aktivasi ulang akun', message: 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.',
+        actionUrl: '/app/users', entityType: 'user_reactivation_request', entityId: Number(result.insertId),
+      }, connection));
       await connection.commit();
       return { id: result.insertId, reactivationRequired: true, reactivationPending: true, approvalRequired: true, code: 'ACCOUNT_REACTIVATION_REQUESTED' };
     } catch (error: any) {
@@ -245,6 +261,11 @@ export class AccountLifecycleService {
           `UPDATE user_reactivation_requests SET status_code = 'approved', reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP(3), review_note = ?, requested_password_hash = NULL WHERE id = ?`,
           [reviewer.id, reviewNote?.trim() || null, requestId],
         );
+        await notifyBestEffort(() => notificationService.createForUser(Number(request.deleted_user_id), {
+          organizationId: reviewer.organization_id, notificationType: 'system', moduleCode: 'users', severityCode: 'success',
+          title: 'Akun Anda aktif kembali', message: 'Pengajuan aktivasi ulang telah disetujui. Anda dapat masuk ke UNI-NEXUS.',
+          actionUrl: '/app/dashboard', entityType: 'user_reactivation_request', entityId: requestId,
+        }, {}, connection));
         await this.audit(connection, reviewer.organization_id, reviewer.id, 'account.reactivation_approve', 'user_reactivation_request', requestId, 'Account reactivation request approved');
       }
       await connection.commit();

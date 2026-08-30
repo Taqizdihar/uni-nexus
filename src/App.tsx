@@ -22,6 +22,7 @@ import { Register } from "./pages/auth/Register";
 import { Dashboard } from "./pages/global/Dashboard";
 import { Users as UsersManagement } from "./pages/global/Users";
 import { Profile } from "./pages/global/Profile";
+import { Notifications } from "./pages/global/Notifications";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -47,7 +48,6 @@ import {
   FileText,
   Wallet,
   Settings,
-  Bell,
   Users,
   ShieldAlert,
   FileArchive,
@@ -102,17 +102,7 @@ const router = createBrowserRouter(
             />
           }
         />
-        <Route
-          path="notifications"
-          element={
-            <PlannedModulePage
-              title="Notifikasi"
-              description="Peringatan sistem dan pemberitahuan pengguna."
-              stage="Tahap Berikutnya"
-              icon={Bell}
-            />
-          }
-        />
+        <Route path="notifications" element={<Notifications />} />
         <Route
           path="users"
           element={

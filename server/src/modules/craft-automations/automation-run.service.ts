@@ -89,10 +89,10 @@ export class AutomationRunService {
 
     const results: any[] = [];
     try {
-      for (const action of actions) {
+      for (const [actionIndex, action] of actions.entries()) {
         const definition = automationActionRegistry.get(action.type);
         try {
-          const result = await automationActionRegistry.execute(action, { rule, run, event, input, organizationId: Number(rule.organization_id), businessUnitId: Number(rule.business_unit_id), businessUnitCode, actorUserId: rule.created_by === null ? null : Number(rule.created_by) });
+          const result = await automationActionRegistry.execute(action, { rule, run, event, input, organizationId: Number(rule.organization_id), businessUnitId: Number(rule.business_unit_id), businessUnitCode, actorUserId: rule.created_by === null ? null : Number(rule.created_by), actionIndex });
           results.push({ type: action.type, status: result.status || 'success', ...result });
         } catch (error) {
           if (error instanceof AutomationSkippedError) { results.push({ type: action.type, status: 'skipped', reason: error.code, message: error.message }); if (!action.continue_on_error) break; continue; }

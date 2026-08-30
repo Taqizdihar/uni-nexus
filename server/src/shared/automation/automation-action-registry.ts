@@ -13,6 +13,7 @@ import { AutomationSkippedError, AutomationValidationError } from './automation-
 import { automationEventRegistry } from './automation-event-registry';
 import { buildAutomationDomainEvent, parseJson } from './automation-context';
 import { domainEvents } from './domain-event-outbox.service';
+import { notificationService } from '../notifications/notification.service';
 
 export type AutomationRisk = 'informational' | 'operational' | 'data_change';
 export interface AutomationAction { type: string; config?: Record<string, unknown>; continue_on_error?: boolean; }
@@ -37,6 +38,7 @@ export interface AutomationExecutionContext {
   businessUnitId: number;
   businessUnitCode: 'CRAFT' | 'STUDIO';
   actorUserId: number | null;
+  actionIndex?: number;
 }
 
 const definitions: AutomationActionDefinition[] = [
@@ -135,18 +137,23 @@ export class AutomationActionRegistry {
       if (!userId) throw new AutomationSkippedError('PROJECT_MANAGER_NOT_ASSIGNED', 'Proyek tidak memiliki Project Manager aktif.');
     }
     const entityId = context.event?.entity_id || null;
-    const [existing]: any = await pool.execute(
-      `SELECT id FROM notifications WHERE organization_id=? AND business_unit_id=? AND user_id <=> ? AND notification_type='automation'
-       AND title=? AND entity_type <=> ? AND entity_id <=> ? AND created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL 5 MINUTE) LIMIT 1`,
-      [context.organizationId, context.businessUnitId, userId, title, context.event?.entity_type || null, entityId],
-    );
-    if (existing.length) return { status: 'skipped', reason: 'NOTIFICATION_DUPLICATE', notification_id: Number(existing[0].id) };
-    const [result]: any = await pool.execute(
-      `INSERT INTO notifications (organization_id,business_unit_id,user_id,notification_type,severity_code,title,message,action_url,entity_type,entity_id)
-       VALUES (?,?,?,'automation',?,?,?,?,?,?)`,
-      [context.organizationId, context.businessUnitId, userId, config.severity || 'info', title, message, config.action_url || null, context.event?.entity_type || null, entityId],
-    );
-    return { status: 'success', notification_id: Number(result.insertId) };
+    const severity = ['info', 'success', 'warning', 'error', 'critical'].includes(String(config.severity))
+      ? String(config.severity) as 'info' | 'success' | 'warning' | 'error' | 'critical' : 'info';
+    const input = {
+      organizationId: context.organizationId, businessUnitId: context.businessUnitId,
+      notificationType: 'automation', moduleCode: String(config.module_code || 'automations'), severityCode: severity,
+      title, message, actionUrl: String(config.action_url || '') || null,
+      entityType: context.event?.entity_type || null, entityId,
+      dedupeKey: `automation:run:${context.run.id}:action:${Number(context.actionIndex || 0)}`,
+    };
+    if (scope === 'workspace_broadcast') {
+      const results = await notificationService.createForWorkspace(input, { businessUnitId: context.businessUnitId });
+      const created = results.filter((result) => result.status === 'created').length;
+      return created ? { status: 'success', recipient_count: created } : { status: 'skipped', reason: 'NO_ELIGIBLE_RECIPIENTS' };
+    }
+    if (!userId) throw new AutomationSkippedError('NOTIFICATION_RECIPIENT_REQUIRED', 'Penerima notifikasi tidak valid.');
+    const result = await notificationService.createForUser(userId, input, { businessUnitId: context.businessUnitId });
+    return result.status === 'created' ? { status: 'success', notification_id: result.id } : { status: 'skipped', reason: result.reason };
   }
 
   private async setOrderPriority(config: Record<string, unknown>, context: AutomationExecutionContext) {

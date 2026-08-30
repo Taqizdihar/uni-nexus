@@ -43,24 +43,6 @@ export class ProductionSyncService {
     );
   }
 
-  async notify(
-    connection: DbConnection,
-    craft: CraftContext,
-    type: string,
-    severity: 'info' | 'warning' | 'error',
-    title: string,
-    message: string,
-    jobId: number,
-  ) {
-    await connection.execute(
-      `INSERT INTO notifications (
-        organization_id, business_unit_id, user_id, notification_type, severity_code,
-        title, message, action_url, entity_type, entity_id
-      ) VALUES (?, ?, NULL, ?, ?, ?, ?, ?, 'print_job', ?)`,
-      [craft.organizationId, craft.id, type, severity, title, message, `/app/craft/production/jobs/${jobId}`, jobId],
-    );
-  }
-
   async syncOrderOnStart(connection: DbConnection, orderId: number | null, userId: number) {
     if (!orderId) return;
     const [rows]: any = await connection.execute(

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 29, 2026 at 11:33 AM
+-- Generation Time: Aug 30, 2026 at 01:41 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -308,7 +308,14 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (637, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:47:32.560'),
 (638, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:49:55.928'),
 (639, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:50:17.952'),
-(640, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 15:14:36.146');
+(640, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 15:14:36.146'),
+(641, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 20:47:59.735'),
+(642, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 21:06:36.652'),
+(689, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-29 21:43:33.906'),
+(690, 1, NULL, 2, 'users', 'profile.avatar_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-29 21:44:04.353'),
+(691, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-30 06:14:39.834'),
+(692, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-30 08:02:26.867'),
+(693, 1, NULL, 2, 'users', 'profile.banner_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-30 08:06:14.360');
 
 -- --------------------------------------------------------
 
@@ -1342,12 +1349,14 @@ CREATE TABLE `notifications` (
   `business_unit_id` bigint UNSIGNED DEFAULT NULL,
   `user_id` bigint UNSIGNED DEFAULT NULL COMMENT 'NULL = broadcast',
   `notification_type` varchar(60) NOT NULL,
+  `module_code` varchar(80) DEFAULT NULL COMMENT 'Canonical source module for filtering and presentation',
   `severity_code` varchar(20) NOT NULL DEFAULT 'info' COMMENT 'info|success|warning|error|critical',
   `title` varchar(180) NOT NULL,
   `message` text NOT NULL,
   `action_url` varchar(500) DEFAULT NULL,
   `entity_type` varchar(60) DEFAULT NULL,
   `entity_id` bigint UNSIGNED DEFAULT NULL,
+  `dedupe_key` varchar(190) DEFAULT NULL COMMENT 'Optional idempotency key; unique when non-NULL',
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
   `read_at` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
@@ -3060,7 +3069,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, NULL, NULL, 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-29 15:14:36.112', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-29 15:14:36.112', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/00bf5009-1b59-4dde-a4ec-9215c545490f.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-30 08:02:26.861', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-30 08:06:14.358', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -3164,7 +3173,9 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (6, 1, 9, '8387d24c-f324-46be-9d54-1692088c4bd6', 'craft', '2026-08-28 01:38:38.262', '2026-08-28 01:45:42.168', '2026-08-28 01:45:43.044'),
 (7, 1, 9, '3ee7a301-60e6-4c8d-a44d-8613abdd0661', 'craft', '2026-08-28 01:39:00.069', '2026-08-28 01:39:04.747', '2026-08-28 01:39:10.984'),
 (8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180'),
-(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 11:17:52.029', NULL);
+(15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 11:45:26.555', '2026-08-29 11:48:24.292'),
+(16, 1, 2, '20bcc66b-5ef5-4dd8-9b5d-50794183df59', 'craft', '2026-08-29 13:48:00.153', '2026-08-29 15:13:56.429', NULL),
+(17, 1, 2, '6cbab24b-7190-40b3-8531-acabb08cb6dc', 'craft', '2026-08-29 23:14:40.111', '2026-08-30 01:41:05.750', NULL);
 
 -- --------------------------------------------------------
 
@@ -3810,9 +3821,13 @@ ALTER TABLE `material_waste`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_notifications_dedupe_key` (`dedupe_key`),
   ADD KEY `idx_notifications_user_read` (`user_id`,`is_read`,`created_at`),
   ADD KEY `fk_notifications_org` (`organization_id`),
-  ADD KEY `fk_notifications_bu` (`business_unit_id`);
+  ADD KEY `fk_notifications_bu` (`business_unit_id`),
+  ADD KEY `idx_notifications_user_scope_time` (`user_id`,`business_unit_id`,`created_at`),
+  ADD KEY `idx_notifications_user_module_time` (`user_id`,`module_code`,`created_at`),
+  ADD KEY `idx_notifications_user_severity_read` (`user_id`,`severity_code`,`is_read`,`created_at`);
 
 --
 -- Indexes for table `order_attachments`
@@ -4459,7 +4474,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=641;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=694;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -5059,31 +5074,31 @@ ALTER TABLE `units_of_measure`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user_deletion_requests`
 --
 ALTER TABLE `user_deletion_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user_reactivation_requests`
 --
 ALTER TABLE `user_reactivation_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`
