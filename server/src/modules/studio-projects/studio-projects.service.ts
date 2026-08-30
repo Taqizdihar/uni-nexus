@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { AuditService } from '../../shared/audit/audit.service';
 import { studioClientService, type StudioClientInput } from '../../shared/party/studio-client.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { STUDIO_LOCAL_DATE_SQL, roundMoney, toNumber, toSqlDate, toSqlDateTime } from './studio-projects.helpers';
@@ -437,28 +438,12 @@ export class StudioProjectsService {
         if (!rows.length) throw new AppError(400, 'INVALID_PARTY', 'Party yang dipilih tidak ditemukan.');
         // An existing party keeps its own code; it simply gains the studio_client role.
         await studioClientService.grantStudioClientRole(connection, Number(rows[0].id), studio);
-        await connection.execute(
-          `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, new_values)
-           VALUES (?, ?, ?, 'studio_clients', 'studio.client_role_grant', 'party', ?, ?, ?, ?)`,
-          [
-            studio.organizationId, studio.id, userId, rows[0].id, rows[0].code,
-            `Mengaktifkan peran Klien Studio untuk ${rows[0].display_name}.`,
-            JSON.stringify({ source: 'studio_projects.quick_create' }),
-          ],
-        );
+        await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: 'studio_clients', actionCode: 'studio.client_role_grant', entityType: 'party', entityId: rows[0].id, entityCode: rows[0].code, description: `Mengaktifkan peran Klien Studio untuk ${rows[0].display_name}.`, newValues: { source: 'studio_projects.quick_create' } }, connection);
         return { ...rows[0], reused: true };
       }
 
       const created = await studioClientService.createStudioClient(connection, input, studio);
-      await connection.execute(
-        `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, new_values)
-         VALUES (?, ?, ?, 'studio_clients', 'studio.client_create', 'party', ?, ?, ?, ?)`,
-        [
-          studio.organizationId, studio.id, userId, created.id, created.code,
-          `Membuat klien Studio ${created.code} dari form Proyek Baru.`,
-          JSON.stringify({ display_name: created.display_name, party_kind: created.party_kind, source: 'studio_projects.quick_create' }),
-        ],
-      );
+      await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: 'studio_clients', actionCode: 'studio.client_create', entityType: 'party', entityId: created.id, entityCode: created.code, description: `Membuat klien Studio ${created.code} dari form Proyek Baru.`, newValues: { display_name: created.display_name, party_kind: created.party_kind, source: 'studio_projects.quick_create' } }, connection);
       return { ...created, reused: false };
     });
   }

@@ -391,7 +391,7 @@ const globalToolsNav: NavGroup = {
       path: "/app/users",
       permission: "users.manage",
     },
-    { name: "Log Audit", icon: ShieldAlert, path: "/app/audit-log" },
+    { name: "Log Audit", icon: ShieldAlert, path: "/app/audit-log", permission: "audit.read" },
     { name: "Integrasi", icon: Network, path: "/app/integrations" },
     { name: "Pusat Otomasi", icon: Zap, path: "/app/automations" },
     { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports" },

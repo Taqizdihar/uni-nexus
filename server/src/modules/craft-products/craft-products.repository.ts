@@ -1,5 +1,6 @@
 import type { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { pool } from '../../config/database';
+import { AuditService } from '../../shared/audit/audit.service';
 import type {
   BomItemInput, CraftProductFilters, DbConnection, ProductUpdateInput, PrintProfileInput, VariantInput,
 } from './craft-products.types';
@@ -465,11 +466,6 @@ export class CraftProductsRepository {
   }
 
   async insertAudit(input: { organizationId: number; businessUnitId: number; userId: number; action: string; entityType: string; entityId: number; entityCode?: string | null; description: string; oldValues?: unknown; newValues?: unknown; ip?: string | undefined; userAgent?: string | undefined }, connection: DbConnection) {
-    await connection.execute(`INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code,
-      entity_type, entity_id, entity_code, description, old_values, new_values, ip_address, user_agent)
-      VALUES (?, ?, ?, 'craft_products', ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
-      input.organizationId, input.businessUnitId, input.userId, input.action, input.entityType, input.entityId,
-      input.entityCode || null, input.description, nullableJson(input.oldValues), nullableJson(input.newValues), input.ip || null, input.userAgent || null,
-    ]);
+    await AuditService.write({ organizationId: input.organizationId, businessUnitId: input.businessUnitId, userId: input.userId, moduleCode: 'craft_products', actionCode: input.action, entityType: input.entityType, entityId: input.entityId, entityCode: input.entityCode, description: input.description, oldValues: input.oldValues, newValues: input.newValues, ipAddress: input.ip, userAgent: input.userAgent }, connection);
   }
 }

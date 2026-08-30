@@ -4,6 +4,7 @@ import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
 import { UsersService } from './users.service';
 import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
+import { AuditService } from '../../shared/audit/audit.service';
 
 const EXECUTIVE_ROLES = new Set(['CEO', 'COO', 'CTO']);
 type Reviewer = { id: number; organization_id: number; role?: { code: string } | null };
@@ -24,11 +25,7 @@ export class AccountLifecycleService {
   }
 
   private static async audit(connection: PoolConnection, organizationId: number, actorId: number | null, action: string, entityType: string, entityId: number, description: string) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, entity_type, entity_id, description)
-       VALUES (?, ?, 'users', ?, ?, ?, ?)`,
-      [organizationId, actorId, action, entityType, entityId, description],
-    );
+    await AuditService.write({ organizationId, userId: actorId, moduleCode: 'users', actionCode: action, entityType, entityId, description }, connection);
   }
 
   /** A shared archive primitive. The transaction remains owned by the caller. */

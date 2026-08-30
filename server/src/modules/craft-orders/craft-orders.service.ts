@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { AuditService } from '../../shared/audit/audit.service';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import { OrderPriorityService } from './order-priority.service';
 import { PartnerPricingService } from '../craft-customers/partner-pricing.service';
@@ -96,11 +97,7 @@ export class CraftOrdersService {
   private async writeDraftAudit(connection: SqlConnection, userId: number, businessUnitId: number, actionCode: string, description: string) {
     const [businessUnits]: any = await connection.execute('SELECT organization_id FROM business_units WHERE id = ? LIMIT 1', [businessUnitId]);
     if (!businessUnits.length) return;
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description)
-       VALUES (?, ?, 'craft_orders', ?, ?)`,
-      [businessUnits[0].organization_id, userId, actionCode, description],
-    );
+    await AuditService.write({ organizationId: Number(businessUnits[0].organization_id), businessUnitId, userId, moduleCode: 'craft_orders', actionCode, description }, connection);
   }
 
   private getDraftTitle(payload: any) {
@@ -521,11 +518,7 @@ export class CraftOrdersService {
         [partyId, businessUnitId],
       );
       if (userId) {
-        await connection.execute(
-          `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, new_values)
-           VALUES (?, ?, ?, 'craft_customers', 'customer.create', 'party', ?, ?, ?, ?)`,
-          [organizationId, businessUnitId, userId, partyId, code, `Membuat pelanggan Craft ${code} dari Pesanan Baru.`, JSON.stringify({ display_name: data.display_name, party_kind: data.party_kind || 'individual', source: 'craft_orders.quick_create' })],
-        );
+        await AuditService.write({ organizationId, businessUnitId, userId, moduleCode: 'craft_customers', actionCode: 'customer.create', entityType: 'party', entityId: partyId, entityCode: code, description: `Membuat pelanggan Craft ${code} dari Pesanan Baru.`, newValues: { display_name: data.display_name, party_kind: data.party_kind || 'individual', source: 'craft_orders.quick_create' } }, connection);
       }
       await connection.commit();
       return { id: partyId, code, display_name: data.display_name, party_kind: data.party_kind || 'individual', email: data.email || null, phone: data.phone || null };

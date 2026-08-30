@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { AppError } from '../errors/AppError';
+import { AuditService } from '../audit/audit.service';
 
 type Connection = { execute: (...args: any[]) => Promise<any> };
 
@@ -66,11 +67,7 @@ export class FinancePostingService {
   }
 
   private async audit(connection: Connection, context: PostingContext, input: { module?: string; action: string; entityType: string; entityId: number; entityCode: string; description: string; }) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description)
-       VALUES (?,?,?,?,?,?,?,?,?)`,
-      [context.organizationId,context.businessUnitId,context.userId,input.module || 'craft_finance',input.action,input.entityType,input.entityId,input.entityCode,input.description],
-    );
+    await AuditService.write({ organizationId: context.organizationId, businessUnitId: context.businessUnitId, userId: context.userId, moduleCode: input.module || 'craft_finance', actionCode: input.action, entityType: input.entityType, entityId: input.entityId, entityCode: input.entityCode, description: input.description }, connection);
   }
 
   /** The only general path for an income or expense to mutate cash. */

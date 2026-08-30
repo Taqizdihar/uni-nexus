@@ -3,6 +3,7 @@ import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { AuditService } from '../../shared/audit/audit.service';
 import { getBusinessUnitByCode, type BusinessUnitContext } from '../../shared/utils/business-unit';
 
 export const STUDIO_BILLING_MODULE = 'studio_billing';
@@ -73,14 +74,7 @@ export const writeBillingAudit = async (
   oldValues?: unknown,
   newValues?: unknown,
 ) => {
-  await connection.execute(
-    `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      studio.organizationId, studio.id, userId, STUDIO_BILLING_MODULE, actionCode, entityType, entityId, entityCode,
-      description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues),
-    ],
-  );
+  await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_BILLING_MODULE, actionCode, entityType, entityId, entityCode, description, oldValues, newValues }, connection);
 };
 
 export const publishBillingEvent = async (

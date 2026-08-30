@@ -23,6 +23,7 @@ import { Dashboard } from "./pages/global/Dashboard";
 import { Users as UsersManagement } from "./pages/global/Users";
 import { Profile } from "./pages/global/Profile";
 import { Notifications } from "./pages/global/Notifications";
+import { AuditLog } from "./pages/global/AuditLog";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -114,14 +115,7 @@ const router = createBrowserRouter(
         <Route path="profile" element={<Profile />} />
         <Route
           path="audit-log"
-          element={
-            <PlannedModulePage
-              title="Log Audit"
-              description="Pelacakan aktivitas sistem dan log keamanan."
-              stage="Lanjutan"
-              icon={ShieldAlert}
-            />
-          }
+          element={<PermissionGate permission="audit.read"><AuditLog /></PermissionGate>}
         />
         <Route path="craft/orders/*" element={<CraftOrders />} />
         <Route

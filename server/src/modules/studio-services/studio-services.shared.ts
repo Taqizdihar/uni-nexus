@@ -1,5 +1,6 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
+import { AuditService } from '../../shared/audit/audit.service';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 
@@ -19,12 +20,7 @@ export const writeStudioServicesAudit = async (
   connection: PoolConnection, studio: BusinessUnitContext, userId: number | null, actionCode: string,
   entity: EntityRef, description: string, oldValues?: unknown, newValues?: unknown,
 ) => {
-  await connection.execute(
-    `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [studio.organizationId, studio.id, userId, STUDIO_SERVICES_MODULE, actionCode, entity.entityType, entity.id, entity.code,
-      description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)],
-  );
+  await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_SERVICES_MODULE, actionCode, entityType: entity.entityType, entityId: entity.id, entityCode: entity.code, description, oldValues, newValues }, connection);
 };
 
 /** Outbox publication is supplemental. A catalog mutation remains valid without an automation worker. */

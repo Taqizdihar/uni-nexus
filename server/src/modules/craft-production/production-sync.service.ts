@@ -1,4 +1,5 @@
 import { AppError } from '../../shared/errors/AppError';
+import { AuditService } from '../../shared/audit/audit.service';
 import type { CraftContext, DbConnection, PrintJobStatus } from './craft-production.types';
 
 export class ProductionSyncService {
@@ -30,17 +31,7 @@ export class ProductionSyncService {
     oldValues?: unknown,
     newValues?: unknown,
   ) {
-    await connection.execute(
-      `INSERT INTO audit_logs (
-        organization_id, business_unit_id, user_id, module_code, action_code,
-        entity_type, entity_id, entity_code, description, old_values, new_values
-      ) VALUES (?, ?, ?, 'craft_production', ?, 'print_job', ?, ?, ?, ?, ?)`,
-      [
-        craft.organizationId, craft.id, userId, actionCode, entityId, entityCode, description,
-        oldValues === undefined ? null : JSON.stringify(oldValues),
-        newValues === undefined ? null : JSON.stringify(newValues),
-      ],
-    );
+    await AuditService.write({ organizationId: craft.organizationId, businessUnitId: craft.id, userId, moduleCode: 'craft_production', actionCode, entityType: 'print_job', entityId, entityCode, description, oldValues, newValues }, connection);
   }
 
   async syncOrderOnStart(connection: DbConnection, orderId: number | null, userId: number) {

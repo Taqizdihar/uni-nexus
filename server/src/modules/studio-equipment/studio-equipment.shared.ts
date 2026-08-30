@@ -1,5 +1,6 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
+import { AuditService } from '../../shared/audit/audit.service';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 
@@ -18,11 +19,7 @@ export const assetReference = (asset: { id: number; asset_code: string }) => ({ 
 export const writeAssetAudit = async (
   connection: PoolConnection, studio: BusinessUnitContext, userId: number | null, actionCode: string,
   asset: { id: number; asset_code: string }, description: string, oldValues?: unknown, newValues?: unknown,
-) => connection.execute(
-  `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-   VALUES (?, ?, ?, ?, ?, 'asset', ?, ?, ?, ?, ?)`,
-  [studio.organizationId, studio.id, userId, STUDIO_EQUIPMENT_MODULE, actionCode, asset.id, asset.asset_code, description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)],
-);
+) => AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_EQUIPMENT_MODULE, actionCode, entityType: 'asset', entityId: asset.id, entityCode: asset.asset_code, description, oldValues, newValues }, connection);
 
 export const publishAssetEvent = async (
   connection: PoolConnection, studio: BusinessUnitContext, eventName: string,

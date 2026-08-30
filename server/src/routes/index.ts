@@ -29,6 +29,7 @@ import { studioAutomationsRoutes } from '../modules/studio-automations/studio-au
 import { dashboardRoutes } from '../modules/dashboard/dashboard.routes';
 import { presenceRoutes } from '../modules/presence/presence.routes';
 import notificationsRoutes from '../modules/notifications/notifications.routes';
+import auditRoutes from '../modules/audit/audit.routes';
 
 const router = Router();
 
@@ -48,6 +49,7 @@ router.use('/profile', profileRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/presence', presenceRoutes);
 router.use('/notifications', notificationsRoutes);
+router.use('/audit', auditRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

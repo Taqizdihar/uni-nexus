@@ -1,5 +1,6 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
+import { AuditService } from '../../shared/audit/audit.service';
 import { AppError } from '../../shared/errors/AppError';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { STUDIO_EXTERNAL_ROLES, type StudioExternalRole } from '../../shared/party/studio-external-party.service';
@@ -22,11 +23,7 @@ export const assertGloballyActive = (party: { status_code: string }) => {
 };
 export const vendorRef = (party: { id: number; code: string }) => ({ id: Number(party.id), code: party.code });
 export const writeVendorAudit = async (connection: PoolConnection, studio: BusinessUnitContext, userId: number | null, action: string, party: { id: number; code: string }, description: string, oldValues?: unknown, newValues?: unknown) => {
-  await connection.execute(
-    `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-     VALUES (?, ?, ?, ?, ?, 'party', ?, ?, ?, ?, ?)`,
-    [studio.organizationId, studio.id, userId, STUDIO_VENDORS_MODULE, action, party.id, party.code, description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)],
-  );
+  await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_VENDORS_MODULE, actionCode: action, entityType: 'party', entityId: party.id, entityCode: party.code, description, oldValues, newValues }, connection);
 };
 export const loadExternalPartyForUpdate = async (connection: PoolConnection, partyId: number, studio: BusinessUnitContext) => {
   const [rows]: any = await connection.execute(

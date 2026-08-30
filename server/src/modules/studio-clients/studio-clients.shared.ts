@@ -1,6 +1,7 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { AuditService } from '../../shared/audit/audit.service';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { STUDIO_CLIENT_ROLE } from '../../shared/party/studio-client.service';
@@ -39,16 +40,7 @@ export const writeClientAudit = async (
   oldValues?: unknown,
   newValues?: unknown,
 ) => {
-  await connection.execute(
-    `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      studio.organizationId, studio.id, userId, STUDIO_CLIENTS_MODULE, actionCode,
-      PARTY_ENTITY, client.id, client.code, description.slice(0, 500),
-      oldValues === undefined ? null : JSON.stringify(oldValues),
-      newValues === undefined ? null : JSON.stringify(newValues),
-    ],
-  );
+  await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_CLIENTS_MODULE, actionCode, entityType: PARTY_ENTITY, entityId: client.id, entityCode: client.code, description, oldValues, newValues }, connection);
 };
 
 /**

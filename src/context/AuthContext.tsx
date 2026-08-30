@@ -43,11 +43,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     const sessionKey = sessionStorage.getItem('uni-nexus.presence.session');
-    if (sessionKey && localStorage.getItem('token')) {
-      try { await api.post('/presence/leave', { session_key: sessionKey }); } catch { /* TTL handles an unavailable server. */ }
+    try {
+      if (localStorage.getItem('token')) await api.post('/auth/logout', sessionKey ? { session_key: sessionKey } : {});
+    } catch {
+      // A stateless JWT must still be cleared locally when the server is unavailable.
+    } finally {
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('uni-nexus.presence.session');
+      setUser(null);
     }
-    localStorage.removeItem('token');
-    setUser(null);
   };
 
   const checkAuth = async () => {

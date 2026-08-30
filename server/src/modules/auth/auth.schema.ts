@@ -18,3 +18,7 @@ export const loginSchema = z.object({
     password: z.string().min(1, 'Password wajib diisi.'),
   }),
 });
+
+export const logoutSchema = z.object({
+  body: z.object({ session_key: z.string().uuid('session_key harus berupa UUID.').optional() }).strict(),
+});

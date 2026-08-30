@@ -3,6 +3,7 @@ import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
+import { AuditService } from '../../shared/audit/audit.service';
 import { CraftPrintersRepository } from './craft-printers.repository';
 import type { CompleteMaintenanceInput, HistoryFilters, IssueInput, IssueUpdateInput, PrinterFilters, PrinterInput, PrinterStatus, PrinterUpdateInput, ScheduleInput, ScheduleUpdateInput } from './craft-printers.types';
 
@@ -21,8 +22,7 @@ export class CraftPrintersService {
   private repository = new CraftPrintersRepository();
 
   private async audit(connection: PoolConnection, actor: PrinterActor, action: string, entityType: string, entityId: number, entityCode: string | null, description: string, oldValues?: unknown, newValues?: unknown) {
-    await connection.execute(`INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values, ip_address, user_agent)
-      VALUES (?, ?, ?, 'craft_printers', ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [actor.organizationId, actor.businessUnitId, actor.id, action, entityType, entityId, entityCode, description, oldValues ? JSON.stringify(oldValues) : null, newValues ? JSON.stringify(newValues) : null, actor.ip || null, actor.userAgent || null]);
+    await AuditService.write({ organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, userId: actor.id, moduleCode: 'craft_printers', actionCode: action, entityType, entityId, entityCode, description, oldValues, newValues, ipAddress: actor.ip, userAgent: actor.userAgent }, connection);
   }
 
   private async printerOrThrow(printerId: number, businessUnitId: number, connection?: PoolConnection, lock = false) {

@@ -1,5 +1,6 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
+import { AuditService } from '../../shared/audit/audit.service';
 import { AppError } from '../../shared/errors/AppError';
 import { getBusinessUnitByCode, type BusinessUnitContext } from '../../shared/utils/business-unit';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
@@ -48,11 +49,7 @@ export const writeStudioFinanceAudit = async (
   oldValues?: unknown,
   newValues?: unknown,
 ) => {
-  await connection.execute(
-    `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description,old_values,new_values)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
-    [studio.organizationId, studio.id, userId, STUDIO_FINANCE_MODULE, action, entityType, entityId, entityCode, description.slice(0, 500), oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)],
-  );
+  await AuditService.write({ organizationId: studio.organizationId, businessUnitId: studio.id, userId, moduleCode: STUDIO_FINANCE_MODULE, actionCode: action, entityType, entityId, entityCode, description, oldValues, newValues }, connection);
 };
 
 /** Publishes finance facts only after cash posting succeeds in the same transaction. */

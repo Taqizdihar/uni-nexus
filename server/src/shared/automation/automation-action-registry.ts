@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { pool } from '../../config/database';
+import { AuditService } from '../audit/audit.service';
 import { CraftOrdersService } from '../../modules/craft-orders/craft-orders.service';
 import { OrderPriorityService } from '../../modules/craft-orders/order-priority.service';
 import { CraftProcurementService } from '../../modules/craft-procurement/craft-procurement.service';
@@ -191,8 +192,7 @@ export class AutomationActionRegistry {
       if (!rows.length) throw new AutomationSkippedError('ORDER_NOT_FOUND', 'Pesanan tidak lagi tersedia.');
       const priority = String(config.priority);
       await connection.execute(`UPDATE craft_orders SET priority_code=?,is_priority_manual=1,priority_reason=? WHERE id=?`, [priority, `Executed by Automation ${context.rule.rule_code} (run ${context.run.id})`, orderId]);
-      await connection.execute(`INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description,new_values)
-        VALUES (?,?,?,'craft_automations','automation.order_priority','craft_order',?,?,?,?)`, [context.organizationId, context.businessUnitId, context.actorUserId, orderId, rows[0].order_code, `Executed by Automation ${context.rule.rule_code}.`, JSON.stringify({ priority, automation_run_id: context.run.id })]);
+      await AuditService.write({ organizationId: context.organizationId, businessUnitId: context.businessUnitId, userId: context.actorUserId, moduleCode: 'craft_automations', actionCode: 'automation.order_priority', entityType: 'craft_order', entityId: orderId, entityCode: rows[0].order_code, description: `Executed by Automation ${context.rule.rule_code}.`, newValues: { priority, automation_run_id: context.run.id } }, connection);
       await domainEvents.publish(connection, buildAutomationDomainEvent({ eventName: 'order.priority_changed', moduleCode: 'craft_orders', organizationId: context.organizationId, businessUnitId: context.businessUnitId, entityType: 'craft_order', entityId: orderId, entityCode: rows[0].order_code, actorUserId: context.actorUserId, payload: { context: { order: { id: orderId, order_code: rows[0].order_code, priority } } } }, { id: context.run.id, correlationId: context.run.correlation_id, chainDepth: context.run.chain_depth }, context.event?.id));
       await connection.commit();
       return { status: 'success', order_id: orderId, priority };

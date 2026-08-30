@@ -7,6 +7,7 @@ import { AccountLifecycleService } from './account-lifecycle.service';
 import type { ProfileStatusCode, UpdateProfileInput } from './users.schema';
 import { UserResponse } from './users.types';
 import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
+import { AuditService } from '../../shared/audit/audit.service';
 
 const SINGLETON_ROLES = ['CEO', 'COO', 'CTO'];
 const domainConflict = (code: string, message: string) => new AppError(409, code, message);
@@ -112,7 +113,7 @@ export class UsersService {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-      const [users] = await connection.execute<any[]>('SELECT id, organization_id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
+      const [users] = await connection.execute<any[]>('SELECT id, organization_id, username, full_name, status_code, approval_status_code, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
       if (!users.length || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
       await this.assignRoleAndBusinessUnitAccess(connection, id, roleCode, managerId);
       await connection.execute(
@@ -124,20 +125,32 @@ export class UsersService {
         title: 'Akun Anda disetujui', message: 'Akun UNI-NEXUS Anda telah aktif. Selamat datang!',
         actionUrl: '/app/dashboard', entityType: 'user', entityId: id,
       }, {}, connection));
-      await this.audit(connection, 1, managerId, 'approval', 'Account approved');
+      await this.audit(connection, Number(users[0].organization_id), managerId, 'approval', `Menyetujui akun ${users[0].full_name}.`, {
+        entityType: 'user', entityId: id, entityCode: users[0].username,
+        oldValues: { status_code: users[0].status_code, approval_status_code: users[0].approval_status_code },
+        newValues: { status_code: 'active', approval_status_code: 'approved', role_code: roleCode },
+      });
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }
     finally { connection.release(); }
   }
 
   static async rejectUser(id: number, managerId: number, reason?: string) {
-    const [result] = await pool.execute<any>(
-      `UPDATE users SET approval_status_code = 'rejected', status_code = 'inactive', rejected_by = ?,
-       rejected_at = CURRENT_TIMESTAMP(3), rejection_reason = ? WHERE id = ? AND deleted_at IS NULL`,
-      [managerId, reason?.trim() || null, id],
-    );
-    if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
-    await this.audit(pool as unknown as PoolConnection, 1, managerId, 'rejection', 'Account rejected');
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [users] = await connection.execute<any[]>('SELECT id, organization_id, username, full_name, status_code, approval_status_code FROM users WHERE id=? AND deleted_at IS NULL FOR UPDATE', [id]);
+      if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+      const target = users[0];
+      await connection.execute(`UPDATE users SET approval_status_code = 'rejected', status_code = 'inactive', rejected_by = ?, rejected_at = CURRENT_TIMESTAMP(3), rejection_reason = ? WHERE id = ?`, [managerId, reason?.trim() || null, id]);
+      await this.audit(connection, Number(target.organization_id), managerId, 'rejection', `Menolak akun ${target.full_name}.`, {
+        entityType: 'user', entityId: id, entityCode: target.username,
+        oldValues: { status_code: target.status_code, approval_status_code: target.approval_status_code },
+        newValues: { status_code: 'inactive', approval_status_code: 'rejected' },
+      });
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
   }
 
   static async updateStatus(id: number, statusCode: string, managerId: number) {
@@ -147,8 +160,19 @@ export class UsersService {
       if (principal?.role?.code === 'CTO') throw new AppError(403, 'CTO_SELF_PROTECTION', 'Akun Chief Technology Officer tidak dapat mengubah status dirinya sendiri.');
       throw new AppError(403, 'CANNOT_SELF_MODIFY', 'Anda tidak dapat mengubah status akun sendiri.');
     }
-    const [result] = await pool.execute<any>('UPDATE users SET status_code = ? WHERE id = ? AND deleted_at IS NULL', [statusCode, id]);
-    if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [users] = await connection.execute<any[]>('SELECT id, organization_id, username, full_name, status_code FROM users WHERE id=? AND deleted_at IS NULL FOR UPDATE', [id]);
+      if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
+      const target = users[0];
+      await connection.execute('UPDATE users SET status_code = ? WHERE id = ?', [statusCode, id]);
+      await this.audit(connection, Number(target.organization_id), managerId, 'status_change', `Mengubah status akun ${target.full_name}.`, {
+        entityType: 'user', entityId: id, entityCode: target.username, oldValues: { status_code: target.status_code }, newValues: { status_code: statusCode },
+      });
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
   }
 
   static async updateRole(id: number, roleCode: string, managerId: number) {
@@ -160,10 +184,13 @@ export class UsersService {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-      const [users] = await connection.execute<any[]>('SELECT id, deleted_at FROM users WHERE id = ? FOR UPDATE', [id]);
+      const [users] = await connection.execute<any[]>(`SELECT u.id,u.organization_id,u.username,u.full_name,u.deleted_at,r.code AS role_code
+        FROM users u LEFT JOIN user_roles ur ON ur.user_id=u.id LEFT JOIN roles r ON r.id=ur.role_id AND r.is_active=1 WHERE u.id = ? FOR UPDATE`, [id]);
       if (!users.length || users[0].deleted_at !== null) throw new NotFoundError('Pengguna tidak ditemukan.');
       await this.assignRoleAndBusinessUnitAccess(connection, id, roleCode, managerId);
-      await this.audit(connection, 1, managerId, 'role_change', 'Role updated');
+      await this.audit(connection, Number(users[0].organization_id), managerId, 'role_change', `Mengubah role ${users[0].full_name}.`, {
+        entityType: 'user', entityId: id, entityCode: users[0].username, oldValues: { role_code: users[0].role_code || null }, newValues: { role_code: roleCode },
+      });
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }
     finally { connection.release(); }
@@ -182,7 +209,7 @@ export class UsersService {
     try {
       await connection.beginTransaction();
       media = await AccountLifecycleService.archiveUser(connection, id, managerId, manager.organization_id);
-      await this.audit(connection, manager.organization_id, managerId, 'account_delete', 'Account archived by management');
+      await this.audit(connection, manager.organization_id, managerId, 'account_delete', 'Account archived by management', { entityType: 'user', entityId: id });
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }
     finally { connection.release(); }
@@ -218,15 +245,20 @@ export class UsersService {
       if (error?.code === 'ER_DUP_ENTRY') throw domainConflict('PROFILE_IDENTITY_CONFLICT', 'Email atau username sudah digunakan oleh akun lain.');
       throw error;
     }
-    await this.audit(pool as unknown as PoolConnection, current.organization_id, id, 'profile.update', 'Profile updated');
+    await this.audit(pool as unknown as PoolConnection, current.organization_id, id, 'profile.update', 'Profile updated', {
+      entityType: 'user', entityId: id, entityCode: next.username,
+      oldValues: { full_name: current.full_name, username: current.username, email: current.email, phone: current.phone, default_workspace_code: current.default_workspace_code },
+      newValues: { full_name: next.full_name, username: next.username, email: next.email, phone: next.phone, default_workspace_code: next.default_workspace_code },
+    });
     return this.getUserById(id);
   }
 
   static async updateProfileStatus(id: number, status: ProfileStatusCode): Promise<UserResponse> {
     if (!['default', 'busy', 'sick', 'leave'].includes(status)) throw new AppError(400, 'PROFILE_STATUS_INVALID', 'Status profil tidak valid.');
+    const [before] = await pool.execute<any[]>('SELECT organization_id, username, profile_status_code FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
     const [result] = await pool.execute<any>('UPDATE users SET profile_status_code = ? WHERE id = ? AND deleted_at IS NULL', [status, id]);
     if (!result.affectedRows) throw new NotFoundError('Pengguna tidak ditemukan.');
-    await this.audit(pool as unknown as PoolConnection, 1, id, 'profile.status_change', 'Profile status updated');
+    await this.audit(pool as unknown as PoolConnection, Number(before[0].organization_id), id, 'profile.status_change', 'Profile status updated', { entityType: 'user', entityId: id, entityCode: before[0].username, oldValues: { profile_status_code: before[0].profile_status_code }, newValues: { profile_status_code: status } });
     return this.getUserById(id);
   }
 
@@ -236,7 +268,7 @@ export class UsersService {
     if (!(await bcrypt.compare(data.currentPassword, users[0].password_hash))) throw new AppError(400, 'CURRENT_PASSWORD_INVALID', 'Kata sandi saat ini tidak valid.');
     const passwordHash = await bcrypt.hash(data.newPassword, 10);
     await pool.execute('UPDATE users SET password_hash = ?, password_changed_at = CURRENT_TIMESTAMP(3), must_change_password = 0 WHERE id = ?', [passwordHash, id]);
-    await this.audit(pool as unknown as PoolConnection, users[0].organization_id, id, 'profile.password_change', 'Password changed');
+    await this.audit(pool as unknown as PoolConnection, users[0].organization_id, id, 'profile.password_change', 'Password changed', { entityType: 'user', entityId: id, newValues: { password_changed: true } });
   }
 
   private static async replaceProfileMedia(id: number, column: 'avatar_path' | 'profile_banner_path', policy: 'avatar' | 'profile_banner', file: Express.Multer.File) {
@@ -249,7 +281,7 @@ export class UsersService {
       if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
       previous = users[0][column] || null;
       await connection.execute(`UPDATE users SET ${column} = ? WHERE id = ?`, [saved.key, id]);
-      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_update' : 'profile.banner_update', 'Profile media updated');
+      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_update' : 'profile.banner_update', 'Profile media updated', { entityType: 'user', entityId: id, oldValues: { has_media: Boolean(previous) }, newValues: { has_media: true } });
       await connection.commit();
     } catch (error) {
       await connection.rollback();
@@ -269,7 +301,7 @@ export class UsersService {
       if (!users.length) throw new NotFoundError('Pengguna tidak ditemukan.');
       previous = users[0][column] || null;
       await connection.execute(`UPDATE users SET ${column} = NULL WHERE id = ?`, [id]);
-      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_delete' : 'profile.banner_delete', 'Profile media deleted');
+      await this.audit(connection, users[0].organization_id, id, column === 'avatar_path' ? 'profile.avatar_delete' : 'profile.banner_delete', 'Profile media deleted', { entityType: 'user', entityId: id, oldValues: { has_media: Boolean(previous) }, newValues: { has_media: false } });
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }
     finally { connection.release(); }
@@ -282,7 +314,7 @@ export class UsersService {
   static replaceBanner(id: number, file: Express.Multer.File) { return this.replaceProfileMedia(id, 'profile_banner_path', 'profile_banner', file); }
   static deleteBanner(id: number) { return this.deleteProfileMedia(id, 'profile_banner_path'); }
 
-  private static async audit(connection: Pick<PoolConnection, 'execute'>, organizationId: number, userId: number, actionCode: string, description: string) {
-    await connection.execute(`INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (?, ?, 'users', ?, ?)`, [organizationId, userId, actionCode, description]);
+  private static async audit(connection: Pick<PoolConnection, 'execute'>, organizationId: number, userId: number, actionCode: string, description: string, details: { entityType?: string; entityId?: number; entityCode?: string | null; oldValues?: unknown; newValues?: unknown } = {}) {
+    await AuditService.write({ organizationId, userId, moduleCode: 'users', actionCode, description, ...details }, connection);
   }
 }

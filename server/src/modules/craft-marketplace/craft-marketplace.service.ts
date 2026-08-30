@@ -6,6 +6,7 @@ import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
+import { AuditService } from '../../shared/audit/audit.service';
 import { CraftOrdersService } from '../craft-orders/craft-orders.service';
 import { marketplaceConnectorRegistry } from '../../shared/integrations/marketplace/MarketplaceConnectorRegistry';
 import type { ImportColumnMapping, NormalizedImportItem, NormalizedImportOrder } from './craft-marketplace.types';
@@ -96,11 +97,7 @@ export class CraftMarketplaceService {
   private readonly financePosting = new FinancePostingService();
 
   private async audit(connection: Connection, context: { organizationId: number; businessUnitId: number; userId: number }, action: string, entityType: string, entityId: number | null, entityCode: string | null, description: string, values?: Record<string, unknown>) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description,new_values)
-       VALUES (?,?,?,'craft_marketplace',?,?,?,?,?,?)`,
-      [context.organizationId, context.businessUnitId, context.userId, action, entityType, entityId, entityCode, description, values ? JSON.stringify(values) : null],
-    );
+    await AuditService.write({ organizationId: context.organizationId, businessUnitId: context.businessUnitId, userId: context.userId, moduleCode: 'craft_marketplace', actionCode: action, entityType, entityId, entityCode, description, newValues: values }, connection);
   }
 
   private async withTransaction<T>(work: (connection: Connection) => Promise<T>) {

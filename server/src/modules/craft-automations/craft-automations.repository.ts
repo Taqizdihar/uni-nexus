@@ -1,5 +1,6 @@
 import { pool } from '../../config/database';
 import { parseJson } from '../../shared/automation/automation-context';
+import { AuditService } from '../../shared/audit/audit.service';
 import type { AutomationRuleInput } from './craft-automations.types';
 
 const normalizeRule = (row: any) => ({ ...row, id: Number(row.id), version_no: Number(row.version_no), priority: Number(row.priority), cooldown_seconds: Number(row.cooldown_seconds || 0), max_retries: Number(row.max_retries || 0), is_system: Boolean(row.is_system), condition_json: parseJson(row.condition_json, null), action_json: parseJson(row.action_json, { version: 1, actions: [] }), trigger_config_json: parseJson(row.trigger_config_json, null) });
@@ -65,7 +66,7 @@ export class CraftAutomationsRepository {
   }
   async getRun(id: number, businessUnitId: number) { const [rows]: any = await pool.execute(`SELECT ar.*,r.rule_code,r.name rule_name,r.module_code FROM automation_runs ar JOIN automation_rules r ON r.id=ar.rule_id WHERE ar.id=? AND r.business_unit_id=?`, [id, businessUnitId]); return rows.length ? normalizeRun(rows[0]) : null; }
   async recentEvents(businessUnitId: number) { const [rows]: any = await pool.execute(`SELECT id,event_name,module_code,entity_type,entity_id,entity_code,correlation_id,chain_depth,status_code,attempt_count,available_at,locked_at,processed_at,last_error,created_at FROM domain_events WHERE business_unit_id=? ORDER BY id DESC LIMIT 100`, [businessUnitId]); return rows.map((row: any) => ({ ...row, id: Number(row.id), entity_id: row.entity_id === null ? null : Number(row.entity_id), chain_depth: Number(row.chain_depth || 0), attempt_count: Number(row.attempt_count || 0) })); }
-  async audit(connection: any, context: { organizationId: number; businessUnitId: number; userId: number }, action: string, entityType: string, entityId: number, entityCode: string, description: string, oldValues?: unknown, newValues?: unknown) { await connection.execute(`INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description,old_values,new_values) VALUES (?,?,?,'craft_automations',?,?,?,?,?,?,?)`, [context.organizationId, context.businessUnitId, context.userId, action, entityType, entityId, entityCode, description, oldValues === undefined ? null : JSON.stringify(oldValues), newValues === undefined ? null : JSON.stringify(newValues)]); }
+  async audit(connection: any, context: { organizationId: number; businessUnitId: number; userId: number }, action: string, entityType: string, entityId: number, entityCode: string, description: string, oldValues?: unknown, newValues?: unknown) { await AuditService.write({ organizationId: context.organizationId, businessUnitId: context.businessUnitId, userId: context.userId, moduleCode: 'craft_automations', actionCode: action, entityType, entityId, entityCode, description, oldValues, newValues }, connection); }
 }
 
 export { normalizeRule, normalizeRun };

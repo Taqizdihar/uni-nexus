@@ -3,6 +3,7 @@ import { pool } from "../../config/database";
 import { AppError } from "../../shared/errors/AppError";
 import { storageService } from '../../shared/storage';
 import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
+import { AuditService } from '../../shared/audit/audit.service';
 import type { BusinessUnitContext } from "../craft-orders/craft-orders.helpers";
 import { CraftProcurementRepository } from "./craft-procurement.repository";
 import type {
@@ -38,22 +39,7 @@ export class CraftProcurementService {
     oldValues?: unknown,
     newValues?: unknown,
   ) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_id,entity_code,description,old_values,new_values)
-       VALUES (?,?,?,'craft_procurement',?,?,?,?,?,?,?)`,
-      [
-        actor.organizationId,
-        actor.id,
-        actor.userId,
-        action,
-        entityType,
-        entityId,
-        entityCode,
-        description,
-        oldValues === undefined ? null : JSON.stringify(oldValues),
-        newValues === undefined ? null : JSON.stringify(newValues),
-      ],
-    );
+    await AuditService.write({ organizationId: actor.organizationId, businessUnitId: actor.id, userId: actor.userId, moduleCode: 'craft_procurement', actionCode: action, entityType, entityId, entityCode, description, oldValues, newValues }, connection);
   }
 
   private async supplierForUpdate(

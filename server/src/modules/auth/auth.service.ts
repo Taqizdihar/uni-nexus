@@ -6,6 +6,8 @@ import { AppError, UnauthorizedError } from '../../shared/errors/AppError';
 import { AccountLifecycleService } from '../users/account-lifecycle.service';
 import { UsersService } from '../users/users.service';
 import { notificationService, notifyBestEffort } from '../../shared/notifications/notification.service';
+import { AuditService } from '../../shared/audit/audit.service';
+import { PresenceService } from '../presence/presence.service';
 
 type RegisterInput = {
   organization_id?: number;
@@ -79,10 +81,7 @@ export class AuthService {
         const [businessUnits] = await connection.execute<any[]>('SELECT id FROM business_units WHERE is_active = 1');
         for (const businessUnit of businessUnits) await connection.execute('INSERT INTO user_business_units (user_id, business_unit_id, can_access) VALUES (?, ?, 1)', [userId, businessUnit.id]);
       }
-      await connection.execute(
-        `INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description)
-         VALUES (?, ?, 'users', ?, ?)`, [organizationId, userId, bootstrap ? 'bootstrap_cto' : 'signup_request', bootstrap ? 'CTO bootstrap registration' : 'User signup request'],
-      );
+      await AuditService.write({ organizationId, userId, moduleCode: 'users', actionCode: bootstrap ? 'bootstrap_cto' : 'signup_request', entityType: 'user', entityId: userId, entityCode: username, description: bootstrap ? 'CTO bootstrap registration' : 'User signup request' }, connection);
       if (!bootstrap) {
         await notifyBestEffort(() => notificationService.createForExecutives({
           organizationId, notificationType: 'system', moduleCode: 'users', severityCode: 'info',
@@ -98,7 +97,7 @@ export class AuthService {
     } finally { connection.release(); }
   }
 
-  static async login(data: { usernameOrEmail: string; password: string }) {
+  static async login(data: { usernameOrEmail: string; password: string }, requestMeta: { ipAddress?: string | null; userAgent?: string | null } = {}) {
     const loginIdentifier = data.usernameOrEmail.trim().toLowerCase();
     const field = loginIdentifier.includes('@') ? 'email' : 'username';
     const [users] = await pool.execute<any[]>(`SELECT * FROM users WHERE ${field} = ? AND deleted_at IS NULL`, [loginIdentifier]);
@@ -111,8 +110,14 @@ export class AuthService {
     if (user.status_code === 'suspended') throw new UnauthorizedError('Akun Anda sedang ditangguhkan.', 'ACCOUNT_SUSPENDED');
     if (user.status_code !== 'active' || user.approval_status_code !== 'approved') throw new UnauthorizedError('Akun Anda tidak aktif.', 'ACCOUNT_INACTIVE');
     await pool.execute('UPDATE users SET last_login_at = CURRENT_TIMESTAMP(3) WHERE id = ?', [user.id]);
-    await pool.execute(`INSERT INTO audit_logs (organization_id, user_id, module_code, action_code, description) VALUES (?, ?, 'auth', 'login', 'User logged in successfully')`, [user.organization_id, user.id]);
+    await AuditService.write({ organizationId: Number(user.organization_id), userId: Number(user.id), moduleCode: 'auth', actionCode: 'login', entityType: 'user', entityId: Number(user.id), entityCode: user.username, description: 'User logged in successfully', ...requestMeta });
     const token = jwt.sign({ id: user.id, organization_id: user.organization_id, username: user.username }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN as any });
     return { token, user: await UsersService.getAuthPrincipal(user.id) };
+  }
+
+  static async logout(user: { id: number; organization_id: number; username?: string }, sessionKey?: string, requestMeta: { ipAddress?: string | null; userAgent?: string | null } = {}) {
+    if (sessionKey) await new PresenceService().leave({ id: Number(user.id), organization_id: Number(user.organization_id) }, sessionKey);
+    await AuditService.write({ organizationId: Number(user.organization_id), userId: Number(user.id), moduleCode: 'auth', actionCode: 'logout', entityType: 'user', entityId: Number(user.id), entityCode: user.username || null, description: 'User logged out explicitly', ...requestMeta });
+    return { success: true };
   }
 }

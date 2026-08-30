@@ -2,6 +2,7 @@ import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
 import { pool } from '../../config/database';
 import { storageService } from '../../shared/storage';
+import { AuditService } from '../../shared/audit/audit.service';
 import { safeText } from './studio-analytics.shared';
 import type { AnalyticsExportFormat, AnalyticsReport, StudioAnalyticsContext, StudioAnalyticsFilters } from './studio-analytics.types';
 import { StudioAnalyticsService } from './studio-analytics.service';
@@ -37,11 +38,7 @@ export class StudioAnalyticsExportService {
   }
 
   private async audit(ctx: StudioAnalyticsContext, userId: number, report: AnalyticsReport, format: AnalyticsExportFormat, filters: StudioAnalyticsFilters, connection: { execute: typeof pool.execute } = pool) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id,business_unit_id,user_id,module_code,action_code,entity_type,entity_code,description,new_values)
-       VALUES (?,?,?,?,?,'analytics_export',?,'Mengekspor laporan Studio Analytics.',?)`,
-      [ctx.organizationId, ctx.id, userId, 'studio_analytics', 'studio.analytics_export', `${report}:${format}`, JSON.stringify({ report, format, start_date: filters.startDate, end_date: filters.endDate, currency: filters.currency || null, client_id: filters.clientId || null, service_id: filters.serviceId || null, project_type: filters.projectType || null })],
-    );
+    await AuditService.write({ organizationId: ctx.organizationId, businessUnitId: ctx.id, userId, moduleCode: 'studio_analytics', actionCode: 'studio.analytics_export', entityType: 'analytics_export', entityCode: `${report}:${format}`, description: 'Mengekspor laporan Studio Analytics.', newValues: { report, format, start_date: filters.startDate, end_date: filters.endDate, currency: filters.currency || null, client_id: filters.clientId || null, service_id: filters.serviceId || null, project_type: filters.projectType || null } }, connection);
   }
 
   private csv(title: string, rows: Array<Record<string, string | number | null>>) {

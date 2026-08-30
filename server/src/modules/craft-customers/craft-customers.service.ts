@@ -5,6 +5,7 @@ import type { BusinessUnitContext } from '../craft-orders/craft-orders.helpers';
 import { CraftCustomersRepository } from './craft-customers.repository';
 import { PartnerPricingService } from './partner-pricing.service';
 import type { ContactInput, CustomerCreateInput, CustomerUpdateInput, PartnerInput, PartnerPriceRuleInput, PartnerPriceRuleUpdateInput } from './craft-customers.types';
+import { AuditService } from '../../shared/audit/audit.service';
 
 type SqlConnection = Awaited<ReturnType<typeof pool.getConnection>>;
 
@@ -13,11 +14,7 @@ export class CraftCustomersService {
   readonly pricing = new PartnerPricingService();
 
   private async writeAudit(connection: SqlConnection, craft: BusinessUnitContext, userId: number, actionCode: string, party: { id: number; code: string }, description: string, oldValues?: unknown, newValues?: unknown) {
-    await connection.execute(
-      `INSERT INTO audit_logs (organization_id, business_unit_id, user_id, module_code, action_code, entity_type, entity_id, entity_code, description, old_values, new_values)
-       VALUES (?, ?, ?, 'craft_customers', ?, 'party', ?, ?, ?, ?, ?)`,
-      [craft.organizationId, craft.id, userId, actionCode, party.id, party.code, description, oldValues ? JSON.stringify(oldValues) : null, newValues ? JSON.stringify(newValues) : null],
-    );
+    await AuditService.write({ organizationId: craft.organizationId, businessUnitId: craft.id, userId, moduleCode: 'craft_customers', actionCode, entityType: 'party', entityId: party.id, entityCode: party.code, description, oldValues, newValues }, connection);
   }
 
   private async getCustomerForUpdate(connection: SqlConnection, partyId: number, craft: BusinessUnitContext) {
