@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 30, 2026 at 01:41 AM
+-- Generation Time: Aug 31, 2026 at 02:06 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -315,7 +315,30 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (690, 1, NULL, 2, 'users', 'profile.avatar_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-29 21:44:04.353'),
 (691, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-30 06:14:39.834'),
 (692, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-30 08:02:26.867'),
-(693, 1, NULL, 2, 'users', 'profile.banner_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-30 08:06:14.360');
+(693, 1, NULL, 2, 'users', 'profile.banner_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-30 08:06:14.360'),
+(710, 1, NULL, 2, 'users', 'profile.avatar_update', NULL, NULL, NULL, 'Profile media updated', NULL, NULL, NULL, NULL, '2026-08-30 09:46:53.436'),
+(727, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-30 12:20:54.915'),
+(825, 1, 2, 2, 'studio_projects', 'studio.project_external_add', 'studio_project', 58, 'SMK-VND-A5C14637', 'Menambahkan kolaborator eksternal Vendor Smoke A5C14637 pada proyek SMK-VND-A5C14637.', NULL, '{\"party_id\": 84, \"agreed_fee\": 2000000, \"assignment_role\": \"freelancer\"}', NULL, NULL, '2026-08-30 07:03:45.375'),
+(827, 1, 2, 2, 'studio_projects', 'studio.project_external_update', 'studio_project', 58, 'SMK-VND-A5C14637', 'Memperbarui penugasan eksternal pada proyek SMK-VND-A5C14637.', '{\"agreed_fee\": 2000000, \"assignment_role\": \"freelancer\"}', '{\"agreed_fee\": 2100000, \"assignment_role\": \"freelancer\"}', NULL, NULL, '2026-08-30 07:03:45.397'),
+(829, 1, 2, 2, 'studio_projects', 'studio.project_external_end', 'studio_project', 58, 'SMK-VND-A5C14637', 'Mengakhiri penugasan eksternal pada proyek SMK-VND-A5C14637.', NULL, '{\"id\": 24, \"end_date\": \"2026-08-02\"}', NULL, NULL, '2026-08-30 07:03:45.409'),
+(833, 1, 2, 2, 'studio_vendors', 'studio.external_party_adopt', 'party', 85, 'CLI-000085', 'Mengadopsi Party CLI-000085 sebagai pihak eksternal Studio.', NULL, '{\"roles\": [\"studio_partner\"], \"contacts\": 0}', NULL, NULL, '2026-08-30 07:03:45.459'),
+(834, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 18, 'TRS-000018', 'Saldo awal Bank Finance EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:52.906'),
+(835, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 18, 'TRS-000018', 'Membuat akun kas Studio TRS-000018.', NULL, '{\"name\": \"Bank Finance EC75455B\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-30 07:03:52.908'),
+(836, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 19, 'TRS-000019', 'Saldo awal Kas Finance EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:52.920'),
+(837, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 19, 'TRS-000019', 'Membuat akun kas Studio TRS-000019.', NULL, '{\"name\": \"Kas Finance EC75455B\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-30 07:03:52.922'),
+(838, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 9, 'TRF-000009', 'Transfer TRF-000009 antar kas Studio.', NULL, '{\"to\": 19, \"from\": 18, \"amount\": 1000000}', NULL, NULL, '2026-08-30 07:03:52.945'),
+(839, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 17, 'PAY-000017', 'Mencatat pembayaran pelanggan PAY-000017.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.015'),
+(840, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 29, 'EXP-000029', 'Membuat pengeluaran EXP-000029.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-30 07:03:53.044'),
+(841, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 29, 'EXP-000029', 'Menyetujui pengeluaran EXP-000029.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.052'),
+(842, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 29, 'EXP-000029', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.067'),
+(843, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 29, 'EXP-000029', 'Membayar pengeluaran EXP-000029.', NULL, '{\"total\": 300000, \"transaction_id\": 67}', NULL, NULL, '2026-08-30 07:03:53.073'),
+(844, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 29, 'EXP-000029', 'Pembalikan EXP-000029: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.095'),
+(845, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 29, 'EXP-000029', 'Membalik pengeluaran EXP-000029.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 68}', NULL, NULL, '2026-08-30 07:03:53.099'),
+(846, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 30, 'EXP-000030', 'Payout Editor FIN-SMK-EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.119'),
+(847, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 30, 'EXP-000030', 'Membayar pengeluaran EXP-000030.', NULL, '{\"total\": 1000000, \"transaction_id\": 69}', NULL, NULL, '2026-08-30 07:03:53.123'),
+(848, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 25, 'ASSIGN-25', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-30 07:03:53.125'),
+(849, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 8, 'BDG-000008', 'Membuat anggaran BDG-000008.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-30 07:03:53.142'),
+(1347, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 01:42:41.336');
 
 -- --------------------------------------------------------
 
@@ -676,15 +699,21 @@ CREATE TABLE `documents` (
   `business_unit_id` bigint UNSIGNED DEFAULT NULL,
   `document_code` varchar(80) DEFAULT NULL,
   `document_type` varchar(60) NOT NULL COMMENT 'invoice|quotation|receipt|report|purchase_order|contract|design|other',
+  `source_module_code` varchar(80) DEFAULT NULL COMMENT 'Canonical module that owns or produced the document',
   `title` varchar(220) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `file_name` varchar(255) NOT NULL,
   `storage_path` varchar(500) NOT NULL,
   `mime_type` varchar(120) DEFAULT NULL,
   `file_size_bytes` bigint UNSIGNED DEFAULT NULL,
+  `checksum_sha256` char(64) DEFAULT NULL,
   `entity_type` varchar(60) DEFAULT NULL,
   `entity_id` bigint UNSIGNED DEFAULT NULL,
+  `entity_code` varchar(120) DEFAULT NULL,
   `version_no` int UNSIGNED NOT NULL DEFAULT '1',
   `is_template` tinyint(1) NOT NULL DEFAULT '0',
+  `archived_at` datetime(3) DEFAULT NULL,
+  `archived_by` bigint UNSIGNED DEFAULT NULL,
   `uploaded_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
@@ -758,7 +787,9 @@ INSERT INTO `domain_events` (`id`, `organization_id`, `business_unit_id`, `event
 (263, 1, 2, 'd63cfc26-6d5e-4c16-a927-6a9a10926259', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 7, 'TRF-000007', 2, 'd84c7524-8ee1-47fa-8fd8-a45a49cf6dfa', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 7, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000007\"}}}', 'processed', '2026-08-28 04:33:46.358', NULL, NULL, 0, '2026-08-28 04:33:46.644', NULL, '2026-08-28 11:33:46.358'),
 (264, 1, 2, 'adf292b0-6b82-40d9-90f5-7907e6740e5d', 'studio.finance.payment_received', 'studio_finance', 'payment', 13, 'PAY-13', 2, 'f1d9d175-a447-4bf0-a7cd-18612239fd1e', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 13, \"amount\": 2000000, \"invoice_id\": 42, \"project_id\": 43}}}', 'processed', '2026-08-28 04:33:46.429', NULL, NULL, 0, '2026-08-28 04:33:46.647', NULL, '2026-08-28 11:33:46.429'),
 (293, 1, 2, '0c938cf0-b9fe-4378-9129-c0a2240d102f', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 8, 'TRF-000008', 2, '9727565c-df46-4a52-bfe6-16708368ae5e', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 8, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000008\"}}}', 'processed', '2026-08-28 08:19:23.465', NULL, NULL, 0, '2026-08-28 08:19:27.948', NULL, '2026-08-28 15:19:23.465'),
-(294, 1, 2, '8833c576-5a80-4468-be54-974674799e6a', 'studio.finance.payment_received', 'studio_finance', 'payment', 16, 'PAY-16', 2, 'c57dc9a6-f3b3-4607-8d0b-11a72e8885c7', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 16, \"amount\": 2000000, \"invoice_id\": 55, \"project_id\": 50}}}', 'processed', '2026-08-28 08:19:23.585', NULL, NULL, 0, '2026-08-28 08:19:28.681', NULL, '2026-08-28 15:19:23.585');
+(294, 1, 2, '8833c576-5a80-4468-be54-974674799e6a', 'studio.finance.payment_received', 'studio_finance', 'payment', 16, 'PAY-16', 2, 'c57dc9a6-f3b3-4607-8d0b-11a72e8885c7', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 16, \"amount\": 2000000, \"invoice_id\": 55, \"project_id\": 50}}}', 'processed', '2026-08-28 08:19:23.585', NULL, NULL, 0, '2026-08-28 08:19:28.681', NULL, '2026-08-28 15:19:23.585'),
+(327, 1, 2, '5a9095d7-6b62-45b8-a475-873d0ecc75ba', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 9, 'TRF-000009', 2, 'a128f23b-ab10-4183-95d8-e356a9ac6bba', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 9, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000009\"}}}', 'processed', '2026-08-30 07:03:52.947', NULL, NULL, 0, '2026-08-30 07:03:53.215', NULL, '2026-08-30 14:03:52.947'),
+(328, 1, 2, '2104a947-0df7-45b0-b8f7-c6b9bddfc44a', 'studio.finance.payment_received', 'studio_finance', 'payment', 17, 'PAY-17', 2, 'd2eb9470-7d50-40eb-b9ff-a30c819358e0', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 17, \"amount\": 2000000, \"invoice_id\": 57, \"project_id\": 59}}}', 'processed', '2026-08-30 07:03:53.025', NULL, NULL, 0, '2026-08-30 07:03:53.263', NULL, '2026-08-30 14:03:53.025');
 
 -- --------------------------------------------------------
 
@@ -1362,6 +1393,784 @@ CREATE TABLE `notifications` (
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_id`, `notification_type`, `module_code`, `severity_code`, `title`, `message`, `action_url`, `entity_type`, `entity_id`, `dedupe_key`, `is_read`, `read_at`, `created_at`) VALUES
+(2, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:04:42.339'),
+(3, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.346'),
+(4, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.352'),
+(5, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.357'),
+(6, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.364'),
+(7, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.368'),
+(8, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.372'),
+(9, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.379'),
+(10, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace f00d7d44-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:04:42.383'),
+(14, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:28.410'),
+(15, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.414'),
+(16, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.420'),
+(17, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.424'),
+(18, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.428'),
+(19, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.434'),
+(20, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.438'),
+(21, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.442'),
+(22, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 80dd94a3-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:28.446'),
+(25, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:28.467'),
+(26, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:05:28.472'),
+(27, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:05:28.477'),
+(28, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:05:28.485'),
+(29, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:05:28.490'),
+(30, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:05:28.496'),
+(31, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:05:28.505'),
+(32, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:05:28.536'),
+(33, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 80dd94a3-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9055263:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:05:28.541'),
+(45, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:28.608'),
+(46, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:3', 0, NULL, '2026-08-30 09:05:28.611'),
+(47, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:4', 0, NULL, '2026-08-30 09:05:28.615'),
+(48, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:5', 0, NULL, '2026-08-30 09:05:28.620'),
+(49, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:6', 0, NULL, '2026-08-30 09:05:28.623'),
+(50, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:7', 0, NULL, '2026-08-30 09:05:28.627'),
+(51, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:8', 0, NULL, '2026-08-30 09:05:28.630'),
+(52, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:9', 0, NULL, '2026-08-30 09:05:28.635'),
+(53, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 80dd94a3-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8055256:action:0:user:10', 0, NULL, '2026-08-30 09:05:28.639'),
+(59, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:56.462'),
+(60, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.467'),
+(61, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.471'),
+(62, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.475'),
+(63, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.482'),
+(64, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.487'),
+(65, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.491'),
+(66, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.497'),
+(67, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace d8646edf-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:05:56.501'),
+(70, 1, 1, 2, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:56.539'),
+(71, 1, 1, 3, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:05:56.552'),
+(72, 1, 1, 4, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:05:56.556'),
+(73, 1, 1, 5, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:05:56.562'),
+(74, 1, 1, 6, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:05:56.566'),
+(75, 1, 1, 7, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:05:56.570'),
+(76, 1, 1, 8, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:05:56.574'),
+(77, 1, 1, 9, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:05:56.580'),
+(78, 1, 1, 10, 'system', 'craft_orders', 'info', 'System d8646edf-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074981:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:05:56.586'),
+(90, 1, 1, 2, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:05:56.661'),
+(91, 1, 1, 3, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:3', 0, NULL, '2026-08-30 09:05:56.665'),
+(92, 1, 1, 4, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:4', 0, NULL, '2026-08-30 09:05:56.672'),
+(93, 1, 1, 5, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:5', 0, NULL, '2026-08-30 09:05:56.675'),
+(94, 1, 1, 6, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:6', 0, NULL, '2026-08-30 09:05:56.680'),
+(95, 1, 1, 7, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:7', 0, NULL, '2026-08-30 09:05:56.685'),
+(96, 1, 1, 8, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:8', 0, NULL, '2026-08-30 09:05:56.689'),
+(97, 1, 1, 9, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:9', 0, NULL, '2026-08-30 09:05:56.692'),
+(98, 1, 1, 10, 'automation', 'automations', 'info', 'Automation d8646edf-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011090:action:0:user:10', 0, NULL, '2026-08-30 09:05:56.698'),
+(104, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:00.299'),
+(105, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.304'),
+(106, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.308'),
+(107, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.312'),
+(108, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.320'),
+(109, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.324'),
+(110, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.329'),
+(111, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.336'),
+(112, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace c6e10d88-6', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:00.342'),
+(115, 1, 1, 2, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:00.367'),
+(116, 1, 1, 3, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:07:00.386'),
+(117, 1, 1, 4, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:07:00.392'),
+(118, 1, 1, 5, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:07:00.400'),
+(119, 1, 1, 6, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:07:00.404'),
+(120, 1, 1, 7, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:07:00.408'),
+(121, 1, 1, 8, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:07:00.412'),
+(122, 1, 1, 9, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:07:00.418'),
+(123, 1, 1, 10, 'system', 'craft_orders', 'info', 'System c6e10d88-6', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9047324:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:07:00.422'),
+(135, 1, 1, 2, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:00.504'),
+(136, 1, 1, 3, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:3', 0, NULL, '2026-08-30 09:07:00.511'),
+(137, 1, 1, 4, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:4', 0, NULL, '2026-08-30 09:07:00.521'),
+(138, 1, 1, 5, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:5', 0, NULL, '2026-08-30 09:07:00.524'),
+(139, 1, 1, 6, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:6', 0, NULL, '2026-08-30 09:07:00.527'),
+(140, 1, 1, 7, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:7', 0, NULL, '2026-08-30 09:07:00.534'),
+(141, 1, 1, 8, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:8', 0, NULL, '2026-08-30 09:07:00.538'),
+(142, 1, 1, 9, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:9', 0, NULL, '2026-08-30 09:07:00.542'),
+(143, 1, 1, 10, 'automation', 'automations', 'info', 'Automation c6e10d88-6', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8078885:action:0:user:10', 0, NULL, '2026-08-30 09:07:00.545'),
+(149, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:52.547'),
+(150, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.551'),
+(151, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.560'),
+(152, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.565'),
+(153, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.569'),
+(154, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.579'),
+(155, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.583'),
+(156, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.590'),
+(157, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 45d21905-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:07:52.596'),
+(160, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:52.625'),
+(161, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:07:52.631'),
+(162, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:07:52.635'),
+(163, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:07:52.647'),
+(164, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:07:52.652'),
+(165, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:07:52.663'),
+(166, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:07:52.667'),
+(167, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:07:52.673'),
+(168, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 45d21905-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9017490:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:07:52.679'),
+(180, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:07:52.782'),
+(181, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:3', 0, NULL, '2026-08-30 09:07:52.785'),
+(182, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:4', 0, NULL, '2026-08-30 09:07:52.791'),
+(183, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:5', 0, NULL, '2026-08-30 09:07:52.795'),
+(184, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:6', 0, NULL, '2026-08-30 09:07:52.798'),
+(185, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:7', 0, NULL, '2026-08-30 09:07:52.801'),
+(186, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:8', 0, NULL, '2026-08-30 09:07:52.813'),
+(187, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:9', 0, NULL, '2026-08-30 09:07:52.816'),
+(188, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 45d21905-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8007904:action:0:user:10', 0, NULL, '2026-08-30 09:07:52.823'),
+(194, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:08:51.685'),
+(195, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.711'),
+(196, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.717'),
+(197, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.721'),
+(198, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.728'),
+(199, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.737'),
+(200, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.742'),
+(201, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.749'),
+(202, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace ba18edaf-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:08:51.753'),
+(205, 1, 1, 2, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:08:51.822'),
+(206, 1, 1, 3, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:08:51.828'),
+(207, 1, 1, 4, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:08:51.834'),
+(208, 1, 1, 5, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:08:51.839'),
+(209, 1, 1, 6, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:08:51.849'),
+(210, 1, 1, 7, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:08:51.854'),
+(211, 1, 1, 8, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:08:51.858'),
+(212, 1, 1, 9, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:08:51.864'),
+(213, 1, 1, 10, 'system', 'craft_orders', 'info', 'System ba18edaf-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9037030:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:08:51.878'),
+(225, 1, 1, 2, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:08:52.013'),
+(226, 1, 1, 3, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:3', 0, NULL, '2026-08-30 09:08:52.025'),
+(227, 1, 1, 4, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:4', 0, NULL, '2026-08-30 09:08:52.040'),
+(228, 1, 1, 5, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:5', 0, NULL, '2026-08-30 09:08:52.051'),
+(229, 1, 1, 6, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:6', 0, NULL, '2026-08-30 09:08:52.054'),
+(230, 1, 1, 7, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:7', 0, NULL, '2026-08-30 09:08:52.057'),
+(231, 1, 1, 8, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:8', 0, NULL, '2026-08-30 09:08:52.063'),
+(232, 1, 1, 9, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:9', 0, NULL, '2026-08-30 09:08:52.068'),
+(233, 1, 1, 10, 'automation', 'automations', 'info', 'Automation ba18edaf-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8074525:action:0:user:10', 0, NULL, '2026-08-30 09:08:52.086'),
+(239, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 09:10:09.578'),
+(240, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 09:10:09.585'),
+(241, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 09:10:09.589'),
+(242, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 09:10:09.592'),
+(243, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 09:10:09.600'),
+(244, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 09:10:09.603'),
+(245, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 09:10:09.606'),
+(246, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:295:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 09:10:09.609'),
+(247, 1, 2, 3, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:3', 0, NULL, '2026-08-30 09:10:29.046'),
+(248, 1, 2, 4, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:4', 0, NULL, '2026-08-30 09:10:29.050'),
+(249, 1, 2, 10, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:10', 0, NULL, '2026-08-30 09:10:29.054'),
+(250, 1, 2, 8, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:8', 0, NULL, '2026-08-30 09:10:29.061'),
+(251, 1, 2, 7, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:7', 0, NULL, '2026-08-30 09:10:29.066'),
+(252, 1, 2, 6, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:6', 0, NULL, '2026-08-30 09:10:29.070'),
+(253, 1, 2, 5, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:5', 0, NULL, '2026-08-30 09:10:29.077'),
+(254, 1, 2, 9, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:296:policy:studio-project-created:user:9', 0, NULL, '2026-08-30 09:10:29.082'),
+(255, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 5, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:15:01.999'),
+(256, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 5, NULL, 0, NULL, '2026-08-30 09:15:02.000'),
+(257, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 5, NULL, 0, NULL, '2026-08-30 09:15:02.004'),
+(258, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 6, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:15:02.051'),
+(259, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 6, NULL, 0, NULL, '2026-08-30 09:15:02.054'),
+(260, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 6, NULL, 0, NULL, '2026-08-30 09:15:02.058'),
+(261, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 5, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:15:02.282'),
+(262, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 5, NULL, 0, NULL, '2026-08-30 09:15:02.284'),
+(263, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 5, NULL, 0, NULL, '2026-08-30 09:15:02.287'),
+(264, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 6, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:15:02.466'),
+(265, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 6, NULL, 0, NULL, '2026-08-30 09:15:02.469'),
+(266, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 6, NULL, 0, NULL, '2026-08-30 09:15:02.472'),
+(270, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:17:44.028'),
+(271, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.032'),
+(272, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.036'),
+(273, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.046'),
+(274, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.052'),
+(275, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.059'),
+(276, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.063'),
+(277, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.068'),
+(278, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 9a6aa230-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:17:44.080'),
+(281, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:17:44.107'),
+(282, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:17:44.112'),
+(283, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:17:44.147'),
+(284, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:17:44.157'),
+(285, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:17:44.163'),
+(286, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:17:44.168'),
+(287, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:17:44.176'),
+(288, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:17:44.180'),
+(289, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 9a6aa230-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9062239:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:17:44.184'),
+(301, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:17:44.371'),
+(302, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:3', 0, NULL, '2026-08-30 09:17:44.376'),
+(303, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:4', 0, NULL, '2026-08-30 09:17:44.379'),
+(304, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:5', 0, NULL, '2026-08-30 09:17:44.383'),
+(305, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:6', 0, NULL, '2026-08-30 09:17:44.386'),
+(306, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:7', 0, NULL, '2026-08-30 09:17:44.392'),
+(307, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:8', 0, NULL, '2026-08-30 09:17:44.395'),
+(308, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:9', 0, NULL, '2026-08-30 09:17:44.399'),
+(309, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 9a6aa230-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8035275:action:0:user:10', 0, NULL, '2026-08-30 09:17:44.403'),
+(318, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:24:14.106'),
+(319, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.112'),
+(320, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.117'),
+(321, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.121'),
+(322, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.124'),
+(323, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.129'),
+(324, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.133'),
+(325, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.137'),
+(326, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 52073115-2', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:24:14.140'),
+(329, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:24:14.159'),
+(330, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:24:14.167'),
+(331, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:24:14.170'),
+(332, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:24:14.173'),
+(333, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:24:14.176'),
+(334, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:24:14.182'),
+(335, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:24:14.185'),
+(336, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:24:14.188'),
+(337, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 52073115-2', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9010507:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:24:14.191'),
+(349, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:24:14.253'),
+(350, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:3', 0, NULL, '2026-08-30 09:24:14.256'),
+(351, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:4', 0, NULL, '2026-08-30 09:24:14.259'),
+(352, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:5', 0, NULL, '2026-08-30 09:24:14.264'),
+(353, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:6', 0, NULL, '2026-08-30 09:24:14.267'),
+(354, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:7', 0, NULL, '2026-08-30 09:24:14.269'),
+(355, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:8', 0, NULL, '2026-08-30 09:24:14.272'),
+(356, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:9', 0, NULL, '2026-08-30 09:24:14.276'),
+(357, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 52073115-2', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8095318:action:0:user:10', 0, NULL, '2026-08-30 09:24:14.281'),
+(364, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:26:22.780'),
+(365, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.784'),
+(366, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.791'),
+(367, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.796'),
+(368, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.801'),
+(369, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.811'),
+(370, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.815'),
+(371, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.822'),
+(372, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace f2bf8888-8', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:26:22.829'),
+(375, 1, 1, 2, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:26:22.854'),
+(376, 1, 1, 3, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:26:22.860');
+INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_id`, `notification_type`, `module_code`, `severity_code`, `title`, `message`, `action_url`, `entity_type`, `entity_id`, `dedupe_key`, `is_read`, `read_at`, `created_at`) VALUES
+(377, 1, 1, 4, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:26:22.865'),
+(378, 1, 1, 5, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:26:22.871'),
+(379, 1, 1, 6, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:26:22.875'),
+(380, 1, 1, 7, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:26:22.879'),
+(381, 1, 1, 8, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:26:22.886'),
+(382, 1, 1, 9, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:26:22.893'),
+(383, 1, 1, 10, 'system', 'craft_orders', 'info', 'System f2bf8888-8', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9022396:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:26:22.898'),
+(395, 1, 1, 2, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:26:22.994'),
+(396, 1, 1, 3, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:3', 0, NULL, '2026-08-30 09:26:22.998'),
+(397, 1, 1, 4, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:4', 0, NULL, '2026-08-30 09:26:23.004'),
+(398, 1, 1, 5, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:5', 0, NULL, '2026-08-30 09:26:23.010'),
+(399, 1, 1, 6, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:6', 0, NULL, '2026-08-30 09:26:23.014'),
+(400, 1, 1, 7, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:7', 0, NULL, '2026-08-30 09:26:23.017'),
+(401, 1, 1, 8, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:8', 0, NULL, '2026-08-30 09:26:23.026'),
+(402, 1, 1, 9, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:9', 0, NULL, '2026-08-30 09:26:23.030'),
+(403, 1, 1, 10, 'automation', 'automations', 'info', 'Automation f2bf8888-8', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8088800:action:0:user:10', 0, NULL, '2026-08-30 09:26:23.033'),
+(410, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 1, '2026-08-30 02:31:07.423', '2026-08-30 09:27:03.574'),
+(411, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.582'),
+(412, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.587'),
+(413, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.591'),
+(414, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.597'),
+(415, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.601'),
+(416, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.605'),
+(417, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.608'),
+(418, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 009c4f42-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 09:27:03.615'),
+(421, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:2', 1, '2026-08-30 02:31:07.423', '2026-08-30 09:27:03.637'),
+(422, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 09:27:03.641'),
+(423, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 09:27:03.648'),
+(424, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 09:27:03.652'),
+(425, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 09:27:03.656'),
+(426, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 09:27:03.659'),
+(427, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 09:27:03.668'),
+(428, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 09:27:03.671'),
+(429, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 009c4f42-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9074110:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 09:27:03.675'),
+(441, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:2', 1, '2026-08-30 02:30:37.673', '2026-08-30 09:27:03.754'),
+(442, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 09:27:03.758'),
+(443, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 09:27:03.764'),
+(444, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 09:27:03.768'),
+(445, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 09:27:03.772'),
+(446, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 09:27:03.779'),
+(447, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 09:27:03.790'),
+(448, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 09:27:03.798'),
+(449, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-009c4f42-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9074111:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 09:27:03.802'),
+(461, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:2', 1, '2026-08-30 02:30:35.973', '2026-08-30 09:27:03.871'),
+(462, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:3', 0, NULL, '2026-08-30 09:27:03.874'),
+(463, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:4', 0, NULL, '2026-08-30 09:27:03.880'),
+(464, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:5', 0, NULL, '2026-08-30 09:27:03.884'),
+(465, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:6', 0, NULL, '2026-08-30 09:27:03.887'),
+(466, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:7', 0, NULL, '2026-08-30 09:27:03.892'),
+(467, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:8', 0, NULL, '2026-08-30 09:27:03.898'),
+(468, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:9', 0, NULL, '2026-08-30 09:27:03.903'),
+(469, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 009c4f42-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8036056:action:0:user:10', 0, NULL, '2026-08-30 09:27:03.913'),
+(476, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.796'),
+(477, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.802'),
+(478, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.806'),
+(479, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.810'),
+(480, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.820'),
+(481, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.825'),
+(482, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.829'),
+(483, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.836'),
+(484, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 489ba8c6-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:00:33.840'),
+(487, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:00:33.862'),
+(488, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:00:33.868'),
+(489, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:00:33.872'),
+(490, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:00:33.876'),
+(491, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:00:33.879'),
+(492, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:00:33.887'),
+(493, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:00:33.890'),
+(494, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:00:33.894'),
+(495, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 489ba8c6-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9041393:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:00:33.902'),
+(507, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:00:33.978'),
+(508, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:00:33.985'),
+(509, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:00:33.989'),
+(510, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:00:33.993'),
+(511, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:00:33.996'),
+(512, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:00:34.003'),
+(513, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:00:34.009'),
+(514, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:00:34.017'),
+(515, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-489ba8c6-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9041394:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:00:34.021'),
+(527, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:2', 0, NULL, '2026-08-30 10:00:34.079'),
+(528, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:3', 0, NULL, '2026-08-30 10:00:34.086'),
+(529, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:4', 0, NULL, '2026-08-30 10:00:34.091'),
+(530, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:5', 0, NULL, '2026-08-30 10:00:34.094'),
+(531, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:6', 0, NULL, '2026-08-30 10:00:34.100'),
+(532, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:7', 0, NULL, '2026-08-30 10:00:34.104'),
+(533, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:8', 0, NULL, '2026-08-30 10:00:34.108'),
+(534, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:9', 0, NULL, '2026-08-30 10:00:34.111'),
+(535, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 489ba8c6-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8030178:action:0:user:10', 0, NULL, '2026-08-30 10:00:34.115'),
+(544, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.526'),
+(545, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.530'),
+(546, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.533'),
+(547, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.538'),
+(548, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.541'),
+(549, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.544'),
+(550, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.547'),
+(551, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.551'),
+(552, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace cce283e2-0', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:20.556'),
+(555, 1, 1, 2, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:04:20.573'),
+(556, 1, 1, 3, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:04:20.576'),
+(557, 1, 1, 4, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:04:20.579'),
+(558, 1, 1, 5, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:04:20.582'),
+(559, 1, 1, 6, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:04:20.585'),
+(560, 1, 1, 7, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:04:20.591'),
+(561, 1, 1, 8, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:04:20.594'),
+(562, 1, 1, 9, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:04:20.596'),
+(563, 1, 1, 10, 'system', 'craft_orders', 'info', 'System cce283e2-0', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9042246:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:04:20.599'),
+(575, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:04:20.648'),
+(576, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:04:20.655'),
+(577, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:04:20.658'),
+(578, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:04:20.661'),
+(579, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:04:20.664'),
+(580, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:04:20.667'),
+(581, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:04:20.673'),
+(582, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:04:20.676'),
+(583, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-cce283e2-0', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9042247:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:04:20.680'),
+(595, 1, 1, 2, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:2', 0, NULL, '2026-08-30 10:04:20.723'),
+(596, 1, 1, 3, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:3', 0, NULL, '2026-08-30 10:04:20.726'),
+(597, 1, 1, 4, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:4', 0, NULL, '2026-08-30 10:04:20.728'),
+(598, 1, 1, 5, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:5', 0, NULL, '2026-08-30 10:04:20.731'),
+(599, 1, 1, 6, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:6', 0, NULL, '2026-08-30 10:04:20.734'),
+(600, 1, 1, 7, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:7', 0, NULL, '2026-08-30 10:04:20.738'),
+(601, 1, 1, 8, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:8', 0, NULL, '2026-08-30 10:04:20.741'),
+(602, 1, 1, 9, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:9', 0, NULL, '2026-08-30 10:04:20.744'),
+(603, 1, 1, 10, 'automation', 'automations', 'info', 'Automation cce283e2-0', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8093937:action:0:user:10', 0, NULL, '2026-08-30 10:04:20.746'),
+(607, 1, 1, 2, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:2', 0, NULL, '2026-08-30 10:04:20.779'),
+(608, 1, 1, 3, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:3', 0, NULL, '2026-08-30 10:04:20.782'),
+(609, 1, 1, 4, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:4', 0, NULL, '2026-08-30 10:04:20.785'),
+(610, 1, 1, 5, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:5', 0, NULL, '2026-08-30 10:04:20.789'),
+(611, 1, 1, 6, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:6', 0, NULL, '2026-08-30 10:04:20.795'),
+(612, 1, 1, 7, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:7', 0, NULL, '2026-08-30 10:04:20.797'),
+(613, 1, 1, 8, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:8', 0, NULL, '2026-08-30 10:04:20.801'),
+(614, 1, 1, 9, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:9', 0, NULL, '2026-08-30 10:04:20.807'),
+(615, 1, 1, 10, 'system', 'craft_orders', 'warning', 'Pesanan mendekati tenggat: SMOKE-SENSOR-cce283e2-0', 'Tenggat pesanan ini akan tiba dalam 24 jam (Sun Aug 30 2026 11:04:20 GMT+0700 (Western Indonesia Time)).', '/app/craft/orders', 'craft_order', 3, 'system:sensor:order.deadline_approaching:1:craft_order:3:2026-08-30:user:10', 0, NULL, '2026-08-30 10:04:20.810'),
+(632, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.194'),
+(633, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.197'),
+(634, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.201'),
+(635, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.205'),
+(636, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.208'),
+(637, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.211'),
+(638, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.215'),
+(639, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.218'),
+(640, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 07eb1411-1', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:04:48.221'),
+(643, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:04:48.236'),
+(644, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:04:48.239'),
+(645, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:04:48.242'),
+(646, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:04:48.245'),
+(647, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:04:48.250'),
+(648, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:04:48.253'),
+(649, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:04:48.255'),
+(650, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:04:48.258'),
+(651, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 07eb1411-1', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9032808:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:04:48.261'),
+(663, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:04:48.307'),
+(664, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:04:48.310'),
+(665, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:04:48.313'),
+(666, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:04:48.318'),
+(667, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:04:48.321'),
+(668, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:04:48.323'),
+(669, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:04:48.327'),
+(670, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:04:48.332'),
+(671, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-07eb1411-1', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9032809:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:04:48.335'),
+(683, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:2', 0, NULL, '2026-08-30 10:04:48.370'),
+(684, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:3', 0, NULL, '2026-08-30 10:04:48.373'),
+(685, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:4', 0, NULL, '2026-08-30 10:04:48.375'),
+(686, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:5', 0, NULL, '2026-08-30 10:04:48.377'),
+(687, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:6', 0, NULL, '2026-08-30 10:04:48.380'),
+(688, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:7', 0, NULL, '2026-08-30 10:04:48.383'),
+(689, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:8', 0, NULL, '2026-08-30 10:04:48.386'),
+(690, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:9', 0, NULL, '2026-08-30 10:04:48.388'),
+(691, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 07eb1411-1', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8017297:action:0:user:10', 0, NULL, '2026-08-30 10:04:48.392'),
+(722, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.661'),
+(723, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.665'),
+(724, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.668'),
+(725, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.671'),
+(726, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.675'),
+(727, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.680'),
+(728, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.683'),
+(729, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.687'),
+(730, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 98c916d2-f', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:04.690'),
+(733, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:05:04.704'),
+(734, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:05:04.708'),
+(735, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:05:04.713'),
+(736, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:05:04.716'),
+(737, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:05:04.719'),
+(738, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:05:04.722'),
+(739, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:05:04.725'),
+(740, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:05:04.729'),
+(741, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 98c916d2-f', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9091098:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:05:04.732'),
+(753, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:05:04.776'),
+(754, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:05:04.780'),
+(755, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:05:04.783'),
+(756, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:05:04.786'),
+(757, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:05:04.788'),
+(758, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:05:04.796'),
+(759, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:05:04.799'),
+(760, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:05:04.802'),
+(761, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-98c916d2-f', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9091099:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:05:04.805'),
+(773, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:2', 0, NULL, '2026-08-30 10:05:04.842'),
+(774, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:3', 0, NULL, '2026-08-30 10:05:04.846'),
+(775, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:4', 0, NULL, '2026-08-30 10:05:04.849'),
+(776, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:5', 0, NULL, '2026-08-30 10:05:04.855'),
+(777, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:6', 0, NULL, '2026-08-30 10:05:04.858'),
+(778, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:7', 0, NULL, '2026-08-30 10:05:04.863'),
+(779, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:8', 0, NULL, '2026-08-30 10:05:04.866'),
+(780, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:9', 0, NULL, '2026-08-30 10:05:04.870'),
+(781, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 98c916d2-f', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8011800:action:0:user:10', 0, NULL, '2026-08-30 10:05:04.873'),
+(812, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.225'),
+(813, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.230'),
+(814, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.234'),
+(815, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.238'),
+(816, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.244'),
+(817, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.248'),
+(818, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.256'),
+(819, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.261'),
+(820, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace b230feb7-3', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:05:25.266'),
+(823, 1, 1, 2, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:05:25.295'),
+(824, 1, 1, 3, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:05:25.299'),
+(825, 1, 1, 4, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:05:25.303'),
+(826, 1, 1, 5, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:05:25.308'),
+(827, 1, 1, 6, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:05:25.313'),
+(828, 1, 1, 7, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:05:25.317'),
+(829, 1, 1, 8, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:05:25.324');
+INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_id`, `notification_type`, `module_code`, `severity_code`, `title`, `message`, `action_url`, `entity_type`, `entity_id`, `dedupe_key`, `is_read`, `read_at`, `created_at`) VALUES
+(830, 1, 1, 9, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:05:25.329'),
+(831, 1, 1, 10, 'system', 'craft_orders', 'info', 'System b230feb7-3', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9016129:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:05:25.333'),
+(843, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:05:25.404'),
+(844, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:05:25.409'),
+(845, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:05:25.413'),
+(846, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:05:25.417'),
+(847, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:05:25.422'),
+(848, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:05:25.429'),
+(849, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:05:25.435'),
+(850, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:05:25.441'),
+(851, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-b230feb7-3', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9016130:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:05:25.447'),
+(863, 1, 1, 2, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:2', 0, NULL, '2026-08-30 10:05:25.504'),
+(864, 1, 1, 3, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:3', 0, NULL, '2026-08-30 10:05:25.509'),
+(865, 1, 1, 4, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:4', 0, NULL, '2026-08-30 10:05:25.513'),
+(866, 1, 1, 5, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:5', 0, NULL, '2026-08-30 10:05:25.516'),
+(867, 1, 1, 6, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:6', 0, NULL, '2026-08-30 10:05:25.520'),
+(868, 1, 1, 7, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:7', 0, NULL, '2026-08-30 10:05:25.525'),
+(869, 1, 1, 8, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:8', 0, NULL, '2026-08-30 10:05:25.532'),
+(870, 1, 1, 9, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:9', 0, NULL, '2026-08-30 10:05:25.535'),
+(871, 1, 1, 10, 'automation', 'automations', 'info', 'Automation b230feb7-3', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084463:action:0:user:10', 0, NULL, '2026-08-30 10:05:25.539'),
+(905, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:13:34.480'),
+(906, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:13:34.485'),
+(907, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:13:34.488'),
+(908, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:13:34.492'),
+(909, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:13:34.498'),
+(910, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:13:34.501'),
+(911, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:13:34.504'),
+(912, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:298:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:13:34.507'),
+(913, 1, 2, 3, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:3', 0, NULL, '2026-08-30 10:13:42.003'),
+(914, 1, 2, 4, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:4', 0, NULL, '2026-08-30 10:13:42.007'),
+(915, 1, 2, 10, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:10', 0, NULL, '2026-08-30 10:13:42.012'),
+(916, 1, 2, 8, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:8', 0, NULL, '2026-08-30 10:13:42.018'),
+(917, 1, 2, 7, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:7', 0, NULL, '2026-08-30 10:13:42.021'),
+(918, 1, 2, 6, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:6', 0, NULL, '2026-08-30 10:13:42.024'),
+(919, 1, 2, 5, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:5', 0, NULL, '2026-08-30 10:13:42.030'),
+(920, 1, 2, 9, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:299:policy:studio-project-created:user:9', 0, NULL, '2026-08-30 10:13:42.035'),
+(921, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.418'),
+(922, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.420'),
+(923, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.422'),
+(924, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.473'),
+(925, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.479'),
+(926, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.480'),
+(927, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.693'),
+(928, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.697'),
+(929, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 7, NULL, 0, NULL, '2026-08-30 10:13:48.699'),
+(930, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.887'),
+(931, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.889'),
+(932, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 8, NULL, 0, NULL, '2026-08-30 10:13:48.892'),
+(940, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.842'),
+(941, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.845'),
+(942, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.848'),
+(943, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.851'),
+(944, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.854'),
+(945, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.859'),
+(946, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.862'),
+(947, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.865'),
+(948, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace e8adbb6f-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:15:22.869'),
+(951, 1, 1, 2, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:15:22.886'),
+(952, 1, 1, 3, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:15:22.895'),
+(953, 1, 1, 4, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:15:22.898'),
+(954, 1, 1, 5, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:15:22.901'),
+(955, 1, 1, 6, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:15:22.904'),
+(956, 1, 1, 7, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:15:22.908'),
+(957, 1, 1, 8, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:15:22.911'),
+(958, 1, 1, 9, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:15:22.914'),
+(959, 1, 1, 10, 'system', 'craft_orders', 'info', 'System e8adbb6f-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9008499:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:15:22.917'),
+(971, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:15:22.965'),
+(972, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:15:22.969'),
+(973, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:15:22.974'),
+(974, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:15:22.976'),
+(975, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:15:22.979'),
+(976, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:15:22.983'),
+(977, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:15:22.986'),
+(978, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:15:22.990'),
+(979, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-e8adbb6f-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9008500:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:15:22.994'),
+(991, 1, 1, 2, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:2', 0, NULL, '2026-08-30 10:15:23.037'),
+(992, 1, 1, 3, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:3', 0, NULL, '2026-08-30 10:15:23.041'),
+(993, 1, 1, 4, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:4', 0, NULL, '2026-08-30 10:15:23.043'),
+(994, 1, 1, 5, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:5', 0, NULL, '2026-08-30 10:15:23.046'),
+(995, 1, 1, 6, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:6', 0, NULL, '2026-08-30 10:15:23.048'),
+(996, 1, 1, 7, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:7', 0, NULL, '2026-08-30 10:15:23.051'),
+(997, 1, 1, 8, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:8', 0, NULL, '2026-08-30 10:15:23.054'),
+(998, 1, 1, 9, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:9', 0, NULL, '2026-08-30 10:15:23.057'),
+(999, 1, 1, 10, 'automation', 'automations', 'info', 'Automation e8adbb6f-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8046008:action:0:user:10', 0, NULL, '2026-08-30 10:15:23.060'),
+(1034, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.785'),
+(1035, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.791'),
+(1036, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.796'),
+(1037, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.800'),
+(1038, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.804'),
+(1039, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.809'),
+(1040, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.813'),
+(1041, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.817'),
+(1042, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 6ea4b087-9', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 10:19:31.820'),
+(1045, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 10:19:31.839'),
+(1046, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 10:19:31.845'),
+(1047, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 10:19:31.849'),
+(1048, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 10:19:31.853'),
+(1049, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 10:19:31.858'),
+(1050, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 10:19:31.861'),
+(1051, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 10:19:31.865'),
+(1052, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 10:19:31.869'),
+(1053, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 6ea4b087-9', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9070872:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 10:19:31.874'),
+(1065, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 10:19:31.935'),
+(1066, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 10:19:31.938'),
+(1067, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 10:19:31.943'),
+(1068, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 10:19:31.947'),
+(1069, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 10:19:31.951'),
+(1070, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 10:19:31.955'),
+(1071, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 10:19:31.961'),
+(1072, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 10:19:31.965'),
+(1073, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-6ea4b087-9', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9070873:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 10:19:31.969'),
+(1085, 1, 1, 2, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:2', 0, NULL, '2026-08-30 10:19:32.022'),
+(1086, 1, 1, 3, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:3', 0, NULL, '2026-08-30 10:19:32.027'),
+(1087, 1, 1, 4, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:4', 0, NULL, '2026-08-30 10:19:32.030'),
+(1088, 1, 1, 5, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:5', 0, NULL, '2026-08-30 10:19:32.033'),
+(1089, 1, 1, 6, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:6', 0, NULL, '2026-08-30 10:19:32.036'),
+(1090, 1, 1, 7, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:7', 0, NULL, '2026-08-30 10:19:32.041'),
+(1091, 1, 1, 8, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:8', 0, NULL, '2026-08-30 10:19:32.046'),
+(1092, 1, 1, 9, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:9', 0, NULL, '2026-08-30 10:19:32.049'),
+(1093, 1, 1, 10, 'automation', 'automations', 'info', 'Automation 6ea4b087-9', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8063258:action:0:user:10', 0, NULL, '2026-08-30 10:19:32.052'),
+(1126, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.046'),
+(1127, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.051'),
+(1128, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.055'),
+(1129, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.059'),
+(1130, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.063'),
+(1131, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.069'),
+(1132, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.074'),
+(1133, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.078'),
+(1134, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 11bf247f-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 05:59:23.082'),
+(1137, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 05:59:23.103'),
+(1138, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 05:59:23.107'),
+(1139, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 05:59:23.111'),
+(1140, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 05:59:23.118'),
+(1141, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 05:59:23.124'),
+(1142, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 05:59:23.127'),
+(1143, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 05:59:23.131'),
+(1144, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 05:59:23.137'),
+(1145, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 11bf247f-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9075861:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 05:59:23.141'),
+(1157, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 05:59:23.212'),
+(1158, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 05:59:23.220'),
+(1159, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 05:59:23.224'),
+(1160, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 05:59:23.228'),
+(1161, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 05:59:23.234'),
+(1162, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 05:59:23.239'),
+(1163, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 05:59:23.245'),
+(1164, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 05:59:23.248'),
+(1165, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-11bf247f-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9075862:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 05:59:23.253'),
+(1177, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:2', 0, NULL, '2026-08-30 05:59:23.348'),
+(1178, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:3', 0, NULL, '2026-08-30 05:59:23.355'),
+(1179, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:4', 0, NULL, '2026-08-30 05:59:23.359'),
+(1180, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:5', 0, NULL, '2026-08-30 05:59:23.367'),
+(1181, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:6', 0, NULL, '2026-08-30 05:59:23.376'),
+(1182, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:7', 0, NULL, '2026-08-30 05:59:23.392'),
+(1183, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:8', 0, NULL, '2026-08-30 05:59:23.396'),
+(1184, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:9', 0, NULL, '2026-08-30 05:59:23.402'),
+(1185, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 11bf247f-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8084805:action:0:user:10', 0, NULL, '2026-08-30 05:59:23.406'),
+(1212, 1, 1, 2, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:2', 0, NULL, '2026-08-30 05:59:23.575'),
+(1213, 1, 1, 3, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:3', 0, NULL, '2026-08-30 05:59:23.579'),
+(1214, 1, 1, 4, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:4', 0, NULL, '2026-08-30 05:59:23.583'),
+(1215, 1, 1, 5, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:5', 0, NULL, '2026-08-30 05:59:23.587'),
+(1216, 1, 1, 6, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:6', 0, NULL, '2026-08-30 05:59:23.590'),
+(1217, 1, 1, 7, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:7', 0, NULL, '2026-08-30 05:59:23.594'),
+(1218, 1, 1, 8, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:8', 0, NULL, '2026-08-30 05:59:23.598'),
+(1219, 1, 1, 9, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:9', 0, NULL, '2026-08-30 05:59:23.604'),
+(1220, 1, 1, 10, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777001, 'system:sensor:printer.maintenance_due:1:printer:777001:2026-08-30:user:10', 0, NULL, '2026-08-30 05:59:23.608'),
+(1223, 1, 1, 2, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:2', 0, NULL, '2026-08-30 05:59:23.624'),
+(1224, 1, 1, 3, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:3', 0, NULL, '2026-08-30 05:59:23.628'),
+(1225, 1, 1, 4, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:4', 0, NULL, '2026-08-30 05:59:23.631'),
+(1226, 1, 1, 5, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:5', 0, NULL, '2026-08-30 05:59:23.636'),
+(1227, 1, 1, 6, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:6', 0, NULL, '2026-08-30 05:59:23.640'),
+(1228, 1, 1, 7, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:7', 0, NULL, '2026-08-30 05:59:23.644'),
+(1229, 1, 1, 8, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:8', 0, NULL, '2026-08-30 05:59:23.648'),
+(1230, 1, 1, 9, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:9', 0, NULL, '2026-08-30 05:59:23.653'),
+(1231, 1, 1, 10, 'system', 'craft_printers', 'warning', 'Maintenance printer: Smoke printer 2', 'Jadwal maintenance printer telah jatuh tempo.', '/app/craft/printers/maintenance', 'printer', 777002, 'system:sensor:printer.maintenance_due:1:printer:777002:2026-08-30:user:10', 0, NULL, '2026-08-30 05:59:23.656'),
+(1240, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.450'),
+(1241, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.455'),
+(1242, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.459'),
+(1243, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.463'),
+(1244, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.466'),
+(1245, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.470'),
+(1246, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.475'),
+(1247, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.478'),
+(1248, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 2de309c8-7', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 06:01:47.482'),
+(1251, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 06:01:47.500'),
+(1252, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 06:01:47.503'),
+(1253, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 06:01:47.508'),
+(1254, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 06:01:47.512'),
+(1255, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 06:01:47.516'),
+(1256, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 06:01:47.519'),
+(1257, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 06:01:47.529'),
+(1258, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 06:01:47.535'),
+(1259, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 2de309c8-7', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9003432:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 06:01:47.547'),
+(1271, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 06:01:47.611'),
+(1272, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 06:01:47.615'),
+(1273, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 06:01:47.618'),
+(1274, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 06:01:47.623'),
+(1275, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 06:01:47.627'),
+(1276, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 06:01:47.631'),
+(1277, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 06:01:47.635'),
+(1278, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 06:01:47.641'),
+(1279, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2de309c8-7', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9003433:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 06:01:47.645'),
+(1291, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:2', 0, NULL, '2026-08-30 06:01:47.707'),
+(1292, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:3', 0, NULL, '2026-08-30 06:01:47.981'),
+(1293, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:4', 0, NULL, '2026-08-30 06:01:47.986'),
+(1294, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:5', 0, NULL, '2026-08-30 06:01:47.991'),
+(1295, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:6', 0, NULL, '2026-08-30 06:01:47.995'),
+(1296, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:7', 0, NULL, '2026-08-30 06:01:47.999'),
+(1297, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:8', 0, NULL, '2026-08-30 06:01:48.003'),
+(1298, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:9', 0, NULL, '2026-08-30 06:01:48.007'),
+(1299, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 2de309c8-7', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8097793:action:0:user:10', 0, NULL, '2026-08-30 06:01:48.011'),
+(1350, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 06:01:57.791'),
+(1351, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 06:01:57.795'),
+(1352, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 06:01:57.798');
+INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_id`, `notification_type`, `module_code`, `severity_code`, `title`, `message`, `action_url`, `entity_type`, `entity_id`, `dedupe_key`, `is_read`, `read_at`, `created_at`) VALUES
+(1353, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 06:01:57.801'),
+(1354, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 06:01:57.806'),
+(1355, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 06:01:57.810'),
+(1356, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 06:01:57.814'),
+(1357, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:304:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 06:01:57.817'),
+(1358, 1, 2, 3, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:3', 0, NULL, '2026-08-30 06:02:06.664'),
+(1359, 1, 2, 4, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:4', 0, NULL, '2026-08-30 06:02:06.723'),
+(1360, 1, 2, 10, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:10', 0, NULL, '2026-08-30 06:02:06.774'),
+(1361, 1, 2, 8, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:8', 0, NULL, '2026-08-30 06:02:06.876'),
+(1362, 1, 2, 7, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:7', 0, NULL, '2026-08-30 06:02:06.993'),
+(1363, 1, 2, 6, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:6', 0, NULL, '2026-08-30 06:02:07.087'),
+(1364, 1, 2, 5, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:5', 0, NULL, '2026-08-30 06:02:07.208'),
+(1365, 1, 2, 9, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:305:policy:studio-project-created:user:9', 0, NULL, '2026-08-30 06:02:07.336'),
+(1366, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.287'),
+(1367, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.290'),
+(1368, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.291'),
+(1369, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.342'),
+(1370, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.344'),
+(1371, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.348'),
+(1372, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.567'),
+(1373, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.572'),
+(1374, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 9, NULL, 0, NULL, '2026-08-30 06:02:19.575'),
+(1375, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.761'),
+(1376, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.763'),
+(1377, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 10, NULL, 0, NULL, '2026-08-30 06:02:19.767'),
+(1398, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.524'),
+(1399, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.528'),
+(1400, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.532'),
+(1401, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.536'),
+(1402, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.540'),
+(1403, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.544'),
+(1404, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.547'),
+(1405, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.551'),
+(1406, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 2969a6e6-5', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-30 07:02:34.555'),
+(1409, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:2', 0, NULL, '2026-08-30 07:02:34.572'),
+(1410, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:3', 0, NULL, '2026-08-30 07:02:34.575'),
+(1411, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:4', 0, NULL, '2026-08-30 07:02:34.579'),
+(1412, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:5', 0, NULL, '2026-08-30 07:02:34.583'),
+(1413, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:6', 0, NULL, '2026-08-30 07:02:34.587'),
+(1414, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:7', 0, NULL, '2026-08-30 07:02:34.593'),
+(1415, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:8', 0, NULL, '2026-08-30 07:02:34.600'),
+(1416, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:9', 0, NULL, '2026-08-30 07:02:34.606'),
+(1417, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 2969a6e6-5', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9068292:policy:smoke-order-created:user:10', 0, NULL, '2026-08-30 07:02:34.612'),
+(1429, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:2', 0, NULL, '2026-08-30 07:02:34.676'),
+(1430, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 07:02:34.680'),
+(1431, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 07:02:34.688'),
+(1432, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 07:02:34.695'),
+(1433, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 07:02:34.700'),
+(1434, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 07:02:34.704'),
+(1435, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 07:02:34.708'),
+(1436, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 07:02:34.712'),
+(1437, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-2969a6e6-5', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9068293:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 07:02:34.715'),
+(1449, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:2', 0, NULL, '2026-08-30 07:02:34.760'),
+(1450, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:3', 0, NULL, '2026-08-30 07:02:34.764'),
+(1451, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:4', 0, NULL, '2026-08-30 07:02:34.768'),
+(1452, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:5', 0, NULL, '2026-08-30 07:02:34.772'),
+(1453, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:6', 0, NULL, '2026-08-30 07:02:34.775'),
+(1454, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:7', 0, NULL, '2026-08-30 07:02:34.779'),
+(1455, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:8', 0, NULL, '2026-08-30 07:02:34.786'),
+(1456, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:9', 0, NULL, '2026-08-30 07:02:34.790'),
+(1457, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 2969a6e6-5', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8071231:action:0:user:10', 0, NULL, '2026-08-30 07:02:34.793'),
+(1508, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.140'),
+(1509, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.142'),
+(1510, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.144'),
+(1511, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.193'),
+(1512, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.195'),
+(1513, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.198'),
+(1514, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.414'),
+(1515, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.417'),
+(1516, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 11, NULL, 0, NULL, '2026-08-30 07:02:42.420'),
+(1517, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.586'),
+(1518, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.589'),
+(1519, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 12, NULL, 0, NULL, '2026-08-30 07:02:42.591'),
+(1521, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:3', 0, NULL, '2026-08-30 07:03:09.632'),
+(1522, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:4', 0, NULL, '2026-08-30 07:03:09.636'),
+(1523, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:10', 0, NULL, '2026-08-30 07:03:09.640'),
+(1524, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:8', 0, NULL, '2026-08-30 07:03:09.644'),
+(1525, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:7', 0, NULL, '2026-08-30 07:03:09.648'),
+(1526, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:6', 0, NULL, '2026-08-30 07:03:09.652'),
+(1527, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:5', 0, NULL, '2026-08-30 07:03:09.655'),
+(1528, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SMOKE', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 999999999, 'system:event:307:policy:craft-order-created:user:9', 0, NULL, '2026-08-30 07:03:09.659'),
+(1529, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:2', 0, NULL, '2026-08-30 07:03:53.228'),
+(1530, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:3', 0, NULL, '2026-08-30 07:03:53.233'),
+(1531, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:4', 0, NULL, '2026-08-30 07:03:53.236'),
+(1532, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:5', 0, NULL, '2026-08-30 07:03:53.241'),
+(1533, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:6', 0, NULL, '2026-08-30 07:03:53.245'),
+(1534, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:7', 0, NULL, '2026-08-30 07:03:53.249'),
+(1535, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:8', 0, NULL, '2026-08-30 07:03:53.252'),
+(1536, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:9', 0, NULL, '2026-08-30 07:03:53.256'),
+(1537, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 17, 'system:event:328:policy:studio-payment-received:user:10', 0, NULL, '2026-08-30 07:03:53.260'),
+(1538, 1, 2, 3, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:3', 0, NULL, '2026-08-30 07:04:00.918'),
+(1539, 1, 2, 4, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:4', 0, NULL, '2026-08-30 07:04:00.922'),
+(1540, 1, 2, 10, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:10', 0, NULL, '2026-08-30 07:04:00.927'),
+(1541, 1, 2, 8, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:8', 0, NULL, '2026-08-30 07:04:00.930'),
+(1542, 1, 2, 7, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:7', 0, NULL, '2026-08-30 07:04:00.934'),
+(1543, 1, 2, 6, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:6', 0, NULL, '2026-08-30 07:04:00.939'),
+(1544, 1, 2, 5, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:5', 0, NULL, '2026-08-30 07:04:00.943'),
+(1545, 1, 2, 9, 'system', 'studio_projects', 'info', 'Proyek baru SMOKE', 'Smoke siap untuk ditinjau.', '/app/studio/projects', 'studio_project', 999999999, 'system:event:329:policy:studio-project-created:user:9', 0, NULL, '2026-08-30 07:04:00.947');
+
 -- --------------------------------------------------------
 
 --
@@ -1638,7 +2447,10 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (47, 'studio.analytics.export', 'studio_analytics', 'Ekspor Laporan Studio', 'Menghasilkan dan mengunduh laporan analitik Uni-Inside Studio dalam format CSV, XLSX, atau PDF.', '2026-08-28 00:24:01.352'),
 (48, 'studio.automations.read', 'studio_automations', 'Lihat Otomasi Studio', 'Melihat aturan, template, pemicu, aksi, status worker, dan riwayat eksekusi otomasi Uni-Inside Studio.', '2026-08-28 05:18:25.985'),
 (49, 'studio.automations.write', 'studio_automations', 'Kelola Otomasi Studio', 'Membuat, mengubah, mengaktifkan, menjeda, melanjutkan, dan menonaktifkan aturan otomasi Uni-Inside Studio.', '2026-08-28 05:18:26.019'),
-(50, 'studio.automations.run', 'studio_automations', 'Jalankan Otomasi Studio', 'Menguji dan menjalankan aturan otomasi Uni-Inside Studio secara manual.', '2026-08-28 05:18:26.053');
+(50, 'studio.automations.run', 'studio_automations', 'Jalankan Otomasi Studio', 'Menguji dan menjalankan aturan otomasi Uni-Inside Studio secara manual.', '2026-08-28 05:18:26.053'),
+(51, 'documents.read', 'documents', 'Lihat Pusat Dokumen', 'Melihat, mencari, membuka, dan mengunduh dokumen yang dapat diakses di Pusat Dokumen UNI-NEXUS.', '2026-08-31 09:05:42.710'),
+(52, 'documents.write', 'documents', 'Kelola Dokumen', 'Mengunggah, memperbarui metadata, dan menambahkan versi dokumen manual UNI-NEXUS.', '2026-08-31 09:05:42.713'),
+(53, 'documents.manage', 'documents', 'Administrasi Pusat Dokumen', 'Mengelola dokumen global, arsip, pemulihan, dan fungsi administratif Pusat Dokumen.', '2026-08-31 09:05:42.717');
 
 -- --------------------------------------------------------
 
@@ -2461,6 +3273,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 48, '2026-08-28 05:18:26.079'),
 (1, 49, '2026-08-28 05:18:26.079'),
 (1, 50, '2026-08-28 05:18:26.079'),
+(1, 51, '2026-08-31 09:05:42.718'),
+(1, 52, '2026-08-31 09:05:42.718'),
+(1, 53, '2026-08-31 09:05:42.721'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -2511,6 +3326,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 48, '2026-08-28 05:18:26.079'),
 (2, 49, '2026-08-28 05:18:26.079'),
 (2, 50, '2026-08-28 05:18:26.079'),
+(2, 51, '2026-08-31 09:05:42.718'),
+(2, 52, '2026-08-31 09:05:42.718'),
+(2, 53, '2026-08-31 09:05:42.721'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -2561,8 +3379,15 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 48, '2026-08-28 05:18:26.079'),
 (3, 49, '2026-08-28 05:18:26.079'),
 (3, 50, '2026-08-28 05:18:26.079'),
+(3, 51, '2026-08-31 09:05:42.718'),
+(3, 52, '2026-08-31 09:05:42.718'),
+(3, 53, '2026-08-31 09:05:42.721'),
 (4, 46, '2026-08-28 00:24:01.379'),
 (4, 47, '2026-08-28 00:24:01.379'),
+(4, 51, '2026-08-31 09:05:42.718'),
+(4, 52, '2026-08-31 09:05:42.718'),
+(5, 51, '2026-08-31 09:05:42.718'),
+(5, 52, '2026-08-31 09:05:42.718'),
 (6, 38, '2026-08-27 15:54:03.507'),
 (6, 39, '2026-08-27 15:54:03.507'),
 (6, 40, '2026-08-27 16:45:45.265'),
@@ -2572,6 +3397,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (6, 44, '2026-08-27 22:32:07.179'),
 (6, 45, '2026-08-27 22:32:07.179'),
 (6, 48, '2026-08-28 05:18:26.105'),
+(6, 51, '2026-08-31 09:05:42.718'),
+(6, 52, '2026-08-31 09:05:42.718'),
 (7, 1, '2026-08-23 09:54:06.853'),
 (7, 2, '2026-08-23 09:54:06.853'),
 (7, 3, '2026-08-23 09:54:06.853'),
@@ -2610,6 +3437,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 37, '2026-08-27 11:21:01.831'),
 (7, 40, '2026-08-27 16:45:45.265'),
 (7, 41, '2026-08-27 16:45:45.265'),
+(7, 51, '2026-08-31 09:05:42.718'),
+(7, 52, '2026-08-31 09:05:42.718'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -2645,7 +3474,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 34, '2026-08-27 10:25:39.332'),
 (8, 35, '2026-08-27 11:21:01.831'),
 (8, 36, '2026-08-27 11:21:01.831'),
-(8, 37, '2026-08-27 11:21:01.831');
+(8, 37, '2026-08-27 11:21:01.831'),
+(8, 51, '2026-08-31 09:05:42.718'),
+(8, 52, '2026-08-31 09:05:42.718');
 
 -- --------------------------------------------------------
 
@@ -3069,7 +3900,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/00bf5009-1b59-4dde-a4ec-9215c545490f.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-30 08:02:26.861', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-30 08:06:14.358', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/ee283f29-d194-4dca-8853-904d59a20588.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 08:42:41.328', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-31 08:42:41.328', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:14:08.000', '2026-08-28 11:43:00.744', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -3175,7 +4006,8 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (8, 1, 10, '8d0f0007-81cb-4b39-8aa0-cee6d5d422a4', 'craft', '2026-08-28 01:39:39.199', '2026-08-28 01:45:44.520', '2026-08-28 01:45:45.180'),
 (15, 1, 2, '1a82fa53-90a9-4687-97c2-07083118f5fc', 'craft', '2026-08-29 08:14:36.806', '2026-08-29 11:45:26.555', '2026-08-29 11:48:24.292'),
 (16, 1, 2, '20bcc66b-5ef5-4dd8-9b5d-50794183df59', 'craft', '2026-08-29 13:48:00.153', '2026-08-29 15:13:56.429', NULL),
-(17, 1, 2, '6cbab24b-7190-40b3-8531-acabb08cb6dc', 'craft', '2026-08-29 23:14:40.111', '2026-08-30 01:41:05.750', NULL);
+(17, 1, 2, '6cbab24b-7190-40b3-8531-acabb08cb6dc', 'craft', '2026-08-29 23:14:40.111', '2026-08-30 06:13:52.707', NULL),
+(54, 1, 2, '851b6bd5-b1f8-44c6-ab93-cad1bb64f349', 'craft', '2026-08-31 01:42:41.665', '2026-08-31 02:02:42.671', NULL);
 
 -- --------------------------------------------------------
 
@@ -3260,18 +4092,18 @@ CREATE TABLE `user_sessions` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_payable` (
-`balance_due` decimal(18,2)
+`supplier_invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_date` date
-,`paid_amount` decimal(18,2)
-,`status_code` varchar(30)
-,`supplier_invoice_id` bigint unsigned
 ,`supplier_invoice_number` varchar(120)
-,`supplier_name` varchar(200)
 ,`supplier_party_id` bigint unsigned
+,`supplier_name` varchar(200)
+,`invoice_date` date
+,`due_date` date
+,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -3281,18 +4113,18 @@ CREATE TABLE `v_accounts_payable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_accounts_receivable` (
-`balance_due` decimal(18,2)
+`invoice_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`days_overdue` int
-,`due_date` date
-,`invoice_id` bigint unsigned
 ,`invoice_number` varchar(80)
-,`issue_date` date
-,`paid_amount` decimal(18,2)
 ,`party_id` bigint unsigned
 ,`party_name` varchar(200)
+,`issue_date` date
+,`due_date` date
 ,`status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`paid_amount` decimal(18,2)
+,`balance_due` decimal(18,2)
+,`days_overdue` int
 );
 
 -- --------------------------------------------------------
@@ -3302,20 +4134,20 @@ CREATE TABLE `v_accounts_receivable` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_craft_order_priority` (
-`customer_name` varchar(200)
-,`customer_party_id` bigint unsigned
-,`deadline_at` datetime(3)
-,`id` bigint unsigned
-,`minutes_to_deadline` bigint
+`id` bigint unsigned
 ,`order_code` varchar(80)
-,`order_date` datetime(3)
-,`payment_status_code` varchar(30)
-,`priority_code` varchar(20)
-,`priority_score` decimal(10,3)
+,`customer_party_id` bigint unsigned
+,`customer_name` varchar(200)
 ,`sales_channel_id` bigint unsigned
 ,`sales_channel_name` varchar(100)
+,`order_date` datetime(3)
+,`deadline_at` datetime(3)
+,`priority_code` varchar(20)
+,`priority_score` decimal(10,3)
 ,`status_code` varchar(30)
+,`payment_status_code` varchar(30)
 ,`total_amount` decimal(18,2)
+,`minutes_to_deadline` bigint
 );
 
 -- --------------------------------------------------------
@@ -3325,18 +4157,18 @@ CREATE TABLE `v_craft_order_priority` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_material_stock` (
-`available_qty` decimal(41,4)
+`material_id` bigint unsigned
 ,`business_unit_id` bigint unsigned
-,`color_name` varchar(100)
-,`low_stock_threshold` decimal(18,4)
-,`material_id` bigint unsigned
-,`material_type` varchar(80)
-,`name` varchar(180)
-,`reserved_qty` decimal(40,4)
 ,`sku` varchar(80)
-,`stock_status` varchar(12)
-,`total_qty` decimal(40,4)
+,`name` varchar(180)
+,`material_type` varchar(80)
+,`color_name` varchar(100)
 ,`unit_symbol` varchar(20)
+,`total_qty` decimal(40,4)
+,`reserved_qty` decimal(40,4)
+,`available_qty` decimal(41,4)
+,`low_stock_threshold` decimal(18,4)
+,`stock_status` varchar(12)
 );
 
 -- --------------------------------------------------------
@@ -3346,17 +4178,17 @@ CREATE TABLE `v_material_stock` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_printer_current_activity` (
-`estimated_finish_at` datetime(3)
+`printer_id` bigint unsigned
+,`printer_code` varchar(60)
+,`printer_name` varchar(150)
+,`printer_status` varchar(30)
+,`print_job_id` bigint unsigned
 ,`job_code` varchar(80)
 ,`job_name` varchar(200)
 ,`job_status` varchar(30)
-,`print_job_id` bigint unsigned
-,`printer_code` varchar(60)
-,`printer_id` bigint unsigned
-,`printer_name` varchar(150)
-,`printer_status` varchar(30)
 ,`progress_percent` decimal(6,2)
 ,`started_at` datetime(3)
+,`estimated_finish_at` datetime(3)
 );
 
 --
@@ -3397,8 +4229,11 @@ ALTER TABLE `audit_logs`
   ADD KEY `idx_audit_logs_user_time` (`user_id`,`created_at`),
   ADD KEY `idx_audit_logs_entity` (`entity_type`,`entity_id`,`created_at`),
   ADD KEY `idx_audit_logs_module` (`module_code`,`action_code`,`created_at`),
-  ADD KEY `fk_audit_logs_org` (`organization_id`),
-  ADD KEY `fk_audit_logs_bu` (`business_unit_id`);
+  ADD KEY `fk_audit_logs_bu` (`business_unit_id`),
+  ADD KEY `idx_audit_logs_org_time` (`organization_id`,`created_at`,`id`),
+  ADD KEY `idx_audit_logs_org_bu_time` (`organization_id`,`business_unit_id`,`created_at`,`id`),
+  ADD KEY `idx_audit_logs_org_module_time` (`organization_id`,`module_code`,`created_at`,`id`),
+  ADD KEY `idx_audit_logs_org_action_time` (`organization_id`,`action_code`,`created_at`,`id`);
 
 --
 -- Indexes for table `automation_rules`
@@ -3540,12 +4375,16 @@ ALTER TABLE `design_files`
 --
 ALTER TABLE `documents`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `document_code` (`document_code`),
+  ADD UNIQUE KEY `uq_documents_org_code_version` (`organization_id`,`document_code`,`version_no`),
   ADD KEY `idx_documents_entity` (`entity_type`,`entity_id`),
   ADD KEY `idx_documents_type_date` (`document_type`,`created_at`),
-  ADD KEY `fk_documents_org` (`organization_id`),
   ADD KEY `fk_documents_bu` (`business_unit_id`),
-  ADD KEY `fk_documents_user` (`uploaded_by`);
+  ADD KEY `fk_documents_user` (`uploaded_by`),
+  ADD KEY `idx_documents_org_scope_archive_time` (`organization_id`,`business_unit_id`,`archived_at`,`created_at`,`id`),
+  ADD KEY `idx_documents_org_type_archive_time` (`organization_id`,`document_type`,`archived_at`,`created_at`,`id`),
+  ADD KEY `idx_documents_org_module_archive_time` (`organization_id`,`source_module_code`,`archived_at`,`created_at`,`id`),
+  ADD KEY `idx_documents_org_entity` (`organization_id`,`entity_type`,`entity_id`,`created_at`),
+  ADD KEY `idx_documents_archived_by` (`archived_by`);
 
 --
 -- Indexes for table `document_templates`
@@ -4456,49 +5295,49 @@ ALTER TABLE `user_sessions`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `asset_maintenance_records`
 --
 ALTER TABLE `asset_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `asset_project_assignments`
 --
 ALTER TABLE `asset_project_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=694;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1348;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
 --
 ALTER TABLE `automation_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `automation_runs`
 --
 ALTER TABLE `automation_runs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `budgets`
 --
 ALTER TABLE `budgets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `budget_items`
 --
 ALTER TABLE `budget_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `business_units`
@@ -4510,7 +5349,7 @@ ALTER TABLE `business_units`
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `channel_product_mappings`
@@ -4528,7 +5367,7 @@ ALTER TABLE `chart_of_accounts`
 -- AUTO_INCREMENT for table `craft_orders`
 --
 ALTER TABLE `craft_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `craft_order_drafts`
@@ -4570,19 +5409,19 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `domain_events`
 --
 ALTER TABLE `domain_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=330;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `filament_spools`
 --
 ALTER TABLE `filament_spools`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `financial_periods`
@@ -4594,19 +5433,19 @@ ALTER TABLE `financial_periods`
 -- AUTO_INCREMENT for table `financial_transactions`
 --
 ALTER TABLE `financial_transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `goods_receipts`
 --
 ALTER TABLE `goods_receipts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `goods_receipt_items`
 --
 ALTER TABLE `goods_receipt_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `integrations`
@@ -4624,19 +5463,19 @@ ALTER TABLE `integration_sync_logs`
 -- AUTO_INCREMENT for table `internal_transfers`
 --
 ALTER TABLE `internal_transfers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `inventory_movements`
 --
 ALTER TABLE `inventory_movements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
@@ -4648,19 +5487,19 @@ ALTER TABLE `invoice_items`
 -- AUTO_INCREMENT for table `invoice_payment_schedules`
 --
 ALTER TABLE `invoice_payment_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `journal_entries`
 --
 ALTER TABLE `journal_entries`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `journal_lines`
 --
 ALTER TABLE `journal_lines`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `login_history`
@@ -4696,13 +5535,13 @@ ALTER TABLE `master_options`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `material_batches`
 --
 ALTER TABLE `material_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -4714,13 +5553,13 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `material_waste`
 --
 ALTER TABLE `material_waste`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1546;
 
 --
 -- AUTO_INCREMENT for table `order_attachments`
@@ -4738,7 +5577,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -4750,19 +5589,19 @@ ALTER TABLE `partner_price_rules`
 -- AUTO_INCREMENT for table `party_contacts`
 --
 ALTER TABLE `party_contacts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -4774,31 +5613,31 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `printers`
 --
 ALTER TABLE `printers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `printer_issues`
 --
 ALTER TABLE `printer_issues`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `printer_maintenance_records`
 --
 ALTER TABLE `printer_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `printer_maintenance_schedules`
 --
 ALTER TABLE `printer_maintenance_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `print_failures`
@@ -4876,7 +5715,7 @@ ALTER TABLE `project_deliverables`
 -- AUTO_INCREMENT for table `project_external_assignments`
 --
 ALTER TABLE `project_external_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `project_milestones`
@@ -4888,25 +5727,25 @@ ALTER TABLE `project_milestones`
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `purchase_order_items`
 --
 ALTER TABLE `purchase_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `purchase_request_items`
 --
 ALTER TABLE `purchase_request_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `qc_inspections`
@@ -4936,31 +5775,31 @@ ALTER TABLE `qc_template_items`
 -- AUTO_INCREMENT for table `quick_links`
 --
 ALTER TABLE `quick_links`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `quotation_items`
 --
 ALTER TABLE `quotation_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `quotation_templates`
 --
 ALTER TABLE `quotation_templates`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `quotation_template_items`
 --
 ALTER TABLE `quotation_template_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `report_definitions`
@@ -4978,7 +5817,7 @@ ALTER TABLE `report_exports`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `sales_channels`
@@ -4990,31 +5829,31 @@ ALTER TABLE `sales_channels`
 -- AUTO_INCREMENT for table `service_packages`
 --
 ALTER TABLE `service_packages`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `service_package_items`
 --
 ALTER TABLE `service_package_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `stock_reservations`
 --
 ALTER TABLE `stock_reservations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `studio_projects`
 --
 ALTER TABLE `studio_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `studio_project_services`
 --
 ALTER TABLE `studio_project_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `studio_project_status_history`
@@ -5026,19 +5865,19 @@ ALTER TABLE `studio_project_status_history`
 -- AUTO_INCREMENT for table `studio_services`
 --
 ALTER TABLE `studio_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `studio_service_categories`
 --
 ALTER TABLE `studio_service_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `supplier_invoices`
 --
 ALTER TABLE `supplier_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -5062,7 +5901,7 @@ ALTER TABLE `transaction_categories`
 -- AUTO_INCREMENT for table `treasury_accounts`
 --
 ALTER TABLE `treasury_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `units_of_measure`
@@ -5074,31 +5913,31 @@ ALTER TABLE `units_of_measure`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=248;
 
 --
 -- AUTO_INCREMENT for table `user_deletion_requests`
 --
 ALTER TABLE `user_deletion_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `user_reactivation_requests`
 --
 ALTER TABLE `user_reactivation_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`
@@ -5294,6 +6133,7 @@ ALTER TABLE `design_files`
 -- Constraints for table `documents`
 --
 ALTER TABLE `documents`
+  ADD CONSTRAINT `fk_documents_archived_by` FOREIGN KEY (`archived_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_documents_bu` FOREIGN KEY (`business_unit_id`) REFERENCES `business_units` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_documents_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
   ADD CONSTRAINT `fk_documents_user` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
