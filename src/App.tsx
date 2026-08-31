@@ -24,6 +24,7 @@ import { Users as UsersManagement } from "./pages/global/Users";
 import { Profile } from "./pages/global/Profile";
 import { Notifications } from "./pages/global/Notifications";
 import { AuditLog } from "./pages/global/AuditLog";
+import { Documents } from "./pages/global/Documents";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -83,14 +84,7 @@ const router = createBrowserRouter(
         />
         <Route
           path="documents"
-          element={
-            <PlannedModulePage
-              title="Pusat Dokumen"
-              description="Penyimpanan dan berbagi file terpusat."
-              stage="Lanjutan"
-              icon={FileArchive}
-            />
-          }
+          element={<PermissionGate permission="documents.read"><Documents /></PermissionGate>}
         />
         <Route
           path="settings"

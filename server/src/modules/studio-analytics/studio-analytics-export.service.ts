@@ -3,6 +3,7 @@ import PDFDocument from 'pdfkit';
 import { pool } from '../../config/database';
 import { storageService } from '../../shared/storage';
 import { AuditService } from '../../shared/audit/audit.service';
+import { documentRegistryService } from '../../shared/documents/document-registry.service';
 import { safeText } from './studio-analytics.shared';
 import type { AnalyticsExportFormat, AnalyticsReport, StudioAnalyticsContext, StudioAnalyticsFilters } from './studio-analytics.types';
 import { StudioAnalyticsService } from './studio-analytics.service';
@@ -96,6 +97,12 @@ export class StudioAnalyticsExportService {
          VALUES (?,?,?,?,?,?,'generated',?)`,
         [ctx.organizationId, ctx.id, title, format, JSON.stringify({ start_date: filters.startDate, end_date: filters.endDate, currency: filters.currency || null, client_id: filters.clientId || null, service_id: filters.serviceId || null, project_type: filters.projectType || null }), saved.key, userId],
       );
+      await documentRegistryService.registerSourceDocument({
+        organizationId: ctx.organizationId, businessUnitId: ctx.id, sourceModuleCode: 'studio_analytics', documentType: 'report',
+        title, description: `Ekspor ${report} (${format.toUpperCase()})`, fileName: saved.original_name, storagePath: saved.key,
+        mimeType: saved.mime_type, fileSizeBytes: saved.size_bytes, checksumSha256: saved.checksum_sha256,
+        entityType: 'report_export', entityId: Number(inserted.insertId), entityCode: `${report}:${format}`, uploadedBy: userId,
+      }, connection);
       await this.audit(ctx, userId, report, format, filters, connection);
       await connection.commit();
       result.report_export_id = Number(inserted.insertId);

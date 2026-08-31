@@ -161,7 +161,12 @@ export class StudioBillingDocumentService {
       [studio.organizationId, studio.id, type, type, id],
     );
     if (existing.length) {
-      try { if (await storageService.exists(existing[0].storage_path)) return existing[0]; }
+      try {
+        if (await storageService.exists(existing[0].storage_path)) {
+          await connection.execute(`UPDATE documents SET source_module_code='studio_billing',entity_code=?,uploaded_by=COALESCE(uploaded_by,?) WHERE id=?`, [number, userId, existing[0].id]);
+          return existing[0];
+        }
+      }
       catch { /* Legacy/unavailable document is regenerated into canonical storage. */ }
     }
     const fileName = this.fileName(type, number);
@@ -170,12 +175,12 @@ export class StudioBillingDocumentService {
     const version = existing.length ? Number(existing[0].version_no) : 1;
     try {
       if (existing.length) {
-        await connection.execute(`UPDATE documents SET document_code = ?, title = ?, file_name = ?, storage_path = ?, mime_type = 'application/pdf', file_size_bytes = ?, uploaded_by = ? WHERE id = ?`, [number, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, userId, existing[0].id]);
+        await connection.execute(`UPDATE documents SET document_code = ?, source_module_code = 'studio_billing', title = ?, file_name = ?, storage_path = ?, mime_type = 'application/pdf', file_size_bytes = ?, checksum_sha256 = ?, entity_code = ?, uploaded_by = ? WHERE id = ?`, [number, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, output.checksum_sha256, number, userId, existing[0].id]);
       } else {
         await connection.execute(
-          `INSERT INTO documents (organization_id, business_unit_id, document_code, document_type, title, file_name, storage_path, mime_type, file_size_bytes, entity_type, entity_id, version_no, is_template, uploaded_by)
-           VALUES (?, ?, ?, ?, ?, ?, ?, 'application/pdf', ?, ?, ?, ?, 0, ?)`,
-          [studio.organizationId, studio.id, number, type, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, type, id, version, userId],
+          `INSERT INTO documents (organization_id, business_unit_id, document_code, document_type, source_module_code, title, file_name, storage_path, mime_type, file_size_bytes, checksum_sha256, entity_type, entity_id, entity_code, version_no, is_template, uploaded_by)
+           VALUES (?, ?, ?, ?, 'studio_billing', ?, ?, ?, 'application/pdf', ?, ?, ?, ?, ?, ?, 0, ?)`,
+          [studio.organizationId, studio.id, number, type, `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${number}`, output.original_name, output.key, output.size_bytes, output.checksum_sha256, type, id, number, version, userId],
         );
       }
       if (type === 'invoice') await connection.execute('UPDATE invoices SET pdf_path = ? WHERE id = ?', [output.key, id]);

@@ -2,6 +2,7 @@ import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { displayNameFromKey, storageService } from '../../shared/storage';
+import { documentRegistryService } from '../../shared/documents/document-registry.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { assertSafeExternalUrl, displayFileName, toSqlDateTime } from './studio-projects.helpers';
 import { StudioProjectsRepository } from './studio-projects.repository';
@@ -170,6 +171,12 @@ export class StudioProjectDeliverablesService {
           `UPDATE project_deliverables SET storage_path = ? WHERE id = ? AND project_id = ?`,
           [newRelativePath, deliverableId, projectId],
         );
+        await documentRegistryService.updateSourceDocument({
+          organizationId: studio.organizationId, businessUnitId: studio.id, sourceModuleCode: 'studio_projects', documentType: 'deliverable',
+          title: current.title, description: current.description, fileName: saved.original_name, storagePath: saved.key, mimeType: saved.mime_type,
+          fileSizeBytes: saved.size_bytes, checksumSha256: saved.checksum_sha256, entityType: 'project_deliverable', entityId: deliverableId,
+          entityCode: project.project_code, uploadedBy: userId,
+        }, connection);
         await writeProjectAudit(
           connection, studio, userId, 'studio.project_deliverable_upload', projectRef(project),
           `Mengunggah file untuk deliverable "${current.title}" pada proyek ${project.project_code}.`,
@@ -223,6 +230,7 @@ export class StudioProjectDeliverablesService {
       removedPath = current.storage_path;
 
       await connection.execute(`DELETE FROM project_deliverables WHERE id = ? AND project_id = ?`, [deliverableId, projectId]);
+      await documentRegistryService.removeSourceDocument(studio.organizationId, 'studio_projects', 'project_deliverable', deliverableId, connection);
       await writeProjectAudit(
         connection, studio, userId, 'studio.project_deliverable_update', projectRef(project),
         `Menghapus deliverable "${current.title}" dari proyek ${project.project_code}.`, { id: deliverableId, title: current.title },

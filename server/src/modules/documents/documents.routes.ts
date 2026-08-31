@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { createUpload } from '../../shared/storage';
+import { DocumentsController } from './documents.controller';
+const controller = new DocumentsController(); export const documentsRoutes = Router();
+documentsRoutes.use(requireAuth, requirePermission('documents.read'));
+documentsRoutes.get('/', controller.list); documentsRoutes.get('/summary', controller.summary); documentsRoutes.get('/meta', controller.meta);
+documentsRoutes.post('/', requirePermission('documents.write'), createUpload('generic_document').single('file'), controller.create);
+documentsRoutes.get('/:id', controller.get); documentsRoutes.patch('/:id', requirePermission('documents.write'), controller.update);
+documentsRoutes.get('/:id/versions', controller.versions); documentsRoutes.post('/:id/versions', requirePermission('documents.write'), createUpload('generic_document').single('file'), controller.addVersion);
+documentsRoutes.post('/:id/archive', requirePermission('documents.manage'), controller.archive); documentsRoutes.post('/:id/restore', requirePermission('documents.manage'), controller.restore);
+documentsRoutes.get('/:id/preview', controller.preview); documentsRoutes.get('/:id/download', controller.download);

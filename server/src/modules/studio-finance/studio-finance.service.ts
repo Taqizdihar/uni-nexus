@@ -2,6 +2,7 @@ import type { PoolConnection } from 'mysql2/promise';
 import { pool } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
+import { documentRegistryService } from '../../shared/documents/document-registry.service';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
 import type { StudioExpenseInput, StudioFinanceListFilters } from './studio-finance.types';
 import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit, publishStudioFinanceEvent } from './studio-finance.shared';
@@ -282,6 +283,12 @@ export class StudioFinanceService {
         if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
         previous = rows[0].receipt_path || null;
         await connection.execute('UPDATE expenses SET receipt_path = ? WHERE id = ?', [saved.key, expenseId]);
+        await documentRegistryService.updateSourceDocument({
+          organizationId: ctx.organizationId, businessUnitId: ctx.id, sourceModuleCode: 'studio_finance', documentType: 'receipt',
+          title: `Bukti pengeluaran ${rows[0].expense_code}`, fileName: saved.original_name, storagePath: saved.key, mimeType: saved.mime_type,
+          fileSizeBytes: saved.size_bytes, checksumSha256: saved.checksum_sha256, entityType: 'expense', entityId: expenseId,
+          entityCode: rows[0].expense_code, uploadedBy: ctx.userId,
+        }, connection);
         await writeStudioFinanceAudit(connection, ctx, ctx.userId, 'studio.finance.expense_receipt_upload', 'expense', expenseId, rows[0].expense_code, `Mengunggah bukti pengeluaran ${rows[0].expense_code}.`, { receipt_path: previous }, { receipt_path: saved.key });
       });
     } catch (error) { await storageService.delete(saved.key); throw error; }
@@ -296,6 +303,7 @@ export class StudioFinanceService {
       if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
       previous = rows[0].receipt_path || null;
       await connection.execute('UPDATE expenses SET receipt_path = NULL WHERE id = ?', [expenseId]);
+      await documentRegistryService.removeSourceDocument(ctx.organizationId, 'studio_finance', 'expense', expenseId, connection);
       await writeStudioFinanceAudit(connection, ctx, ctx.userId, 'studio.finance.expense_receipt_remove', 'expense', expenseId, rows[0].expense_code, `Menghapus bukti pengeluaran ${rows[0].expense_code}.`, { receipt_path: previous }, { receipt_path: null });
     });
     await storageService.delete(previous);

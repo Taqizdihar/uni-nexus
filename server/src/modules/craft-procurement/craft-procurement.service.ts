@@ -4,6 +4,7 @@ import { AppError } from "../../shared/errors/AppError";
 import { storageService } from '../../shared/storage';
 import { domainEvents } from "../../shared/automation/domain-event-outbox.service";
 import { AuditService } from '../../shared/audit/audit.service';
+import { documentRegistryService } from '../../shared/documents/document-registry.service';
 import type { BusinessUnitContext } from "../craft-orders/craft-orders.helpers";
 import { CraftProcurementRepository } from "./craft-procurement.repository";
 import type {
@@ -1610,6 +1611,12 @@ export class CraftProcurementService {
       if (!rows.length) throw new AppError(404, 'SUPPLIER_INVOICE_NOT_FOUND', 'Tagihan pemasok tidak ditemukan.');
       previous = rows[0].document_path || null;
       await connection.execute('UPDATE supplier_invoices SET document_path = ? WHERE id = ?', [saved.key, invoiceId]);
+      await documentRegistryService.updateSourceDocument({
+        organizationId: actor.organizationId, businessUnitId: actor.id, sourceModuleCode: 'craft_procurement', documentType: 'invoice',
+        title: `Tagihan pemasok ${rows[0].supplier_invoice_number}`, fileName: saved.original_name, storagePath: saved.key, mimeType: saved.mime_type,
+        fileSizeBytes: saved.size_bytes, checksumSha256: saved.checksum_sha256, entityType: 'supplier_invoice', entityId: invoiceId,
+        entityCode: rows[0].supplier_invoice_number, uploadedBy: actor.userId,
+      }, connection);
       await this.audit(connection, actor, 'supplier_invoice.document_upload', 'supplier_invoice', invoiceId, rows[0].supplier_invoice_number, `Mengunggah dokumen tagihan ${rows[0].supplier_invoice_number}.`, { document_path: previous }, { document_path: saved.key });
       await connection.commit();
     } catch (error) {
@@ -1630,6 +1637,7 @@ export class CraftProcurementService {
       if (!rows.length) throw new AppError(404, 'SUPPLIER_INVOICE_NOT_FOUND', 'Tagihan pemasok tidak ditemukan.');
       previous = rows[0].document_path || null;
       await connection.execute('UPDATE supplier_invoices SET document_path = NULL WHERE id = ?', [invoiceId]);
+      await documentRegistryService.removeSourceDocument(actor.organizationId, 'craft_procurement', 'supplier_invoice', invoiceId, connection);
       await this.audit(connection, actor, 'supplier_invoice.document_remove', 'supplier_invoice', invoiceId, rows[0].supplier_invoice_number, `Menghapus dokumen tagihan ${rows[0].supplier_invoice_number}.`, { document_path: previous }, { document_path: null });
       await connection.commit();
     } catch (error) { await connection.rollback(); throw error; }

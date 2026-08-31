@@ -1,4 +1,5 @@
 import { pool } from '../../config/database';
+import { moduleReadPermissionFor } from '../access/module-read-permissions';
 
 export const NOTIFICATION_SEVERITIES = ['info', 'success', 'warning', 'error', 'critical'] as const;
 export type NotificationSeverity = typeof NOTIFICATION_SEVERITIES[number];
@@ -13,26 +14,6 @@ export type CanonicalNotificationModule =
   | 'studio_services' | 'studio_equipment' | 'studio_vendors' | 'studio_analytics'
   | 'automations' | 'craft_automations' | 'studio_automations';
 
-const notificationModuleReadPermissions: Partial<Record<CanonicalNotificationModule, string>> = {
-  craft_orders: 'craft.orders.read',
-  craft_production: 'craft.production.read',
-  craft_products: 'craft.products.read',
-  craft_customers: 'craft.customers.read',
-  craft_printers: 'craft.printers.read',
-  craft_materials: 'craft.materials.read',
-  craft_finance: 'craft.finance.read',
-  craft_procurement: 'craft.procurement.read',
-  craft_marketplace: 'craft.marketplace.read',
-  craft_analytics: 'craft.analytics.read',
-  studio_projects: 'studio.projects.read',
-  studio_clients: 'studio.clients.read',
-  studio_finance: 'studio.finance.read',
-  studio_billing: 'studio.billing.read',
-  studio_services: 'studio.services.read',
-  studio_equipment: 'studio.equipment.read',
-  studio_vendors: 'studio.vendors.read',
-  studio_analytics: 'studio.analytics.read',
-};
 
 /** Resolves authorization from a canonical module, never from a translated label. */
 export const notificationReadPermissionForModule = (
@@ -41,10 +22,7 @@ export const notificationReadPermissionForModule = (
 ) => {
   const module = String(moduleCode || '').trim().toLowerCase() as CanonicalNotificationModule;
   const workspace = String(businessUnitCode).toUpperCase() === 'STUDIO' ? 'studio' : 'craft';
-  if (module === 'automations') return `${workspace}.automations.read`;
-  if (module === 'craft_automations') return 'craft.automations.read';
-  if (module === 'studio_automations') return 'studio.automations.read';
-  return notificationModuleReadPermissions[module] || null;
+  return moduleReadPermissionFor(module, workspace);
 };
 
 export type NotificationInput = {

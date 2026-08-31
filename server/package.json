@@ -26,7 +26,9 @@
     "smoke:profile-v2": "tsx scripts/smoke-profile-v2.ts",
     "smoke:notifications": "tsx scripts/smoke-notifications.ts",
     "smoke:audit": "tsx scripts/smoke-audit.ts",
+    "smoke:documents": "tsx scripts/smoke-documents.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
+    "documents:reconcile": "tsx scripts/reconcile-document-registry.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
     "browser:craft-procurement": "node scripts/browser-craft-procurement.mjs",
     "browser:craft-materials": "node scripts/browser-craft-materials.mjs",
@@ -44,6 +46,7 @@
     "browser:notifications": "node scripts/browser-notifications.mjs",
     "browser:audit": "node scripts/browser-audit.mjs",
     "browser:storage": "node scripts/browser-storage.mjs",
+    "browser:documents": "node scripts/browser-documents.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"

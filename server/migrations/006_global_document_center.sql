@@ -1,0 +1,32 @@
+-- GLOBAL DOCUMENT CENTER (MySQL 8.0)
+-- THE CURRENT DEVELOPMENT DB MAY ALREADY HAVE THESE CHANGES
+-- BECAUSE THEY WERE APPLIED MANUALLY THROUGH PHPMYADMIN.
+-- Source-control history for clean installations only. Do NOT execute migration 006
+-- against the current development database.
+
+SET @schema_name := DATABASE();
+
+-- MySQL 8 does not support ADD COLUMN IF NOT EXISTS, so use INFORMATION_SCHEMA + PREPARE.
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='source_module_code')=0, 'ALTER TABLE documents ADD COLUMN source_module_code VARCHAR(80) NULL AFTER document_type', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='description')=0, 'ALTER TABLE documents ADD COLUMN description VARCHAR(500) NULL AFTER title', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='checksum_sha256')=0, 'ALTER TABLE documents ADD COLUMN checksum_sha256 CHAR(64) NULL AFTER file_size_bytes', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='entity_code')=0, 'ALTER TABLE documents ADD COLUMN entity_code VARCHAR(120) NULL AFTER entity_id', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='archived_at')=0, 'ALTER TABLE documents ADD COLUMN archived_at DATETIME(3) NULL AFTER is_template', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='archived_by')=0, 'ALTER TABLE documents ADD COLUMN archived_by BIGINT UNSIGNED NULL AFTER archived_at', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+
+-- Remove only the former single-column globally unique document_code key, if a clean legacy install has it.
+SET @old_document_code_index := (SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND COLUMN_NAME='document_code' AND NON_UNIQUE=0 AND INDEX_NAME<>'PRIMARY' GROUP BY INDEX_NAME HAVING COUNT(*)=1 LIMIT 1);
+SET @sql := IF(@old_document_code_index IS NULL, 'SELECT 1', CONCAT('ALTER TABLE documents DROP INDEX `', REPLACE(@old_document_code_index, '`', '``'), '`')); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='uq_documents_org_code_version')=0, 'CREATE UNIQUE INDEX uq_documents_org_code_version ON documents (organization_id, document_code, version_no)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='idx_documents_org_scope_archive_time')=0, 'CREATE INDEX idx_documents_org_scope_archive_time ON documents (organization_id,business_unit_id,archived_at,created_at,id)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='idx_documents_org_type_archive_time')=0, 'CREATE INDEX idx_documents_org_type_archive_time ON documents (organization_id,document_type,archived_at,created_at,id)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='idx_documents_org_module_archive_time')=0, 'CREATE INDEX idx_documents_org_module_archive_time ON documents (organization_id,source_module_code,archived_at,created_at,id)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='idx_documents_org_entity')=0, 'CREATE INDEX idx_documents_org_entity ON documents (organization_id,entity_type,entity_id,created_at)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=@schema_name AND TABLE_NAME='documents' AND INDEX_NAME='idx_documents_archived_by')=0, 'CREATE INDEX idx_documents_archived_by ON documents (archived_by)', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+SET @sql := IF((SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_SCHEMA=@schema_name AND TABLE_NAME='documents' AND CONSTRAINT_NAME='fk_documents_archived_by')=0, 'ALTER TABLE documents ADD CONSTRAINT fk_documents_archived_by FOREIGN KEY (archived_by) REFERENCES users(id) ON DELETE SET NULL', 'SELECT 1'); PREPARE document_ddl FROM @sql; EXECUTE document_ddl; DEALLOCATE PREPARE document_ddl;
+
+INSERT INTO permissions (code,module_code,name,description,created_at) VALUES
+('documents.read','documents','Lihat Pusat Dokumen','Melihat, mencari, membuka, dan mengunduh dokumen yang dapat diakses di Pusat Dokumen UNI-NEXUS.',UTC_TIMESTAMP(3)),
+('documents.write','documents','Kelola Dokumen','Mengunggah, memperbarui metadata, dan menambahkan versi dokumen manual UNI-NEXUS.',UTC_TIMESTAMP(3)),
+('documents.manage','documents','Administrasi Pusat Dokumen','Mengelola dokumen global, arsip, pemulihan, dan fungsi administratif Pusat Dokumen.',UTC_TIMESTAMP(3))
+ON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description);

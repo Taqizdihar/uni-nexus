@@ -382,7 +382,7 @@ const globalToolsNav: NavGroup = {
   label: "FITUR GLOBAL",
   items: [
     { name: "Keuangan Terpadu", icon: Wallet, path: "/app/finance" },
-    { name: "Pusat Dokumen", icon: FileArchive, path: "/app/documents" },
+    { name: "Pusat Dokumen", icon: FileArchive, path: "/app/documents", permission: "documents.read" },
     { name: "Kalender & Tugas", icon: Calendar, path: "/app/calendar" },
     { name: "Notifikasi", icon: Bell, path: "/app/notifications" },
     {

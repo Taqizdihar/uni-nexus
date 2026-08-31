@@ -13,6 +13,7 @@ import {
 import { getCraftBusinessUnit } from './craft-orders.helpers';
 import { z } from 'zod';
 import { storageService } from '../../shared/storage';
+import { documentRegistryService } from '../../shared/documents/document-registry.service';
 
 const parseOrderId = (value: string): number => {
   const id = Number.parseInt(value, 10);
@@ -313,7 +314,15 @@ export class CraftOrdersController {
            VALUES (?, ?, ?, ?, ?, ?, ?)`,
           [orderId, saved.original_name, saved.mime_type, saved.key, saved.size_bytes, req.body.attachment_type || 'reference', (req as any).user.id],
         );
-        sendSuccess(res, { id: Number(result.insertId), file_name: saved.original_name, file_type: saved.mime_type, file_size_bytes: saved.size_bytes }, undefined, 201);
+        const attachmentId = Number(result.insertId);
+        const [orderRows]: any = await pool.execute('SELECT bu.organization_id,o.order_code FROM craft_orders o JOIN business_units bu ON bu.id=o.business_unit_id WHERE o.id=? AND o.business_unit_id=?', [orderId, craft.id]);
+        await documentRegistryService.registerSourceDocument({
+          organizationId: Number(orderRows[0].organization_id), businessUnitId: craft.id, sourceModuleCode: 'craft_orders', documentType: 'attachment',
+          title: `Lampiran pesanan ${orderRows[0].order_code}`, fileName: saved.original_name, storagePath: saved.key, mimeType: saved.mime_type,
+          fileSizeBytes: saved.size_bytes, checksumSha256: saved.checksum_sha256, entityType: 'order_attachment', entityId: attachmentId,
+          entityCode: orderRows[0].order_code, uploadedBy: Number((req as any).user.id),
+        });
+        sendSuccess(res, { id: attachmentId, file_name: saved.original_name, file_type: saved.mime_type, file_size_bytes: saved.size_bytes }, undefined, 201);
       } catch (error) {
         await storageService.delete(saved.key);
         throw error;
@@ -345,13 +354,14 @@ export class CraftOrdersController {
       const craft = await getCraftBusinessUnit();
       const attachmentId = Number.parseInt(req.params.attachmentId as string, 10);
       const [rows]: any = await pool.execute(
-        `SELECT a.id, a.storage_path
+        `SELECT a.id, a.storage_path, o.organization_id
          FROM order_attachments a JOIN craft_orders o ON a.order_id = o.id
          WHERE a.id = ? AND o.business_unit_id = ? AND o.deleted_at IS NULL`,
         [attachmentId, craft.id],
       );
       if (!rows.length) throw new NotFoundError('Lampiran tidak ditemukan');
       await pool.execute('DELETE FROM order_attachments WHERE id = ?', [attachmentId]);
+      await documentRegistryService.removeSourceDocument(Number(rows[0].organization_id), 'craft_orders', 'order_attachment', attachmentId);
       await storageService.delete(rows[0].storage_path);
       sendSuccess(res, { message: 'Lampiran berhasil dihapus.' });
     } catch (error) {
