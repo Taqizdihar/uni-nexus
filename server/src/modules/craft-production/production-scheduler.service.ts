@@ -1,6 +1,7 @@
 import { AppError } from '../../shared/errors/AppError';
 import { addMinutes, toMysqlDateTime } from './craft-production.helpers';
 import type { CraftContext, DbConnection } from './craft-production.types';
+import { calendarRegistry } from '../../shared/calendar/calendar-registry.service';
 
 export class ProductionSchedulerService {
   private async refreshQueueSchedule(connection: DbConnection, queueItemId: number | null) {
@@ -84,33 +85,11 @@ export class ProductionSchedulerService {
       await this.refreshQueueSchedule(connection, job.queue_item_id);
     }
 
-    const [events]: any = await connection.execute(
-      `SELECT id FROM calendar_events WHERE source_type = 'print_job' AND source_id = ? ORDER BY id FOR UPDATE`,
-      [job.id],
-    );
-    const values = [
-      craft.organizationId, craft.id, `${job.job_code} - ${job.job_name}`, startAt, endAt, userId,
-    ];
-    if (events.length) {
-      await connection.execute(
-        `UPDATE calendar_events SET organization_id = ?, business_unit_id = ?, title = ?,
-          event_type = 'production', start_at = ?, end_at = ?, all_day = 0, created_by = ?
-         WHERE id = ?`,
-        [...values, events[0].id],
-      );
-      await connection.execute(
-        `DELETE FROM calendar_events WHERE source_type = 'print_job' AND source_id = ? AND id <> ?`,
-        [job.id, events[0].id],
-      );
-    } else {
-      await connection.execute(
-        `INSERT INTO calendar_events (
-          organization_id, business_unit_id, title, event_type, start_at, end_at,
-          all_day, source_type, source_id, created_by
-        ) VALUES (?, ?, ?, 'production', ?, ?, 0, 'print_job', ?, ?)`,
-        [craft.organizationId, craft.id, `${job.job_code} - ${job.job_name}`, startAt, endAt, job.id, userId],
-      );
-    }
+    await calendarRegistry.upsertSourceEvent({
+      organizationId: craft.organizationId, businessUnitId: craft.id, sourceKey: `print_job_schedule:${job.id}`,
+      sourceModuleCode: 'craft_production', sourceType: 'print_job', sourceId: job.id, sourceCode: job.job_code,
+      title: `${job.job_code} - ${job.job_name}`, eventType: 'production', startAt, endAt, allDay: false, updatedBy: userId,
+    }, connection);
     return { scheduled_start_at: startAt, scheduled_end_at: endAt };
   }
 
@@ -120,6 +99,7 @@ export class ProductionSchedulerService {
       [jobId],
     );
     await this.refreshQueueSchedule(connection, queueItemId);
-    await connection.execute(`DELETE FROM calendar_events WHERE source_type = 'print_job' AND source_id = ?`, [jobId]);
+    const [rows]: any = await connection.execute(`SELECT bu.organization_id FROM print_jobs pj JOIN business_units bu ON bu.id=pj.business_unit_id WHERE pj.id=? LIMIT 1`, [jobId]);
+    if (rows.length) await calendarRegistry.removeSourceEvent(Number(rows[0].organization_id), `print_job_schedule:${jobId}`, null, connection);
   }
 }

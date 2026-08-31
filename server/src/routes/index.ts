@@ -31,6 +31,8 @@ import { presenceRoutes } from '../modules/presence/presence.routes';
 import notificationsRoutes from '../modules/notifications/notifications.routes';
 import auditRoutes from '../modules/audit/audit.routes';
 import { documentsRoutes } from '../modules/documents/documents.routes';
+import { calendarRoutes } from '../modules/calendar/calendar.routes';
+import { tasksRoutes } from '../modules/tasks/tasks.routes';
 
 const router = Router();
 
@@ -52,6 +54,8 @@ router.use('/presence', presenceRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/audit', auditRoutes);
 router.use('/documents', documentsRoutes);
+router.use('/calendar', calendarRoutes);
+router.use('/tasks', tasksRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

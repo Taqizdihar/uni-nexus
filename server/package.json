@@ -27,6 +27,8 @@
     "smoke:notifications": "tsx scripts/smoke-notifications.ts",
     "smoke:audit": "tsx scripts/smoke-audit.ts",
     "smoke:documents": "tsx scripts/smoke-documents.ts",
+    "calendar:reconcile": "tsx scripts/reconcile-calendar.ts",
+    "smoke:calendar-tasks": "tsx scripts/smoke-calendar-tasks.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "documents:reconcile": "tsx scripts/reconcile-document-registry.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
@@ -47,6 +49,7 @@
     "browser:audit": "node scripts/browser-audit.mjs",
     "browser:storage": "node scripts/browser-storage.mjs",
     "browser:documents": "node scripts/browser-documents.mjs",
+    "browser:calendar-tasks": "node scripts/browser-calendar-tasks.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"

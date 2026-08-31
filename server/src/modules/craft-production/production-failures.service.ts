@@ -6,6 +6,7 @@ import { ProductionMaterialsService } from './production-materials.service';
 import { ProductionSyncService } from './production-sync.service';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import type { CraftContext, CreatePrintJobInput, FailPrintInput } from './craft-production.types';
+import { calendarRegistry } from '../../shared/calendar/calendar-registry.service';
 
 export class ProductionFailuresService {
   private jobs = new ProductionJobsService();
@@ -83,7 +84,7 @@ export class ProductionFailuresService {
         `UPDATE printers SET status_code = ?, total_print_hours = total_print_hours + ? WHERE id = ?`,
         [printerStatus, actualMinutes / 60, printer.id],
       );
-      await connection.execute(`DELETE FROM calendar_events WHERE source_type = 'print_job' AND source_id = ?`, [jobId]);
+      await calendarRegistry.setSourceStatus(craft.organizationId, `print_job_schedule:${jobId}`, 'cancelled', userId, connection);
       if (input.requires_reprint) await this.sync.refreshQueueState(connection, job.queue_item_id ? Number(job.queue_item_id) : null);
       else await this.sync.cancelQueueRequirement(connection, job.queue_item_id ? Number(job.queue_item_id) : null);
       await this.sync.addJobHistory(connection, jobId, job.status_code, 'failed', userId, input.description, Number(job.progress_percent));

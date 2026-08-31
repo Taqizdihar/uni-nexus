@@ -4,6 +4,8 @@ import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { domainEvents } from '../../shared/automation/domain-event-outbox.service';
 import { AuditService } from '../../shared/audit/audit.service';
+import { calendarRegistry } from '../../shared/calendar/calendar-registry.service';
+import { jakartaDateStartUtc, utcDateTimeSql } from '../../shared/time/jakarta-time';
 import { CraftPrintersRepository } from './craft-printers.repository';
 import type { CompleteMaintenanceInput, HistoryFilters, IssueInput, IssueUpdateInput, PrinterFilters, PrinterInput, PrinterStatus, PrinterUpdateInput, ScheduleInput, ScheduleUpdateInput } from './craft-printers.types';
 
@@ -17,6 +19,11 @@ const toSqlDateTime = (value: string | Date) => {
 };
 const futureDate = (from: string | Date, days: number) => new Date(new Date(from).getTime() + days * 86_400_000);
 const asNumber = (value: unknown) => Number(value || 0);
+const allDayRange = (value: string | Date) => {
+  const day = typeof value === 'string' ? value.slice(0, 10) : value.toISOString().slice(0, 10);
+  const start = jakartaDateStartUtc(day);
+  return { startAt: utcDateTimeSql(start), endAt: utcDateTimeSql(new Date(start.getTime() + 86_400_000)) };
+};
 
 export class CraftPrintersService {
   private repository = new CraftPrintersRepository();
@@ -149,11 +156,13 @@ export class CraftPrintersService {
   }
 
   private async syncDateCalendar(connection: PoolConnection, schedule: any, actor: PrinterActor) {
-    await connection.execute(`DELETE FROM calendar_events WHERE source_type = 'printer_maintenance_schedule' AND source_id = ?`, [schedule.id]);
-    if (!schedule.is_active || schedule.trigger_type !== 'date' || !schedule.next_due_at) return;
+    const sourceKey = `printer_maintenance:${schedule.id}`;
+    if (!schedule.is_active || schedule.trigger_type !== 'date' || !schedule.next_due_at) {
+      await calendarRegistry.removeSourceEvent(actor.organizationId, sourceKey, actor.id, connection);
+      return;
+    }
     const printer = await this.printerOrThrow(Number(schedule.printer_id), actor.businessUnitId, connection);
-    await connection.execute(`INSERT INTO calendar_events (organization_id, business_unit_id, title, description, event_type, start_at, end_at, all_day, source_type, source_id, created_by)
-      VALUES (?, ?, ?, ?, 'maintenance', ?, ?, 1, 'printer_maintenance_schedule', ?, ?)`, [actor.organizationId, actor.businessUnitId, `Perawatan: ${printer.name} — ${schedule.maintenance_type}`, schedule.notes || null, toSqlDateTime(schedule.next_due_at), toSqlDateTime(schedule.next_due_at), schedule.id, actor.id]);
+    await calendarRegistry.upsertSourceEvent({ organizationId: actor.organizationId, businessUnitId: actor.businessUnitId, sourceKey, sourceModuleCode: 'craft_printers', sourceType: 'printer_maintenance_schedule', sourceId: Number(schedule.id), sourceCode: printer.code, title: `Perawatan: ${printer.name} - ${schedule.maintenance_type}`, description: schedule.notes || null, eventType: 'maintenance', ...allDayRange(schedule.next_due_at), allDay: true, updatedBy: actor.id }, connection);
   }
 
   private scheduleDueFields(input: { trigger_type: string; interval_value: number; next_due_at?: string | null }, printer: any, current?: any) {
@@ -202,7 +211,7 @@ export class CraftPrintersService {
       if (!schedule) throw new NotFoundError('Jadwal perawatan tidak ditemukan.');
       await connection.execute('UPDATE printer_maintenance_records SET schedule_id = NULL WHERE schedule_id = ?', [scheduleId]);
       await connection.execute('DELETE FROM printer_maintenance_schedules WHERE id = ?', [scheduleId]);
-      await connection.execute(`DELETE FROM calendar_events WHERE source_type = 'printer_maintenance_schedule' AND source_id = ?`, [scheduleId]);
+      await calendarRegistry.removeSourceEvent(actor.organizationId, `printer_maintenance:${scheduleId}`, actor.id, connection);
       await this.audit(connection, actor, 'maintenance_schedule_delete', 'maintenance_schedule', scheduleId, null, `Menghapus jadwal perawatan ${schedule.maintenance_type}.`, schedule);
       return { id: scheduleId, deleted: true };
     });

@@ -25,6 +25,7 @@ import { Profile } from "./pages/global/Profile";
 import { Notifications } from "./pages/global/Notifications";
 import { AuditLog } from "./pages/global/AuditLog";
 import { Documents } from "./pages/global/Documents";
+import { CalendarTasks } from "./pages/global/CalendarTasks";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -86,6 +87,7 @@ const router = createBrowserRouter(
           path="documents"
           element={<PermissionGate permission="documents.read"><Documents /></PermissionGate>}
         />
+        <Route path="calendar" element={<PermissionGate permission="calendar.read"><CalendarTasks /></PermissionGate>} />
         <Route
           path="settings"
           element={

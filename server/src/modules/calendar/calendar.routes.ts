@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { requireAnyPermission, requireAuth, requirePermission } from '../../middleware/auth.middleware';
+import { validateRequest } from '../../middleware/validation.middleware';
+import { CalendarController } from './calendar.controller';
+import { calendarAttendeesSchema, calendarEventCreateSchema, calendarEventIdSchema, calendarEventUpdateSchema, calendarFeedSchema, calendarResponseSchema } from './calendar.schema';
+const controller = new CalendarController(); export const calendarRoutes = Router();
+calendarRoutes.use(requireAuth, requirePermission('calendar.read'));
+calendarRoutes.get('/feed', validateRequest(calendarFeedSchema), controller.feed); calendarRoutes.get('/summary', controller.summary); calendarRoutes.get('/meta', controller.meta);
+calendarRoutes.post('/events', requirePermission('calendar.write'), validateRequest(calendarEventCreateSchema), controller.create);
+calendarRoutes.get('/events/:id', validateRequest(calendarEventIdSchema), controller.get);
+calendarRoutes.patch('/events/:id', requireAnyPermission('calendar.write', 'calendar.manage'), validateRequest(calendarEventUpdateSchema), controller.update);
+calendarRoutes.delete('/events/:id', requireAnyPermission('calendar.write', 'calendar.manage'), validateRequest(calendarEventIdSchema), controller.remove);
+calendarRoutes.put('/events/:id/attendees', requireAnyPermission('calendar.write', 'calendar.manage'), validateRequest(calendarAttendeesSchema), controller.attendees);
+calendarRoutes.patch('/events/:id/response', validateRequest(calendarResponseSchema), controller.response);

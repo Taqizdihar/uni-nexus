@@ -1,0 +1,10 @@
+import { z } from 'zod';
+const id = z.coerce.number().int().positive();
+const date = z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/);
+const eventBody = z.object({ title: z.string().trim().min(1).max(220), description: z.string().trim().max(10_000).nullable().optional(), location_name: z.string().trim().max(220).nullable().optional(), event_type: z.enum(['meeting', 'other']).optional(), business_unit_id: id.nullable().optional(), all_day: z.boolean().optional(), start_at: z.string().trim().max(64).optional(), end_at: z.string().trim().max(64).nullable().optional(), start_date: date.optional(), end_date: date.optional(), reminder_minutes_before: z.coerce.number().int().min(0).max(1_008_000).nullable().optional(), attendee_ids: z.array(id).max(100).optional() });
+export const calendarFeedSchema = z.object({ query: z.object({ from: date.optional(), to: date.optional(), workspace: z.enum(['all', 'global', 'craft', 'studio']).default('all'), event_type: z.enum(['order_deadline', 'production', 'project_deadline', 'maintenance', 'payment', 'meeting', 'task', 'other']).optional(), source: z.string().trim().max(80).optional(), status: z.enum(['scheduled', 'completed', 'cancelled']).optional(), include_tasks: z.enum(['true', 'false']).optional(), task_scope: z.enum(['all', 'mine']).default('all'), q: z.string().trim().max(120).optional() }), params: z.object({}), body: z.object({}).passthrough().default({}) });
+export const calendarEventCreateSchema = z.object({ body: eventBody, query: z.object({}), params: z.object({}) });
+export const calendarEventUpdateSchema = z.object({ body: eventBody.partial(), query: z.object({}), params: z.object({ id }) });
+export const calendarEventIdSchema = z.object({ body: z.object({}).passthrough().default({}), query: z.object({}), params: z.object({ id }) });
+export const calendarAttendeesSchema = z.object({ body: z.object({ attendee_ids: z.array(id).max(100) }), query: z.object({}), params: z.object({ id }) });
+export const calendarResponseSchema = z.object({ body: z.object({ response_status_code: z.enum(['accepted', 'tentative', 'declined']) }), query: z.object({}), params: z.object({ id }) });

@@ -7,6 +7,8 @@ import { normalizeRule } from '../shared/automation/automation-repository';
 import { AutomationRunService } from '../shared/automation/automation-run.service';
 import { systemNotificationService } from '../shared/notifications/system-notification.service';
 import { systemNotificationSensorService } from '../shared/notifications/system-notification-sensor.service';
+import { calendarReminderService } from '../shared/calendar/calendar-reminder.service';
+import { calendarSourceSyncService } from '../shared/calendar/calendar-source-sync.service';
 
 const limit = (value: number) => Math.max(1, Math.min(value, 50));
 const ruleSnapshot = (rule: any) => ({ version: rule.version_no, trigger: { type: rule.trigger_type, event: rule.trigger_event, config: rule.trigger_config_json, timezone: rule.schedule_timezone }, conditions: rule.condition_json, actions: rule.action_json, reliability: { cooldown_seconds: Number(rule.cooldown_seconds || 0), max_retries: Number(rule.max_retries || 0), priority: Number(rule.priority || 100) } });
@@ -18,6 +20,8 @@ export class AutomationWorker {
   private nextSensorAttemptAt = 0;
   private readonly sensorIntervalMs = 5 * 60 * 1000;
   private readonly sensorRetryIntervalMs = 60 * 1000;
+  private nextCalendarAttemptAt = 0;
+  private readonly calendarIntervalMs = 60 * 1000;
 
   async recoverStaleLocks() {
     await Promise.all([
@@ -83,6 +87,12 @@ export class AutomationWorker {
       throw error;
     }
   }
+  async runCalendarMaintenance(now = new Date()) {
+    if (now.getTime() < this.nextCalendarAttemptAt) return { status: 'throttled' as const };
+    this.nextCalendarAttemptAt = now.getTime() + this.calendarIntervalMs;
+    const [sync, reminders] = await Promise.all([calendarSourceSyncService.syncAll(), calendarReminderService.runOnce()]);
+    return { status: 'ran' as const, sync, reminders };
+  }
   async processOnce() {
     await this.recoverStaleLocks();
     const events = await this.claimEvents();
@@ -91,6 +101,11 @@ export class AutomationWorker {
       await this.runBuiltInNotificationSensors();
     } catch (error) {
       console.warn('[automation] built-in notification sensor pass failed:', sanitizeAutomationError(error));
+    }
+    try {
+      await this.runCalendarMaintenance();
+    } catch (error) {
+      console.warn('[automation] calendar maintenance pass failed:', sanitizeAutomationError(error));
     }
     const schedules = await this.claimDueSchedules();
     const runs = await this.processRuns();

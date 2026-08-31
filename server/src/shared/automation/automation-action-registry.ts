@@ -15,6 +15,7 @@ import { automationEventRegistry } from './automation-event-registry';
 import { buildAutomationDomainEvent, parseJson } from './automation-context';
 import { domainEvents } from './domain-event-outbox.service';
 import { notificationReadPermissionForModule, notificationService } from '../notifications/notification.service';
+import { tasksService } from '../../modules/tasks/tasks.service';
 
 export type AutomationRisk = 'informational' | 'operational' | 'data_change';
 export interface AutomationAction { type: string; config?: Record<string, unknown>; continue_on_error?: boolean; }
@@ -244,8 +245,16 @@ export class AutomationActionRegistry {
   private async createTask(config: Record<string, unknown>, context: AutomationExecutionContext) {
     const title = template(config.title_template || 'Tindak lanjut otomasi', context.rule.trigger_event, context.input).slice(0, 220);
     const description = template(config.description_template || '', context.rule.trigger_event, context.input);
-    const [result]: any = await pool.execute(`INSERT INTO tasks (organization_id,business_unit_id,task_code,title,description,status_code,priority_code,due_at,source_type,source_id,created_by) VALUES (?,?,?, ?,?,'todo',?,?,?, ?,?)`, [context.organizationId, context.businessUnitId, `TSK-${randomUUID().slice(0, 8).toUpperCase()}`, title, description || null, config.priority || 'normal', config.due_at || null, context.event?.entity_type || 'automation_run', context.event?.entity_id || context.run.id, context.actorUserId || Number(context.rule.created_by)]);
-    return { status: 'success', task_id: Number(result.insertId) };
+    const sourceModuleCode = context.event?.module_code || (context.businessUnitCode === 'STUDIO' ? 'studio_automations' : 'craft_automations');
+    const result = await tasksService.createGenerated({
+      organizationId: context.organizationId, businessUnitId: context.businessUnitId, title, description: description || null,
+      priorityCode: ['low', 'normal', 'high', 'critical'].includes(String(config.priority)) ? String(config.priority) as any : 'normal',
+      dueAt: typeof config.due_at === 'string' ? config.due_at : null, sourceModuleCode,
+      sourceType: context.event?.entity_type || 'automation_run', sourceId: context.event?.entity_id || context.run.id,
+      sourceCode: context.event?.entity_code || context.rule.rule_code, sourceKey: `automation:run:${context.run.id}:action:${Number(context.actionIndex || 0)}`,
+      actorId: context.actorUserId || Number(context.rule.created_by),
+    });
+    return { status: 'success', task_id: result.id, reused: result.reused };
   }
 
   private async setStudioProjectPriority(config: Record<string, unknown>, context: AutomationExecutionContext) {
