@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 31, 2026 at 03:00 AM
+-- Generation Time: Aug 31, 2026 at 05:04 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -362,7 +362,20 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (1425, 1, NULL, 2, 'auth', 'logout', 'user', 2, 'taqizdihar', 'User logged out explicitly', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:21.647'),
 (1426, 1, NULL, 3, 'auth', 'login', 'user', 3, 'apriladzania', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:31.907'),
 (1427, 1, NULL, 3, 'auth', 'logout', 'user', 3, 'apriladzania', 'User logged out explicitly', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:45.946'),
-(1428, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:51.909');
+(1428, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:51.909'),
+(1485, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 56, 'EVT-000056', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara 8efdc6c3\", \"end_at\": \"2026-08-31 21:05:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:05:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:05:55.065'),
+(1486, 1, 1, 2, 'tasks', 'tasks.create', 'task', 13, 'TSK-000013', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas 8efdc6c3\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:05:55.550');
+INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`, `module_code`, `action_code`, `entity_type`, `entity_id`, `entity_code`, `description`, `old_values`, `new_values`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1500, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 64, 'EVT-000064', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara 68df6032\", \"end_at\": \"2026-08-31 21:13:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:13:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:13:37.030'),
+(1501, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 66, 'EVT-000066', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara e42b104a\", \"end_at\": \"2026-08-31 21:14:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:14:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:14:54.657'),
+(1502, 1, 1, 2, 'tasks', 'tasks.create', 'task', 16, 'TSK-000016', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas e42b104a\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:14:55.522'),
+(1503, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 68, 'EVT-000068', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara 15a3b4bb\", \"end_at\": \"2026-08-31 21:15:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:15:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:15:38.084'),
+(1504, 1, 1, 2, 'tasks', 'tasks.create', 'task', 17, 'TSK-000017', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas 15a3b4bb\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:15:39.409'),
+(1505, 1, 1, 2, 'tasks', 'tasks.status_change', 'task', 16, 'TSK-000016', 'Mengubah status tugas.', '{\"status_code\": \"todo\", \"completed_at\": null}', '{\"status_code\": \"in_progress\", \"completed_at\": null}', NULL, NULL, '2026-08-31 04:15:39.731'),
+(1519, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 76, 'EVT-000076', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara b1ae4693\", \"end_at\": \"2026-08-31 21:22:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:22:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:22:03.985'),
+(1520, 1, 1, 2, 'tasks', 'tasks.create', 'task', 20, 'TSK-000020', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas b1ae4693\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:22:05.122'),
+(1521, 1, 1, 2, 'tasks', 'tasks.status_change', 'task', 16, 'TSK-000016', 'Mengubah status tugas.', '{\"status_code\": \"in_progress\", \"completed_at\": null}', '{\"status_code\": \"in_progress\", \"completed_at\": null}', NULL, NULL, '2026-08-31 04:22:05.616'),
+(1522, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 04:26:13.682');
 
 -- --------------------------------------------------------
 
@@ -524,6 +537,16 @@ CREATE TABLE `calendar_events` (
   `updated_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `deleted_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `calendar_events`
+--
+
+INSERT INTO `calendar_events` (`id`, `organization_id`, `business_unit_id`, `event_code`, `title`, `description`, `location_name`, `event_type`, `source_module_code`, `start_at`, `end_at`, `all_day`, `status_code`, `reminder_minutes_before`, `source_type`, `source_id`, `source_code`, `source_key`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(40, 1, 1, 'SRC-C8C370DC', 'Source c8c370dc', NULL, NULL, 'order_deadline', 'craft_orders', '2026-08-31 03:54:13.342', NULL, 0, 'scheduled', NULL, 'craft_order', 900051395, 'BROWSER', 'browser-source:c8c370dc', 2, NULL, '2026-08-31 10:54:13.342', '2026-08-31 10:54:56.963', '2026-08-31 03:54:56.963'),
+(41, 1, 1, 'SRC-5BCBDDB1', 'Source 5bcbddb1', NULL, NULL, 'order_deadline', 'craft_orders', '2026-08-31 03:54:27.747', NULL, 0, 'scheduled', NULL, 'craft_order', 900023499, 'BROWSER', 'browser-source:5bcbddb1', 2, NULL, '2026-08-31 10:54:27.747', '2026-08-31 10:54:56.968', '2026-08-31 03:54:56.968'),
+(64, 1, 1, 'EVT-000064', 'Browser acara 68df6032', NULL, NULL, 'meeting', 'calendar', '2026-08-31 21:13:00.000', '2026-08-31 21:13:00.000', 0, 'scheduled', NULL, 'manual_event', NULL, NULL, NULL, 2, 2, '2026-08-31 11:13:36.957', '2026-08-31 11:13:36.971', NULL),
+(66, 1, 1, 'EVT-000066', 'Browser acara e42b104a', NULL, NULL, 'meeting', 'calendar', '2026-08-31 21:14:00.000', '2026-08-31 21:14:00.000', 0, 'scheduled', NULL, 'manual_event', NULL, NULL, NULL, 2, 2, '2026-08-31 11:14:54.593', '2026-08-31 11:14:54.650', NULL);
 
 -- --------------------------------------------------------
 
@@ -938,6 +961,7 @@ CREATE TABLE `financial_transactions` (
   `source_type` varchar(60) DEFAULT NULL,
   `source_id` bigint UNSIGNED DEFAULT NULL,
   `source_code` varchar(100) DEFAULT NULL,
+  `idempotency_key` varchar(190) DEFAULT NULL COMMENT 'Client/request idempotency key for retry-safe financial posting',
   `status_code` varchar(30) NOT NULL DEFAULT 'posted' COMMENT 'draft|posted|void',
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `posted_by` bigint UNSIGNED DEFAULT NULL,
@@ -1043,6 +1067,7 @@ CREATE TABLE `internal_transfers` (
   `currency_code` char(3) NOT NULL DEFAULT 'IDR',
   `transfer_date` datetime(3) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
+  `idempotency_key` varchar(190) DEFAULT NULL COMMENT 'Client/request idempotency key for retry-safe treasury transfer',
   `status_code` varchar(30) NOT NULL DEFAULT 'completed' COMMENT 'draft|completed|void',
   `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
@@ -2565,7 +2590,11 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (56, 'calendar.manage', 'calendar', 'Administrasi Kalender', 'Mengelola acara kalender global dan acara manual lintas pengguna yang diizinkan.', '2026-08-31 10:00:11.942'),
 (57, 'tasks.read', 'tasks', 'Lihat Tugas', 'Melihat tugas UNI-NEXUS pada organisasi dan workspace yang diizinkan.', '2026-08-31 10:00:11.945'),
 (58, 'tasks.write', 'tasks', 'Kelola Tugas', 'Membuat tugas dan memperbarui tugas yang menjadi tanggung jawab pengguna.', '2026-08-31 10:00:11.945'),
-(59, 'tasks.manage', 'tasks', 'Administrasi Tugas', 'Mengelola penugasan, arsip, dan tugas global pada organisasi.', '2026-08-31 10:00:11.945');
+(59, 'tasks.manage', 'tasks', 'Administrasi Tugas', 'Mengelola penugasan, arsip, dan tugas global pada organisasi.', '2026-08-31 10:00:11.945'),
+(60, 'finance.read', 'finance', 'Lihat Keuangan Terpadu', 'Melihat kondisi keuangan gabungan Craft, Studio, dan Shared yang diizinkan.', '2026-08-31 12:04:47.036'),
+(61, 'finance.write', 'finance', 'Kelola Keuangan Bersama', 'Mencatat transaksi keuangan organisasi pada unit Shared yang diizinkan.', '2026-08-31 12:04:47.040'),
+(62, 'finance.transfer', 'finance', 'Transfer Dana Internal', 'Melakukan transfer kas internal antar unit bisnis UNI-NEXUS secara terkontrol.', '2026-08-31 12:04:47.042'),
+(63, 'finance.manage', 'finance', 'Administrasi Keuangan Terpadu', 'Mengelola konfigurasi keuangan global, treasury Shared, dan periode keuangan.', '2026-08-31 12:04:47.045');
 
 -- --------------------------------------------------------
 
@@ -3397,6 +3426,10 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 57, '2026-08-31 10:00:11.948'),
 (1, 58, '2026-08-31 10:00:11.948'),
 (1, 59, '2026-08-31 10:00:11.951'),
+(1, 60, '2026-08-31 12:04:47.049'),
+(1, 61, '2026-08-31 12:04:47.049'),
+(1, 62, '2026-08-31 12:04:47.049'),
+(1, 63, '2026-08-31 12:04:47.049'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -3456,6 +3489,10 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 57, '2026-08-31 10:00:11.948'),
 (2, 58, '2026-08-31 10:00:11.948'),
 (2, 59, '2026-08-31 10:00:11.951'),
+(2, 60, '2026-08-31 12:04:47.049'),
+(2, 61, '2026-08-31 12:04:47.049'),
+(2, 62, '2026-08-31 12:04:47.049'),
+(2, 63, '2026-08-31 12:04:47.049'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -3515,6 +3552,14 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 57, '2026-08-31 10:00:11.948'),
 (3, 58, '2026-08-31 10:00:11.948'),
 (3, 59, '2026-08-31 10:00:11.951'),
+(3, 60, '2026-08-31 12:04:47.049'),
+(3, 61, '2026-08-31 12:04:47.049'),
+(3, 62, '2026-08-31 12:04:47.049'),
+(3, 63, '2026-08-31 12:04:47.049'),
+(4, 12, '2026-08-31 12:04:47.054'),
+(4, 13, '2026-08-31 12:04:47.054'),
+(4, 18, '2026-08-31 12:04:47.054'),
+(4, 19, '2026-08-31 12:04:47.054'),
 (4, 46, '2026-08-28 00:24:01.379'),
 (4, 47, '2026-08-28 00:24:01.379'),
 (4, 51, '2026-08-31 09:05:42.718'),
@@ -3523,6 +3568,10 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (4, 55, '2026-08-31 10:00:11.948'),
 (4, 57, '2026-08-31 10:00:11.948'),
 (4, 58, '2026-08-31 10:00:11.948'),
+(4, 60, '2026-08-31 12:04:47.049'),
+(4, 61, '2026-08-31 12:04:47.049'),
+(4, 62, '2026-08-31 12:04:47.049'),
+(4, 63, '2026-08-31 12:04:47.049'),
 (5, 51, '2026-08-31 09:05:42.718'),
 (5, 52, '2026-08-31 09:05:42.718'),
 (5, 54, '2026-08-31 10:00:11.948'),
@@ -3922,6 +3971,13 @@ CREATE TABLE `tasks` (
   `deleted_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `organization_id`, `business_unit_id`, `task_code`, `title`, `description`, `status_code`, `priority_code`, `start_at`, `due_at`, `reminder_minutes_before`, `source_module_code`, `source_type`, `source_id`, `source_code`, `source_key`, `created_by`, `updated_by`, `completed_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(16, 1, 1, 'TSK-000016', 'Browser tugas e42b104a', NULL, 'in_progress', 'normal', '2026-08-31 21:14:00.000', '2026-08-31 21:14:00.000', NULL, 'tasks', 'manual', NULL, NULL, NULL, 2, 2, NULL, '2026-08-31 11:14:55.510', '2026-08-31 11:15:39.729', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -3964,7 +4020,8 @@ INSERT INTO `transaction_categories` (`id`, `organization_id`, `business_unit_id
 (5, 1, 1, 'CRAFT_MAINTENANCE', 'Perawatan Printer', 'expense', 17, 1),
 (6, 1, 3, 'SHARED_OPERATING', 'Biaya Operasional Umum', 'expense', 16, 1),
 (7, 1, 2, 'STUDIO_PROJECT', 'Pendapatan Proyek Studio', 'income', 9, 1),
-(8, 1, 2, 'STUDIO_PROJECT_COST', 'Biaya Proyek Studio', 'expense', 15, 1);
+(8, 1, 2, 'STUDIO_PROJECT_COST', 'Biaya Proyek Studio', 'expense', 15, 1),
+(9, 1, 3, 'SHARED_OTHER_INCOME', 'Pendapatan Bersama / Lain-lain', 'income', 10, 1);
 
 -- --------------------------------------------------------
 
@@ -4061,7 +4118,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/ee283f29-d194-4dca-8853-904d59a20588.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 09:40:51.907', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-31 09:40:51.907', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/ee283f29-d194-4dca-8853-904d59a20588.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 11:26:13.678', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-31 11:26:13.678', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 09:40:31.903', NULL, 0, '2026-08-23 10:14:08.000', '2026-08-31 09:40:31.903', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -4172,7 +4229,18 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (56, 1, 2, '13010673-21ae-4cf1-bb8c-9573a8bac0f4', 'craft', '2026-08-31 02:37:54.060', '2026-08-31 02:39:52.311', '2026-08-31 02:39:54.984'),
 (57, 1, 2, '1746408c-8eae-408e-a114-48335a411e40', 'craft', '2026-08-31 02:40:09.039', '2026-08-31 02:40:09.039', '2026-08-31 02:40:21.639'),
 (59, 1, 3, 'f809296d-61ae-453c-8b9d-89b1ca0ec678', 'craft', '2026-08-31 02:40:32.064', '2026-08-31 02:40:32.079', '2026-08-31 02:40:45.897'),
-(60, 1, 2, '2b0ed4c0-d702-4801-b5da-5379755eb810', 'craft', '2026-08-31 02:40:52.034', '2026-08-31 03:00:15.663', NULL);
+(60, 1, 2, '2b0ed4c0-d702-4801-b5da-5379755eb810', 'craft', '2026-08-31 02:40:52.034', '2026-08-31 03:01:44.212', NULL),
+(61, 1, 2, 'f26d0169-8ed2-4d76-868b-4cf0f334d9fc', 'craft', '2026-08-31 04:01:16.817', '2026-08-31 04:01:16.817', NULL),
+(63, 1, 2, '8c153e01-5658-4635-a27c-cf3b0e1f556b', 'craft', '2026-08-31 04:03:24.291', '2026-08-31 04:03:24.341', NULL),
+(64, 1, 2, 'e1a35121-a59a-4c41-a93f-b70be58f4812', 'craft', '2026-08-31 04:04:03.979', '2026-08-31 04:04:03.979', NULL),
+(66, 1, 2, '52babd3e-8d24-4c29-a71e-c5c88638075f', 'craft', '2026-08-31 04:04:46.406', '2026-08-31 04:04:46.414', NULL),
+(67, 1, 2, '71581e8a-3642-4f5e-985b-fcb020dc2c30', 'craft', '2026-08-31 04:05:11.638', '2026-08-31 04:05:11.657', NULL),
+(68, 1, 2, '6661feca-65a4-461b-badb-a9070938b872', 'craft', '2026-08-31 04:05:54.388', '2026-08-31 04:05:54.397', NULL),
+(69, 1, 2, '562b068a-b0df-4cca-b6b4-fe6fe856dad9', 'craft', '2026-08-31 04:13:35.577', '2026-08-31 04:13:35.577', NULL),
+(71, 1, 2, '0730018d-8178-43f1-a06d-f175c8b767f1', 'craft', '2026-08-31 04:14:53.660', '2026-08-31 04:14:53.660', NULL),
+(73, 1, 2, '44072478-772a-4ec7-be89-b83e401a4df1', 'craft', '2026-08-31 04:15:37.149', '2026-08-31 04:15:37.191', NULL),
+(74, 1, 2, '61152c61-07a4-4099-893e-6571050a78d7', 'craft', '2026-08-31 04:22:02.861', '2026-08-31 04:22:02.874', NULL),
+(75, 1, 2, 'fe18bbef-b3af-42da-95b4-12fa2b7d8e62', 'craft', '2026-08-31 04:26:13.917', '2026-08-31 05:04:38.731', NULL);
 
 -- --------------------------------------------------------
 
@@ -4619,7 +4687,8 @@ ALTER TABLE `filament_spools`
 ALTER TABLE `financial_periods`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_financial_period` (`organization_id`,`period_code`),
-  ADD KEY `fk_financial_period_user` (`closed_by`);
+  ADD KEY `fk_financial_period_user` (`closed_by`),
+  ADD KEY `idx_financial_periods_org_dates` (`organization_id`,`start_date`,`end_date`,`status_code`);
 
 --
 -- Indexes for table `financial_transactions`
@@ -4627,14 +4696,15 @@ ALTER TABLE `financial_periods`
 ALTER TABLE `financial_transactions`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `transaction_code` (`transaction_code`),
+  ADD UNIQUE KEY `uq_fin_transactions_org_idempotency` (`organization_id`,`idempotency_key`),
   ADD KEY `idx_fin_transactions_bu_date` (`business_unit_id`,`transaction_date`,`transaction_type`),
   ADD KEY `idx_fin_transactions_source` (`source_type`,`source_id`),
   ADD KEY `idx_fin_transactions_account` (`treasury_account_id`,`transaction_date`),
-  ADD KEY `fk_fin_transactions_org` (`organization_id`),
   ADD KEY `fk_fin_transactions_category` (`category_id`),
   ADD KEY `fk_fin_transactions_party` (`party_id`),
   ADD KEY `fk_fin_transactions_created_by` (`created_by`),
-  ADD KEY `fk_fin_transactions_posted_by` (`posted_by`);
+  ADD KEY `fk_fin_transactions_posted_by` (`posted_by`),
+  ADD KEY `idx_fin_transactions_org_status_currency_date` (`organization_id`,`status_code`,`currency_code`,`transaction_date`,`business_unit_id`,`transaction_type`);
 
 --
 -- Indexes for table `goods_receipts`
@@ -4678,14 +4748,15 @@ ALTER TABLE `integration_sync_logs`
 ALTER TABLE `internal_transfers`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `transfer_code` (`transfer_code`),
+  ADD UNIQUE KEY `uq_internal_transfers_org_idempotency` (`organization_id`,`idempotency_key`),
   ADD KEY `idx_internal_transfer_date` (`transfer_date`),
-  ADD KEY `fk_internal_transfer_org` (`organization_id`),
   ADD KEY `fk_internal_transfer_from_bu` (`from_business_unit_id`),
   ADD KEY `fk_internal_transfer_to_bu` (`to_business_unit_id`),
   ADD KEY `fk_internal_transfer_from_account` (`from_treasury_account_id`),
   ADD KEY `fk_internal_transfer_to_account` (`to_treasury_account_id`),
   ADD KEY `fk_internal_transfer_journal` (`journal_entry_id`),
-  ADD KEY `fk_internal_transfer_user` (`created_by`);
+  ADD KEY `fk_internal_transfer_user` (`created_by`),
+  ADD KEY `idx_internal_transfers_org_date_units` (`organization_id`,`transfer_date`,`from_business_unit_id`,`to_business_unit_id`,`status_code`);
 
 --
 -- Indexes for table `inventory_movements`
@@ -4708,9 +4779,9 @@ ALTER TABLE `invoices`
   ADD KEY `idx_invoices_party_due` (`party_id`,`due_date`,`status_code`),
   ADD KEY `idx_invoices_bu_date` (`business_unit_id`,`issue_date`),
   ADD KEY `idx_invoices_source` (`source_type`,`source_id`),
-  ADD KEY `fk_invoices_org` (`organization_id`),
   ADD KEY `fk_invoices_quotation` (`quotation_id`),
-  ADD KEY `fk_invoices_user` (`created_by`);
+  ADD KEY `fk_invoices_user` (`created_by`),
+  ADD KEY `idx_invoices_org_bu_status_due_currency` (`organization_id`,`business_unit_id`,`status_code`,`due_date`,`currency_code`);
 
 --
 -- Indexes for table `invoice_items`
@@ -4736,12 +4807,12 @@ ALTER TABLE `journal_entries`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `journal_number` (`journal_number`),
   ADD KEY `idx_journal_entries_date` (`business_unit_id`,`entry_date`),
-  ADD KEY `fk_journal_entries_org` (`organization_id`),
   ADD KEY `fk_journal_entries_period` (`financial_period_id`),
   ADD KEY `fk_journal_entries_tx` (`source_transaction_id`),
   ADD KEY `fk_journal_entries_reversal` (`reversal_of_id`),
   ADD KEY `fk_journal_entries_created_by` (`created_by`),
-  ADD KEY `fk_journal_entries_posted_by` (`posted_by`);
+  ADD KEY `fk_journal_entries_posted_by` (`posted_by`),
+  ADD KEY `idx_journal_entries_org_date_bu` (`organization_id`,`entry_date`,`business_unit_id`,`status_code`);
 
 --
 -- Indexes for table `journal_lines`
@@ -5340,8 +5411,8 @@ ALTER TABLE `supplier_invoices`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_supplier_invoice` (`supplier_party_id`,`supplier_invoice_number`),
   ADD KEY `idx_supplier_invoices_due` (`status_code`,`due_date`),
-  ADD KEY `fk_supplier_invoices_bu` (`business_unit_id`),
-  ADD KEY `fk_supplier_invoices_po` (`purchase_order_id`);
+  ADD KEY `fk_supplier_invoices_po` (`purchase_order_id`),
+  ADD KEY `idx_supplier_invoices_bu_status_due` (`business_unit_id`,`status_code`,`due_date`);
 
 --
 -- Indexes for table `system_settings`
@@ -5389,9 +5460,9 @@ ALTER TABLE `transaction_categories`
 ALTER TABLE `treasury_accounts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `account_code` (`account_code`),
-  ADD KEY `fk_treasury_accounts_org` (`organization_id`),
   ADD KEY `fk_treasury_accounts_bu` (`business_unit_id`),
-  ADD KEY `fk_treasury_accounts_coa` (`coa_account_id`);
+  ADD KEY `fk_treasury_accounts_coa` (`coa_account_id`),
+  ADD KEY `idx_treasury_org_bu_active_currency` (`organization_id`,`business_unit_id`,`is_active`,`currency_code`);
 
 --
 -- Indexes for table `units_of_measure`
@@ -5494,7 +5565,7 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1429;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1523;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
@@ -5530,7 +5601,7 @@ ALTER TABLE `business_units`
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `channel_product_mappings`
@@ -5740,7 +5811,7 @@ ALTER TABLE `material_waste`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1675;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1707;
 
 --
 -- AUTO_INCREMENT for table `order_attachments`
@@ -5794,7 +5865,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -5998,7 +6069,7 @@ ALTER TABLE `report_exports`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `sales_channels`
@@ -6070,13 +6141,13 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `transaction_categories`
 --
 ALTER TABLE `transaction_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `treasury_accounts`
@@ -6094,7 +6165,7 @@ ALTER TABLE `units_of_measure`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
 
 --
 -- AUTO_INCREMENT for table `user_deletion_requests`
@@ -6106,7 +6177,7 @@ ALTER TABLE `user_deletion_requests`
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `user_reactivation_requests`
@@ -6118,7 +6189,7 @@ ALTER TABLE `user_reactivation_requests`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`

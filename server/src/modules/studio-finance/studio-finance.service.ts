@@ -4,6 +4,7 @@ import { AppError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
 import { documentRegistryService } from '../../shared/documents/document-registry.service';
 import { FinancePostingService } from '../../shared/finance/finance-posting.service';
+import { jakartaBusinessDate } from '../../shared/time/jakarta-time';
 import type { StudioExpenseInput, StudioFinanceListFilters } from './studio-finance.types';
 import { financeCode, getStudioFinanceBusinessUnit, money, STUDIO_FINANCE_MODULE, toSqlDateTime, withStudioFinanceTransaction, writeStudioFinanceAudit, publishStudioFinanceEvent } from './studio-finance.shared';
 import type { StudioFinanceContext } from './studio-finance.shared';
@@ -144,7 +145,7 @@ export class StudioFinanceService {
       const [result]: any = await connection.execute(
         `INSERT INTO treasury_accounts (organization_id,business_unit_id,coa_account_id,account_code,name,account_type,provider_name,account_number_masked,currency_code,opening_balance,current_balance)
          VALUES (?,?,?, ?,?,?,?,?,?,?,?)`,
-        [ctx.organizationId,ctx.id,coa,`TMP-${Date.now()}`,data.name,data.account_type,data.provider_name || null,data.account_number_masked || null,data.currency_code.toUpperCase(),data.opening_balance,data.opening_balance],
+        [ctx.organizationId,ctx.id,coa,`TMP-${Date.now()}`,data.name,data.account_type,data.provider_name || null,data.account_number_masked || null,data.currency_code.toUpperCase(),data.opening_balance,0],
       );
       const id=Number(result.insertId), accountCode=financeCode('TRS',id); await connection.execute('UPDATE treasury_accounts SET account_code=? WHERE id=?',[accountCode,id]);
       await this.posting.postTreasuryOpening(connection,ctx,{treasuryAccountId:id,amount:data.opening_balance,date:new Date().toISOString().slice(0,19).replace('T',' '),description:`Saldo awal ${data.name}`},{auditModule:STUDIO_FINANCE_MODULE,auditAction:'studio.finance.treasury_opening',entityCode:accountCode});
@@ -165,8 +166,9 @@ export class StudioFinanceService {
   }
 
   private async journalTransfer(connection: PoolConnection, ctx: StudioFinanceContext, data: { date: string; description: string; amount: number; from: any; to: any; transferId: number; }) {
-    const [periods]: any = await connection.execute(`SELECT id,status_code FROM financial_periods WHERE organization_id=? AND ? BETWEEN start_date AND end_date ORDER BY start_date DESC LIMIT 1 FOR UPDATE`,[ctx.organizationId,String(data.date).slice(0,10)]);
+    const [periods]: any = await connection.execute(`SELECT id,status_code FROM financial_periods WHERE organization_id=? AND ? BETWEEN start_date AND end_date ORDER BY start_date DESC LIMIT 1 FOR UPDATE`,[ctx.organizationId,jakartaBusinessDate(data.date)]);
     if (periods.length && periods[0].status_code === 'closed') throw new AppError(409,'FINANCIAL_PERIOD_CLOSED','Tanggal transfer berada pada periode yang telah ditutup.');
+    if (periods.length && periods[0].status_code === 'locked') throw new AppError(409,'FINANCIAL_PERIOD_LOCKED','Tanggal transfer berada pada periode yang dikunci.');
     if (!data.from.coa_account_id || !data.to.coa_account_id) return null;
     const [entry]: any = await connection.execute(`INSERT INTO journal_entries (organization_id,business_unit_id,financial_period_id,journal_number,entry_date,description,source_type,source_id,status_code,created_by,posted_by,posted_at) VALUES (?,?,?, ?,?,?,'internal_transfer',?,'posted',?,?,UTC_TIMESTAMP())`,[ctx.organizationId,ctx.id,periods[0]?.id || null,`TMP-${Date.now()}`,data.date,data.description,data.transferId,ctx.userId,ctx.userId]);
     const journalId=Number(entry.insertId); await connection.execute('UPDATE journal_entries SET journal_number=? WHERE id=?',[financeCode('JRN',journalId),journalId]);

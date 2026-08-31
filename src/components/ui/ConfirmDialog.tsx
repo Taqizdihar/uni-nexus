@@ -47,21 +47,21 @@ export function ConfirmDialog({
         return {
           iconColor: 'text-red-600',
           iconBg: 'bg-red-100',
-          confirmBtnVariant: 'destructive' as const,
+          confirmBtnVariant: 'primary' as const,
           DefaultIcon: Trash2,
         };
       case 'warning':
         return {
           iconColor: 'text-orange-600',
           iconBg: 'bg-orange-100',
-          confirmBtnVariant: 'default' as const, // Might need custom style if button doesn't support warning
+          confirmBtnVariant: 'primary' as const,
           DefaultIcon: AlertTriangle,
         };
       default:
         return {
           iconColor: 'text-[var(--nexus-yellow-deep)]',
           iconBg: 'bg-[var(--nexus-yellow)]/20',
-          confirmBtnVariant: 'default' as const,
+          confirmBtnVariant: 'primary' as const,
           DefaultIcon: AlertCircle,
         };
     }

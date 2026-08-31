@@ -33,6 +33,7 @@ import auditRoutes from '../modules/audit/audit.routes';
 import { documentsRoutes } from '../modules/documents/documents.routes';
 import { calendarRoutes } from '../modules/calendar/calendar.routes';
 import { tasksRoutes } from '../modules/tasks/tasks.routes';
+import { unifiedFinanceRoutes } from '../modules/finance/finance.routes';
 
 const router = Router();
 
@@ -56,6 +57,7 @@ router.use('/audit', auditRoutes);
 router.use('/documents', documentsRoutes);
 router.use('/calendar', calendarRoutes);
 router.use('/tasks', tasksRoutes);
+router.use('/finance', unifiedFinanceRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

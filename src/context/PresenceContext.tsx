@@ -29,7 +29,7 @@ export function PresenceProvider({ children }: { children: React.ReactNode }) {
   const heartbeat = async () => {
     if (!running) return;
     try {
-      const result = await presenceApi.heartbeat(key.current || (key.current = sessionKey()), activeWorkspace);
+      const result = await presenceApi.heartbeat(key.current || (key.current = sessionKey()), activeWorkspace as 'craft' | 'studio');
       setSnapshot(result);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) setSnapshot(empty);

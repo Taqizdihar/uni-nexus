@@ -381,7 +381,7 @@ const studioNav: NavGroup[] = [
 const globalToolsNav: NavGroup = {
   label: "FITUR GLOBAL",
   items: [
-    { name: "Keuangan Terpadu", icon: Wallet, path: "/app/finance" },
+    { name: "Keuangan Terpadu", icon: Wallet, path: "/app/finance", permission: "finance.read" },
     { name: "Pusat Dokumen", icon: FileArchive, path: "/app/documents", permission: "documents.read" },
     { name: "Kalender & Tugas", icon: Calendar, path: "/app/calendar", permission: "calendar.read" },
     { name: "Notifikasi", icon: Bell, path: "/app/notifications" },

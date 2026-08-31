@@ -27,7 +27,7 @@ export function FinanceOverviewPage() {
   const [data, setData] = useState<Awaited<ReturnType<typeof studioFinanceApi.overview>>>();
   const [error, setError] = useState('');
   const load = () => { setError(''); studioFinanceApi.overview().then(setData).catch((e: Error) => setError(e.message)); };
-  useEffect(load, []);
+  useEffect(() => { void load(); }, []);
   if (error) return <ErrorPanel message={error} retry={load} />;
   if (!data) return <Loading />;
   const cards = [
@@ -41,14 +41,14 @@ export function FinanceOverviewPage() {
 
 export function TransactionsPage() {
   const [data, setData] = useState<Paginated<FinanceTransaction>>(); const [error, setError] = useState('');
-  const load = () => { setError(''); studioFinanceApi.transactions().then(setData).catch((e: Error) => setError(e.message)); }; useEffect(load, []);
+  const load = () => { setError(''); studioFinanceApi.transactions().then(setData).catch((e: Error) => setError(e.message)); }; useEffect(() => { void load(); }, []);
   if (error) return <ErrorPanel message={error} retry={load} />; if (!data) return <Loading />;
   return <div className="mx-auto max-w-7xl space-y-6 pb-12"><PageHeader title="Transaksi" description="Riwayat transaksi posted Studio. Riwayat ini tidak dapat dihapus." ><Button variant="outline" onClick={load}><RefreshCw className="h-4 w-4" /> Muat ulang</Button></PageHeader><Card><CardContent className="overflow-x-auto p-0"><table className="w-full min-w-[800px] text-sm"><thead className="bg-[var(--nexus-cream-soft)] text-left text-xs uppercase text-[var(--nexus-muted)]"><tr><th className="p-4">Kode / Tanggal</th><th>Jenis</th><th>Kategori</th><th>Kas</th><th>Pihak</th><th className="text-right">Jumlah</th></tr></thead><tbody>{data.items.map(row => <tr className="border-t" key={row.id}><td className="p-4 font-medium">{row.transaction_code}<div className="mt-1 text-xs font-normal text-[var(--nexus-muted)]">{date(row.transaction_date)} · {row.description}</div></td><td><Status value={row.transaction_type} /></td><td>{row.category_name || 'Penyesuaian'}</td><td>{row.treasury_name || '—'}</td><td>{row.party_name || '—'}</td><td className={`text-right font-semibold ${amountClass(row.transaction_type)}`}>{row.transaction_type === 'income' ? '+' : row.transaction_type === 'expense' ? '-' : ''}{money(row.amount)}</td></tr>)}</tbody></table>{!data.items.length && <div className="p-8 text-sm text-[var(--nexus-muted)]">Belum ada transaksi Studio.</div>}</CardContent></Card></div>;
 }
 
 export function TreasuryPage() {
   const mayWrite = useWritePermission(); const [accounts, setAccounts] = useState<TreasuryAccount[]>(); const [refs, setRefs] = useState<FinanceReferences>(); const [error, setError] = useState(''); const [showCreate, setShowCreate] = useState(false); const [showTransfer, setShowTransfer] = useState(false);
-  const load = () => { setError(''); Promise.all([studioFinanceApi.treasury(), studioFinanceApi.references()]).then(([a, r]) => { setAccounts(a); setRefs(r); }).catch((e: Error) => setError(e.message)); }; useEffect(load, []);
+  const load = () => { setError(''); Promise.all([studioFinanceApi.treasury(), studioFinanceApi.references()]).then(([a, r]) => { setAccounts(a); setRefs(r); }).catch((e: Error) => setError(e.message)); }; useEffect(() => { void load(); }, []);
   if (error) return <ErrorPanel message={error} retry={load} />; if (!accounts || !refs) return <Loading />;
   return <div className="mx-auto max-w-7xl space-y-6 pb-12"><PageHeader title="Kas & Bank" description="Saldo kas Studio berasal dari posting keuangan yang tercatat.">{mayWrite && <div className="flex gap-2"><Button variant="outline" onClick={() => setShowTransfer(!showTransfer)}><ArrowLeftRight className="h-4 w-4" /> Transfer</Button><Button onClick={() => setShowCreate(!showCreate)}><Plus className="h-4 w-4" /> Akun Kas</Button></div>}</PageHeader>{showCreate && <TreasuryForm done={() => { setShowCreate(false); load(); }} />}{showTransfer && <TransferForm treasuries={accounts} done={() => { setShowTransfer(false); load(); }} />}<Card><CardContent className="overflow-x-auto p-0"><table className="w-full min-w-[800px] text-sm"><thead className="bg-[var(--nexus-cream-soft)] text-left text-xs uppercase text-[var(--nexus-muted)]"><tr><th className="p-4">Akun</th><th>Jenis</th><th>Provider</th><th>Saldo Awal</th><th>Saldo Saat Ini</th><th>Status</th></tr></thead><tbody>{accounts.map(account => <tr className="border-t" key={account.id}><td className="p-4 font-medium">{account.account_code} · {account.name}<div className="text-xs font-normal text-[var(--nexus-muted)]">{account.account_number_masked || '—'} · {account.currency_code}</div></td><td>{account.account_type}</td><td>{account.provider_name || '—'}</td><td>{money(account.opening_balance)}</td><td className="font-semibold">{money(account.current_balance)}</td><td><Status value={account.is_active ? 'active' : 'inactive'} /></td></tr>)}</tbody></table>{!accounts.length && <div className="p-8 text-sm text-[var(--nexus-muted)]">Belum ada akun kas Studio.</div>}</CardContent></Card></div>;
 }
