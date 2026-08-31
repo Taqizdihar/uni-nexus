@@ -395,7 +395,7 @@ const globalToolsNav: NavGroup = {
     { name: "Integrasi", icon: Network, path: "/app/integrations" },
     { name: "Pusat Otomasi", icon: Zap, path: "/app/automations" },
     { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports" },
-    { name: "Data Master", icon: Database, path: "/app/master-data" },
+    { name: "Data Master", icon: Database, path: "/app/master-data", permission: "master_data.read" },
     { name: "Pengaturan", icon: Settings, path: "/app/settings" },
   ],
 };

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 31, 2026 at 05:04 AM
+-- Generation Time: Aug 31, 2026 at 08:12 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -174,133 +174,17 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (391, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 23:04:45.343'),
 (392, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 23:10:47.598'),
 (393, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-27 23:37:04.433'),
-(394, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 2, 'TRS-000002', 'Saldo awal Bank Finance 0145C79A', NULL, NULL, NULL, NULL, '2026-08-27 23:52:56.539'),
-(395, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 2, 'TRS-000002', 'Membuat akun kas Studio TRS-000002.', NULL, '{\"name\": \"Bank Finance 0145C79A\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-27 23:52:56.541'),
-(396, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 3, 'TRS-000003', 'Saldo awal Kas Finance 0145C79A', NULL, NULL, NULL, NULL, '2026-08-27 23:52:56.553'),
-(397, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 3, 'TRS-000003', 'Membuat akun kas Studio TRS-000003.', NULL, '{\"name\": \"Kas Finance 0145C79A\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-27 23:52:56.554'),
-(398, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 1, 'TRF-000001', 'Transfer TRF-000001 antar kas Studio.', NULL, '{\"to\": 3, \"from\": 2, \"amount\": 1000000}', NULL, NULL, '2026-08-27 23:52:56.583'),
-(399, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 4, 'PAY-000004', 'Mencatat pembayaran pelanggan PAY-000004.', NULL, NULL, NULL, NULL, '2026-08-27 23:52:56.643'),
-(400, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 3, 'EXP-000003', 'Membuat pengeluaran EXP-000003.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-27 23:52:56.671'),
-(401, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 3, 'EXP-000003', 'Menyetujui pengeluaran EXP-000003.', NULL, NULL, NULL, NULL, '2026-08-27 23:52:56.681'),
-(402, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 4, 'TRS-000004', 'Saldo awal Bank Finance 033BB4D3', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.719'),
-(403, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 4, 'TRS-000004', 'Membuat akun kas Studio TRS-000004.', NULL, '{\"name\": \"Bank Finance 033BB4D3\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-27 23:53:21.721'),
-(404, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 5, 'TRS-000005', 'Saldo awal Kas Finance 033BB4D3', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.738'),
-(405, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 5, 'TRS-000005', 'Membuat akun kas Studio TRS-000005.', NULL, '{\"name\": \"Kas Finance 033BB4D3\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-27 23:53:21.739'),
-(406, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 2, 'TRF-000002', 'Transfer TRF-000002 antar kas Studio.', NULL, '{\"to\": 5, \"from\": 4, \"amount\": 1000000}', NULL, NULL, '2026-08-27 23:53:21.766'),
-(407, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 5, 'PAY-000005', 'Mencatat pembayaran pelanggan PAY-000005.', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.837'),
-(408, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 4, 'EXP-000004', 'Membuat pengeluaran EXP-000004.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-27 23:53:21.869'),
-(409, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 4, 'EXP-000004', 'Menyetujui pengeluaran EXP-000004.', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.879'),
-(410, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 4, 'EXP-000004', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.899'),
-(411, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 4, 'EXP-000004', 'Membayar pengeluaran EXP-000004.', NULL, '{\"total\": 300000, \"transaction_id\": 7}', NULL, NULL, '2026-08-27 23:53:21.905'),
-(412, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 5, 'EXP-000005', 'Payout Editor FIN-SMK-033BB4D3', NULL, NULL, NULL, NULL, '2026-08-27 23:53:21.945'),
-(413, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 5, 'EXP-000005', 'Membayar pengeluaran EXP-000005.', NULL, '{\"total\": 1000000, \"transaction_id\": 8}', NULL, NULL, '2026-08-27 23:53:21.949'),
-(414, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 7, 'ASSIGN-7', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-27 23:53:21.952'),
-(415, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 1, 'BDG-000001', 'Membuat anggaran BDG-000001.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-27 23:53:21.974'),
-(416, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 6, 'TRS-000006', 'Saldo awal Bank Finance 5B8CBF8C', NULL, NULL, NULL, NULL, '2026-08-27 23:54:08.978'),
-(417, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 6, 'TRS-000006', 'Membuat akun kas Studio TRS-000006.', NULL, '{\"name\": \"Bank Finance 5B8CBF8C\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-27 23:54:08.980'),
-(418, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 7, 'TRS-000007', 'Saldo awal Kas Finance 5B8CBF8C', NULL, NULL, NULL, NULL, '2026-08-27 23:54:08.995'),
-(419, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 7, 'TRS-000007', 'Membuat akun kas Studio TRS-000007.', NULL, '{\"name\": \"Kas Finance 5B8CBF8C\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-27 23:54:08.996'),
-(420, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 3, 'TRF-000003', 'Transfer TRF-000003 antar kas Studio.', NULL, '{\"to\": 7, \"from\": 6, \"amount\": 1000000}', NULL, NULL, '2026-08-27 23:54:09.025'),
-(421, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 6, 'PAY-000006', 'Mencatat pembayaran pelanggan PAY-000006.', NULL, NULL, NULL, NULL, '2026-08-27 23:54:09.095'),
-(422, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 6, 'EXP-000006', 'Membuat pengeluaran EXP-000006.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-27 23:54:09.129'),
-(423, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 6, 'EXP-000006', 'Menyetujui pengeluaran EXP-000006.', NULL, NULL, NULL, NULL, '2026-08-27 23:54:09.138'),
-(424, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 6, 'EXP-000006', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-27 23:54:09.159'),
-(425, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 6, 'EXP-000006', 'Membayar pengeluaran EXP-000006.', NULL, '{\"total\": 300000, \"transaction_id\": 12}', NULL, NULL, '2026-08-27 23:54:09.165'),
-(426, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 7, 'EXP-000007', 'Payout Editor FIN-SMK-5B8CBF8C', NULL, NULL, NULL, NULL, '2026-08-27 23:54:09.195'),
-(427, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 7, 'EXP-000007', 'Membayar pengeluaran EXP-000007.', NULL, '{\"total\": 1000000, \"transaction_id\": 13}', NULL, NULL, '2026-08-27 23:54:09.199'),
-(428, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 8, 'ASSIGN-8', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-27 23:54:09.201'),
-(429, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 2, 'BDG-000002', 'Membuat anggaran BDG-000002.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-27 23:54:09.214'),
-(430, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 8, 'TRS-000008', 'Saldo awal Bank Finance 3138D168', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.358'),
-(431, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 8, 'TRS-000008', 'Membuat akun kas Studio TRS-000008.', NULL, '{\"name\": \"Bank Finance 3138D168\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 00:03:41.360'),
-(432, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 9, 'TRS-000009', 'Saldo awal Kas Finance 3138D168', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.371'),
-(433, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 9, 'TRS-000009', 'Membuat akun kas Studio TRS-000009.', NULL, '{\"name\": \"Kas Finance 3138D168\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 00:03:41.372'),
-(434, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 4, 'TRF-000004', 'Transfer TRF-000004 antar kas Studio.', NULL, '{\"to\": 9, \"from\": 8, \"amount\": 1000000}', NULL, NULL, '2026-08-28 00:03:41.392'),
-(435, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 7, 'PAY-000007', 'Mencatat pembayaran pelanggan PAY-000007.', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.448'),
-(436, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 8, 'EXP-000008', 'Membuat pengeluaran EXP-000008.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 00:03:41.472'),
-(437, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 8, 'EXP-000008', 'Menyetujui pengeluaran EXP-000008.', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.482'),
-(438, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 8, 'EXP-000008', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.494'),
-(439, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 8, 'EXP-000008', 'Membayar pengeluaran EXP-000008.', NULL, '{\"total\": 300000, \"transaction_id\": 17}', NULL, NULL, '2026-08-28 00:03:41.499'),
-(440, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 8, 'EXP-000008', 'Pembalikan EXP-000008: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.517'),
-(441, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 8, 'EXP-000008', 'Membalik pengeluaran EXP-000008.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 18}', NULL, NULL, '2026-08-28 00:03:41.519'),
-(442, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 9, 'EXP-000009', 'Payout Editor FIN-SMK-3138D168', NULL, NULL, NULL, NULL, '2026-08-28 00:03:41.536'),
-(443, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 9, 'EXP-000009', 'Membayar pengeluaran EXP-000009.', NULL, '{\"total\": 1000000, \"transaction_id\": 19}', NULL, NULL, '2026-08-28 00:03:41.538'),
-(444, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 9, 'ASSIGN-9', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 00:03:41.540'),
-(445, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 3, 'BDG-000003', 'Membuat anggaran BDG-000003.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 00:03:41.551'),
 (446, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 00:09:52.226'),
 (449, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 04:58:45.370'),
 (450, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 07:36:42.288'),
 (451, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 07:36:42.593'),
-(452, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 10, 'TRS-000010', 'Saldo awal Bank Finance 8E18A1F7', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.224'),
-(453, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 10, 'TRS-000010', 'Membuat akun kas Studio TRS-000010.', NULL, '{\"name\": \"Bank Finance 8E18A1F7\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 08:30:53.226'),
-(454, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 11, 'TRS-000011', 'Saldo awal Kas Finance 8E18A1F7', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.237'),
-(455, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 11, 'TRS-000011', 'Membuat akun kas Studio TRS-000011.', NULL, '{\"name\": \"Kas Finance 8E18A1F7\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 08:30:53.238'),
-(456, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 5, 'TRF-000005', 'Transfer TRF-000005 antar kas Studio.', NULL, '{\"to\": 11, \"from\": 10, \"amount\": 1000000}', NULL, NULL, '2026-08-28 08:30:53.258'),
-(457, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 8, 'PAY-000008', 'Mencatat pembayaran pelanggan PAY-000008.', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.310'),
-(458, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 14, 'EXP-000014', 'Membuat pengeluaran EXP-000014.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 08:30:53.340'),
-(459, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 14, 'EXP-000014', 'Menyetujui pengeluaran EXP-000014.', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.353'),
-(460, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 14, 'EXP-000014', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.366'),
-(461, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 14, 'EXP-000014', 'Membayar pengeluaran EXP-000014.', NULL, '{\"total\": 300000, \"transaction_id\": 31}', NULL, NULL, '2026-08-28 08:30:53.370'),
-(462, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 14, 'EXP-000014', 'Pembalikan EXP-000014: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.389'),
-(463, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 14, 'EXP-000014', 'Membalik pengeluaran EXP-000014.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 32}', NULL, NULL, '2026-08-28 08:30:53.392'),
-(464, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 15, 'EXP-000015', 'Payout Editor FIN-SMK-8E18A1F7', NULL, NULL, NULL, NULL, '2026-08-28 08:30:53.411'),
-(465, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 15, 'EXP-000015', 'Membayar pengeluaran EXP-000015.', NULL, '{\"total\": 1000000, \"transaction_id\": 33}', NULL, NULL, '2026-08-28 08:30:53.414'),
-(466, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 14, 'ASSIGN-14', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 08:30:53.416'),
-(467, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 4, 'BDG-000004', 'Membuat anggaran BDG-000004.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 08:30:53.425'),
 (490, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:37:23.824'),
 (491, 1, NULL, 9, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:38:38.039'),
 (492, 1, NULL, 10, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 08:39:38.947'),
 (493, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:16:20.340'),
 (494, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:43:02.501'),
 (495, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 09:49:56.861'),
-(496, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 12, 'TRS-000012', 'Saldo awal Bank Finance EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.624'),
-(497, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 12, 'TRS-000012', 'Membuat akun kas Studio TRS-000012.', NULL, '{\"name\": \"Bank Finance EE20233C\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 10:17:30.626'),
-(498, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 13, 'TRS-000013', 'Saldo awal Kas Finance EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.681'),
-(499, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 13, 'TRS-000013', 'Membuat akun kas Studio TRS-000013.', NULL, '{\"name\": \"Kas Finance EE20233C\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.682'),
-(500, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 6, 'TRF-000006', 'Transfer TRF-000006 antar kas Studio.', NULL, '{\"to\": 13, \"from\": 12, \"amount\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.703'),
-(501, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 10, 'PAY-000010', 'Mencatat pembayaran pelanggan PAY-000010.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.762'),
-(502, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 17, 'EXP-000017', 'Membuat pengeluaran EXP-000017.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 10:17:30.787'),
-(503, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 17, 'EXP-000017', 'Menyetujui pengeluaran EXP-000017.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.796'),
-(504, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 17, 'EXP-000017', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.810'),
-(505, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 17, 'EXP-000017', 'Membayar pengeluaran EXP-000017.', NULL, '{\"total\": 300000, \"transaction_id\": 39}', NULL, NULL, '2026-08-28 10:17:30.814'),
-(506, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 17, 'EXP-000017', 'Pembalikan EXP-000017: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.833'),
-(507, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 17, 'EXP-000017', 'Membalik pengeluaran EXP-000017.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 40}', NULL, NULL, '2026-08-28 10:17:30.837'),
-(508, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 18, 'EXP-000018', 'Payout Editor FIN-SMK-EE20233C', NULL, NULL, NULL, NULL, '2026-08-28 10:17:30.855'),
-(509, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 18, 'EXP-000018', 'Membayar pengeluaran EXP-000018.', NULL, '{\"total\": 1000000, \"transaction_id\": 41}', NULL, NULL, '2026-08-28 10:17:30.859'),
-(510, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 16, 'ASSIGN-16', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 10:17:30.860'),
-(511, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 5, 'BDG-000005', 'Membuat anggaran BDG-000005.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 10:17:30.871'),
-(554, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 14, 'TRS-000014', 'Saldo awal Bank Finance 1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.317'),
-(555, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 14, 'TRS-000014', 'Membuat akun kas Studio TRS-000014.', NULL, '{\"name\": \"Bank Finance 1D15FCB7\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 11:33:46.318'),
-(556, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 15, 'TRS-000015', 'Saldo awal Kas Finance 1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.331'),
-(557, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 15, 'TRS-000015', 'Membuat akun kas Studio TRS-000015.', NULL, '{\"name\": \"Kas Finance 1D15FCB7\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.332'),
-(558, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 7, 'TRF-000007', 'Transfer TRF-000007 antar kas Studio.', NULL, '{\"to\": 15, \"from\": 14, \"amount\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.356'),
-(559, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 13, 'PAY-000013', 'Mencatat pembayaran pelanggan PAY-000013.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.419'),
-(560, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 19, 'EXP-000019', 'Membuat pengeluaran EXP-000019.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 11:33:46.447'),
-(561, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 19, 'EXP-000019', 'Menyetujui pengeluaran EXP-000019.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.454'),
-(562, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 19, 'EXP-000019', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.470'),
-(563, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 19, 'EXP-000019', 'Membayar pengeluaran EXP-000019.', NULL, '{\"total\": 300000, \"transaction_id\": 45}', NULL, NULL, '2026-08-28 11:33:46.474'),
-(564, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 19, 'EXP-000019', 'Pembalikan EXP-000019: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.494'),
-(565, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 19, 'EXP-000019', 'Membalik pengeluaran EXP-000019.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 46}', NULL, NULL, '2026-08-28 11:33:46.497'),
-(566, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 20, 'EXP-000020', 'Payout Editor FIN-SMK-1D15FCB7', NULL, NULL, NULL, NULL, '2026-08-28 11:33:46.517'),
-(567, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 20, 'EXP-000020', 'Membayar pengeluaran EXP-000020.', NULL, '{\"total\": 1000000, \"transaction_id\": 47}', NULL, NULL, '2026-08-28 11:33:46.519'),
-(568, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 17, 'ASSIGN-17', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 11:33:46.521'),
-(569, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 6, 'BDG-000006', 'Membuat anggaran BDG-000006.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 11:33:46.535'),
 (594, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 14:24:33.142'),
-(616, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 16, 'TRS-000016', 'Saldo awal Bank Finance FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.350'),
-(617, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 16, 'TRS-000016', 'Membuat akun kas Studio TRS-000016.', NULL, '{\"name\": \"Bank Finance FECD739D\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-28 15:19:23.352'),
-(618, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 17, 'TRS-000017', 'Saldo awal Kas Finance FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.400'),
-(619, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 17, 'TRS-000017', 'Membuat akun kas Studio TRS-000017.', NULL, '{\"name\": \"Kas Finance FECD739D\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-28 15:19:23.401'),
-(620, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 8, 'TRF-000008', 'Transfer TRF-000008 antar kas Studio.', NULL, '{\"to\": 17, \"from\": 16, \"amount\": 1000000}', NULL, NULL, '2026-08-28 15:19:23.462'),
-(621, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 16, 'PAY-000016', 'Mencatat pembayaran pelanggan PAY-000016.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.574'),
-(622, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 25, 'EXP-000025', 'Membuat pengeluaran EXP-000025.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-28 15:19:23.640'),
-(623, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 25, 'EXP-000025', 'Menyetujui pengeluaran EXP-000025.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.682'),
-(624, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 25, 'EXP-000025', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.787'),
-(625, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 25, 'EXP-000025', 'Membayar pengeluaran EXP-000025.', NULL, '{\"total\": 300000, \"transaction_id\": 59}', NULL, NULL, '2026-08-28 15:19:23.841'),
-(626, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 25, 'EXP-000025', 'Pembalikan EXP-000025: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-28 15:19:23.931'),
-(627, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 25, 'EXP-000025', 'Membalik pengeluaran EXP-000025.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 60}', NULL, NULL, '2026-08-28 15:19:23.935'),
-(628, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 26, 'EXP-000026', 'Payout Editor FIN-SMK-FECD739D', NULL, NULL, NULL, NULL, '2026-08-28 15:19:24.027'),
-(629, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 26, 'EXP-000026', 'Membayar pengeluaran EXP-000026.', NULL, '{\"total\": 1000000, \"transaction_id\": 61}', NULL, NULL, '2026-08-28 15:19:24.031'),
-(630, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 22, 'ASSIGN-22', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-28 15:19:24.033'),
-(631, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 7, 'BDG-000007', 'Membuat anggaran BDG-000007.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-28 15:19:24.097'),
 (633, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:29:09.845'),
 (634, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:37:56.930'),
 (635, 1, NULL, 2, 'auth', 'login', NULL, NULL, NULL, 'User logged in successfully', NULL, NULL, NULL, NULL, '2026-08-28 15:38:11.764'),
@@ -322,40 +206,8 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (827, 1, 2, 2, 'studio_projects', 'studio.project_external_update', 'studio_project', 58, 'SMK-VND-A5C14637', 'Memperbarui penugasan eksternal pada proyek SMK-VND-A5C14637.', '{\"agreed_fee\": 2000000, \"assignment_role\": \"freelancer\"}', '{\"agreed_fee\": 2100000, \"assignment_role\": \"freelancer\"}', NULL, NULL, '2026-08-30 07:03:45.397'),
 (829, 1, 2, 2, 'studio_projects', 'studio.project_external_end', 'studio_project', 58, 'SMK-VND-A5C14637', 'Mengakhiri penugasan eksternal pada proyek SMK-VND-A5C14637.', NULL, '{\"id\": 24, \"end_date\": \"2026-08-02\"}', NULL, NULL, '2026-08-30 07:03:45.409'),
 (833, 1, 2, 2, 'studio_vendors', 'studio.external_party_adopt', 'party', 85, 'CLI-000085', 'Mengadopsi Party CLI-000085 sebagai pihak eksternal Studio.', NULL, '{\"roles\": [\"studio_partner\"], \"contacts\": 0}', NULL, NULL, '2026-08-30 07:03:45.459'),
-(834, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 18, 'TRS-000018', 'Saldo awal Bank Finance EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:52.906'),
-(835, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 18, 'TRS-000018', 'Membuat akun kas Studio TRS-000018.', NULL, '{\"name\": \"Bank Finance EC75455B\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-30 07:03:52.908'),
-(836, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 19, 'TRS-000019', 'Saldo awal Kas Finance EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:52.920'),
-(837, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 19, 'TRS-000019', 'Membuat akun kas Studio TRS-000019.', NULL, '{\"name\": \"Kas Finance EC75455B\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-30 07:03:52.922'),
-(838, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 9, 'TRF-000009', 'Transfer TRF-000009 antar kas Studio.', NULL, '{\"to\": 19, \"from\": 18, \"amount\": 1000000}', NULL, NULL, '2026-08-30 07:03:52.945'),
-(839, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 17, 'PAY-000017', 'Mencatat pembayaran pelanggan PAY-000017.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.015'),
-(840, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 29, 'EXP-000029', 'Membuat pengeluaran EXP-000029.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-30 07:03:53.044'),
-(841, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 29, 'EXP-000029', 'Menyetujui pengeluaran EXP-000029.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.052'),
-(842, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 29, 'EXP-000029', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.067'),
-(843, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 29, 'EXP-000029', 'Membayar pengeluaran EXP-000029.', NULL, '{\"total\": 300000, \"transaction_id\": 67}', NULL, NULL, '2026-08-30 07:03:53.073'),
-(844, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 29, 'EXP-000029', 'Pembalikan EXP-000029: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.095'),
-(845, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 29, 'EXP-000029', 'Membalik pengeluaran EXP-000029.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 68}', NULL, NULL, '2026-08-30 07:03:53.099'),
-(846, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 30, 'EXP-000030', 'Payout Editor FIN-SMK-EC75455B', NULL, NULL, NULL, NULL, '2026-08-30 07:03:53.119'),
-(847, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 30, 'EXP-000030', 'Membayar pengeluaran EXP-000030.', NULL, '{\"total\": 1000000, \"transaction_id\": 69}', NULL, NULL, '2026-08-30 07:03:53.123'),
-(848, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 25, 'ASSIGN-25', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-30 07:03:53.125'),
-(849, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 8, 'BDG-000008', 'Membuat anggaran BDG-000008.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-30 07:03:53.142'),
 (1347, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 01:42:41.336'),
 (1348, 1, NULL, 2, 'auth', 'logout', 'user', 2, 'taqizdihar', 'User logged out explicitly', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:13:42.750'),
-(1363, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 20, 'TRS-000020', 'Saldo awal Bank Finance BC2A2543', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.247'),
-(1364, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 20, 'TRS-000020', 'Membuat akun kas Studio TRS-000020.', NULL, '{\"name\": \"Bank Finance BC2A2543\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-31 02:23:48.249'),
-(1365, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 21, 'TRS-000021', 'Saldo awal Kas Finance BC2A2543', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.263'),
-(1366, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 21, 'TRS-000021', 'Membuat akun kas Studio TRS-000021.', NULL, '{\"name\": \"Kas Finance BC2A2543\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-31 02:23:48.263'),
-(1367, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 10, 'TRF-000010', 'Transfer TRF-000010 antar kas Studio.', NULL, '{\"to\": 21, \"from\": 20, \"amount\": 1000000}', NULL, NULL, '2026-08-31 02:23:48.293'),
-(1368, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 18, 'PAY-000018', 'Mencatat pembayaran pelanggan PAY-000018.', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.359'),
-(1369, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 31, 'EXP-000031', 'Membuat pengeluaran EXP-000031.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-31 02:23:48.388'),
-(1370, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 31, 'EXP-000031', 'Menyetujui pengeluaran EXP-000031.', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.395'),
-(1371, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 31, 'EXP-000031', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.410'),
-(1372, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 31, 'EXP-000031', 'Membayar pengeluaran EXP-000031.', NULL, '{\"total\": 300000, \"transaction_id\": 73}', NULL, NULL, '2026-08-31 02:23:48.414'),
-(1373, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 31, 'EXP-000031', 'Pembalikan EXP-000031: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.446'),
-(1374, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 31, 'EXP-000031', 'Membalik pengeluaran EXP-000031.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 74}', NULL, NULL, '2026-08-31 02:23:48.449'),
-(1375, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 32, 'EXP-000032', 'Payout Editor FIN-SMK-BC2A2543', NULL, NULL, NULL, NULL, '2026-08-31 02:23:48.481'),
-(1376, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 32, 'EXP-000032', 'Membayar pengeluaran EXP-000032.', NULL, '{\"total\": 1000000, \"transaction_id\": 75}', NULL, NULL, '2026-08-31 02:23:48.484'),
-(1377, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 26, 'ASSIGN-26', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 02:23:48.488'),
-(1378, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 9, 'BDG-000009', 'Membuat anggaran BDG-000009.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 02:23:48.505'),
 (1422, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:37:53.707'),
 (1423, 1, NULL, 2, 'auth', 'logout', 'user', 2, 'taqizdihar', 'User logged out explicitly', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:39:54.990'),
 (1424, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:08.890'),
@@ -364,8 +216,7 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (1427, 1, NULL, 3, 'auth', 'logout', 'user', 3, 'apriladzania', 'User logged out explicitly', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:45.946'),
 (1428, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 02:40:51.909'),
 (1485, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 56, 'EVT-000056', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara 8efdc6c3\", \"end_at\": \"2026-08-31 21:05:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:05:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:05:55.065'),
-(1486, 1, 1, 2, 'tasks', 'tasks.create', 'task', 13, 'TSK-000013', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas 8efdc6c3\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:05:55.550');
-INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`, `module_code`, `action_code`, `entity_type`, `entity_id`, `entity_code`, `description`, `old_values`, `new_values`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1486, 1, 1, 2, 'tasks', 'tasks.create', 'task', 13, 'TSK-000013', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas 8efdc6c3\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:05:55.550'),
 (1500, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 64, 'EVT-000064', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara 68df6032\", \"end_at\": \"2026-08-31 21:13:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:13:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:13:37.030'),
 (1501, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 66, 'EVT-000066', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara e42b104a\", \"end_at\": \"2026-08-31 21:14:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:14:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:14:54.657'),
 (1502, 1, 1, 2, 'tasks', 'tasks.create', 'task', 16, 'TSK-000016', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas e42b104a\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:14:55.522'),
@@ -375,7 +226,56 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (1519, 1, 1, 2, 'calendar', 'calendar.event_create', 'calendar_event', 76, 'EVT-000076', 'Membuat acara manual.', NULL, '{\"title\": \"Browser acara b1ae4693\", \"end_at\": \"2026-08-31 21:22:00.000\", \"all_day\": false, \"start_at\": \"2026-08-31 21:22:00.000\", \"attendee_ids\": []}', NULL, NULL, '2026-08-31 04:22:03.985'),
 (1520, 1, 1, 2, 'tasks', 'tasks.create', 'task', 20, 'TSK-000020', 'Membuat tugas manual.', NULL, '{\"title\": \"Browser tugas b1ae4693\", \"assignee_ids\": [], \"priority_code\": \"normal\"}', NULL, NULL, '2026-08-31 04:22:05.122'),
 (1521, 1, 1, 2, 'tasks', 'tasks.status_change', 'task', 16, 'TSK-000016', 'Mengubah status tugas.', '{\"status_code\": \"in_progress\", \"completed_at\": null}', '{\"status_code\": \"in_progress\", \"completed_at\": null}', NULL, NULL, '2026-08-31 04:22:05.616'),
-(1522, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 04:26:13.682');
+(1522, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 04:26:13.682'),
+(1523, 1, NULL, 2, 'auth', 'logout', 'user', 2, 'taqizdihar', 'User logged out explicitly', NULL, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 05:24:41.151'),
+(1747, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 97, 'TRS-000097', 'Saldo awal Bank Finance 1F82D32B', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.145'),
+(1748, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 97, 'TRS-000097', 'Membuat akun kas Studio TRS-000097.', NULL, '{\"name\": \"Bank Finance 1F82D32B\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-31 06:06:35.148'),
+(1749, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 98, 'TRS-000098', 'Saldo awal Kas Finance 1F82D32B', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.165'),
+(1750, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 98, 'TRS-000098', 'Membuat akun kas Studio TRS-000098.', NULL, '{\"name\": \"Kas Finance 1F82D32B\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-31 06:06:35.168'),
+(1751, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 28, 'TRF-000028', 'Transfer TRF-000028 antar kas Studio.', NULL, '{\"to\": 98, \"from\": 97, \"amount\": 1000000}', NULL, NULL, '2026-08-31 06:06:35.199'),
+(1752, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 29, 'PAY-000029', 'Mencatat pembayaran pelanggan PAY-000029.', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.278'),
+(1753, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 41, 'EXP-000041', 'Membuat pengeluaran EXP-000041.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-31 06:06:35.319'),
+(1754, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 41, 'EXP-000041', 'Menyetujui pengeluaran EXP-000041.', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.329'),
+(1755, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 41, 'EXP-000041', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.352'),
+(1756, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 41, 'EXP-000041', 'Membayar pengeluaran EXP-000041.', NULL, '{\"total\": 300000, \"transaction_id\": 162}', NULL, NULL, '2026-08-31 06:06:35.359'),
+(1757, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 41, 'EXP-000041', 'Pembalikan EXP-000041: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.397'),
+(1758, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 41, 'EXP-000041', 'Membalik pengeluaran EXP-000041.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 163}', NULL, NULL, '2026-08-31 06:06:35.403'),
+(1759, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 42, 'EXP-000042', 'Payout Editor FIN-SMK-1F82D32B', NULL, NULL, NULL, NULL, '2026-08-31 06:06:35.435'),
+(1760, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 42, 'EXP-000042', 'Membayar pengeluaran EXP-000042.', NULL, '{\"total\": 1000000, \"transaction_id\": 164}', NULL, NULL, '2026-08-31 06:06:35.440'),
+(1761, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 32, 'ASSIGN-32', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 06:06:35.444'),
+(1762, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 13, 'BDG-000013', 'Membuat anggaran BDG-000013.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 06:06:35.462'),
+(1763, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 103, 'TRS-000103', 'Saldo awal Bank Finance C3353E15', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.226'),
+(1764, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 103, 'TRS-000103', 'Membuat akun kas Studio TRS-000103.', NULL, '{\"name\": \"Bank Finance C3353E15\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-31 06:07:30.228'),
+(1765, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 104, 'TRS-000104', 'Saldo awal Kas Finance C3353E15', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.246'),
+(1766, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 104, 'TRS-000104', 'Membuat akun kas Studio TRS-000104.', NULL, '{\"name\": \"Kas Finance C3353E15\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-31 06:07:30.247'),
+(1767, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 29, 'TRF-000029', 'Transfer TRF-000029 antar kas Studio.', NULL, '{\"to\": 104, \"from\": 103, \"amount\": 1000000}', NULL, NULL, '2026-08-31 06:07:30.276'),
+(1768, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 30, 'PAY-000030', 'Mencatat pembayaran pelanggan PAY-000030.', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.385'),
+(1769, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 43, 'EXP-000043', 'Membuat pengeluaran EXP-000043.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-31 06:07:30.425'),
+(1770, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 43, 'EXP-000043', 'Menyetujui pengeluaran EXP-000043.', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.438'),
+(1771, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 43, 'EXP-000043', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.457'),
+(1772, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 43, 'EXP-000043', 'Membayar pengeluaran EXP-000043.', NULL, '{\"total\": 300000, \"transaction_id\": 168}', NULL, NULL, '2026-08-31 06:07:30.463'),
+(1773, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 43, 'EXP-000043', 'Pembalikan EXP-000043: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.487'),
+(1774, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 43, 'EXP-000043', 'Membalik pengeluaran EXP-000043.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 169}', NULL, NULL, '2026-08-31 06:07:30.493'),
+(1775, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 44, 'EXP-000044', 'Payout Editor FIN-SMK-C3353E15', NULL, NULL, NULL, NULL, '2026-08-31 06:07:30.525'),
+(1776, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 44, 'EXP-000044', 'Membayar pengeluaran EXP-000044.', NULL, '{\"total\": 1000000, \"transaction_id\": 170}', NULL, NULL, '2026-08-31 06:07:30.529'),
+(1777, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 33, 'ASSIGN-33', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 06:07:30.531'),
+(1778, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 14, 'BDG-000014', 'Membuat anggaran BDG-000014.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 06:07:30.546'),
+(1808, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 122, 'TRS-000122', 'Saldo awal Bank Finance 45CC872F', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.205'),
+(1809, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 122, 'TRS-000122', 'Membuat akun kas Studio TRS-000122.', NULL, '{\"name\": \"Bank Finance 45CC872F\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-31 06:18:35.207'),
+(1810, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 123, 'TRS-000123', 'Saldo awal Kas Finance 45CC872F', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.229'),
+(1811, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 123, 'TRS-000123', 'Membuat akun kas Studio TRS-000123.', NULL, '{\"name\": \"Kas Finance 45CC872F\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-31 06:18:35.230'),
+(1812, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 33, 'TRF-000033', 'Transfer TRF-000033 antar kas Studio.', NULL, '{\"to\": 123, \"from\": 122, \"amount\": 1000000}', NULL, NULL, '2026-08-31 06:18:35.258'),
+(1813, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 35, 'PAY-000035', 'Mencatat pembayaran pelanggan PAY-000035.', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.324'),
+(1814, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 45, 'EXP-000045', 'Membuat pengeluaran EXP-000045.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-31 06:18:35.359'),
+(1815, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 45, 'EXP-000045', 'Menyetujui pengeluaran EXP-000045.', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.370'),
+(1816, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 45, 'EXP-000045', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.390'),
+(1817, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 45, 'EXP-000045', 'Membayar pengeluaran EXP-000045.', NULL, '{\"total\": 300000, \"transaction_id\": 192}', NULL, NULL, '2026-08-31 06:18:35.397'),
+(1818, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 45, 'EXP-000045', 'Pembalikan EXP-000045: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.424'),
+(1819, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 45, 'EXP-000045', 'Membalik pengeluaran EXP-000045.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 193}', NULL, NULL, '2026-08-31 06:18:35.429'),
+(1820, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 46, 'EXP-000046', 'Payout Editor FIN-SMK-45CC872F', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.459'),
+(1821, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 46, 'EXP-000046', 'Membayar pengeluaran EXP-000046.', NULL, '{\"total\": 1000000, \"transaction_id\": 194}', NULL, NULL, '2026-08-31 06:18:35.463'),
+(1822, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 34, 'ASSIGN-34', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 06:18:35.536'),
+(1823, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 15, 'BDG-000015', 'Membuat anggaran BDG-000015.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 06:18:35.556');
 
 -- --------------------------------------------------------
 
@@ -796,7 +696,9 @@ CREATE TABLE `documents` (
 --
 
 INSERT INTO `documents` (`id`, `organization_id`, `business_unit_id`, `document_code`, `document_type`, `source_module_code`, `title`, `description`, `file_name`, `storage_path`, `mime_type`, `file_size_bytes`, `checksum_sha256`, `entity_type`, `entity_id`, `entity_code`, `version_no`, `is_template`, `archived_at`, `archived_by`, `uploaded_by`, `created_at`, `updated_at`) VALUES
-(53, 1, 2, 'SRC-studio_analytics-report_export-5', 'report', 'studio_analytics', 'Ringkasan Analitik', 'Ekspor overview (CSV)', 'UNI-NEXUS_Studio_Ringkasan_Analitik_2026-08-01_2026-08-31.csv', 'reports/1539d2c4-d3cf-4705-b871-d38b523800b8.csv', 'text/csv; charset=utf-8', 4806, '0dc9b2119147c7dfa436962d575d737971bd371fb59f9e5bf0c1d618f0851791', 'report_export', 5, 'overview:csv', 1, 0, NULL, NULL, 1, '2026-08-31 09:23:52.499', '2026-08-31 09:23:52.499');
+(53, 1, 2, 'SRC-studio_analytics-report_export-5', 'report', 'studio_analytics', 'Ringkasan Analitik', 'Ekspor overview (CSV)', 'UNI-NEXUS_Studio_Ringkasan_Analitik_2026-08-01_2026-08-31.csv', 'reports/1539d2c4-d3cf-4705-b871-d38b523800b8.csv', 'text/csv; charset=utf-8', 4806, '0dc9b2119147c7dfa436962d575d737971bd371fb59f9e5bf0c1d618f0851791', 'report_export', 5, 'overview:csv', 1, 0, NULL, NULL, 1, '2026-08-31 09:23:52.499', '2026-08-31 09:23:52.499'),
+(69, 1, 2, 'SRC-studio_analytics-report_export-6', 'report', 'studio_analytics', 'Ringkasan Analitik', 'Ekspor overview (CSV)', 'UNI-NEXUS_Studio_Ringkasan_Analitik_2026-08-01_2026-08-31.csv', 'reports/079b6b78-56f9-474f-a217-ea24eb60fce6.csv', 'text/csv; charset=utf-8', 4806, '9e3b380545296a1ef5de5b98e9f031a3f9d4776bda6426923c604507724aa6fa', 'report_export', 6, 'overview:csv', 1, 0, NULL, NULL, 1, '2026-08-31 12:51:14.784', '2026-08-31 12:51:14.784'),
+(75, 1, 2, 'SRC-studio_analytics-report_export-7', 'report', 'studio_analytics', 'Ringkasan Analitik', 'Ekspor overview (CSV)', 'UNI-NEXUS_Studio_Ringkasan_Analitik_2026-08-01_2026-08-31.csv', 'reports/0d96cf8d-cb2c-4e2b-9667-3ad8438c45f1.csv', 'text/csv; charset=utf-8', 4806, '340bbfdf47817f36d6cdc6dc734f3b9bfd39cb23ec6f2e8aa5556ef918b08787', 'report_export', 7, 'overview:csv', 1, 0, NULL, NULL, 1, '2026-08-31 13:19:16.531', '2026-08-31 13:19:16.531');
 
 -- --------------------------------------------------------
 
@@ -870,7 +772,19 @@ INSERT INTO `domain_events` (`id`, `organization_id`, `business_unit_id`, `event
 (327, 1, 2, '5a9095d7-6b62-45b8-a475-873d0ecc75ba', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 9, 'TRF-000009', 2, 'a128f23b-ab10-4183-95d8-e356a9ac6bba', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 9, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000009\"}}}', 'processed', '2026-08-30 07:03:52.947', NULL, NULL, 0, '2026-08-30 07:03:53.215', NULL, '2026-08-30 14:03:52.947'),
 (328, 1, 2, '2104a947-0df7-45b0-b8f7-c6b9bddfc44a', 'studio.finance.payment_received', 'studio_finance', 'payment', 17, 'PAY-17', 2, 'd2eb9470-7d50-40eb-b9ff-a30c819358e0', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 17, \"amount\": 2000000, \"invoice_id\": 57, \"project_id\": 59}}}', 'processed', '2026-08-30 07:03:53.025', NULL, NULL, 0, '2026-08-30 07:03:53.263', NULL, '2026-08-30 14:03:53.025'),
 (332, 1, 2, '0488a617-c52a-473e-8323-8f2a90f7040b', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 10, 'TRF-000010', 2, '9f2475bf-0985-4e67-8a6e-9fdee3ab0fb0', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 10, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000010\"}}}', 'processed', '2026-08-31 02:23:48.294', NULL, NULL, 0, '2026-08-31 02:23:48.444', NULL, '2026-08-31 09:23:48.294'),
-(333, 1, 2, 'e7924958-ddcd-42d7-9d3e-84cda7e2d333', 'studio.finance.payment_received', 'studio_finance', 'payment', 18, 'PAY-18', 2, 'c0847993-c842-4624-98f5-65e033c5f2b0', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 18, \"amount\": 2000000, \"invoice_id\": 58, \"project_id\": 62}}}', 'processed', '2026-08-31 02:23:48.367', NULL, NULL, 0, '2026-08-31 02:23:48.493', NULL, '2026-08-31 09:23:48.367');
+(333, 1, 2, 'e7924958-ddcd-42d7-9d3e-84cda7e2d333', 'studio.finance.payment_received', 'studio_finance', 'payment', 18, 'PAY-18', 2, 'c0847993-c842-4624-98f5-65e033c5f2b0', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 18, \"amount\": 2000000, \"invoice_id\": 58, \"project_id\": 62}}}', 'processed', '2026-08-31 02:23:48.367', NULL, NULL, 0, '2026-08-31 02:23:48.493', NULL, '2026-08-31 09:23:48.367'),
+(362, 1, 2, '2eb45b98-ad0e-4245-9160-a5f9b31c7ef4', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 13, 'TRF-000013', 2, '2ece8fcc-6b02-4947-9e8c-0caf4320e8ac', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 13, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000013\"}}}', 'processed', '2026-08-31 05:43:22.164', NULL, NULL, 0, '2026-08-31 05:43:22.454', NULL, '2026-08-31 12:43:22.164'),
+(363, 1, 2, 'd932e05a-7340-41d1-9839-c49c4c8437aa', 'studio.finance.payment_received', 'studio_finance', 'payment', 21, 'PAY-21', 2, 'cfe604df-7ebf-4232-867d-b9409e65d6dd', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 21, \"amount\": 2000000, \"invoice_id\": 68, \"project_id\": 66}}}', 'processed', '2026-08-31 05:43:22.241', NULL, NULL, 0, '2026-08-31 05:43:22.500', NULL, '2026-08-31 12:43:22.241'),
+(389, 1, 2, '829c5a03-add5-4297-bf8c-f908661b7859', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 17, 'TRF-000017', 2, '6f25a98a-76b3-4825-90e7-a0c2620cf627', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 17, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000017\"}}}', 'processed', '2026-08-31 05:54:07.978', NULL, NULL, 0, '2026-08-31 05:54:08.033', NULL, '2026-08-31 12:54:07.978'),
+(390, 1, 2, '12b3a3ec-1333-4f3b-b1de-e2b8a63808c6', 'studio.finance.payment_received', 'studio_finance', 'payment', 23, 'PAY-23', 2, '5a8a4c89-a005-4618-a09a-136837c9bd97', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 23, \"amount\": 2000000, \"invoice_id\": 74, \"project_id\": 71}}}', 'processed', '2026-08-31 05:54:08.051', NULL, NULL, 0, '2026-08-31 05:54:08.114', NULL, '2026-08-31 12:54:08.051'),
+(391, 1, 2, 'c24a5b41-f92c-4711-89f0-f093c1c50c2c', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 21, 'TRF-000021', 2, 'e78b4107-60ad-46ad-b7ce-08bd30cf557c', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 21, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000021\"}}}', 'processed', '2026-08-31 05:54:45.694', NULL, NULL, 0, '2026-08-31 05:54:45.752', NULL, '2026-08-31 12:54:45.694'),
+(392, 1, 2, '4fe12639-3648-4d93-b852-5bed5fb4397c', 'studio.finance.payment_received', 'studio_finance', 'payment', 24, 'PAY-24', 2, 'aef4e10f-1e07-4c98-82cc-1ebb9c71902c', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 24, \"amount\": 2000000, \"invoice_id\": 75, \"project_id\": 72}}}', 'processed', '2026-08-31 05:54:45.780', NULL, NULL, 0, '2026-08-31 05:54:46.903', NULL, '2026-08-31 12:54:45.780'),
+(393, 1, 2, '1e990e43-1dda-4b0b-b2f6-6fcd47e47b3f', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 28, 'TRF-000028', 2, '29821d3d-1e90-4e4c-a0de-cbb0ed406e5f', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 28, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000028\"}}}', 'processed', '2026-08-31 06:06:35.203', NULL, NULL, 0, '2026-08-31 06:06:35.412', NULL, '2026-08-31 13:06:35.203'),
+(394, 1, 2, '50932c1b-c2a5-4d91-8783-08c6a02b9d2b', 'studio.finance.payment_received', 'studio_finance', 'payment', 29, 'PAY-29', 2, 'e99726b0-2eed-4380-8c94-0a11bda304bb', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 29, \"amount\": 2000000, \"invoice_id\": 78, \"project_id\": 73}}}', 'processed', '2026-08-31 06:06:35.293', NULL, NULL, 0, '2026-08-31 06:06:35.482', NULL, '2026-08-31 13:06:35.293'),
+(395, 1, 2, '2e80c4f2-63f5-407a-a6d1-6b912ef89aa4', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 29, 'TRF-000029', 2, 'cfcd5808-88de-4338-8fcc-481c10c161e7', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 29, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000029\"}}}', 'processed', '2026-08-31 06:07:30.278', NULL, NULL, 0, '2026-08-31 06:07:30.703', NULL, '2026-08-31 13:07:30.278'),
+(396, 1, 2, '210e48a2-0c08-4e3e-94ab-20a8b35fae37', 'studio.finance.payment_received', 'studio_finance', 'payment', 30, 'PAY-30', 2, 'f5ad2216-9d54-43a0-82a9-2884ecc270a5', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 30, \"amount\": 2000000, \"invoice_id\": 79, \"project_id\": 74}}}', 'processed', '2026-08-31 06:07:30.397', NULL, NULL, 0, '2026-08-31 06:07:30.778', NULL, '2026-08-31 13:07:30.397'),
+(397, 1, 2, 'f73cfac2-caf5-4f04-bb96-31188b33dcfe', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 33, 'TRF-000033', 2, '0315a63b-2200-4094-a26a-0937e8f62492', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 33, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000033\"}}}', 'processed', '2026-08-31 06:18:35.260', NULL, NULL, 0, '2026-08-31 06:18:35.783', NULL, '2026-08-31 13:18:35.260'),
+(398, 1, 2, 'd9bece8a-8687-4c52-bb3a-c046fca819b0', 'studio.finance.payment_received', 'studio_finance', 'payment', 35, 'PAY-35', 2, '4bf2ea6d-1632-4d72-a3fb-71c5763e674b', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 35, \"amount\": 2000000, \"invoice_id\": 82, \"project_id\": 75}}}', 'processed', '2026-08-31 06:18:35.336', NULL, NULL, 0, '2026-08-31 06:18:36.030', NULL, '2026-08-31 13:18:35.336');
 
 -- --------------------------------------------------------
 
@@ -2303,7 +2217,137 @@ INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_
 (1671, 1, 2, 4, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000038', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 38, 'system:event:338:policy:studio-quotation-accepted:user:4', 0, NULL, '2026-08-31 02:24:14.975'),
 (1672, 1, 2, 2, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000040', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 40, 'system:event:352:policy:studio-quotation-accepted:user:2', 0, NULL, '2026-08-31 02:36:44.125'),
 (1673, 1, 2, 3, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000040', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 40, 'system:event:352:policy:studio-quotation-accepted:user:3', 0, NULL, '2026-08-31 02:36:44.129'),
-(1674, 1, 2, 4, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000040', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 40, 'system:event:352:policy:studio-quotation-accepted:user:4', 0, NULL, '2026-08-31 02:36:44.135');
+(1674, 1, 2, 4, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000040', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 40, 'system:event:352:policy:studio-quotation-accepted:user:4', 0, NULL, '2026-08-31 02:36:44.135'),
+(1707, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 05:43:22.464'),
+(1708, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 05:43:22.469'),
+(1709, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 05:43:22.473'),
+(1710, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 05:43:22.477'),
+(1711, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 05:43:22.482'),
+(1712, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 05:43:22.485'),
+(1713, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 05:43:22.489'),
+(1714, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 05:43:22.492'),
+(1715, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 21, 'system:event:363:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 05:43:22.496'),
+(1720, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.480'),
+(1721, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.489'),
+(1722, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.493'),
+(1723, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.498'),
+(1724, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.506'),
+(1725, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.510'),
+(1726, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.515'),
+(1727, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.521'),
+(1728, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 45baa829-e', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 05:51:16.526'),
+(1731, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:2', 0, NULL, '2026-08-31 05:51:16.553'),
+(1732, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:3', 0, NULL, '2026-08-31 05:51:16.558'),
+(1733, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:4', 0, NULL, '2026-08-31 05:51:16.562'),
+(1734, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:5', 0, NULL, '2026-08-31 05:51:16.566'),
+(1735, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:6', 0, NULL, '2026-08-31 05:51:16.570'),
+(1736, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:7', 0, NULL, '2026-08-31 05:51:16.574'),
+(1737, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:8', 0, NULL, '2026-08-31 05:51:16.578'),
+(1738, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:9', 0, NULL, '2026-08-31 05:51:16.583'),
+(1739, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 45baa829-e', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9040274:policy:smoke-order-created:user:10', 0, NULL, '2026-08-31 05:51:16.588'),
+(1751, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:2', 0, NULL, '2026-08-31 05:51:16.671'),
+(1752, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:3', 0, NULL, '2026-08-31 05:51:16.675'),
+(1753, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:4', 0, NULL, '2026-08-31 05:51:16.679'),
+(1754, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:5', 0, NULL, '2026-08-31 05:51:16.684'),
+(1755, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:6', 0, NULL, '2026-08-31 05:51:16.689'),
+(1756, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:7', 0, NULL, '2026-08-31 05:51:16.694'),
+(1757, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:8', 0, NULL, '2026-08-31 05:51:16.700'),
+(1758, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:9', 0, NULL, '2026-08-31 05:51:16.704'),
+(1759, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-45baa829-e', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9040275:policy:craft-order-created:user:10', 0, NULL, '2026-08-31 05:51:16.708'),
+(1771, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:2', 0, NULL, '2026-08-31 05:51:16.761'),
+(1772, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:3', 0, NULL, '2026-08-31 05:51:16.765'),
+(1773, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:4', 0, NULL, '2026-08-31 05:51:16.769'),
+(1774, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:5', 0, NULL, '2026-08-31 05:51:16.773'),
+(1775, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:6', 0, NULL, '2026-08-31 05:51:16.776'),
+(1776, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:7', 0, NULL, '2026-08-31 05:51:16.781'),
+(1777, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:8', 0, NULL, '2026-08-31 05:51:16.784'),
+(1778, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:9', 0, NULL, '2026-08-31 05:51:16.790'),
+(1779, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 45baa829-e', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8064655:action:0:user:10', 0, NULL, '2026-08-31 05:51:16.797'),
+(1836, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 05:54:08.072'),
+(1837, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 05:54:08.077'),
+(1838, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 05:54:08.081'),
+(1839, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 05:54:08.085'),
+(1840, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 05:54:08.089'),
+(1841, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 05:54:08.092'),
+(1842, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 05:54:08.095'),
+(1843, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 05:54:08.104'),
+(1844, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 23, 'system:event:390:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 05:54:08.108'),
+(1845, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 05:54:46.862'),
+(1846, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 05:54:46.866'),
+(1847, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 05:54:46.869'),
+(1848, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 05:54:46.874'),
+(1849, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 05:54:46.882');
+INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_id`, `notification_type`, `module_code`, `severity_code`, `title`, `message`, `action_url`, `entity_type`, `entity_id`, `dedupe_key`, `is_read`, `read_at`, `created_at`) VALUES
+(1850, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 05:54:46.886'),
+(1851, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 05:54:46.892'),
+(1852, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 05:54:46.896'),
+(1853, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 24, 'system:event:392:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 05:54:46.899'),
+(1854, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 06:06:35.425'),
+(1855, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 06:06:35.430'),
+(1856, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 06:06:35.435'),
+(1857, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 06:06:35.439'),
+(1858, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 06:06:35.445'),
+(1859, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 06:06:35.463'),
+(1860, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 06:06:35.468'),
+(1861, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 06:06:35.472'),
+(1862, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 29, 'system:event:394:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 06:06:35.478'),
+(1863, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 06:07:30.710'),
+(1864, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 06:07:30.714'),
+(1865, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 06:07:30.717'),
+(1866, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 06:07:30.721'),
+(1867, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 06:07:30.725'),
+(1868, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 06:07:30.744'),
+(1869, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 06:07:30.755'),
+(1870, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 06:07:30.764'),
+(1871, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 30, 'system:event:396:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 06:07:30.775'),
+(1872, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 06:18:35.849'),
+(1873, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 06:18:35.879'),
+(1874, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 06:18:35.930'),
+(1875, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 06:18:35.953'),
+(1876, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 06:18:35.997'),
+(1877, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 06:18:36.003'),
+(1878, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 06:18:36.009'),
+(1879, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 06:18:36.017'),
+(1880, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 35, 'system:event:398:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 06:18:36.022'),
+(1881, 1, 2, 2, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000045', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 45, 'system:event:403:policy:studio-quotation-accepted:user:2', 0, NULL, '2026-08-31 06:18:54.528'),
+(1882, 1, 2, 3, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000045', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 45, 'system:event:403:policy:studio-quotation-accepted:user:3', 0, NULL, '2026-08-31 06:18:54.625'),
+(1883, 1, 2, 4, 'system', 'studio_billing', 'success', 'Penawaran diterima: QTN-000045', 'Klien telah menerima penawaran Studio.', '/app/studio/billing/quotations', 'quotation', 45, 'system:event:403:policy:studio-quotation-accepted:user:4', 0, NULL, '2026-08-31 06:18:54.793'),
+(1888, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:03.749'),
+(1889, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:03.807'),
+(1890, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:03.882'),
+(1891, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:03.970'),
+(1892, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:04.075'),
+(1893, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:04.179'),
+(1894, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:04.382'),
+(1895, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:04.847'),
+(1896, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 5688f533-c', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 06:19:04.884'),
+(1899, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:2', 0, NULL, '2026-08-31 06:19:04.949'),
+(1900, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:3', 0, NULL, '2026-08-31 06:19:04.960'),
+(1901, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:4', 0, NULL, '2026-08-31 06:19:04.966'),
+(1902, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:5', 0, NULL, '2026-08-31 06:19:04.970'),
+(1903, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:6', 0, NULL, '2026-08-31 06:19:04.974'),
+(1904, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:7', 0, NULL, '2026-08-31 06:19:04.978'),
+(1905, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:8', 0, NULL, '2026-08-31 06:19:04.982'),
+(1906, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:9', 0, NULL, '2026-08-31 06:19:04.985'),
+(1907, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 5688f533-c', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9045781:policy:smoke-order-created:user:10', 0, NULL, '2026-08-31 06:19:04.992'),
+(1919, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:2', 0, NULL, '2026-08-31 06:19:05.124'),
+(1920, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:3', 0, NULL, '2026-08-31 06:19:05.147'),
+(1921, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:4', 0, NULL, '2026-08-31 06:19:05.151'),
+(1922, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:5', 0, NULL, '2026-08-31 06:19:05.156'),
+(1923, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:6', 0, NULL, '2026-08-31 06:19:05.160'),
+(1924, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:7', 0, NULL, '2026-08-31 06:19:05.164'),
+(1925, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:8', 0, NULL, '2026-08-31 06:19:05.169'),
+(1926, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:9', 0, NULL, '2026-08-31 06:19:05.174'),
+(1927, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-5688f533-c', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9045782:policy:craft-order-created:user:10', 0, NULL, '2026-08-31 06:19:05.178'),
+(1939, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:2', 0, NULL, '2026-08-31 06:19:05.283'),
+(1940, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:3', 0, NULL, '2026-08-31 06:19:05.287'),
+(1941, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:4', 0, NULL, '2026-08-31 06:19:05.291'),
+(1942, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:5', 0, NULL, '2026-08-31 06:19:05.294'),
+(1943, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:6', 0, NULL, '2026-08-31 06:19:05.298'),
+(1944, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:7', 0, NULL, '2026-08-31 06:19:05.302'),
+(1945, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:8', 0, NULL, '2026-08-31 06:19:05.306'),
+(1946, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:9', 0, NULL, '2026-08-31 06:19:05.310'),
+(1947, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:10', 0, NULL, '2026-08-31 06:19:05.314');
 
 -- --------------------------------------------------------
 
@@ -2594,7 +2638,9 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (60, 'finance.read', 'finance', 'Lihat Keuangan Terpadu', 'Melihat kondisi keuangan gabungan Craft, Studio, dan Shared yang diizinkan.', '2026-08-31 12:04:47.036'),
 (61, 'finance.write', 'finance', 'Kelola Keuangan Bersama', 'Mencatat transaksi keuangan organisasi pada unit Shared yang diizinkan.', '2026-08-31 12:04:47.040'),
 (62, 'finance.transfer', 'finance', 'Transfer Dana Internal', 'Melakukan transfer kas internal antar unit bisnis UNI-NEXUS secara terkontrol.', '2026-08-31 12:04:47.042'),
-(63, 'finance.manage', 'finance', 'Administrasi Keuangan Terpadu', 'Mengelola konfigurasi keuangan global, treasury Shared, dan periode keuangan.', '2026-08-31 12:04:47.045');
+(63, 'finance.manage', 'finance', 'Administrasi Keuangan Terpadu', 'Mengelola konfigurasi keuangan global, treasury Shared, dan periode keuangan.', '2026-08-31 12:04:47.045'),
+(64, 'master_data.read', 'master_data', 'Lihat Data Master', 'Melihat data referensi terpusat UNI-NEXUS sesuai workspace dan hak akses pengguna.', '2026-08-31 15:12:13.212'),
+(65, 'master_data.manage', 'master_data', 'Kelola Data Master', 'Mengelola data referensi terpusat UNI-NEXUS dengan tetap mengikuti hak akses domain terkait.', '2026-08-31 15:12:13.239');
 
 -- --------------------------------------------------------
 
@@ -3430,6 +3476,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 61, '2026-08-31 12:04:47.049'),
 (1, 62, '2026-08-31 12:04:47.049'),
 (1, 63, '2026-08-31 12:04:47.049'),
+(1, 64, '2026-08-31 15:12:13.264'),
+(1, 65, '2026-08-31 15:12:13.289'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -3493,6 +3541,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 61, '2026-08-31 12:04:47.049'),
 (2, 62, '2026-08-31 12:04:47.049'),
 (2, 63, '2026-08-31 12:04:47.049'),
+(2, 64, '2026-08-31 15:12:13.264'),
+(2, 65, '2026-08-31 15:12:13.289'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -3556,6 +3606,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 61, '2026-08-31 12:04:47.049'),
 (3, 62, '2026-08-31 12:04:47.049'),
 (3, 63, '2026-08-31 12:04:47.049'),
+(3, 64, '2026-08-31 15:12:13.264'),
+(3, 65, '2026-08-31 15:12:13.289'),
 (4, 12, '2026-08-31 12:04:47.054'),
 (4, 13, '2026-08-31 12:04:47.054'),
 (4, 18, '2026-08-31 12:04:47.054'),
@@ -3637,6 +3689,7 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 55, '2026-08-31 10:00:11.948'),
 (7, 57, '2026-08-31 10:00:11.948'),
 (7, 58, '2026-08-31 10:00:11.948'),
+(7, 64, '2026-08-31 15:12:13.264'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -3678,7 +3731,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 54, '2026-08-31 10:00:11.948'),
 (8, 55, '2026-08-31 10:00:11.948'),
 (8, 57, '2026-08-31 10:00:11.948'),
-(8, 58, '2026-08-31 10:00:11.948');
+(8, 58, '2026-08-31 10:00:11.948'),
+(8, 64, '2026-08-31 15:12:13.264');
 
 -- --------------------------------------------------------
 
@@ -4240,7 +4294,28 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (71, 1, 2, '0730018d-8178-43f1-a06d-f175c8b767f1', 'craft', '2026-08-31 04:14:53.660', '2026-08-31 04:14:53.660', NULL),
 (73, 1, 2, '44072478-772a-4ec7-be89-b83e401a4df1', 'craft', '2026-08-31 04:15:37.149', '2026-08-31 04:15:37.191', NULL),
 (74, 1, 2, '61152c61-07a4-4099-893e-6571050a78d7', 'craft', '2026-08-31 04:22:02.861', '2026-08-31 04:22:02.874', NULL),
-(75, 1, 2, 'fe18bbef-b3af-42da-95b4-12fa2b7d8e62', 'craft', '2026-08-31 04:26:13.917', '2026-08-31 05:04:38.731', NULL);
+(75, 1, 2, 'fe18bbef-b3af-42da-95b4-12fa2b7d8e62', 'craft', '2026-08-31 04:26:13.917', '2026-08-31 05:24:15.108', '2026-08-31 05:24:41.019'),
+(79, 1, 2, '35406a3d-15d1-4376-a130-5fc9569530ef', 'craft', '2026-08-31 05:44:14.668', '2026-08-31 05:44:14.683', NULL),
+(80, 1, 2, '3271c6ea-c8d0-45e6-b893-a600ba334794', 'craft', '2026-08-31 05:44:48.416', '2026-08-31 05:44:48.416', NULL),
+(82, 1, 2, '01876f5c-fb7f-4104-9255-6383dbc4da21', 'craft', '2026-08-31 05:45:28.511', '2026-08-31 05:45:28.511', NULL),
+(84, 1, 2, '4fbd588b-631b-40b2-80e5-ef1c952e3ac3', 'craft', '2026-08-31 05:46:03.114', '2026-08-31 05:46:03.119', NULL),
+(85, 1, 2, '9c4fbbd3-1404-4e5e-b134-4b49ac8e4621', 'craft', '2026-08-31 05:47:19.557', '2026-08-31 05:47:19.557', NULL),
+(87, 1, 2, '26f26c46-eaec-4913-aa86-05a210bb55c1', 'craft', '2026-08-31 05:48:34.431', '2026-08-31 05:48:34.436', NULL),
+(88, 1, 2, '03b71fac-0b25-4963-82c2-4e7a50e71ea5', 'craft', '2026-08-31 05:49:57.022', '2026-08-31 05:49:57.022', NULL),
+(93, 1, 2, '1fa11424-debc-4536-bf70-b111e2e90c99', 'craft', '2026-08-31 05:54:15.435', '2026-08-31 05:54:15.435', NULL),
+(95, 1, 2, 'e4af2735-ba3f-4f93-a74b-0765b269052e', 'craft', '2026-08-31 05:54:32.866', '2026-08-31 05:54:32.866', NULL),
+(99, 1, 2, '393ad969-1142-4db4-8662-7bb7e42cf130', 'craft', '2026-08-31 05:54:55.702', '2026-08-31 05:54:55.702', NULL),
+(101, 1, 2, '176b9986-fcf5-4864-acb2-526ef73854e1', 'craft', '2026-08-31 05:57:30.793', '2026-08-31 05:57:30.839', NULL),
+(102, 1, 2, 'a5c7fa0d-8ca3-4cb3-876b-97191f010329', 'craft', '2026-08-31 06:00:09.522', '2026-08-31 06:00:09.572', NULL),
+(103, 1, 2, '2092713a-e61c-4cec-bf94-41db697b54a3', 'craft', '2026-08-31 06:01:21.231', '2026-08-31 06:01:21.233', NULL),
+(106, 1, 2, '65a29436-1c64-44d7-b189-8a9eedfc2e4a', 'craft', '2026-08-31 06:07:30.545', '2026-08-31 06:07:30.545', NULL),
+(110, 1, 2, '96310a19-edad-404d-87a9-b2ab8838f859', 'craft', '2026-08-31 06:07:42.481', '2026-08-31 06:07:42.524', NULL),
+(111, 1, 2, 'e59355ef-513a-4134-8f3f-283086ec2497', 'craft', '2026-08-31 06:08:10.895', '2026-08-31 06:08:10.936', NULL),
+(112, 1, 2, '0bf8c232-da55-4cb6-aef4-7982e623703d', 'craft', '2026-08-31 06:09:34.595', '2026-08-31 06:09:34.595', NULL),
+(114, 1, 2, '45c68cbe-8af3-48c0-906e-8b5857ae4a75', 'craft', '2026-08-31 06:17:39.098', '2026-08-31 06:17:39.100', NULL),
+(118, 1, 2, 'c7cabf88-ff59-4334-bddd-c6e8fe1b251c', 'craft', '2026-08-31 06:24:24.383', '2026-08-31 06:24:24.383', NULL),
+(120, 1, 2, 'cd892cc4-58a4-42d4-9bf9-1d460882d233', 'craft', '2026-08-31 06:25:30.702', '2026-08-31 06:25:30.702', NULL),
+(122, 1, 2, '5284c264-54e0-417a-b479-aac61ec1f9ae', 'craft', '2026-08-31 06:26:50.171', '2026-08-31 06:26:50.305', NULL);
 
 -- --------------------------------------------------------
 
@@ -5547,31 +5622,31 @@ ALTER TABLE `user_sessions`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `asset_maintenance_records`
 --
 ALTER TABLE `asset_maintenance_records`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `asset_project_assignments`
 --
 ALTER TABLE `asset_project_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1523;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1885;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
 --
 ALTER TABLE `automation_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `automation_runs`
@@ -5583,13 +5658,13 @@ ALTER TABLE `automation_runs`
 -- AUTO_INCREMENT for table `budgets`
 --
 ALTER TABLE `budgets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `budget_items`
 --
 ALTER TABLE `budget_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `business_units`
@@ -5601,7 +5676,7 @@ ALTER TABLE `business_units`
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `channel_product_mappings`
@@ -5619,7 +5694,7 @@ ALTER TABLE `chart_of_accounts`
 -- AUTO_INCREMENT for table `craft_orders`
 --
 ALTER TABLE `craft_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `craft_order_drafts`
@@ -5631,7 +5706,7 @@ ALTER TABLE `craft_order_drafts`
 -- AUTO_INCREMENT for table `craft_order_items`
 --
 ALTER TABLE `craft_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `craft_order_status_history`
@@ -5649,7 +5724,7 @@ ALTER TABLE `design_files`
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `document_templates`
@@ -5661,19 +5736,19 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `domain_events`
 --
 ALTER TABLE `domain_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=362;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `filament_spools`
 --
 ALTER TABLE `filament_spools`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `financial_periods`
@@ -5685,73 +5760,73 @@ ALTER TABLE `financial_periods`
 -- AUTO_INCREMENT for table `financial_transactions`
 --
 ALTER TABLE `financial_transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
 
 --
 -- AUTO_INCREMENT for table `goods_receipts`
 --
 ALTER TABLE `goods_receipts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `goods_receipt_items`
 --
 ALTER TABLE `goods_receipt_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `integrations`
 --
 ALTER TABLE `integrations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `integration_sync_logs`
 --
 ALTER TABLE `integration_sync_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `internal_transfers`
 --
 ALTER TABLE `internal_transfers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `inventory_movements`
 --
 ALTER TABLE `inventory_movements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `invoice_payment_schedules`
 --
 ALTER TABLE `invoice_payment_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `journal_entries`
 --
 ALTER TABLE `journal_entries`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT for table `journal_lines`
 --
 ALTER TABLE `journal_lines`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=409;
 
 --
 -- AUTO_INCREMENT for table `login_history`
@@ -5763,19 +5838,19 @@ ALTER TABLE `login_history`
 -- AUTO_INCREMENT for table `marketplace_fee_rules`
 --
 ALTER TABLE `marketplace_fee_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlements`
 --
 ALTER TABLE `marketplace_settlements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlement_items`
 --
 ALTER TABLE `marketplace_settlement_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `master_options`
@@ -5787,13 +5862,13 @@ ALTER TABLE `master_options`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `material_batches`
 --
 ALTER TABLE `material_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -5811,7 +5886,7 @@ ALTER TABLE `material_waste`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1707;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2004;
 
 --
 -- AUTO_INCREMENT for table `order_attachments`
@@ -5829,7 +5904,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -5847,13 +5922,13 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -5865,7 +5940,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -5967,7 +6042,7 @@ ALTER TABLE `project_deliverables`
 -- AUTO_INCREMENT for table `project_external_assignments`
 --
 ALTER TABLE `project_external_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `project_milestones`
@@ -5979,25 +6054,25 @@ ALTER TABLE `project_milestones`
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `purchase_order_items`
 --
 ALTER TABLE `purchase_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `purchase_request_items`
 --
 ALTER TABLE `purchase_request_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `qc_inspections`
@@ -6027,31 +6102,31 @@ ALTER TABLE `qc_template_items`
 -- AUTO_INCREMENT for table `quick_links`
 --
 ALTER TABLE `quick_links`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `quotation_items`
 --
 ALTER TABLE `quotation_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `quotation_templates`
 --
 ALTER TABLE `quotation_templates`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `quotation_template_items`
 --
 ALTER TABLE `quotation_template_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `report_definitions`
@@ -6063,13 +6138,13 @@ ALTER TABLE `report_definitions`
 -- AUTO_INCREMENT for table `report_exports`
 --
 ALTER TABLE `report_exports`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `sales_channels`
@@ -6099,25 +6174,25 @@ ALTER TABLE `stock_reservations`
 -- AUTO_INCREMENT for table `studio_projects`
 --
 ALTER TABLE `studio_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `studio_project_services`
 --
 ALTER TABLE `studio_project_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `studio_project_status_history`
 --
 ALTER TABLE `studio_project_status_history`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `studio_services`
 --
 ALTER TABLE `studio_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `studio_service_categories`
@@ -6129,7 +6204,7 @@ ALTER TABLE `studio_service_categories`
 -- AUTO_INCREMENT for table `supplier_invoices`
 --
 ALTER TABLE `supplier_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -6141,7 +6216,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `transaction_categories`
@@ -6153,7 +6228,7 @@ ALTER TABLE `transaction_categories`
 -- AUTO_INCREMENT for table `treasury_accounts`
 --
 ALTER TABLE `treasury_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `units_of_measure`
@@ -6165,7 +6240,7 @@ ALTER TABLE `units_of_measure`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=320;
 
 --
 -- AUTO_INCREMENT for table `user_deletion_requests`
@@ -6177,7 +6252,7 @@ ALTER TABLE `user_deletion_requests`
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `user_reactivation_requests`
@@ -6189,7 +6264,7 @@ ALTER TABLE `user_reactivation_requests`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`

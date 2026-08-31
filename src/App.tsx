@@ -27,6 +27,7 @@ import { AuditLog } from "./pages/global/AuditLog";
 import { Documents } from "./pages/global/Documents";
 import { CalendarTasks } from "./pages/global/CalendarTasks";
 import { UnifiedFinance } from "./pages/global/UnifiedFinance";
+import { MasterData } from "./pages/global/MasterData";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -74,6 +75,7 @@ const router = createBrowserRouter(
         <Route index element={<Navigate to="/app/dashboard" replace />} />
         <Route path="dashboard" element={<PermissionGate permission="dashboard.read"><Dashboard /></PermissionGate>} />
         <Route path="finance" element={<PermissionGate permission="finance.read"><UnifiedFinance /></PermissionGate>} />
+        <Route path="master-data" element={<PermissionGate permission="master_data.read"><MasterData /></PermissionGate>} />
         <Route
           path="documents"
           element={<PermissionGate permission="documents.read"><Documents /></PermissionGate>}
