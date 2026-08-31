@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFile, stat, utimes } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, symlink, utimes, writeFile } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { storageService } from '../src/shared/storage';
 
@@ -54,6 +55,21 @@ async function main() {
   assert.equal(storageService.getPublicUrl('avatars/example.webp'), '/uploads/avatars/example.webp');
   assert.equal(storageService.getPublicUrl('profile-banners/example.webp'), '/uploads/profile-banners/example.webp');
   await expectError(async () => { storageService.getPublicUrl('documents/private.pdf'); }, 'FILE_NOT_PUBLIC');
+
+  // Symlink escape: a category directory that is itself a symlink pointing outside the storage
+  // root must never let a key resolve through it to read/write outside server/uploads.
+  const outside = path.join(os.tmpdir(), `smoke-storage-escape-${Date.now()}`);
+  await mkdir(outside, { recursive: true });
+  await writeFile(path.join(outside, 'secret.txt'), 'should never be reachable via storage keys');
+  const evilLink = path.join(storageService.root, 'avatars', 'evil-link');
+  await symlink(outside, evilLink, 'dir');
+  try {
+    await expectError(async () => { await storageService.exists('avatars/evil-link/secret.txt'); }, 'INVALID_STORAGE_PATH');
+  } finally {
+    await rm(evilLink, { force: true });
+    await rm(outside, { recursive: true, force: true });
+  }
+
   console.log('Storage smoke: PASS');
 }
 

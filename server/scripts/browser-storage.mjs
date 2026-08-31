@@ -23,7 +23,9 @@ const withTimeout = async (promise, message, timeoutMs = 15_000) => {
     ]);
   } finally { clearTimeout(timer); }
 };
-const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64');
+// A genuinely valid, decodable PNG — avatars are now normalized (decoded, resized, re-encoded)
+// with sharp, so a hand-rolled minimal PNG that only passes a magic-byte check is not enough.
+const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEElEQVQImWM4YWQERwzEcQDxIxLBd1QpUgAAAABJRU5ErkJggg==', 'base64');
 const tokenFor = user => { const now = Math.floor(Date.now() / 1000); const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url'); const payload = Buffer.from(JSON.stringify({ id: user.id, organization_id: user.organization_id, username: user.username, iat: now, exp: now + 1800 })).toString('base64url'); return `${header}.${payload}.${createHmac('sha256', process.env.JWT_SECRET).update(`${header}.${payload}`).digest('base64url')}`; };
 const database = () => mysql.createConnection({ host: process.env.DB_HOST, port: Number(process.env.DB_PORT), user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME });
 
@@ -66,11 +68,12 @@ async function upload(token, label) {
   const form = new FormData(); form.set('avatar', new Blob([png], { type: 'image/png' }), `${label}.png`);
   const response = await fetch(`${api}/profile/avatar`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form });
   const body = await response.json(); assert(response.ok, `Avatar upload returned ${response.status}: ${JSON.stringify(body)}`);
-  const key = body?.data?.avatar_path; assert(/^avatars\/[0-9a-f-]+\.png$/i.test(key), `Avatar key is not canonical: ${key}`); return key;
+  // Avatars are always normalized to WEBP (512x512 via sharp) regardless of the uploaded format.
+  const key = body?.data?.avatar_path; assert(/^avatars\/[0-9a-f-]+\.webp$/i.test(key), `Avatar key is not canonical: ${key}`); return key;
 }
 async function deleteAvatar(token) { const response = await fetch(`${api}/profile/avatar`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }); const body = await response.json(); assert(response.ok && body?.data?.avatar_path === null, `Avatar delete returned ${response.status}`); }
 const publicUrl = key => `${api.replace(/\/api\/v1$/, '')}/uploads/${key}`;
-const removeGenerated = async key => { if (!key || !/^avatars\/[0-9a-f-]+\.png$/i.test(key)) return; await rm(path.join(root, 'server', 'uploads', ...key.split('/')), { force: true }); };
+const removeGenerated = async key => { if (!key || !/^avatars\/[0-9a-f-]+\.webp$/i.test(key)) return; await rm(path.join(root, 'server', 'uploads', ...key.split('/')), { force: true }); };
 
 async function run() {
   let user; let token; let first; let second; let child; let profile;
@@ -79,7 +82,7 @@ async function run() {
     const privateResponse = await fetch(`${api.replace(/\/api\/v1$/, '')}/uploads/documents/guessed-private.pdf`, { signal: AbortSignal.timeout(10_000) });
     assert(privateResponse.status !== 200, 'A guessed private /uploads URL was publicly accessible.');
     first = await upload(token, 'storage-browser-a');
-    const firstResponse = await fetch(publicUrl(first), { signal: AbortSignal.timeout(10_000) }); assert(firstResponse.ok && firstResponse.headers.get('content-type')?.startsWith('image/png'), 'Approved avatar static URL is not available.');
+    const firstResponse = await fetch(publicUrl(first), { signal: AbortSignal.timeout(10_000) }); assert(firstResponse.ok && firstResponse.headers.get('content-type')?.startsWith('image/webp'), 'Approved avatar static URL is not available.');
     second = await upload(token, 'storage-browser-b');
     assert((await fetch(publicUrl(first), { signal: AbortSignal.timeout(10_000) })).status !== 200, 'Replaced avatar remains publicly available.');
 

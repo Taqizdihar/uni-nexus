@@ -29,7 +29,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       // Auto logout on unauthorized (token expired/invalid) - skip for login to allow normal error handling
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.href = '/';
     }
     
     throw new ApiError(

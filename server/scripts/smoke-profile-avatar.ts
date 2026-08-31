@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
 import { createHmac, randomUUID } from 'node:crypto';
+import sharp from 'sharp';
 import { pool } from '../src/config/database';
 import { env } from '../src/config/env';
 import { storageService } from '../src/shared/storage';
 
-const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64');
+// A genuinely valid, decodable PNG — avatars are now normalized (decoded, resized, re-encoded)
+// with sharp, so a hand-rolled minimal PNG that only passes a magic-byte check is not enough.
+const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEElEQVQImWM4YWQERwzEcQDxIxLBd1QpUgAAAABJRU5ErkJggg==', 'base64');
 const tokenFor = (user: { id: number; organization_id: number; username: string }) => {
   const now = Math.floor(Date.now() / 1000); const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
   const payload = Buffer.from(JSON.stringify({ id: user.id, organization_id: user.organization_id, username: user.username, iat: now, exp: now + 300 })).toString('base64url');
@@ -15,7 +18,8 @@ const api = `http://localhost:${env.PORT}/api/v1`;
 async function upload(token: string, name: string) {
   const form = new FormData(); form.set('avatar', new Blob([png], { type: 'image/png' }), name);
   const response = await fetch(`${api}/profile/avatar`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form, signal: AbortSignal.timeout(10_000) });
-  const body = await response.json(); assert.equal(response.status, 200, JSON.stringify(body)); assert.match(body.data.avatar_path, /^avatars\/[0-9a-f-]+\.png$/i); return String(body.data.avatar_path);
+  // Avatars are always normalized to WEBP (512x512 via sharp) regardless of the uploaded format.
+  const body = await response.json(); assert.equal(response.status, 200, JSON.stringify(body)); assert.match(body.data.avatar_path, /^avatars\/[0-9a-f-]+\.webp$/i); return String(body.data.avatar_path);
 }
 
 async function main() {
@@ -28,6 +32,8 @@ async function main() {
     );
     fixtureId = Number(created.insertId); const token = tokenFor({ id: fixtureId, organization_id: 1, username });
     first = await upload(token, 'avatar-smoke-a.png'); assert(await storageService.exists(first));
+    const firstMeta = await sharp(storageService.safeResolve(first)).metadata();
+    assert.equal(firstMeta.format, 'webp', 'normalized avatar is not WEBP'); assert.equal(firstMeta.width, 512, 'normalized avatar width is not 512'); assert.equal(firstMeta.height, 512, 'normalized avatar height is not 512');
     second = await upload(token, 'avatar-smoke-b.png'); assert(await storageService.exists(second)); assert.equal(await storageService.exists(first), false, 'replacement did not remove the old avatar');
     const publicResponse = await fetch(`${api.replace(/\/api\/v1$/, '')}/uploads/${second}`, { signal: AbortSignal.timeout(10_000) }); assert.equal(publicResponse.status, 200, 'approved public avatar was not served');
     const privateResponse = await fetch(`${api.replace(/\/api\/v1$/, '')}/uploads/documents/guessed-private.pdf`, { signal: AbortSignal.timeout(10_000) }); assert.notEqual(privateResponse.status, 200, 'guessed private storage URL was publicly served');

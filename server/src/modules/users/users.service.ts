@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
+import { normalizeAvatarImage } from '../../shared/storage/image-processing';
 import { AccountLifecycleService } from './account-lifecycle.service';
 import type { ProfileStatusCode, UpdateProfileInput } from './users.schema';
 import { UserResponse } from './users.types';
@@ -271,8 +272,21 @@ export class UsersService {
     await this.audit(pool as unknown as PoolConnection, users[0].organization_id, id, 'profile.password_change', 'Password changed', { entityType: 'user', entityId: id, newValues: { password_changed: true } });
   }
 
+  /** Avatars are decoded, EXIF auto-oriented, square-cropped to 512x512, and re-encoded as WEBP — a renamed
+   * executable that merely wears a `.jpg` extension fails here because sharp cannot decode it as an image. */
+  private static async saveNormalizedAvatar(file: Express.Multer.File) {
+    const original = await storageService.consumeStagedUpload('avatar', file);
+    let normalized: Buffer;
+    try {
+      normalized = await normalizeAvatarImage(original);
+    } catch {
+      throw new AppError(400, 'FILE_CONTENT_INVALID', 'Berkas bukan gambar yang valid atau rusak.');
+    }
+    return storageService.writeBuffer('avatar', normalized, 'avatar.webp');
+  }
+
   private static async replaceProfileMedia(id: number, column: 'avatar_path' | 'profile_banner_path', policy: 'avatar' | 'profile_banner', file: Express.Multer.File) {
-    const saved = await storageService.saveUploadedFile(policy, file);
+    const saved = policy === 'avatar' ? await this.saveNormalizedAvatar(file) : await storageService.saveUploadedFile(policy, file);
     const connection = await pool.getConnection();
     let previous: string | null = null;
     try {
