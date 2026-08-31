@@ -35,6 +35,7 @@ import { calendarRoutes } from '../modules/calendar/calendar.routes';
 import { tasksRoutes } from '../modules/tasks/tasks.routes';
 import { unifiedFinanceRoutes } from '../modules/finance/finance.routes';
 import { masterDataRoutes } from '../modules/master-data/master-data.routes';
+import { reportsRoutes } from '../modules/reports/reports.routes';
 
 const router = Router();
 
@@ -60,6 +61,7 @@ router.use('/calendar', calendarRoutes);
 router.use('/tasks', tasksRoutes);
 router.use('/finance', unifiedFinanceRoutes);
 router.use('/master-data', masterDataRoutes);
+router.use('/reports', reportsRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

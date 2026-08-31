@@ -8,6 +8,7 @@ export const moduleReadPermissions: Record<string, string> = {
   studio_equipment: 'studio.equipment.read', studio_billing: 'studio.billing.read', studio_vendors: 'studio.vendors.read',
   studio_finance: 'studio.finance.read', studio_analytics: 'studio.analytics.read', studio_automations: 'studio.automations.read',
   documents: 'documents.read',
+  reports: 'reports.read', finance: 'finance.read', dashboard: 'dashboard.read',
   master_data: 'master_data.read',
   calendar: 'calendar.read', tasks: 'tasks.read',
 };

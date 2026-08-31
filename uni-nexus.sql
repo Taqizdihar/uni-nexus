@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 31, 2026 at 08:12 AM
+-- Generation Time: Aug 31, 2026 at 09:48 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.5.9
 
@@ -275,7 +275,32 @@ INSERT INTO `audit_logs` (`id`, `organization_id`, `business_unit_id`, `user_id`
 (1820, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 46, 'EXP-000046', 'Payout Editor FIN-SMK-45CC872F', NULL, NULL, NULL, NULL, '2026-08-31 06:18:35.459'),
 (1821, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 46, 'EXP-000046', 'Membayar pengeluaran EXP-000046.', NULL, '{\"total\": 1000000, \"transaction_id\": 194}', NULL, NULL, '2026-08-31 06:18:35.463'),
 (1822, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 34, 'ASSIGN-34', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 06:18:35.536'),
-(1823, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 15, 'BDG-000015', 'Membuat anggaran BDG-000015.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 06:18:35.556');
+(1823, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 15, 'BDG-000015', 'Membuat anggaran BDG-000015.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 06:18:35.556'),
+(2031, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"csv\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_28332B3269\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:19.145'),
+(2032, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"xlsx\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_28332B3269\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:19.201'),
+(2063, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"csv\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_388A97B911\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:45.292'),
+(2064, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"xlsx\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_388A97B911\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:45.342'),
+(2095, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"csv\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_260224159C\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:54.650'),
+(2096, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"xlsx\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_260224159C\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:39:54.701'),
+(2114, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 130, 'TRS-000130', 'Saldo awal Bank Finance C357D318', NULL, NULL, NULL, NULL, '2026-08-31 08:46:53.459'),
+(2115, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 130, 'TRS-000130', 'Membuat akun kas Studio TRS-000130.', NULL, '{\"name\": \"Bank Finance C357D318\", \"opening_balance\": 10000000}', NULL, NULL, '2026-08-31 08:46:53.461'),
+(2116, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_opening', 'treasury_account', 131, 'TRS-000131', 'Saldo awal Kas Finance C357D318', NULL, NULL, NULL, NULL, '2026-08-31 08:46:53.511'),
+(2117, 1, 2, 2, 'studio_finance', 'studio.finance.treasury_create', 'treasury_account', 131, 'TRS-000131', 'Membuat akun kas Studio TRS-000131.', NULL, '{\"name\": \"Kas Finance C357D318\", \"opening_balance\": 1000000}', NULL, NULL, '2026-08-31 08:46:53.512'),
+(2118, 1, 2, 2, 'studio_finance', 'studio.finance.transfer', 'internal_transfer', 35, 'TRF-000035', 'Transfer TRF-000035 antar kas Studio.', NULL, '{\"to\": 131, \"from\": 130, \"amount\": 1000000}', NULL, NULL, '2026-08-31 08:46:53.573'),
+(2119, 1, 2, 2, 'studio_finance', 'studio.finance.customer_payment', 'payment', 37, 'PAY-000037', 'Mencatat pembayaran pelanggan PAY-000037.', NULL, NULL, NULL, NULL, '2026-08-31 08:46:53.671'),
+(2120, 1, 2, 2, 'studio_finance', 'studio.finance.expense_create', 'expense', 48, 'EXP-000048', 'Membuat pengeluaran EXP-000048.', NULL, '{\"amount\": 300000, \"status\": \"draft\", \"tax_amount\": 0}', NULL, NULL, '2026-08-31 08:46:53.738'),
+(2121, 1, 2, 2, 'studio_finance', 'studio.finance.expense_approve', 'expense', 48, 'EXP-000048', 'Menyetujui pengeluaran EXP-000048.', NULL, NULL, NULL, NULL, '2026-08-31 08:46:53.787'),
+(2122, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 48, 'EXP-000048', 'Transport Proyek Smoke', NULL, NULL, NULL, NULL, '2026-08-31 08:46:53.843'),
+(2123, 1, 2, 2, 'studio_finance', 'studio.finance.expense_pay', 'expense', 48, 'EXP-000048', 'Membayar pengeluaran EXP-000048.', NULL, '{\"total\": 300000, \"transaction_id\": 200}', NULL, NULL, '2026-08-31 08:46:53.848'),
+(2124, 1, 2, 2, 'studio_finance', 'studio.finance.expense_reversal', 'expense', 48, 'EXP-000048', 'Pembalikan EXP-000048: Pembalikan fixture smoke.', NULL, NULL, NULL, NULL, '2026-08-31 08:46:54.164'),
+(2125, 1, 2, 2, 'studio_finance', 'studio.finance.expense_void', 'expense', 48, 'EXP-000048', 'Membalik pengeluaran EXP-000048.', '{\"status_code\": \"paid\"}', '{\"reason\": \"Pembalikan fixture smoke.\", \"status_code\": \"void\", \"reversal_transaction_id\": 201}', NULL, NULL, '2026-08-31 08:46:54.168'),
+(2126, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 49, 'EXP-000049', 'Payout Editor FIN-SMK-C357D318', NULL, NULL, NULL, NULL, '2026-08-31 08:46:54.250'),
+(2127, 1, 2, 2, 'studio_finance', 'studio.finance.external_payout', 'expense', 49, 'EXP-000049', 'Membayar pengeluaran EXP-000049.', NULL, '{\"total\": 1000000, \"transaction_id\": 202}', NULL, NULL, '2026-08-31 08:46:54.389'),
+(2128, 1, 2, 2, 'studio_finance', 'studio.finance.external_assignment_sync', 'project_external_assignment', 36, 'ASSIGN-36', 'Menyelaraskan status pembayaran penugasan eksternal.', NULL, '{\"paid\": 1000000, \"status\": \"partial\", \"remaining\": 1000000}', NULL, NULL, '2026-08-31 08:46:54.391'),
+(2129, 1, 2, 2, 'studio_finance', 'studio.finance.budget_create', 'budget', 16, 'BDG-000016', 'Membuat anggaran BDG-000016.', NULL, '{\"total\": 5000000, \"item_count\": 1}', NULL, NULL, '2026-08-31 08:46:54.405'),
+(2219, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"csv\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_AAC5B0CE9D\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:52:17.312'),
+(2220, 1, NULL, 2, 'master_data', 'master_data.export', 'master_data_dataset', NULL, 'units', 'Mengekspor Data Master Satuan.', NULL, '{\"format\": \"xlsx\", \"dataset\": \"units\", \"filters\": {\"q\": \"SMK_DM_U_AAC5B0CE9D\", \"status\": \"active\", \"parent_id\": null, \"unit_group\": null, \"channel_type\": null, \"business_unit\": null, \"transaction_type\": null}}', NULL, 'smoke-master-data', '2026-08-31 08:52:17.366'),
+(2227, 1, NULL, 2, 'auth', 'login', 'user', 2, 'taqizdihar', 'User logged in successfully', NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', '2026-08-31 09:01:21.415');
 
 -- --------------------------------------------------------
 
@@ -784,7 +809,9 @@ INSERT INTO `domain_events` (`id`, `organization_id`, `business_unit_id`, `event
 (395, 1, 2, '2e80c4f2-63f5-407a-a6d1-6b912ef89aa4', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 29, 'TRF-000029', 2, 'cfcd5808-88de-4338-8fcc-481c10c161e7', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 29, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000029\"}}}', 'processed', '2026-08-31 06:07:30.278', NULL, NULL, 0, '2026-08-31 06:07:30.703', NULL, '2026-08-31 13:07:30.278'),
 (396, 1, 2, '210e48a2-0c08-4e3e-94ab-20a8b35fae37', 'studio.finance.payment_received', 'studio_finance', 'payment', 30, 'PAY-30', 2, 'f5ad2216-9d54-43a0-82a9-2884ecc270a5', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 30, \"amount\": 2000000, \"invoice_id\": 79, \"project_id\": 74}}}', 'processed', '2026-08-31 06:07:30.397', NULL, NULL, 0, '2026-08-31 06:07:30.778', NULL, '2026-08-31 13:07:30.397'),
 (397, 1, 2, 'f73cfac2-caf5-4f04-bb96-31188b33dcfe', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 33, 'TRF-000033', 2, '0315a63b-2200-4094-a26a-0937e8f62492', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 33, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000033\"}}}', 'processed', '2026-08-31 06:18:35.260', NULL, NULL, 0, '2026-08-31 06:18:35.783', NULL, '2026-08-31 13:18:35.260'),
-(398, 1, 2, 'd9bece8a-8687-4c52-bb3a-c046fca819b0', 'studio.finance.payment_received', 'studio_finance', 'payment', 35, 'PAY-35', 2, '4bf2ea6d-1632-4d72-a3fb-71c5763e674b', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 35, \"amount\": 2000000, \"invoice_id\": 82, \"project_id\": 75}}}', 'processed', '2026-08-31 06:18:35.336', NULL, NULL, 0, '2026-08-31 06:18:36.030', NULL, '2026-08-31 13:18:35.336');
+(398, 1, 2, 'd9bece8a-8687-4c52-bb3a-c046fca819b0', 'studio.finance.payment_received', 'studio_finance', 'payment', 35, 'PAY-35', 2, '4bf2ea6d-1632-4d72-a3fb-71c5763e674b', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 35, \"amount\": 2000000, \"invoice_id\": 82, \"project_id\": 75}}}', 'processed', '2026-08-31 06:18:35.336', NULL, NULL, 0, '2026-08-31 06:18:36.030', NULL, '2026-08-31 13:18:35.336'),
+(432, 1, 2, 'b10f2920-24cf-4caf-bb0b-a3c437ff1221', 'studio.finance.treasury_transfer_completed', 'studio_finance', 'internal_transfer', 35, 'TRF-000035', 2, 'c3aec176-d8e6-4160-abda-cdf12844d301', NULL, NULL, 0, '{\"context\": {\"transfer\": {\"id\": 35, \"amount\": 1000000, \"currency_code\": \"IDR\", \"transfer_code\": \"TRF-000035\"}}}', 'processed', '2026-08-31 08:46:53.575', NULL, NULL, 0, '2026-08-31 08:46:54.604', NULL, '2026-08-31 15:46:53.575'),
+(433, 1, 2, '660c03b7-f55a-4ff3-824f-f751e4fd160d', 'studio.finance.payment_received', 'studio_finance', 'payment', 37, 'PAY-37', 2, 'a71d6cae-2c8c-4703-b5e3-7c65c6b7e1fb', NULL, NULL, 0, '{\"context\": {\"payment\": {\"id\": 37, \"amount\": 2000000, \"invoice_id\": 88, \"project_id\": 81}}}', 'processed', '2026-08-31 08:46:53.680', NULL, NULL, 0, '2026-08-31 08:46:54.654', NULL, '2026-08-31 15:46:53.680');
 
 -- --------------------------------------------------------
 
@@ -2347,7 +2374,64 @@ INSERT INTO `notifications` (`id`, `organization_id`, `business_unit_id`, `user_
 (1944, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:7', 0, NULL, '2026-08-31 06:19:05.302'),
 (1945, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:8', 0, NULL, '2026-08-31 06:19:05.306'),
 (1946, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:9', 0, NULL, '2026-08-31 06:19:05.310'),
-(1947, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:10', 0, NULL, '2026-08-31 06:19:05.314');
+(1947, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 5688f533-c', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8092248:action:0:user:10', 0, NULL, '2026-08-31 06:19:05.314'),
+(2004, 1, 2, 2, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:2', 0, NULL, '2026-08-31 08:46:54.612'),
+(2005, 1, 2, 3, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:3', 0, NULL, '2026-08-31 08:46:54.617'),
+(2006, 1, 2, 4, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:4', 0, NULL, '2026-08-31 08:46:54.622'),
+(2007, 1, 2, 5, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:5', 0, NULL, '2026-08-31 08:46:54.628'),
+(2008, 1, 2, 6, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:6', 0, NULL, '2026-08-31 08:46:54.633'),
+(2009, 1, 2, 7, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:7', 0, NULL, '2026-08-31 08:46:54.639'),
+(2010, 1, 2, 8, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:8', 0, NULL, '2026-08-31 08:46:54.642'),
+(2011, 1, 2, 9, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:9', 0, NULL, '2026-08-31 08:46:54.646'),
+(2012, 1, 2, 10, 'system', 'studio_finance', 'success', 'Pembayaran Studio diterima', 'Pembayaran telah tercatat pada keuangan Studio.', '/app/studio/finance/income', 'payment', 37, 'system:event:433:policy:studio-payment-received:user:10', 0, NULL, '2026-08-31 08:46:54.650'),
+(2017, 1, 1, 2, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.246'),
+(2018, 1, 1, 3, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.295'),
+(2019, 1, 1, 4, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.337'),
+(2020, 1, 1, 5, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.362'),
+(2021, 1, 1, 6, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.387'),
+(2022, 1, 1, 7, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.416'),
+(2023, 1, 1, 8, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.461'),
+(2024, 1, 1, 9, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.505'),
+(2025, 1, 1, 10, 'smoke', 'craft_orders', 'warning', 'Workspace 43206864-d', 'Permission filtered workspace delivery', NULL, NULL, NULL, NULL, 0, NULL, '2026-08-31 08:47:32.549'),
+(2028, 1, 1, 2, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:2', 0, NULL, '2026-08-31 08:47:32.686'),
+(2029, 1, 1, 3, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:3', 0, NULL, '2026-08-31 08:47:32.735'),
+(2030, 1, 1, 4, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:4', 0, NULL, '2026-08-31 08:47:32.778'),
+(2031, 1, 1, 5, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:5', 0, NULL, '2026-08-31 08:47:32.803'),
+(2032, 1, 1, 6, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:6', 0, NULL, '2026-08-31 08:47:32.828'),
+(2033, 1, 1, 7, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:7', 0, NULL, '2026-08-31 08:47:32.872'),
+(2034, 1, 1, 8, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:8', 0, NULL, '2026-08-31 08:47:32.916'),
+(2035, 1, 1, 9, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:9', 0, NULL, '2026-08-31 08:47:32.961'),
+(2036, 1, 1, 10, 'system', 'craft_orders', 'info', 'System 43206864-d', 'Retry-safe delivery', '/app/craft/orders', 'craft_order', 12345, 'system:event:9004970:policy:smoke-order-created:user:10', 0, NULL, '2026-08-31 08:47:33.005'),
+(2048, 1, 1, 2, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:2', 0, NULL, '2026-08-31 08:47:33.186'),
+(2049, 1, 1, 3, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:3', 0, NULL, '2026-08-31 08:47:33.232'),
+(2050, 1, 1, 4, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:4', 0, NULL, '2026-08-31 08:47:33.277'),
+(2051, 1, 1, 5, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:5', 0, NULL, '2026-08-31 08:47:33.321'),
+(2052, 1, 1, 6, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:6', 0, NULL, '2026-08-31 08:47:33.366'),
+(2053, 1, 1, 7, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:7', 0, NULL, '2026-08-31 08:47:33.412'),
+(2054, 1, 1, 8, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:8', 0, NULL, '2026-08-31 08:47:33.457'),
+(2055, 1, 1, 9, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:9', 0, NULL, '2026-08-31 08:47:33.498'),
+(2056, 1, 1, 10, 'system', 'craft_orders', 'info', 'Pesanan baru SYS-43206864-d', 'Pesanan baru telah masuk dan siap ditinjau.', '/app/craft/orders', 'craft_order', 12346, 'system:event:9004971:policy:craft-order-created:user:10', 0, NULL, '2026-08-31 08:47:33.543'),
+(2068, 1, 1, 2, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:2', 0, NULL, '2026-08-31 08:47:33.662'),
+(2069, 1, 1, 3, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:3', 0, NULL, '2026-08-31 08:47:33.705'),
+(2070, 1, 1, 4, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:4', 0, NULL, '2026-08-31 08:47:33.748'),
+(2071, 1, 1, 5, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:5', 0, NULL, '2026-08-31 08:47:33.792'),
+(2072, 1, 1, 6, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:6', 0, NULL, '2026-08-31 08:47:33.834'),
+(2073, 1, 1, 7, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:7', 0, NULL, '2026-08-31 08:47:33.876'),
+(2074, 1, 1, 8, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:8', 0, NULL, '2026-08-31 08:47:33.920'),
+(2075, 1, 1, 9, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:9', 0, NULL, '2026-08-31 08:47:33.962'),
+(2076, 1, 1, 10, 'automation', 'craft_orders', 'info', 'Automation 43206864-d', 'Automation notification', NULL, 'craft_order', 12345, 'automation:run:8049190:action:0:user:10', 0, NULL, '2026-08-31 08:47:34.003'),
+(2133, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 13, NULL, 0, NULL, '2026-08-31 08:47:59.960'),
+(2134, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 13, NULL, 0, NULL, '2026-08-31 08:47:59.961'),
+(2135, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 13, NULL, 0, NULL, '2026-08-31 08:47:59.962'),
+(2136, 1, NULL, 2, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.129'),
+(2137, 1, NULL, 3, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.131'),
+(2138, 1, NULL, 4, 'system', 'users', 'warning', 'Pengajuan penghapusan akun', 'Ada pengajuan penghapusan akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_deletion_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.132'),
+(2139, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 13, NULL, 0, NULL, '2026-08-31 08:48:00.560'),
+(2140, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 13, NULL, 0, NULL, '2026-08-31 08:48:00.562'),
+(2141, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 13, NULL, 0, NULL, '2026-08-31 08:48:00.563'),
+(2142, 1, NULL, 2, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.833'),
+(2143, 1, NULL, 3, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.835'),
+(2144, 1, NULL, 4, 'system', 'users', 'info', 'Pengajuan aktivasi ulang akun', 'Ada pengajuan aktivasi ulang akun yang menunggu peninjauan eksekutif.', '/app/users', 'user_reactivation_request', 14, NULL, 0, NULL, '2026-08-31 08:48:00.837');
 
 -- --------------------------------------------------------
 
@@ -2640,7 +2724,8 @@ INSERT INTO `permissions` (`id`, `code`, `module_code`, `name`, `description`, `
 (62, 'finance.transfer', 'finance', 'Transfer Dana Internal', 'Melakukan transfer kas internal antar unit bisnis UNI-NEXUS secara terkontrol.', '2026-08-31 12:04:47.042'),
 (63, 'finance.manage', 'finance', 'Administrasi Keuangan Terpadu', 'Mengelola konfigurasi keuangan global, treasury Shared, dan periode keuangan.', '2026-08-31 12:04:47.045'),
 (64, 'master_data.read', 'master_data', 'Lihat Data Master', 'Melihat data referensi terpusat UNI-NEXUS sesuai workspace dan hak akses pengguna.', '2026-08-31 15:12:13.212'),
-(65, 'master_data.manage', 'master_data', 'Kelola Data Master', 'Mengelola data referensi terpusat UNI-NEXUS dengan tetap mengikuti hak akses domain terkait.', '2026-08-31 15:12:13.239');
+(65, 'master_data.manage', 'master_data', 'Kelola Data Master', 'Mengelola data referensi terpusat UNI-NEXUS dengan tetap mengikuti hak akses domain terkait.', '2026-08-31 15:12:13.239'),
+(66, 'reports.read', 'reports', 'Lihat Pusat Laporan', 'Melihat katalog, preview, ringkasan, dan histori laporan yang dapat diakses melalui Pusat Laporan UNI-NEXUS.', '2026-08-31 16:47:52.072');
 
 -- --------------------------------------------------------
 
@@ -3341,7 +3426,28 @@ INSERT INTO `report_definitions` (`id`, `organization_id`, `business_unit_id`, `
 (8, 1, 1, 'CRAFT_PRINTER_ANALYTICS', 'Analitik Printer', 'printers', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"printers\"}', 0, 1, NULL, '2026-08-27 09:20:18.432', '2026-08-27 09:20:18.432'),
 (9, 1, 1, 'CRAFT_MATERIAL_ANALYTICS', 'Analitik Material', 'materials', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"materials\"}', 0, 1, NULL, '2026-08-27 09:20:18.459', '2026-08-27 09:20:18.459'),
 (10, 1, 1, 'CRAFT_PROCUREMENT_ANALYTICS', 'Analitik Pengadaan', 'procurement', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"procurement\"}', 0, 1, NULL, '2026-08-27 09:20:18.482', '2026-08-27 09:20:18.482'),
-(11, 1, 1, 'CRAFT_PROFITABILITY_ANALYTICS', 'Analitik Profitabilitas', 'profitability', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"profitability\"}', 0, 1, NULL, '2026-08-27 09:20:18.504', '2026-08-27 09:20:18.504');
+(11, 1, 1, 'CRAFT_PROFITABILITY_ANALYTICS', 'Analitik Profitabilitas', 'profitability', '{\"scope\": \"craft\", \"version\": 1, \"report_key\": \"profitability\"}', 0, 1, NULL, '2026-08-27 09:20:18.504', '2026-08-27 09:20:18.504'),
+(12, 1, 2, 'STUDIO_ANALYTICS_OVERVIEW', 'Ringkasan Analitik Studio', 'overview', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"overview\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(13, 1, 2, 'STUDIO_PROJECT_ANALYTICS', 'Analitik Proyek Studio', 'projects', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"projects\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(14, 1, 2, 'STUDIO_CLIENT_ANALYTICS', 'Analitik Klien Studio', 'clients', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"clients\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(15, 1, 2, 'STUDIO_SERVICE_ANALYTICS', 'Analitik Layanan Studio', 'services', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"services\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(16, 1, 2, 'STUDIO_COMMERCIAL_ANALYTICS', 'Analitik Penawaran & Penagihan Studio', 'commercial', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"commercial\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(17, 1, 2, 'STUDIO_REVENUE_ANALYTICS', 'Pendapatan & Arus Kas Studio', 'revenue', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"revenue\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(18, 1, 2, 'STUDIO_PROFITABILITY_ANALYTICS', 'Profitabilitas Studio', 'profitability', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"profitability\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(19, 1, 2, 'STUDIO_RECEIVABLE_ANALYTICS', 'Piutang Studio', 'receivables', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"receivables\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(20, 1, 2, 'STUDIO_VENDOR_ANALYTICS', 'Vendor & Freelancer Studio', 'vendors', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"vendors\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(21, 1, 2, 'STUDIO_EQUIPMENT_ANALYTICS', 'Peralatan & Aset Studio', 'equipment', '{\"scope\": \"studio\", \"version\": 1, \"report_key\": \"equipment\"}', 0, 1, NULL, '2026-08-31 16:47:52.141', '2026-08-31 16:47:52.141'),
+(27, 1, NULL, 'GLOBAL_EXECUTIVE_SUMMARY', 'Ringkasan Eksekutif UNI-NEXUS', 'executive-summary', '{\"scope\": \"global\", \"version\": 1, \"report_key\": \"executive-summary\"}', 0, 1, NULL, '2026-08-31 16:47:52.169', '2026-08-31 16:47:52.169'),
+(28, 1, NULL, 'UNIFIED_FINANCE_OVERVIEW', 'Ringkasan Keuangan Terpadu', 'overview', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"overview\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(29, 1, NULL, 'UNIFIED_FINANCE_TRANSACTIONS', 'Transaksi Keuangan Terpadu', 'transactions', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"transactions\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(30, 1, NULL, 'UNIFIED_FINANCE_TREASURY', 'Kas & Bank Terpadu', 'treasury', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"treasury\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(31, 1, NULL, 'UNIFIED_FINANCE_TRANSFERS', 'Transfer Internal', 'transfers', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"transfers\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(32, 1, NULL, 'UNIFIED_FINANCE_CASH_FLOW', 'Arus Kas Terpadu', 'cash-flow', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"cash-flow\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(33, 1, NULL, 'UNIFIED_FINANCE_PROFIT_LOSS', 'Laba Rugi Terpadu', 'profit-loss', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"profit-loss\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(34, 1, NULL, 'UNIFIED_FINANCE_RECEIVABLES', 'Piutang Terpadu', 'receivables', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"receivables\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(35, 1, NULL, 'UNIFIED_FINANCE_PAYABLES', 'Hutang Terpadu', 'payables', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"payables\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(36, 1, NULL, 'UNIFIED_FINANCE_BUDGETS', 'Anggaran Terpadu', 'budgets', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"budgets\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201'),
+(37, 1, NULL, 'UNIFIED_FINANCE_JOURNALS', 'Jurnal Akuntansi Terpadu', 'journals', '{\"scope\": \"unified_finance\", \"version\": 1, \"report_key\": \"journals\"}', 0, 1, NULL, '2026-08-31 16:47:52.201', '2026-08-31 16:47:52.201');
 
 -- --------------------------------------------------------
 
@@ -3478,6 +3584,7 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (1, 63, '2026-08-31 12:04:47.049'),
 (1, 64, '2026-08-31 15:12:13.264'),
 (1, 65, '2026-08-31 15:12:13.289'),
+(1, 66, '2026-08-31 16:47:52.106'),
 (2, 1, '2026-08-22 07:48:09.737'),
 (2, 2, '2026-08-22 07:48:09.737'),
 (2, 3, '2026-08-22 07:48:09.737'),
@@ -3543,6 +3650,7 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (2, 63, '2026-08-31 12:04:47.049'),
 (2, 64, '2026-08-31 15:12:13.264'),
 (2, 65, '2026-08-31 15:12:13.289'),
+(2, 66, '2026-08-31 16:47:52.106'),
 (3, 1, '2026-08-23 09:54:06.853'),
 (3, 2, '2026-08-23 09:54:06.853'),
 (3, 3, '2026-08-23 09:54:06.853'),
@@ -3608,6 +3716,7 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (3, 63, '2026-08-31 12:04:47.049'),
 (3, 64, '2026-08-31 15:12:13.264'),
 (3, 65, '2026-08-31 15:12:13.289'),
+(3, 66, '2026-08-31 16:47:52.106'),
 (4, 12, '2026-08-31 12:04:47.054'),
 (4, 13, '2026-08-31 12:04:47.054'),
 (4, 18, '2026-08-31 12:04:47.054'),
@@ -3690,6 +3799,7 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (7, 57, '2026-08-31 10:00:11.948'),
 (7, 58, '2026-08-31 10:00:11.948'),
 (7, 64, '2026-08-31 15:12:13.264'),
+(7, 66, '2026-08-31 16:47:52.106'),
 (8, 1, '2026-08-23 09:54:06.853'),
 (8, 2, '2026-08-23 09:54:06.853'),
 (8, 3, '2026-08-23 09:54:06.853'),
@@ -3732,7 +3842,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`, `created_at`) VALUES
 (8, 55, '2026-08-31 10:00:11.948'),
 (8, 57, '2026-08-31 10:00:11.948'),
 (8, 58, '2026-08-31 10:00:11.948'),
-(8, 64, '2026-08-31 15:12:13.264');
+(8, 64, '2026-08-31 15:12:13.264'),
+(8, 66, '2026-08-31 16:47:52.106');
 
 -- --------------------------------------------------------
 
@@ -4172,7 +4283,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `organization_id`, `employee_code`, `full_name`, `username`, `email`, `password_hash`, `phone`, `avatar_path`, `profile_banner_path`, `profile_status_code`, `status_code`, `approval_status_code`, `registration_source`, `approval_requested_at`, `approved_by`, `approved_at`, `rejected_by`, `rejected_at`, `rejection_reason`, `default_workspace_code`, `email_verified_at`, `last_login_at`, `password_changed_at`, `must_change_password`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, NULL, 'Jane Doe', 'janedoe', 'jane@example.com', '$2b$10$Vi0qAbt2L/TLkN4fmHH.6.IRpR16bcOmjqE/8aiNW5HnSCAfqKakK', NULL, NULL, NULL, 'default', 'inactive', 'approved', 'legacy', '2026-08-22 15:30:29.057', NULL, '2026-08-22 15:30:29.057', NULL, NULL, NULL, 'craft', NULL, '2026-08-22 15:32:10.679', NULL, 0, '2026-08-22 15:30:29.057', '2026-08-23 09:54:23.987', '2026-08-23 09:54:23.987'),
-(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/ee283f29-d194-4dca-8853-904d59a20588.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 11:26:13.678', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-31 11:26:13.678', NULL),
+(2, 1, NULL, 'Muhammad Taqi Izdihar', 'taqizdihar', 'm.taqizdihar@gmail.com', '$2b$10$FBvL5LNb8H8BCzDQMv/Hnul/muHkH7PvDe3AV0h7KKHqjfGmK2nj6', NULL, 'avatars/ee283f29-d194-4dca-8853-904d59a20588.jpg', 'profile-banners/81a93810-84a1-4d74-9ddb-ca56790b43b4.png', 'default', 'active', 'approved', 'bootstrap', '2026-08-23 10:07:06.542', NULL, '2026-08-23 10:07:06.542', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 16:01:21.411', NULL, 0, '2026-08-23 10:07:06.542', '2026-08-31 16:01:21.411', NULL),
 (3, 1, NULL, 'April Adzania', 'apriladzania', 'april.adzania@gmail.com', '$2b$10$RBpHzttXQPDNvppR6Xgq6ehLMxyYZ2f4GNiGNIIDZeXXN8OajzZXe', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:08.000', 2, '2026-08-23 10:50:09.750', NULL, NULL, NULL, 'craft', NULL, '2026-08-31 09:40:31.903', NULL, 0, '2026-08-23 10:14:08.000', '2026-08-31 09:40:31.903', NULL),
 (4, 1, NULL, 'Dian Daeli', 'diandaeli', 'diandaeli125@gmail.com', '$2b$10$XabxUPPEFMYg4wZXR.zEIu37A9xnaMwT/g1oMY4UQxU42G0a2Lpx2', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:14:40.763', 2, '2026-08-23 10:50:05.934', NULL, NULL, NULL, 'craft', NULL, '2026-08-23 11:10:35.701', NULL, 0, '2026-08-23 10:14:40.763', '2026-08-28 11:43:00.744', NULL),
 (5, 1, NULL, 'Naura Ramadhani', 'nauraramadhani', 'nauraramadhani.nr32@gmail.com', '$2b$10$RLbe7PCKBRA535LsSCKJOuKbDN55MqfItEI1lN8eJtXApHUwU5v02', NULL, NULL, NULL, 'default', 'active', 'approved', 'self_signup', '2026-08-23 10:16:56.533', 2, '2026-08-23 10:50:00.349', NULL, NULL, NULL, 'craft', NULL, NULL, NULL, 0, '2026-08-23 10:16:56.533', '2026-08-23 10:50:00.349', NULL),
@@ -4315,7 +4426,22 @@ INSERT INTO `user_presence_sessions` (`id`, `organization_id`, `user_id`, `sessi
 (114, 1, 2, '45c68cbe-8af3-48c0-906e-8b5857ae4a75', 'craft', '2026-08-31 06:17:39.098', '2026-08-31 06:17:39.100', NULL),
 (118, 1, 2, 'c7cabf88-ff59-4334-bddd-c6e8fe1b251c', 'craft', '2026-08-31 06:24:24.383', '2026-08-31 06:24:24.383', NULL),
 (120, 1, 2, 'cd892cc4-58a4-42d4-9bf9-1d460882d233', 'craft', '2026-08-31 06:25:30.702', '2026-08-31 06:25:30.702', NULL),
-(122, 1, 2, '5284c264-54e0-417a-b479-aac61ec1f9ae', 'craft', '2026-08-31 06:26:50.171', '2026-08-31 06:26:50.305', NULL);
+(122, 1, 2, '5284c264-54e0-417a-b479-aac61ec1f9ae', 'craft', '2026-08-31 06:26:50.171', '2026-08-31 06:26:50.305', NULL),
+(123, 1, 2, '2c4b0766-d6c9-4e85-8f61-ba616ef5d96f', 'craft', '2026-08-31 08:41:39.890', '2026-08-31 08:41:39.930', NULL),
+(124, 1, 2, '068637d2-ebd6-4fcb-8718-2d17ae8c3c7d', 'craft', '2026-08-31 08:41:55.882', '2026-08-31 08:41:55.882', NULL),
+(126, 1, 2, 'e258a85e-ef36-484c-a14c-86458573415c', 'craft', '2026-08-31 08:42:14.311', '2026-08-31 08:42:14.311', NULL),
+(128, 1, 2, 'e50ad226-1348-48ff-b4b7-2d8cd6605642', 'craft', '2026-08-31 08:42:30.960', '2026-08-31 08:42:30.960', NULL),
+(130, 1, 2, '44ba5e2f-bb2b-4c9d-a58a-caccfbaccf12', 'craft', '2026-08-31 08:43:02.401', '2026-08-31 08:43:02.446', NULL),
+(131, 1, 2, '2150a76e-4cc3-4779-8334-5c7e4131c7c9', 'craft', '2026-08-31 08:43:30.364', '2026-08-31 08:43:30.425', NULL),
+(132, 1, 2, '0c0eb558-7af0-4ea9-8fa4-8edfc263488d', 'craft', '2026-08-31 08:44:08.482', '2026-08-31 08:44:08.482', NULL),
+(133, 1, 2, 'ef19564a-f18a-4a15-a6d0-959ce8d3c267', 'craft', '2026-08-31 08:44:41.901', '2026-08-31 08:44:41.901', NULL),
+(135, 1, 2, '689df013-4bfc-4380-84f7-82135861ec52', 'studio', '2026-08-31 08:45:37.417', '2026-08-31 08:45:40.957', NULL),
+(139, 1, 2, '064c7a94-d6d5-4db7-82e7-bc8132821efa', 'craft', '2026-08-31 08:51:06.814', '2026-08-31 08:51:06.814', NULL),
+(141, 1, 2, 'a4b1047e-ceb2-4338-8ca6-186b08af6d9f', 'craft', '2026-08-31 08:52:01.045', '2026-08-31 08:52:01.056', NULL),
+(142, 1, 2, '44afd578-f0ea-4ef5-b76c-b9eb1532ff63', 'craft', '2026-08-31 08:52:53.706', '2026-08-31 08:52:53.708', NULL),
+(143, 1, 2, '26f83f1d-50af-47ef-b079-3ef233e229a6', 'craft', '2026-08-31 08:53:59.985', '2026-08-31 08:54:00.029', NULL),
+(144, 1, 2, '4e767b22-2e98-413d-989f-532ff4604859', 'studio', '2026-08-31 08:54:56.123', '2026-08-31 08:55:00.289', NULL),
+(145, 1, 2, 'ae614059-9a08-4c2e-bcb3-c4a49cae98bc', 'craft', '2026-08-31 09:01:21.586', '2026-08-31 09:29:29.659', NULL);
 
 -- --------------------------------------------------------
 
@@ -5640,13 +5766,13 @@ ALTER TABLE `asset_project_assignments`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1885;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2228;
 
 --
 -- AUTO_INCREMENT for table `automation_rules`
 --
 ALTER TABLE `automation_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `automation_runs`
@@ -5658,13 +5784,13 @@ ALTER TABLE `automation_runs`
 -- AUTO_INCREMENT for table `budgets`
 --
 ALTER TABLE `budgets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `budget_items`
 --
 ALTER TABLE `budget_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `business_units`
@@ -5676,7 +5802,7 @@ ALTER TABLE `business_units`
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `channel_product_mappings`
@@ -5694,7 +5820,7 @@ ALTER TABLE `chart_of_accounts`
 -- AUTO_INCREMENT for table `craft_orders`
 --
 ALTER TABLE `craft_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `craft_order_drafts`
@@ -5706,7 +5832,7 @@ ALTER TABLE `craft_order_drafts`
 -- AUTO_INCREMENT for table `craft_order_items`
 --
 ALTER TABLE `craft_order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `craft_order_status_history`
@@ -5736,19 +5862,19 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `domain_events`
 --
 ALTER TABLE `domain_events`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=435;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `filament_spools`
 --
 ALTER TABLE `filament_spools`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `financial_periods`
@@ -5760,7 +5886,7 @@ ALTER TABLE `financial_periods`
 -- AUTO_INCREMENT for table `financial_transactions`
 --
 ALTER TABLE `financial_transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- AUTO_INCREMENT for table `goods_receipts`
@@ -5778,31 +5904,31 @@ ALTER TABLE `goods_receipt_items`
 -- AUTO_INCREMENT for table `integrations`
 --
 ALTER TABLE `integrations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `integration_sync_logs`
 --
 ALTER TABLE `integration_sync_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `internal_transfers`
 --
 ALTER TABLE `internal_transfers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `inventory_movements`
 --
 ALTER TABLE `inventory_movements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
@@ -5814,19 +5940,19 @@ ALTER TABLE `invoice_items`
 -- AUTO_INCREMENT for table `invoice_payment_schedules`
 --
 ALTER TABLE `invoice_payment_schedules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `journal_entries`
 --
 ALTER TABLE `journal_entries`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=222;
 
 --
 -- AUTO_INCREMENT for table `journal_lines`
 --
 ALTER TABLE `journal_lines`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=409;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=443;
 
 --
 -- AUTO_INCREMENT for table `login_history`
@@ -5838,19 +5964,19 @@ ALTER TABLE `login_history`
 -- AUTO_INCREMENT for table `marketplace_fee_rules`
 --
 ALTER TABLE `marketplace_fee_rules`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlements`
 --
 ALTER TABLE `marketplace_settlements`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `marketplace_settlement_items`
 --
 ALTER TABLE `marketplace_settlement_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `master_options`
@@ -5862,31 +5988,31 @@ ALTER TABLE `master_options`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `material_batches`
 --
 ALTER TABLE `material_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
 --
 ALTER TABLE `material_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `material_waste`
 --
 ALTER TABLE `material_waste`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2004;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2146;
 
 --
 -- AUTO_INCREMENT for table `order_attachments`
@@ -5904,7 +6030,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `partner_price_rules`
@@ -5922,25 +6048,25 @@ ALTER TABLE `party_contacts`
 -- AUTO_INCREMENT for table `party_roles`
 --
 ALTER TABLE `party_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
 --
 ALTER TABLE `payment_methods`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `printers`
@@ -6006,7 +6132,7 @@ ALTER TABLE `production_queue_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product_boms`
@@ -6024,13 +6150,13 @@ ALTER TABLE `product_bom_items`
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `project_deliverables`
@@ -6042,7 +6168,7 @@ ALTER TABLE `project_deliverables`
 -- AUTO_INCREMENT for table `project_external_assignments`
 --
 ALTER TABLE `project_external_assignments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `project_milestones`
@@ -6102,7 +6228,7 @@ ALTER TABLE `qc_template_items`
 -- AUTO_INCREMENT for table `quick_links`
 --
 ALTER TABLE `quick_links`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `quotations`
@@ -6132,7 +6258,7 @@ ALTER TABLE `quotation_template_items`
 -- AUTO_INCREMENT for table `report_definitions`
 --
 ALTER TABLE `report_definitions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `report_exports`
@@ -6144,43 +6270,43 @@ ALTER TABLE `report_exports`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `sales_channels`
 --
 ALTER TABLE `sales_channels`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `service_packages`
 --
 ALTER TABLE `service_packages`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `service_package_items`
 --
 ALTER TABLE `service_package_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `stock_reservations`
 --
 ALTER TABLE `stock_reservations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `studio_projects`
 --
 ALTER TABLE `studio_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `studio_project_services`
 --
 ALTER TABLE `studio_project_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `studio_project_status_history`
@@ -6192,19 +6318,19 @@ ALTER TABLE `studio_project_status_history`
 -- AUTO_INCREMENT for table `studio_services`
 --
 ALTER TABLE `studio_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `studio_service_categories`
 --
 ALTER TABLE `studio_service_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `supplier_invoices`
 --
 ALTER TABLE `supplier_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -6216,55 +6342,55 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `transaction_categories`
 --
 ALTER TABLE `transaction_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `treasury_accounts`
 --
 ALTER TABLE `treasury_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
 
 --
 -- AUTO_INCREMENT for table `units_of_measure`
 --
 ALTER TABLE `units_of_measure`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=320;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
 -- AUTO_INCREMENT for table `user_deletion_requests`
 --
 ALTER TABLE `user_deletion_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_presence_sessions`
 --
 ALTER TABLE `user_presence_sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
 
 --
 -- AUTO_INCREMENT for table `user_reactivation_requests`
 --
 ALTER TABLE `user_reactivation_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`

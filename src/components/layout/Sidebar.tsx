@@ -394,7 +394,7 @@ const globalToolsNav: NavGroup = {
     { name: "Log Audit", icon: ShieldAlert, path: "/app/audit-log", permission: "audit.read" },
     { name: "Integrasi", icon: Network, path: "/app/integrations" },
     { name: "Pusat Otomasi", icon: Zap, path: "/app/automations" },
-    { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports" },
+    { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports", permission: "reports.read" },
     { name: "Data Master", icon: Database, path: "/app/master-data", permission: "master_data.read" },
     { name: "Pengaturan", icon: Settings, path: "/app/settings" },
   ],

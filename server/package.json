@@ -31,6 +31,7 @@
     "smoke:calendar-tasks": "tsx scripts/smoke-calendar-tasks.ts",
     "smoke:unified-finance": "tsx scripts/smoke-unified-finance.ts",
     "smoke:master-data": "tsx scripts/smoke-master-data.ts",
+    "smoke:reports": "tsx scripts/smoke-reports.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "documents:reconcile": "tsx scripts/reconcile-document-registry.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
@@ -54,6 +55,7 @@
     "browser:calendar-tasks": "node scripts/browser-calendar-tasks.mjs",
     "browser:unified-finance": "node scripts/browser-unified-finance.mjs",
     "browser:master-data": "node scripts/browser-master-data.mjs",
+    "browser:reports": "node scripts/browser-reports.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"
