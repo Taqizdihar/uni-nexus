@@ -1,4 +1,4 @@
-const assert: (condition: unknown, message: string) => asserts condition = (condition, message) => { if (!condition) throw new Error(message); };
+const assert: (actual: unknown, expected: unknown, message?: string) => void = (actual, expected, message) => { if (actual !== expected) throw new Error(message || `Expected ${String(expected)}, received ${String(actual)}.`); };
 import { randomUUID } from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import app from '../src/app';
@@ -6,7 +6,7 @@ import { pool } from '../src/config/database';
 import { AuditService } from '../src/shared/audit/audit.service';
 import { UsersService } from '../src/modules/users/users.service';
 
-const assertOk = (condition: unknown, message: string): asserts condition => assert(Boolean(condition), message);
+const assertOk: (condition: unknown, message: string) => asserts condition = (condition, message) => { if (!condition) throw new Error(message); };
 
 async function main() {
   const suffix = randomUUID().slice(0, 8); const username = `audit_smoke_${suffix}`; const noPermissionUsername = `audit_none_${suffix}`; const noExportUsername = `audit_view_${suffix}`;

@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { ArrowDownRight, ArrowLeftRight, ArrowUpRight, CheckCircle2, Landmark, Plus, RefreshCw, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
@@ -13,6 +13,7 @@ const date = (value?: string | null) => value ? new Date(value).toLocaleDateStri
 const amountClass = (type: string) => type === 'income' ? 'text-emerald-600' : type === 'expense' ? 'text-red-600' : 'text-[var(--nexus-charcoal)]';
 const money = (value: number) => formatCurrency(Number(value || 0));
 const statusClass = (status: string) => status === 'paid' || status === 'approved' || status === 'posted' ? 'bg-emerald-50 text-emerald-700' : status === 'draft' || status === 'partial' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700';
+const useEffect = (effect: () => void | (() => void) | Promise<unknown>, dependencies: React.DependencyList) => React.useEffect(() => { const result = effect(); return typeof result === 'function' ? result : undefined; }, dependencies);
 
 function PageHeader({ title, description, children }: { title: string; description: string; children?: React.ReactNode }) {
   return <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h1 className="text-2xl font-bold text-[var(--nexus-charcoal)]">{title}</h1><p className="mt-1 text-sm text-[var(--nexus-muted)]">{description}</p></div>{children}</div>;

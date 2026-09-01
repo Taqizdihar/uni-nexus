@@ -4,7 +4,7 @@ import { env } from '../src/config/env';
 import { storageService } from '../src/shared/storage';
 import { reportCodes } from '../src/modules/reports/reports.types';
 
-const assert = (value: unknown, message: string): asserts value => { if (!value) throw new Error(message); };
+const assert: (value: unknown, message: string) => asserts value = (value, message) => { if (!value) throw new Error(message); };
 const base = `http://localhost:${env.PORT}/api/v1`;
 let exportId: number | null = null; let storageKey: string | null = null;
 
