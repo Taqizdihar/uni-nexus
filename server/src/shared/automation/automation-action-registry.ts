@@ -6,7 +6,7 @@ import { OrderPriorityService } from '../../modules/craft-orders/order-priority.
 import { CraftProcurementService } from '../../modules/craft-procurement/craft-procurement.service';
 import { CraftMarketplaceService } from '../../modules/craft-marketplace/craft-marketplace.service';
 import { StudioProjectsService } from '../../modules/studio-projects/studio-projects.service';
-import { getStudioBusinessUnit } from '../../modules/studio-projects/studio-projects.helpers';
+import { getBusinessUnitByCodeForOrganization } from '../utils/business-unit';
 import { StudioAnalyticsService } from '../../modules/studio-analytics/studio-analytics.service';
 import { StudioAnalyticsExportService } from '../../modules/studio-analytics/studio-analytics-export.service';
 import { normalizeFilters, studioAnalyticsContext } from '../../modules/studio-analytics/studio-analytics.shared';
@@ -28,6 +28,8 @@ export interface AutomationActionDefinition {
   requiredPermission: string;
   retrySafe: boolean;
   risk: AutomationRisk;
+  available?: boolean;
+  unavailableReason?: string;
   supportedEvents?: string[];
   scope: 'shared' | 'craft' | 'studio';
 }
@@ -51,7 +53,7 @@ const definitions: AutomationActionDefinition[] = [
   { type: 'production.enqueue_order_items', label: 'Masukkan ke Antrean Produksi', module: 'craft_production', description: 'Menambahkan item pesanan Ready ke antrean produksi bila memenuhi syarat.', requiredPermission: 'craft.production.write', retrySafe: true, risk: 'data_change', supportedEvents: ['order.status_changed'], scope: 'craft' },
   { type: 'procurement.create_purchase_request', label: 'Buat Permintaan Pembelian', module: 'craft_procurement', description: 'Membuat draft purchase request; tidak dapat menyetujui atau membayar.', requiredPermission: 'craft.procurement.write', retrySafe: true, risk: 'data_change', supportedEvents: ['material.low_stock'], scope: 'craft' },
   { type: 'marketplace.sync', label: 'Sinkronkan Marketplace', module: 'craft_marketplace', description: 'Memanggil connector marketplace yang benar-benar terhubung.', requiredPermission: 'craft.marketplace.sync', retrySafe: false, risk: 'operational', scope: 'craft' },
-  { type: 'analytics.generate_report', label: 'Generate Laporan', module: 'craft_analytics', description: 'Meminta export laporan bila generator tersedia.', requiredPermission: 'craft.analytics.export', retrySafe: false, risk: 'operational', scope: 'craft' },
+  { type: 'analytics.generate_report', label: 'Generate Laporan', module: 'craft_analytics', description: 'Belum tersedia untuk otomasi sampai integrasi Report Center Craft aman tersedia.', requiredPermission: 'craft.analytics.export', retrySafe: false, risk: 'operational', scope: 'craft', available: false, unavailableReason: 'Integrasi export Craft belum tersedia untuk otomasi.' },
   { type: 'studio.project.priority.set', label: 'Atur Prioritas Proyek', module: 'studio_projects', description: 'Memakai layanan Proyek kanonik untuk memperbarui prioritas.', requiredPermission: 'studio.projects.write', retrySafe: true, risk: 'data_change', supportedEvents: ['studio.project.created', 'studio.project.status_changed', 'studio.project.deadline_approaching', 'studio.project.overdue'], scope: 'studio' },
   { type: 'studio.project.create_from_quotation', label: 'Buat Proyek dari Penawaran', module: 'studio_projects', description: 'Membuat satu proyek Studio dari penawaran diterima yang belum terhubung.', requiredPermission: 'studio.projects.write', retrySafe: false, risk: 'data_change', supportedEvents: ['studio.quotation.accepted'], scope: 'studio' },
   { type: 'studio.project.try_mark_paid', label: 'Coba Tandai Proyek Lunas', module: 'studio_projects', description: 'Meneruskan status completed → paid hanya bila pemeriksaan komersial kanonik terpenuhi.', requiredPermission: 'studio.projects.write', retrySafe: true, risk: 'data_change', supportedEvents: ['studio.finance.payment_received', 'studio.project.completed'], scope: 'studio' },
@@ -107,7 +109,9 @@ export class AutomationActionRegistry {
   }
   assertAvailable(actions: AutomationAction[], businessUnitCode = 'CRAFT') {
     for (const action of actions || []) {
-      if (!this.all(businessUnitCode).some((item) => item.type === action.type)) throw new AutomationValidationError(`Aksi ${action.type} tidak tersedia untuk workspace ini.`);
+      const definition = this.all(businessUnitCode).find((item) => item.type === action.type);
+      if (!definition) throw new AutomationValidationError(`Aksi ${action.type} tidak tersedia untuk workspace ini.`);
+      if (definition.available === false) throw new AutomationValidationError(definition.unavailableReason || `Aksi ${action.type} belum tersedia.`);
     }
   }
 
@@ -131,7 +135,9 @@ export class AutomationActionRegistry {
 
   async execute(action: AutomationAction, context: AutomationExecutionContext): Promise<Record<string, unknown>> {
     const config = action.config || {};
-    if (!this.all(context.businessUnitCode).some((definition) => definition.type === action.type)) throw new AutomationValidationError(`Aksi ${action.type} tidak tersedia untuk workspace ini.`);
+    const definition = this.all(context.businessUnitCode).find((item) => item.type === action.type);
+    if (!definition) throw new AutomationValidationError(`Aksi ${action.type} tidak tersedia untuk workspace ini.`);
+    if (definition.available === false) throw new AutomationSkippedError('AUTOMATION_ACTION_UNAVAILABLE', definition.unavailableReason || `Aksi ${action.type} belum tersedia.`);
     switch (action.type) {
       case 'notification.create': return this.createNotification(config, context);
       case 'order.priority.set': return this.setOrderPriority(config, context);
@@ -260,7 +266,7 @@ export class AutomationActionRegistry {
   private async setStudioProjectPriority(config: Record<string, unknown>, context: AutomationExecutionContext) {
     const projectId = projectIdFor(context);
     if (!projectId) throw new AutomationSkippedError('PROJECT_CONTEXT_REQUIRED', 'Aksi prioritas membutuhkan konteks proyek Studio.');
-    const studio = await getStudioBusinessUnit();
+    const studio = await getBusinessUnitByCodeForOrganization(context.organizationId, 'STUDIO');
     if (studio.id !== context.businessUnitId) throw new AutomationSkippedError('STUDIO_CONTEXT_REQUIRED', 'Aksi proyek hanya dapat dijalankan untuk Studio.');
     const result = await new StudioProjectsService().updateProject(projectId, { priority_code: String(config.priority) }, context.actorUserId || Number(context.rule.created_by), studio);
     return { status: 'success', project_id: result.id, priority: String(config.priority) };
@@ -269,7 +275,7 @@ export class AutomationActionRegistry {
   private async createStudioProjectFromQuotation(context: AutomationExecutionContext) {
     const quotationId = quotationIdFor(context);
     if (!quotationId) throw new AutomationSkippedError('QUOTATION_CONTEXT_REQUIRED', 'Aksi ini membutuhkan konteks penawaran.');
-    const studio = await getStudioBusinessUnit();
+    const studio = await getBusinessUnitByCodeForOrganization(context.organizationId, 'STUDIO');
     if (studio.id !== context.businessUnitId) throw new AutomationSkippedError('STUDIO_CONTEXT_REQUIRED', 'Aksi penawaran hanya dapat dijalankan untuk Studio.');
     const [rows]: any = await pool.execute(`SELECT id, quotation_number, party_id, project_id, status_code, currency_code, total_amount
       FROM quotations WHERE id=? AND organization_id=? AND business_unit_id=? LIMIT 1`, [quotationId, context.organizationId, studio.id]);
@@ -299,7 +305,7 @@ export class AutomationActionRegistry {
       projectId = Number(invoices[0]?.source_id || 0);
     }
     if (!projectId) throw new AutomationSkippedError('PROJECT_CONTEXT_REQUIRED', 'Tidak ada proyek Studio yang dapat diperiksa.');
-    const studio = await getStudioBusinessUnit();
+    const studio = await getBusinessUnitByCodeForOrganization(context.organizationId, 'STUDIO');
     if (studio.id !== context.businessUnitId) throw new AutomationSkippedError('STUDIO_CONTEXT_REQUIRED', 'Aksi proyek hanya dapat dijalankan untuk Studio.');
     const [projects]: any = await pool.execute('SELECT id,status_code FROM studio_projects WHERE id=? AND business_unit_id=? AND deleted_at IS NULL LIMIT 1', [projectId, studio.id]);
     if (!projects.length) throw new AutomationSkippedError('PROJECT_NOT_FOUND', 'Proyek Studio tidak lagi tersedia.');

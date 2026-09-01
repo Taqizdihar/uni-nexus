@@ -33,16 +33,22 @@ export class AutomationRunService {
     } catch (error) { await connection.rollback(); throw error; } finally { connection.release(); }
   }
 
-  private async businessUnitCode(businessUnitId: number): Promise<'CRAFT' | 'STUDIO'> {
-    const [rows]: any = await pool.execute('SELECT code FROM business_units WHERE id=? AND is_active=1 LIMIT 1', [businessUnitId]);
-    return String(rows[0]?.code || 'CRAFT').toUpperCase() === 'STUDIO' ? 'STUDIO' : 'CRAFT';
+  private async businessUnitCode(rule: any): Promise<'CRAFT' | 'STUDIO'> {
+    const [rows]: any = await pool.execute('SELECT code,organization_id FROM business_units WHERE id=? AND organization_id=? AND is_active=1 LIMIT 1', [rule.business_unit_id, rule.organization_id]);
+    if (!rows.length) throw new AutomationSkippedError('AUTOMATION_WORKSPACE_NOT_FOUND', 'Workspace aturan tidak ditemukan atau tidak aktif.');
+    if (Number(rows[0].organization_id) !== Number(rule.organization_id)) throw new AutomationSkippedError('AUTOMATION_WORKSPACE_ORGANIZATION_MISMATCH', 'Workspace aturan tidak cocok dengan organisasi.');
+    const code = String(rows[0].code || '').toUpperCase();
+    if (code !== 'CRAFT' && code !== 'STUDIO') throw new AutomationSkippedError('AUTOMATION_WORKSPACE_UNSUPPORTED', 'Workspace aturan tidak didukung oleh otomasi.');
+    return code;
   }
 
   private async validateLiveOwner(rule: any, actions: any[], businessUnitCode: 'CRAFT' | 'STUDIO') {
     if (!rule.created_by) return { valid: false, missing: [`${businessUnitCode.toLowerCase()}.automations.write`], reason: 'AUTOMATION_OWNER_REQUIRED' };
     const owner = await UsersService.getAuthPrincipal(Number(rule.created_by));
     const required = [...new Set([`${businessUnitCode.toLowerCase()}.automations.write`, ...automationActionRegistry.requiredPermissions(actions, businessUnitCode)])];
-    if (!owner || owner.status_code !== 'active' || owner.approval_status_code !== 'approved') return { valid: false, missing: required, reason: 'AUTOMATION_ACTION_PERMISSION_REVOKED' };
+    if (!owner || owner.status_code !== 'active' || owner.approval_status_code !== 'approved' || Number(owner.organization_id) !== Number(rule.organization_id)) return { valid: false, missing: required, reason: 'AUTOMATION_ACTION_PERMISSION_REVOKED' };
+    const [access]: any = await pool.execute('SELECT 1 FROM user_business_units WHERE user_id=? AND business_unit_id=? AND can_access=1 LIMIT 1', [owner.id, rule.business_unit_id]);
+    if (!access.length) return { valid: false, missing: required, reason: 'AUTOMATION_OWNER_SCOPE_REVOKED' };
     const permissions = Array.isArray(owner.permissions) ? owner.permissions : [];
     const missing = required.filter((permission) => !permissions.includes(permission));
     return { valid: !missing.length, missing, reason: 'AUTOMATION_ACTION_PERMISSION_REVOKED' };
@@ -69,12 +75,18 @@ export class AutomationRunService {
     const rule = normalizeRule(ruleRows[0]);
     const ruleSnapshot: any = parseJson(run.rule_snapshot_json, snapshot(rule));
     const actions = ruleSnapshot.actions?.actions || rule.action_json.actions || [];
-    const businessUnitCode = await this.businessUnitCode(Number(rule.business_unit_id));
+    let businessUnitCode: 'CRAFT' | 'STUDIO';
+    try { businessUnitCode = await this.businessUnitCode(rule); }
+    catch (error) {
+      const reason = error instanceof AutomationSkippedError ? error.code : 'AUTOMATION_WORKSPACE_NOT_FOUND';
+      await this.finish(run, rule, 'skipped', { reason });
+      return { status: 'skipped' };
+    }
     const triggerEvent = run.trigger_event || rule.trigger_event;
     const input = parseJson<Record<string, any>>(run.input_json, {});
     const eventId = Number(input._automation_event_id || 0);
     let event: any = null;
-    if (eventId) { const [events]: any = await pool.execute('SELECT * FROM domain_events WHERE id=?', [eventId]); event = events[0] || null; }
+    if (eventId) { const [events]: any = await pool.execute('SELECT * FROM domain_events WHERE id=? AND organization_id=? AND business_unit_id=?', [eventId, rule.organization_id, rule.business_unit_id]); event = events[0] || null; }
 
     if (rule.status_code !== 'active') { await this.finish(run, rule, 'skipped', { reason: 'RULE_NOT_ACTIVE', rule_status: rule.status_code }); return { status: 'skipped' }; }
     const owner = await this.validateLiveOwner(rule, actions, businessUnitCode);

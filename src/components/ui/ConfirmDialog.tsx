@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
 import { AlertTriangle, AlertCircle, Trash2, X, LucideIcon } from 'lucide-react';
 import { Button } from './Button';
 
@@ -13,6 +14,23 @@ interface ConfirmDialogProps {
   isLoading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+}
+
+type ConfirmationRequest = Pick<ConfirmDialogProps, 'title' | 'description' | 'confirmLabel' | 'cancelLabel' | 'variant' | 'icon'>;
+
+/** Opens the shared React confirmation dialog for legacy event handlers that cannot render local JSX state. */
+export function requestConfirmation(request: ConfirmationRequest): Promise<boolean> {
+  return new Promise((resolve) => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    const finish = (confirmed: boolean) => {
+      root.unmount();
+      container.remove();
+      resolve(confirmed);
+    };
+    root.render(<ConfirmDialog {...request} open onCancel={() => finish(false)} onConfirm={() => finish(true)} />);
+  });
 }
 
 export function ConfirmDialog({

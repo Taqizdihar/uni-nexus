@@ -71,9 +71,15 @@ async function run() {
     const outputDir = path.join(root, 'artifacts', `craft-materials-browser-${Date.now()}-${randomBytes(3).toString('hex')}`);
     await (await import('node:fs/promises')).mkdir(outputDir, { recursive: true });
     for (const [route, title] of routes) {
-      await cdp.send('Page.navigate', { url: `${front}${route}` }); await delay(1_400);
-      const state = await cdp.send('Runtime.evaluate', { expression: `({ title: Array.from(document.querySelectorAll('h1')).at(-1)?.textContent?.trim(), body: document.body.innerText, errors: window.__materialErrors })`, returnByValue: true });
-      const result = state.result?.value; assert(result?.title === title, `${route} expected '${title}', got '${result?.title}': ${result?.body?.slice(0, 300)}`); assert(!result.body.includes('FORBIDDEN'), `${route} rendered forbidden state`); assert(!result.errors?.length, `${route} has browser errors: ${result.errors.join('; ')}`);
+      await cdp.send('Page.navigate', { url: `${front}${route}` });
+      let result;
+      for (let attempt = 0; attempt < 50; attempt += 1) {
+        await delay(200);
+        const state = await cdp.send('Runtime.evaluate', { expression: `({ title: Array.from(document.querySelectorAll('h1')).at(-1)?.textContent?.trim(), body: document.body.innerText, errors: window.__materialErrors })`, returnByValue: true });
+        result = state.result?.value;
+        if (result?.title === title) break;
+      }
+      assert(result?.title === title, `${route} expected '${title}', got '${result?.title}': ${result?.body?.slice(0, 300)}`); assert(!result.body.includes('FORBIDDEN'), `${route} rendered forbidden state`); assert(!result.errors?.length, `${route} has browser errors: ${result.errors.join('; ')}`);
       const image = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true }); await writeFile(path.join(outputDir, `${title.replace(/\s+/g, '-').toLowerCase()}.png`), Buffer.from(image.data, 'base64'));
     }
     cdp.socket.close(); console.log(`Craft Materials browser acceptance passed. Screenshots: ${outputDir}`);

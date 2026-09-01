@@ -63,43 +63,44 @@ export class AutomationRuleService {
     return null;
   }
 
-  async list(businessUnitId: number, filters: Record<string, unknown>) { return this.repository.listRules(businessUnitId, filters); }
-  async get(id: number, businessUnitId: number) { const rule = await this.repository.getRule(id, businessUnitId); if (!rule) throw new NotFoundError('Aturan otomasi tidak ditemukan.'); return rule; }
+  async list(businessUnitId: number, filters: Record<string, unknown>, organizationId?: number) { return this.repository.listRules(businessUnitId, filters, organizationId); }
+  async get(id: number, businessUnitId: number, organizationId?: number) { const rule = await this.repository.getRule(id, businessUnitId, organizationId); if (!rule) throw new NotFoundError('Aturan otomasi tidak ditemukan.'); return rule; }
 
   async create(input: AutomationRuleInput, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) {
     const normalized = this.normalize(input); const executable = normalized.status_code === 'active';
     this.validate(normalized, executable);
     if (executable) requirePermissions(actor, automationActionRegistry.requiredPermissions(normalized.action_json.actions, this.businessUnitCode));
-    return this.repository.createRule(normalized, { ...context, userId: actor.id, moduleCode: moduleFor(normalized, this.businessUnitCode), nextRunAt: this.nextRun(normalized) });
+    return this.repository.createRule(normalized, { ...context, userId: actor.id, moduleCode: moduleFor(normalized, this.businessUnitCode), auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations`, nextRunAt: this.nextRun(normalized) });
   }
 
   async update(id: number, patch: Partial<AutomationRuleInput>, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) {
-    const existing = await this.get(id, context.businessUnitId); if (existing.is_system) throw new AppError(409, 'SYSTEM_RULE_READ_ONLY', 'Aturan sistem tidak dapat diubah.');
+    const existing = await this.get(id, context.businessUnitId, context.organizationId); if (existing.is_system) throw new AppError(409, 'SYSTEM_RULE_READ_ONLY', 'Aturan sistem tidak dapat diubah.');
     const normalized = this.normalize(patch as AutomationRuleInput, existing); const executable = normalized.status_code === 'active';
     this.validate(normalized, executable); if (executable) requirePermissions(actor, automationActionRegistry.requiredPermissions(normalized.action_json.actions, this.businessUnitCode));
-    return this.repository.updateRule(id, normalized, { ...context, userId: actor.id, moduleCode: moduleFor(normalized, this.businessUnitCode), nextRunAt: this.nextRun(normalized) });
+    return this.repository.updateRule(id, normalized, { ...context, userId: actor.id, moduleCode: moduleFor(normalized, this.businessUnitCode), auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations`, expectedVersion: (patch as any).expected_version, nextRunAt: this.nextRun(normalized) });
   }
 
   async activate(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) {
-    const rule = await this.get(id, context.businessUnitId); if (rule.is_system) throw new AppError(409, 'SYSTEM_RULE_READ_ONLY', 'Aturan sistem tidak dapat diaktifkan secara manual.');
+    const rule = await this.get(id, context.businessUnitId, context.organizationId); if (rule.is_system) throw new AppError(409, 'SYSTEM_RULE_READ_ONLY', 'Aturan sistem tidak dapat diaktifkan secara manual.');
     const input = this.normalize(rule, rule); this.validate(input, true); requirePermissions(actor, automationActionRegistry.requiredPermissions(input.action_json.actions, this.businessUnitCode));
-    return this.repository.changeStatus(id, 'active', { ...context, userId: actor.id, nextRunAt: this.nextRun({ ...input, status_code: 'active' }) });
+    return this.repository.changeStatus(id, 'active', { ...context, userId: actor.id, auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations`, nextRunAt: this.nextRun({ ...input, status_code: 'active' }) });
   }
-  async pause(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId); return this.repository.changeStatus(id, 'paused', { ...context, userId: actor.id, nextRunAt: null }); }
+  async pause(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId, context.organizationId); return this.repository.changeStatus(id, 'paused', { ...context, userId: actor.id, auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations`, nextRunAt: null }); }
   async resume(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { return this.activate(id, actor, context); }
-  async disable(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId); return this.repository.changeStatus(id, 'disabled', { ...context, userId: actor.id, nextRunAt: null }); }
-  async duplicate(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId); return this.repository.duplicateRule(id, { ...context, userId: actor.id }); }
+  async disable(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId, context.organizationId); return this.repository.changeStatus(id, 'disabled', { ...context, userId: actor.id, auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations`, nextRunAt: null }); }
+  async duplicate(id: number, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) { await this.get(id, context.businessUnitId, context.organizationId); return this.repository.duplicateRule(id, { ...context, userId: actor.id, auditModuleCode: `${this.businessUnitCode.toLowerCase()}_automations` }); }
 
   async useTemplate(code: string, actor: AutomationActor, context: { organizationId: number; businessUnitId: number }) {
     const template = this.templates.get(code); if (!template) throw new NotFoundError('Template otomasi tidak ditemukan.');
     return this.create({ ...template.rule, name: template.rule.name, status_code: 'draft' }, actor, context);
   }
 
-  async test(id: number, body: { event_id?: number; input?: Record<string, unknown> }, businessUnitId: number) {
-    const rule = await this.get(id, businessUnitId); this.validate(this.normalize(rule, rule), rule.status_code === 'active');
+  async test(id: number, body: { event_id?: number; input?: Record<string, unknown> }, businessUnitId: number, organizationId?: number) {
+    const rule = await this.get(id, businessUnitId, organizationId); this.validate(this.normalize(rule, rule), rule.status_code === 'active');
     let input = body.input || {};
     if (body.event_id) {
-      const [events]: any = await (await import('../../config/database')).pool.execute('SELECT * FROM domain_events WHERE id=? AND business_unit_id=?', [body.event_id, businessUnitId]);
+      const params: unknown[] = [body.event_id, businessUnitId]; const organizationClause = organizationId === undefined ? '' : ' AND organization_id=?'; if (organizationId !== undefined) params.push(organizationId);
+      const [events]: any = await (await import('../../config/database')).pool.execute(`SELECT * FROM domain_events WHERE id=? AND business_unit_id=?${organizationClause}`, params as any[]);
       if (!events.length) throw new NotFoundError('Event domain tidak ditemukan.');
       const event = events[0]; input = parseJson(event.payload_json, {}); if (!input.event) input = { ...input, event: { id: Number(event.id), name: event.event_name, entity_type: event.entity_type, entity_id: event.entity_id } };
     }

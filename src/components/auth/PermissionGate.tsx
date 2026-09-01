@@ -3,17 +3,20 @@ import { useAuth } from '../../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 interface PermissionGateProps {
-  permission: string;
+  permission?: string;
+  /** Backward-compatible any-of permission guard for global modules. */
+  anyOf?: string[];
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
-export function PermissionGate({ permission, children, fallback }: PermissionGateProps) {
+export function PermissionGate({ permission, anyOf, children, fallback }: PermissionGateProps) {
   const { hasPermission, isLoading } = useAuth();
 
   if (isLoading) return null;
 
-  if (!hasPermission(permission)) {
+  const allowed = permission ? hasPermission(permission) : Boolean(anyOf?.some(hasPermission));
+  if (!allowed) {
     if (fallback !== undefined) {
       return <>{fallback}</>;
     }

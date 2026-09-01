@@ -40,6 +40,7 @@ interface NavItem {
   path: string;
   subItems?: NavSubItem[];
   permission?: string;
+  permissionsAny?: string[];
 }
 
 interface NavGroup {
@@ -393,7 +394,7 @@ const globalToolsNav: NavGroup = {
     },
     { name: "Log Audit", icon: ShieldAlert, path: "/app/audit-log", permission: "audit.read" },
     { name: "Integrasi", icon: Network, path: "/app/integrations" },
-    { name: "Pusat Otomasi", icon: Zap, path: "/app/automations" },
+    { name: "Pusat Otomasi", icon: Zap, path: "/app/automations", permissionsAny: ["craft.automations.read", "studio.automations.read"] },
     { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports", permission: "reports.read" },
     { name: "Data Master", icon: Database, path: "/app/master-data", permission: "master_data.read" },
     { name: "Pengaturan", icon: Settings, path: "/app/settings", permission: "settings.manage" },
@@ -502,7 +503,7 @@ export function Sidebar() {
             <div className="space-y-1">
               {group.items
                 .filter(
-                  (item) => !item.permission || hasPermission(item.permission),
+                  (item) => (!item.permission || hasPermission(item.permission)) && (!item.permissionsAny || item.permissionsAny.some(hasPermission)),
                 )
                 .map((item) => (
                   <SidebarItem key={item.name} item={item} />
@@ -517,7 +518,7 @@ export function Sidebar() {
           </h3>
           <div className="space-y-1">
             {globalToolsNav.items.map((item) => {
-              if (item.permission && !hasPermission(item.permission))
+              if ((item.permission && !hasPermission(item.permission)) || (item.permissionsAny && !item.permissionsAny.some(hasPermission)))
                 return null;
               return <SidebarItem key={item.name} item={item} />;
             })}

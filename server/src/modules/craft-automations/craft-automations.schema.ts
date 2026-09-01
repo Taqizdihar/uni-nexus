@@ -23,5 +23,8 @@ export const automationRuleSchema = z.object({
   max_retries: z.number().int().min(0).max(5).optional().default(0),
   status_code: z.enum(['draft', 'active', 'paused', 'disabled']).optional(),
 }).strict();
-export const automationRulePatchSchema = automationRuleSchema.partial().extend({ action_json: z.object({ version: z.number().int().positive().optional(), actions: z.array(actionSchema).min(1).max(10) }).strict().optional() }).strict();
+export const automationRulePatchSchema = automationRuleSchema.partial().extend({
+  action_json: z.object({ version: z.number().int().positive().optional(), actions: z.array(actionSchema).min(1).max(10) }).strict().optional(),
+  expected_version: z.number().int().positive().optional(),
+}).strict();
 export const manualRunSchema = z.object({ event_id: z.number().int().positive().optional(), dry_run: z.boolean().optional(), input: z.record(z.string(), z.unknown()).optional() }).strict();

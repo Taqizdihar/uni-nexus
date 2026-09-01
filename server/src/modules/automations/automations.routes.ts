@@ -1,0 +1,26 @@
+import { Router } from 'express';
+import { requireAnyPermission, requireAuth } from '../../middleware/auth.middleware';
+import { GlobalAutomationsController } from './automations.controller';
+
+const controller = new GlobalAutomationsController();
+export const globalAutomationsRoutes = Router();
+globalAutomationsRoutes.use(requireAuth, requireAnyPermission('craft.automations.read', 'studio.automations.read'));
+globalAutomationsRoutes.get('/overview', controller.overview);
+globalAutomationsRoutes.get('/meta', controller.meta);
+globalAutomationsRoutes.get('/catalog', controller.catalog);
+globalAutomationsRoutes.get('/events', controller.events);
+globalAutomationsRoutes.get('/templates', controller.templates);
+globalAutomationsRoutes.post('/templates/:workspace/:code/use', controller.useTemplate);
+globalAutomationsRoutes.get('/rules', controller.rules);
+globalAutomationsRoutes.post('/rules', controller.create);
+globalAutomationsRoutes.get('/rules/:id', controller.rule);
+globalAutomationsRoutes.patch('/rules/:id', controller.update);
+globalAutomationsRoutes.post('/rules/:id/activate', controller.status('activate'));
+globalAutomationsRoutes.post('/rules/:id/pause', controller.status('pause'));
+globalAutomationsRoutes.post('/rules/:id/resume', controller.status('resume'));
+globalAutomationsRoutes.post('/rules/:id/disable', controller.status('disable'));
+globalAutomationsRoutes.post('/rules/:id/duplicate', controller.duplicate);
+globalAutomationsRoutes.post('/rules/:id/test', controller.test);
+globalAutomationsRoutes.post('/rules/:id/run', controller.run);
+globalAutomationsRoutes.get('/runs', controller.runs);
+globalAutomationsRoutes.get('/runs/:id', controller.runDetail);
