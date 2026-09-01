@@ -1,8 +1,9 @@
 import { pool } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
+import { settingsService } from '../../shared/settings/settings.service';
+import { organizationBusinessDate, organizationDayStartUtc } from '../../shared/time/organization-time';
 import type { AccessibleBusinessUnits, DashboardActor, DashboardFilters, DashboardNavigation, DashboardPeriod, DashboardRange } from './dashboard.types';
 
-const TIMEZONE = 'Asia/Jakarta' as const;
 const DAY_MS = 86_400_000;
 const TERMINAL_ORDER_STATUSES = ['completed', 'packed', 'shipped', 'cancelled', 'returned'];
 const ACTIVE_PROJECT_STATUSES = ['approved', 'in_progress', 'review'];
@@ -15,13 +16,7 @@ const addDays = (date: Date, days: number) => new Date(date.getTime() + days * D
 const placeholders = (values: unknown[]) => values.map(() => '?').join(', ');
 const inList = (values: number[]) => values.length ? `IN (${placeholders(values)})` : 'IN (NULL)';
 
-function jakartaDay() {
-  const parts = new Intl.DateTimeFormat('en-US', { timeZone: TIMEZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts();
-  const part = (name: string) => parts.find(item => item.type === name)?.value || '';
-  return new Date(Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day'))));
-}
-
-function localDateToUtc(date: Date) { return new Date(date.getTime() - 7 * 60 * 60 * 1000); }
+function organizationDay(timeZone: string) { return new Date(`${organizationBusinessDate(new Date(), timeZone)}T00:00:00.000Z`); }
 
 function parseYmd(value: string) {
   const [year, month, day] = value.split('-').map(Number);
@@ -30,19 +25,19 @@ function parseYmd(value: string) {
   return parsed;
 }
 
-function makePeriod(range: DashboardRange, startDay: Date, endDay: Date): DashboardPeriod {
-  const startUtc = localDateToUtc(startDay);
-  const endUtc = localDateToUtc(addDays(endDay, 1));
-  return { range, start_date: ymd(startDay), end_date: ymd(endDay), timezone: TIMEZONE, start_at_utc: sqlDateTime(startUtc), end_at_utc: sqlDateTime(endUtc) };
+function makePeriod(range: DashboardRange, startDay: Date, endDay: Date, timeZone: string): DashboardPeriod {
+  const startUtc = organizationDayStartUtc(ymd(startDay), timeZone);
+  const endUtc = organizationDayStartUtc(ymd(addDays(endDay, 1)), timeZone);
+  return { range, start_date: ymd(startDay), end_date: ymd(endDay), timezone: timeZone, start_at_utc: sqlDateTime(startUtc), end_at_utc: sqlDateTime(endUtc) };
 }
 
-function periods(filters: DashboardFilters) {
-  const today = jakartaDay();
+function periods(filters: DashboardFilters, weekStart: 'monday' | 'sunday' = 'monday', timeZone = 'Asia/Jakarta') {
+  const today = organizationDay(timeZone);
   let start = today;
   let end = today;
   if (filters.range === 'week') {
-    const mondayOffset = (today.getUTCDay() + 6) % 7;
-    start = addDays(today, -mondayOffset); end = addDays(start, 6);
+    const offset = weekStart === 'sunday' ? today.getUTCDay() : (today.getUTCDay() + 6) % 7;
+    start = addDays(today, -offset); end = addDays(start, 6);
   } else if (filters.range === 'month') {
     start = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)); end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0));
   } else if (filters.range === 'year') {
@@ -52,7 +47,7 @@ function periods(filters: DashboardFilters) {
     if (end < start) throw new AppError(400, 'DASHBOARD_INVALID_RANGE', 'Tanggal akhir harus setelah tanggal mulai.');
     if (end.getTime() - start.getTime() > 5 * 366 * DAY_MS) throw new AppError(400, 'DASHBOARD_RANGE_TOO_LARGE', 'Rentang Dasbor dibatasi hingga lima tahun.');
   }
-  const current = makePeriod(filters.range, start, end);
+  const current = makePeriod(filters.range, start, end, timeZone);
   const duration = Math.round((end.getTime() - start.getTime()) / DAY_MS) + 1;
   let previousStart = addDays(start, -duration); let previousEnd = addDays(start, -1);
   if (filters.range === 'month') {
@@ -60,7 +55,7 @@ function periods(filters: DashboardFilters) {
   } else if (filters.range === 'year') {
     previousStart = new Date(Date.UTC(start.getUTCFullYear() - 1, 0, 1)); previousEnd = new Date(Date.UTC(start.getUTCFullYear() - 1, 11, 31));
   }
-  const previous = makePeriod(filters.range, previousStart, previousEnd);
+  const previous = makePeriod(filters.range, previousStart, previousEnd, timeZone);
   return { current, previous, duration };
 }
 
@@ -181,16 +176,16 @@ export class DashboardService {
     return values;
   }
 
-  private async studioSummary(studioId: number | null, period: DashboardPeriod) {
+  private async studioSummary(studioId: number | null, period: DashboardPeriod, dueSoonDays: number) {
     if (!studioId) return null;
     const [rows]: any = await pool.execute(
       `SELECT SUM(status_code IN (${ACTIVE_PROJECT_STATUSES.map(() => '?').join(',')})) AS active_projects,
-              SUM(status_code IN (${ACTIVE_PROJECT_STATUSES.map(() => '?').join(',')}) AND deadline_at >= UTC_TIMESTAMP(3) AND deadline_at < DATE_ADD(UTC_TIMESTAMP(3), INTERVAL 7 DAY)) AS due_soon,
+              SUM(status_code IN (${ACTIVE_PROJECT_STATUSES.map(() => '?').join(',')}) AND deadline_at >= UTC_TIMESTAMP(3) AND deadline_at < DATE_ADD(UTC_TIMESTAMP(3), INTERVAL ? DAY)) AS due_soon,
               SUM(status_code IN (${ACTIVE_PROJECT_STATUSES.map(() => '?').join(',')}) AND deadline_at < UTC_TIMESTAMP(3)) AS overdue_projects,
               SUM(status_code IN (${ACTIVE_PROJECT_STATUSES.map(() => '?').join(',')}) AND payment_status_code IN ('unpaid', 'partial')) AS unpaid_projects,
               SUM(completed_at >= ? AND completed_at < ?) AS completed_in_period
        FROM studio_projects WHERE business_unit_id = ? AND deleted_at IS NULL`,
-      [...ACTIVE_PROJECT_STATUSES, ...ACTIVE_PROJECT_STATUSES, ...ACTIVE_PROJECT_STATUSES, ...ACTIVE_PROJECT_STATUSES, period.start_at_utc, period.end_at_utc, studioId],
+      [...ACTIVE_PROJECT_STATUSES, ...ACTIVE_PROJECT_STATUSES, dueSoonDays, ...ACTIVE_PROJECT_STATUSES, ...ACTIVE_PROJECT_STATUSES, period.start_at_utc, period.end_at_utc, studioId],
     );
     return Object.fromEntries(Object.entries(rows[0]).map(([key, value]) => [key, Number(value || 0)]));
   }
@@ -262,7 +257,13 @@ export class DashboardService {
   }
 
   async overview(filters: DashboardFilters, actor: DashboardActor) {
-    const { current, previous, duration } = periods(filters);
+    const [[organizationRows], weekStart, dueSoonDays] = await Promise.all([
+      pool.execute<any[]>('SELECT timezone FROM organizations WHERE id=? LIMIT 1', [actor.organization_id]),
+      settingsService.value<'monday' | 'sunday'>(actor.organization_id, 'organization', 'general', 'week_start'),
+      settingsService.value<number>(actor.organization_id, 'studio', 'studio', 'dashboard_due_soon_days'),
+    ]);
+    const timeZone = organizationRows[0]?.timezone || 'Asia/Jakarta';
+    const { current, previous, duration } = periods(filters, weekStart, timeZone);
     const units = await this.units(actor);
     const financeUnits = [units.craftId, units.studioId, units.sharedId].filter((id): id is number => Boolean(id));
     const navigation: DashboardNavigation = {
@@ -279,7 +280,7 @@ export class DashboardService {
     const selectedCurrency = filters.currency || defaultCurrency;
     const [financial, craftSummary, studioSummary, production, attention, quickLinks, craftOrders, studioProjects] = await Promise.all([
       Promise.all([this.financialTotals(actor, financeUnits, current, selectedCurrency), this.financialTotals(actor, financeUnits, previous, selectedCurrency), this.cashSnapshot(actor, financeUnits, selectedCurrency), this.revenueBreakdown(actor, financeUnits, current, selectedCurrency, duration), this.cashFlow(actor, financeUnits, current, selectedCurrency)]),
-      this.craftSummary(units.craftId, current), this.studioSummary(units.studioId, current), this.production(units.craftId), this.attention(actor, units, navigation), this.quickLinks(actor, units), this.recentOrders(units.craftId), this.recentProjects(units.studioId),
+      this.craftSummary(units.craftId, current), this.studioSummary(units.studioId, current, dueSoonDays), this.production(units.craftId), this.attention(actor, units, navigation), this.quickLinks(actor, units), this.recentOrders(units.craftId), this.recentProjects(units.studioId),
     ]);
     const [now, before, totalCash, revenueBreakdown, cashFlow] = financial;
     const expense = number(now.expense - now.reversal); const previousExpense = number(before.expense - before.reversal);

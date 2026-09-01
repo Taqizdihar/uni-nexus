@@ -13,7 +13,7 @@ import { formatNotificationTime, notificationModuleIcon, relativeNotificationTim
 
 export function Header() {
   const { activeWorkspace, setWorkspace } = useWorkspace();
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
@@ -180,9 +180,9 @@ export function Header() {
              <Link to="/app/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
                Profil Saya
              </Link>
-             <Link to="/app/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
-               Preferensi
-             </Link>
+             {hasPermission('settings.manage') && <Link to="/app/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--nexus-cream-soft)] hover:text-[var(--nexus-yellow-deep)] transition-colors">
+               Pengaturan Sistem
+             </Link>}
              <button onClick={() => setIsLogoutDialogOpen(true)} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                Keluar
              </button>

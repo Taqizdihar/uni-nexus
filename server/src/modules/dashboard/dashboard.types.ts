@@ -17,7 +17,7 @@ export interface DashboardPeriod {
   range: DashboardRange;
   start_date: string;
   end_date: string;
-  timezone: 'Asia/Jakarta';
+  timezone: string;
   start_at_utc: string;
   end_at_utc: string;
 }

@@ -1,10 +1,13 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { settingsService } from '../../shared/settings/settings.service';
 import { studioClientService } from '../../shared/party/studio-client.service';
 import { studioBillingDocumentService } from './studio-billing-document.service';
 import { studioBillingRepository } from './studio-billing.repository';
 import { STUDIO_PROJECT_INVOICE_SOURCE, assignCommercialNumber, assertDateOrder, getStudioBillingBusinessUnit, loadStudioProjectForBilling, publishBillingEvent, roundMoney, studioDate, tempCode, toNumber, toSqlDate, withBillingTransaction, writeBillingAudit } from './studio-billing.shared';
 import type { CommercialLineInput, InvoiceInput, InvoiceListFilters, PaymentScheduleInput } from './studio-billing.types';
+
+const plusDays = (date: string, days: number) => { const value = new Date(`${date}T00:00:00Z`); value.setUTCDate(value.getUTCDate() + days); return value.toISOString().slice(0, 10); };
 
 interface InvoiceTotals { subtotal: number; discount_amount: number; tax_amount: number; total_amount: number; }
 interface ResolvedInvoiceReferences { partyId: number; quotation: any | null; project: any | null; sourceType: 'studio_project' | 'manual'; sourceId: number | null; }
@@ -148,7 +151,8 @@ export class StudioInvoiceService {
     return withBillingTransaction(async connection => {
       const issueDate = toSqlDate(input.issue_date);
       if (!issueDate) throw new AppError(400, 'INVALID_DATE', 'Tanggal invoice wajib diisi.');
-      const dueDate = toSqlDate(input.due_date);
+      const defaultDays = input.due_date === undefined ? await settingsService.value<number>(studio.organizationId, 'studio', 'studio', 'invoice_default_due_days') : null;
+      const dueDate = toSqlDate(input.due_date === undefined ? plusDays(issueDate, defaultDays!) : input.due_date);
       assertDateOrder(issueDate, dueDate, 'Tanggal jatuh tempo');
       const references = await this.resolveReferences(connection, input, studio, { requireAcceptedQuotation: true, requireProjectEligible: true });
       await this.validateLines(connection, input.items, studio.id);
@@ -177,7 +181,7 @@ export class StudioInvoiceService {
     const items = quoteItems.map((item, index) => ({ service_id: item.service_id, description: item.description, quantity: toNumber(item.quantity), unit_price: toNumber(item.unit_price), discount_amount: toNumber(item.discount_amount), tax_amount: index === quoteItems.length - 1 ? toNumber(quotation.tax_amount) : 0 }));
     return this.create({
       party_id: Number(quotation.party_id), quotation_id: quotationId, source_type: quotation.project_id ? STUDIO_PROJECT_INVOICE_SOURCE : 'manual', source_id: quotation.project_id ? Number(quotation.project_id) : null,
-      issue_date: overrides.issue_date || studioDate(), due_date: overrides.due_date || null, currency_code: quotation.currency_code, discount_amount: toNumber(quotation.discount_amount), payment_terms: overrides.payment_terms || null, notes: overrides.notes || quotation.notes || null, items, schedules: overrides.schedules || [],
+      issue_date: overrides.issue_date || studioDate(), due_date: overrides.due_date, currency_code: quotation.currency_code, discount_amount: toNumber(quotation.discount_amount), payment_terms: overrides.payment_terms || null, notes: overrides.notes || quotation.notes || null, items, schedules: overrides.schedules || [],
     }, userId);
   }
 

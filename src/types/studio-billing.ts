@@ -34,7 +34,7 @@ export interface StudioBillingDocument { id: number; file_name: string; created_
 export interface PaginationMeta { page: number; limit: number; total: number; totalPages: number; }
 export interface Paginated<T> { items: T[]; meta: PaginationMeta; }
 
-export interface StudioBillingReferences { clients: StudioBillingClientReference[]; projects: StudioBillingProjectReference[]; services: StudioBillingServiceReference[]; service_packages: StudioBillingServicePackageReference[]; quotation_templates: StudioQuotationTemplateSummary[]; organization: { name?: string; legal_name?: string | null; currency_code: string; }; }
+export interface StudioBillingReferences { clients: StudioBillingClientReference[]; projects: StudioBillingProjectReference[]; services: StudioBillingServiceReference[]; service_packages: StudioBillingServicePackageReference[]; quotation_templates: StudioQuotationTemplateSummary[]; organization: { name?: string; legal_name?: string | null; currency_code: string; }; defaults: { quotation_valid_days: number; invoice_due_days: number; payment_schedule_interval_days: number; }; }
 export interface StudioProjectScope { project: StudioBillingProjectReference; services: Array<{ id: number; service_id: number | null; package_id: number | null; description: string; quantity: number; unit_price: number; line_total: number; service_code: string | null; service_name: string | null; package_code: string | null; package_name: string | null; }>; }
 
 export interface CommercialLinePayload { service_id?: number | null; description: string; quantity: number; unit_price: number; discount_amount?: number; tax_amount?: number; }

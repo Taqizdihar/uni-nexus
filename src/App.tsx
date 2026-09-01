@@ -29,6 +29,7 @@ import { CalendarTasks } from "./pages/global/CalendarTasks";
 import { UnifiedFinance } from "./pages/global/UnifiedFinance";
 import { MasterData } from "./pages/global/MasterData";
 import { Reports } from "./pages/global/Reports";
+import { Settings as SettingsPage } from "./pages/global/Settings";
 import { CraftOrders } from "./pages/craft/Orders";
 import { CraftPrinters } from "./pages/craft/Printers";
 import { CraftProduction } from "./pages/craft/Production";
@@ -86,12 +87,7 @@ const router = createBrowserRouter(
         <Route
           path="settings"
           element={
-            <PlannedModulePage
-              title="Pengaturan Sistem"
-              description="Pengaturan global aplikasi dan ruang kerja."
-              stage="Tahap Berikutnya"
-              icon={Settings}
-            />
+            <PermissionGate permission="settings.manage"><SettingsPage /></PermissionGate>
           }
         />
         <Route path="notifications" element={<Notifications />} />

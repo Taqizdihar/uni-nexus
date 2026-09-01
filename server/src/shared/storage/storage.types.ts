@@ -7,7 +7,7 @@ export type StoragePolicyName =
   | 'project_deliverable' | 'generic_document' | 'quotation_pdf' | 'invoice_pdf'
   | 'payment_proof' | 'expense_receipt' | 'purchase_order_document'
   | 'supplier_invoice_document' | 'equipment_image' | 'maintenance_attachment'
-  | 'report_export' | 'marketplace_import';
+  | 'report_export' | 'marketplace_import' | 'organization_logo';
 
 export interface StorageScope {
   productId?: number;
@@ -15,6 +15,7 @@ export interface StorageScope {
   projectId?: number;
   expenseId?: number;
   supplierInvoiceId?: number;
+  organizationId?: number;
 }
 
 export interface StoragePolicy {

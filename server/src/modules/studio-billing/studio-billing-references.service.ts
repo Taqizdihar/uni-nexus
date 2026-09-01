@@ -2,11 +2,12 @@ import { pool } from '../../config/database';
 import { studioReferencesService } from '../studio-references/studio-references.service';
 import { studioBillingRepository } from './studio-billing.repository';
 import { getStudioBillingBusinessUnit, toNumber } from './studio-billing.shared';
+import { settingsService } from '../../shared/settings/settings.service';
 
 export class StudioBillingReferencesService {
   async getAll() {
     const studio = await getStudioBillingBusinessUnit();
-    const [clients, services, packages, templates, projectRows, organizationRows] = await Promise.all([
+    const [clients, services, packages, templates, projectRows, organizationRows, quotationDefaultValidDays, invoiceDefaultDueDays, paymentScheduleIntervalDays] = await Promise.all([
       studioReferencesService.getClients(studio, undefined, 200),
       studioReferencesService.getServices(studio),
       studioReferencesService.getServicePackages(studio),
@@ -20,10 +21,13 @@ export class StudioBillingReferencesService {
          ORDER BY p.created_at DESC, p.id DESC LIMIT 300`, [studio.id],
       ),
       pool.execute('SELECT id, name, legal_name, address, city, province, postal_code, country_code, currency_code FROM organizations WHERE id = ? LIMIT 1', [studio.organizationId]),
+      settingsService.value<number>(studio.organizationId, 'studio', 'studio', 'quotation_default_valid_days'),
+      settingsService.value<number>(studio.organizationId, 'studio', 'studio', 'invoice_default_due_days'),
+      settingsService.value<number>(studio.organizationId, 'studio', 'studio', 'payment_schedule_interval_days'),
     ]);
     const projects = (projectRows[0] as any[]).map(row => ({ ...row, contract_value: toNumber(row.contract_value), service_count: toNumber(row.service_count) }));
     const organization = (organizationRows[0] as any[])[0] || { currency_code: 'IDR' };
-    return { clients, projects, services, service_packages: packages, quotation_templates: templates.items, organization };
+    return { clients, projects, services, service_packages: packages, quotation_templates: templates.items, organization, defaults: { quotation_valid_days: quotationDefaultValidDays, invoice_due_days: invoiceDefaultDueDays, payment_schedule_interval_days: paymentScheduleIntervalDays } };
   }
 
   async getProjectScope(projectId: number) {

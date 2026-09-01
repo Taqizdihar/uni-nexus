@@ -14,6 +14,7 @@ const office = [
 const policy = (entry: StoragePolicy) => entry;
 
 export const storagePolicies: Record<StoragePolicyName, StoragePolicy> = {
+  organization_logo: policy({ name: 'organization_logo', destination: scope => `organization-logos/${numericScope(scope.organizationId, 'ID organisasi')}`, visibility: 'private', maxBytes: 5 * 1024 * 1024, extensions: ['.jpg', '.jpeg', '.png', '.webp'], mimeTypes: images, signatureExtensions: ['.jpg', '.jpeg', '.png', '.webp'] }),
   avatar: policy({ name: 'avatar', destination: () => 'avatars', visibility: 'public', maxBytes: 5 * 1024 * 1024, extensions: ['.jpg', '.jpeg', '.png', '.webp'], mimeTypes: images, signatureExtensions: ['.jpg', '.jpeg', '.png', '.webp'] }),
   profile_banner: policy({ name: 'profile_banner', destination: () => 'profile-banners', visibility: 'public', maxBytes: 10 * 1024 * 1024, extensions: ['.jpg', '.jpeg', '.png', '.webp'], mimeTypes: images, signatureExtensions: ['.jpg', '.jpeg', '.png', '.webp'] }),
   product_image: policy({ name: 'product_image', destination: scope => `products/${numericScope(scope.productId, 'ID produk')}`, visibility: 'private', maxBytes: 10 * 1024 * 1024, extensions: ['.jpg', '.jpeg', '.png', '.webp'], mimeTypes: images, signatureExtensions: ['.jpg', '.jpeg', '.png', '.webp'] }),

@@ -94,7 +94,7 @@ export class SystemNotificationSensorService {
         policiesChecked += 1;
         let candidates: SensorCandidate[];
         try {
-          candidates = await automationSensorService.candidates(policy.event, Number(businessUnit.id));
+          candidates = await automationSensorService.candidates(policy.event, Number(businessUnit.id), Number(businessUnit.organization_id));
         } catch (error) {
           failedPolicies += 1;
           console.warn('[notifications] sensor policy query failed', {

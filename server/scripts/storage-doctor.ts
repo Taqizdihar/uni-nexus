@@ -5,6 +5,7 @@ import { storageService } from '../src/shared/storage';
 
 type Reference = { source: string; key: string | null };
 const references: Array<{ source: string; sql: string }> = [
+  { source: 'organizations.logo_path', sql: 'SELECT logo_path AS storage_key FROM organizations WHERE logo_path IS NOT NULL' },
   { source: 'users.avatar_path', sql: 'SELECT avatar_path AS storage_key FROM users WHERE avatar_path IS NOT NULL' },
   { source: 'users.profile_banner_path', sql: 'SELECT profile_banner_path AS storage_key FROM users WHERE profile_banner_path IS NOT NULL' },
   { source: 'products.image_path', sql: 'SELECT image_path AS storage_key FROM products WHERE image_path IS NOT NULL' },
@@ -32,7 +33,7 @@ async function main() {
   await storageService.bootstrap();
   const [fileColumns]: any = await pool.execute(
     `SELECT TABLE_NAME,COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-     WHERE TABLE_SCHEMA = DATABASE() AND COLUMN_NAME IN ('avatar_path','profile_banner_path','image_path','storage_path','document_path','receipt_path','pdf_path')
+     WHERE TABLE_SCHEMA = DATABASE() AND COLUMN_NAME IN ('logo_path','avatar_path','profile_banner_path','image_path','storage_path','document_path','receipt_path','pdf_path')
      ORDER BY TABLE_NAME,COLUMN_NAME`,
   );
   const all: Reference[] = [];

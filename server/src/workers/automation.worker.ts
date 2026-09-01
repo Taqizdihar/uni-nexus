@@ -64,7 +64,7 @@ export class AutomationWorker {
       for (const row of rows) {
         const rule = normalizeRule(row); const scheduledFor = new Date(row.next_run_at); const next = automationScheduleService.nextRun(rule.trigger_config_json, rule.schedule_timezone, scheduledFor);
         await connection.execute('UPDATE automation_rules SET next_run_at=? WHERE id=?', [next, rule.id]);
-        const candidates = rule.trigger_type === 'sensor' ? await automationSensorService.candidates(rule.trigger_event, Number(rule.business_unit_id), connection) : [{ entityType: null, entityId: null, entityCode: null, context: {} }];
+        const candidates = rule.trigger_type === 'sensor' ? await automationSensorService.candidates(rule.trigger_event, Number(rule.business_unit_id), Number(rule.organization_id), connection) : [{ entityType: null, entityId: null, entityCode: null, context: {} }];
         for (const candidate of candidates) {
           const identifier = candidate.entityId || 'schedule'; const runKey = `${rule.id}:${rule.trigger_type}:${identifier}:${scheduledFor.toISOString()}`;
           await connection.execute(`INSERT IGNORE INTO automation_runs (rule_id,run_key,rule_version,trigger_event,trigger_entity_type,trigger_entity_id,scheduled_for,initiated_by,attempt_no,next_attempt_at,correlation_id,chain_depth,status_code,input_json,rule_snapshot_json) VALUES (?,?,?,?,?,?,?,NULL,1,UTC_TIMESTAMP(3),?,0,'queued',?,?)`, [rule.id, runKey, rule.version_no, rule.trigger_event, candidate.entityType, candidate.entityId, scheduledFor, randomUUID(), JSON.stringify(candidate.context), JSON.stringify(ruleSnapshot(rule))]);

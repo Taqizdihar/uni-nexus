@@ -1,11 +1,14 @@
 import type { PoolConnection } from 'mysql2/promise';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
+import { settingsService } from '../../shared/settings/settings.service';
 import { studioClientService } from '../../shared/party/studio-client.service';
 import { studioProjectsService } from '../studio-projects/studio-projects.service';
 import { studioBillingDocumentService } from './studio-billing-document.service';
 import { studioBillingRepository } from './studio-billing.repository';
 import { assignCommercialNumber, assertDateOrder, effectiveQuotationStatus, getStudioBillingBusinessUnit, loadStudioProjectForBilling, publishBillingEvent, roundMoney, studioDate, tempCode, toNumber, toSqlDate, withBillingTransaction, writeBillingAudit } from './studio-billing.shared';
 import type { CommercialLineInput, QuotationInput, QuotationListFilters } from './studio-billing.types';
+
+const plusDays = (date: string, days: number) => { const value = new Date(`${date}T00:00:00Z`); value.setUTCDate(value.getUTCDate() + days); return value.toISOString().slice(0, 10); };
 
 interface QuotationTotals { subtotal: number; discount_amount: number; tax_amount: number; total_amount: number; }
 
@@ -86,7 +89,8 @@ export class StudioQuotationService {
     return withBillingTransaction(async connection => {
       const issueDate = toSqlDate(input.issue_date);
       if (!issueDate) throw new AppError(400, 'INVALID_DATE', 'Tanggal penawaran wajib diisi.');
-      const validUntil = toSqlDate(input.valid_until);
+      const defaultDays = input.valid_until === undefined ? await settingsService.value<number>(studio.organizationId, 'studio', 'studio', 'quotation_default_valid_days') : null;
+      const validUntil = toSqlDate(input.valid_until === undefined ? plusDays(issueDate, defaultDays!) : input.valid_until);
       assertDateOrder(issueDate, validUntil, 'Tanggal berlaku');
       await this.resolveContext(connection, input.party_id, input.project_id, studio);
       await this.validateLines(connection, input.items, studio.id);

@@ -32,6 +32,7 @@
     "smoke:unified-finance": "tsx scripts/smoke-unified-finance.ts",
     "smoke:master-data": "tsx scripts/smoke-master-data.ts",
     "smoke:reports": "tsx scripts/smoke-reports.ts",
+    "smoke:settings": "tsx scripts/smoke-settings.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "documents:reconcile": "tsx scripts/reconcile-document-registry.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
@@ -56,6 +57,7 @@
     "browser:unified-finance": "node scripts/browser-unified-finance.mjs",
     "browser:master-data": "node scripts/browser-master-data.mjs",
     "browser:reports": "node scripts/browser-reports.mjs",
+    "browser:settings": "node scripts/browser-settings.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"

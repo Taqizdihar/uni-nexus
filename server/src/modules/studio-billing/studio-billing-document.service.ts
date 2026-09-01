@@ -1,8 +1,10 @@
 import PDFDocument from 'pdfkit';
 import type { PoolConnection } from 'mysql2/promise';
 import type { Response } from 'express';
+import { pool } from '../../config/database';
 import { AppError, NotFoundError } from '../../shared/errors/AppError';
 import { storageService } from '../../shared/storage';
+import { documentBrandingService, type DocumentBranding } from '../../shared/documents/document-branding.service';
 import type { BusinessUnitContext } from '../../shared/utils/business-unit';
 import { studioBillingRepository } from './studio-billing.repository';
 import { toNumber, writeBillingAudit } from './studio-billing.shared';
@@ -46,17 +48,17 @@ export class StudioBillingDocumentService {
     return fileName;
   }
 
-  private async renderToBuffer(type: DocumentType, record: PdfRecord, lines: PdfLine[]) {
+  private async renderToBuffer(type: DocumentType, record: PdfRecord, lines: PdfLine[], organizationId: number) {
     const doc = new PDFDocument({ size: 'A4', margin: 48, bufferPages: true, info: { Title: `${type === 'quotation' ? 'Penawaran' : 'Invoice'} ${record.document_number}`, Author: 'UNI-INSIDE Studio' } });
     const chunks: Buffer[] = [];
     doc.on('data', (chunk: Buffer) => chunks.push(Buffer.from(chunk)));
     const result = new Promise<Buffer>((resolve, reject) => { doc.once('end', () => resolve(Buffer.concat(chunks))); doc.once('error', reject); });
-    this.drawPdf(doc, type, record, lines);
+    this.drawPdf(doc, type, record, lines, await documentBrandingService.resolve(organizationId));
     doc.end();
     return result;
   }
 
-  private drawPdf(doc: PDFKit.PDFDocument, type: DocumentType, record: PdfRecord, lines: PdfLine[]) {
+  private drawPdf(doc: PDFKit.PDFDocument, type: DocumentType, record: PdfRecord, lines: PdfLine[], branding: DocumentBranding) {
     const title = type === 'quotation' ? 'PENAWARAN' : 'INVOICE';
     const pageBottom = () => doc.page.height - 52;
     const ensureSpace = (needed: number) => {
@@ -81,8 +83,11 @@ export class StudioBillingDocumentService {
       doc.fillColor('#111827').font('Helvetica-Bold').fontSize(9).text(value, x, y + 11, { width: 220 });
     };
 
-    doc.fillColor('#B88B00').font('Helvetica-Bold').fontSize(11).text('UNI-NEXUS', 48, 48);
-    doc.fillColor('#111827').fontSize(8).text('UNI-INSIDE STUDIO', 48, 64);
+    const brandX = branding.showLogo && branding.logo ? 116 : 48;
+    if (branding.showLogo && branding.logo) { try { doc.image(branding.logo, 48, 45, { fit: [56, 48] }); } catch { /* Invalid legacy logo never blocks commercial document generation. */ } }
+    doc.fillColor('#B88B00').font('Helvetica-Bold').fontSize(11).text(branding.name, brandX, 48, { width: 205 });
+    doc.fillColor('#111827').fontSize(8).text(branding.legalName || 'UNI-NEXUS', brandX, 64, { width: 205 });
+    if (branding.showContact && branding.contact.length) doc.fillColor('#6B7280').font('Helvetica').fontSize(6.7).text(branding.contact.join(' • '), brandX, 76, { width: 230, lineBreak: false });
     doc.fontSize(25).text(title, 330, 46, { width: 217, align: 'right' });
     doc.fillColor('#6B7280').font('Helvetica').fontSize(9).text(record.document_number, 330, 78, { width: 217, align: 'right' });
     doc.moveTo(48, 101).lineTo(547, 101).strokeColor('#D1D5DB').stroke();
@@ -135,7 +140,7 @@ export class StudioBillingDocumentService {
     const pageCount = (doc as any).bufferedPageRange?.().count || 1;
     for (let i = 0; i < pageCount; i += 1) {
       doc.switchToPage(i);
-      doc.fillColor('#6B7280').font('Helvetica').fontSize(7).text(`Dokumen komersial UNI-INSIDE Studio • ${record.document_number}`, 48, doc.page.height - 36, { width: 420 });
+      doc.fillColor('#6B7280').font('Helvetica').fontSize(7).text(branding.footerText || `Dokumen komersial ${branding.name} • ${record.document_number}`, 48, doc.page.height - 36, { width: 420 });
       doc.text(`${i + 1}/${pageCount}`, 470, doc.page.height - 36, { width: 77, align: 'right' });
     }
   }
@@ -170,7 +175,7 @@ export class StudioBillingDocumentService {
       catch { /* Legacy/unavailable document is regenerated into canonical storage. */ }
     }
     const fileName = this.fileName(type, number);
-    const body = await this.renderToBuffer(type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })));
+    const body = await this.renderToBuffer(type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })), studio.organizationId);
     const output = await storageService.writeBuffer(type === 'quotation' ? 'quotation_pdf' : 'invoice_pdf', body, fileName);
     const version = existing.length ? Number(existing[0].version_no) : 1;
     try {
@@ -197,7 +202,8 @@ export class StudioBillingDocumentService {
     const doc = new PDFDocument({ size: 'A4', margin: 48, bufferPages: true });
     doc.on('data', (chunk: Buffer) => chunks.push(chunk));
     const result = new Promise<Buffer>((resolve, reject) => { doc.once('end', () => resolve(Buffer.concat(chunks))); doc.once('error', reject); });
-    this.drawPdf(doc, type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })));
+    const [organization]: any = await pool.execute('SELECT organization_id FROM business_units WHERE code=\'STUDIO\' AND is_active=1 LIMIT 1');
+    this.drawPdf(doc, type, this.recordFor(type, header), items.map(line => ({ description: line.description, quantity: toNumber(line.quantity), unit_price: toNumber(line.unit_price), discount_amount: toNumber(line.discount_amount), tax_amount: toNumber(line.tax_amount), line_total: toNumber(line.line_total) })), await documentBrandingService.resolve(Number(organization[0]?.organization_id)));
     doc.end();
     const buffer = await result;
     res.setHeader('Content-Type', 'application/pdf');
