@@ -11,6 +11,7 @@ export const moduleReadPermissions: Record<string, string> = {
   reports: 'reports.read', finance: 'finance.read', dashboard: 'dashboard.read',
   master_data: 'master_data.read',
   calendar: 'calendar.read', tasks: 'tasks.read',
+  integrations: 'integrations.read',
 };
 
 export const moduleReadPermissionFor = (moduleCode?: string | null, businessUnitCode = 'CRAFT') => {

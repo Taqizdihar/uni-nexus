@@ -393,7 +393,7 @@ const globalToolsNav: NavGroup = {
       permission: "users.manage",
     },
     { name: "Log Audit", icon: ShieldAlert, path: "/app/audit-log", permission: "audit.read" },
-    { name: "Integrasi", icon: Network, path: "/app/integrations" },
+    { name: "Integrasi", icon: Network, path: "/app/integrations", permission: "integrations.read" },
     { name: "Pusat Otomasi", icon: Zap, path: "/app/automations", permissionsAny: ["craft.automations.read", "studio.automations.read"] },
     { name: "Pusat Laporan", icon: LayoutDashboard, path: "/app/reports", permission: "reports.read" },
     { name: "Data Master", icon: Database, path: "/app/master-data", permission: "master_data.read" },

@@ -38,6 +38,7 @@ import { masterDataRoutes } from '../modules/master-data/master-data.routes';
 import { reportsRoutes } from '../modules/reports/reports.routes';
 import { settingsRoutes } from '../modules/settings/settings.routes';
 import { globalAutomationsRoutes } from '../modules/automations/automations.routes';
+import { integrationsRoutes } from '../modules/integrations/integrations.routes';
 
 const router = Router();
 
@@ -66,6 +67,7 @@ router.use('/master-data', masterDataRoutes);
 router.use('/reports', reportsRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/automations', globalAutomationsRoutes);
+router.use('/integrations', integrationsRoutes);
 
 router.use('/craft/orders', craftOrdersRoutes);
 router.use('/craft/references', craftReferencesRoutes);

@@ -51,6 +51,7 @@ import { StudioFinance } from "./pages/studio/Finance";
 import { StudioAnalytics } from "./pages/studio/Analytics";
 import { StudioAutomations } from "./pages/studio/Automations";
 import { GlobalAutomations } from "./pages/global/automations/GlobalAutomations";
+import { Integrations } from "./pages/global/integrations/Integrations";
 import { PlannedModulePage } from "./components/common/PlannedModulePage";
 import {
   FileText,
@@ -102,6 +103,7 @@ const router = createBrowserRouter(
         />
         <Route path="profile" element={<Profile />} />
         <Route path="automations/*" element={<PermissionGate anyOf={["craft.automations.read", "studio.automations.read"]}><GlobalAutomations /></PermissionGate>} />
+        <Route path="integrations/*" element={<PermissionGate permission="integrations.read"><Integrations /></PermissionGate>} />
         <Route
           path="audit-log"
           element={<PermissionGate permission="audit.read"><AuditLog /></PermissionGate>}

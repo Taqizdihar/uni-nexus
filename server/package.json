@@ -34,6 +34,7 @@
     "smoke:master-data": "tsx scripts/smoke-master-data.ts",
     "smoke:reports": "tsx scripts/smoke-reports.ts",
     "smoke:settings": "tsx scripts/smoke-settings.ts",
+    "smoke:integrations": "tsx scripts/smoke-integrations.ts",
     "storage:doctor": "tsx scripts/storage-doctor.ts",
     "documents:reconcile": "tsx scripts/reconcile-document-registry.ts",
     "browser:craft-customers": "node scripts/browser-craft-customers.mjs",
@@ -60,6 +61,7 @@
     "browser:master-data": "node scripts/browser-master-data.mjs",
     "browser:reports": "node scripts/browser-reports.mjs",
     "browser:settings": "node scripts/browser-settings.mjs",
+    "browser:integrations": "node scripts/browser-integrations.mjs",
     "automation:worker": "node dist/workers/automation.worker.js",
     "automation:worker:dev": "tsx watch src/workers/automation.worker.ts",
     "start": "node dist/server.js"
@@ -76,6 +78,7 @@
     "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
+    "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",
     "mysql2": "^3.23.4",

@@ -21,6 +21,11 @@ const envSchema = z.object({
   STORAGE_DIR: z.string().optional(),
   STORAGE_PUBLIC_BASE_URL: z.string().default('/uploads'),
   BOOTSTRAP_CTO_EMAIL: z.string().email().optional(),
+  // Base64-encoded 32-byte AES-256-GCM key for the Integration credential vault.
+  // Intentionally optional here so the server still boots without it; the vault
+  // itself fails closed with INTEGRATION_SECRET_KEY_NOT_CONFIGURED if a secret
+  // operation is attempted while this is unset or malformed.
+  INTEGRATION_SECRET_KEY: z.string().optional(),
 });
 
 const _env = envSchema.safeParse(process.env);
