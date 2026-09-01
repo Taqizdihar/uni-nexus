@@ -1,0 +1,583 @@
+-- ============================================================================
+-- UNI-NEXUS STRICT TESTING DATA RESET
+-- ============================================================================
+--
+-- PURPOSE
+-- -------
+-- Prepare UNI-NEXUS for full-system testing from an EMPTY BUSINESS DATA state.
+--
+-- PRESERVED EXACTLY:
+--   organizations
+--   business_units
+--   users
+--   roles
+--   permissions
+--   role_permissions
+--   user_roles
+--   user_business_units
+--
+-- EVERYTHING ELSE:
+--   DELETE ALL ROWS
+--   RESET AUTO_INCREMENT WHEN APPLICABLE
+--
+-- INTENTIONALLY CLEARED, INCLUDING:
+--   audit_logs
+--   notifications
+--   user_sessions
+--   user_presence_sessions
+--   user_deletion_requests
+--   user_reactivation_requests
+--   tasks
+--   calendar data
+--   automation rules/runs/events
+--   integrations / integration_secrets / sync logs
+--   documents
+--   reports
+--   system_settings
+--   all Data Master records
+--   all Craft domain records
+--   all Studio domain records
+--   all Finance records
+--   all other non-authentication data
+--
+-- TARGET:
+--   MySQL 8.0.x
+--   Database: uni-nexus
+--
+-- IMPORTANT:
+-- 1. MAKE A BACKUP FIRST.
+-- 2. STOP UNI-NEXUS BACKEND AND AUTOMATION WORKER FIRST.
+-- 3. RUN ON DEVELOPMENT/TEST DATABASE ONLY.
+-- 4. FIRST RUN THIS SCRIPT WITH @CONFIRM_RESET = 'NO'.
+-- 5. REVIEW THE PREVIEW.
+-- 6. ONLY THEN change confirmation to:
+--
+--      RESET-UNI-NEXUS-TEST-DATA
+--
+-- ============================================================================
+
+
+USE `uni-nexus`;
+
+
+-- ============================================================================
+-- 0. EXPLICIT SAFETY CONFIRMATION
+-- ============================================================================
+--
+-- DEFAULT = NO DELETION.
+--
+-- FIRST RUN:
+SET @CONFIRM_RESET := 'NO';
+
+-- WHEN YOU HAVE REVIEWED THE PREVIEW, REPLACE THE LINE ABOVE WITH:
+--
+-- SET @CONFIRM_RESET := 'RESET-UNI-NEXUS-TEST-DATA';
+--
+
+
+-- ============================================================================
+-- 1. PRE-FLIGHT DATABASE IDENTITY
+-- ============================================================================
+
+SELECT
+    DATABASE() AS current_database,
+    VERSION() AS mysql_version,
+    NOW(3) AS server_time;
+
+
+-- ============================================================================
+-- 2. SNAPSHOT COUNTS OF DATA THAT MUST SURVIVE
+-- ============================================================================
+
+SET @before_organizations       := (SELECT COUNT(*) FROM `organizations`);
+SET @before_business_units      := (SELECT COUNT(*) FROM `business_units`);
+SET @before_users               := (SELECT COUNT(*) FROM `users`);
+SET @before_roles               := (SELECT COUNT(*) FROM `roles`);
+SET @before_permissions         := (SELECT COUNT(*) FROM `permissions`);
+SET @before_role_permissions    := (SELECT COUNT(*) FROM `role_permissions`);
+SET @before_user_roles          := (SELECT COUNT(*) FROM `user_roles`);
+SET @before_user_business_units := (SELECT COUNT(*) FROM `user_business_units`);
+
+
+SELECT
+    @before_organizations       AS organizations,
+    @before_business_units      AS business_units,
+    @before_users               AS users,
+    @before_roles               AS roles,
+    @before_permissions         AS permissions,
+    @before_role_permissions    AS role_permissions,
+    @before_user_roles          AS user_roles,
+    @before_user_business_units AS user_business_units;
+
+
+-- ============================================================================
+-- 3. PREVIEW — TABLES THAT WILL BE EMPTIED
+-- ============================================================================
+--
+-- TABLE_ROWS for InnoDB can be approximate.
+-- This query is primarily for reviewing TABLE NAMES.
+--
+
+SELECT
+    t.`TABLE_NAME`,
+    t.`TABLE_ROWS` AS estimated_rows
+FROM `information_schema`.`TABLES` t
+WHERE t.`TABLE_SCHEMA` = DATABASE()
+  AND t.`TABLE_TYPE` = 'BASE TABLE'
+  AND t.`TABLE_NAME` NOT IN (
+      'organizations',
+      'business_units',
+      'users',
+      'roles',
+      'permissions',
+      'role_permissions',
+      'user_roles',
+      'user_business_units'
+  )
+ORDER BY t.`TABLE_NAME`;
+
+
+-- ============================================================================
+-- 4. RESET PROCEDURE
+-- ============================================================================
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `__uni_nexus_strict_test_reset`$$
+
+CREATE PROCEDURE `__uni_nexus_strict_test_reset`(
+    IN p_confirmation VARCHAR(100)
+)
+reset_main: BEGIN
+
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_table VARCHAR(64);
+    DECLARE v_deleted BIGINT DEFAULT 0;
+    DECLARE v_remaining BIGINT DEFAULT 0;
+    DECLARE v_has_auto_increment INT DEFAULT 0;
+    DECLARE v_required_tables INT DEFAULT 0;
+    DECLARE v_message VARCHAR(512);
+
+    DECLARE reset_cursor CURSOR FOR
+        SELECT t.`TABLE_NAME`
+        FROM `information_schema`.`TABLES` t
+        WHERE t.`TABLE_SCHEMA` = DATABASE()
+          AND t.`TABLE_TYPE` = 'BASE TABLE'
+          AND t.`TABLE_NAME` NOT IN (
+              'organizations',
+              'business_units',
+              'users',
+              'roles',
+              'permissions',
+              'role_permissions',
+              'user_roles',
+              'user_business_units'
+          )
+        ORDER BY t.`TABLE_NAME`;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+        SET v_done = 1;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET FOREIGN_KEY_CHECKS = @__reset_old_fk_checks;
+        SET SQL_SAFE_UPDATES   = @__reset_old_safe_updates;
+        RESIGNAL;
+    END;
+
+
+    -- ------------------------------------------------------------------------
+    -- Preserve current session settings.
+    -- ------------------------------------------------------------------------
+
+    SET @__reset_old_fk_checks    := @@SESSION.FOREIGN_KEY_CHECKS;
+    SET @__reset_old_safe_updates := @@SESSION.SQL_SAFE_UPDATES;
+
+
+    -- ------------------------------------------------------------------------
+    -- Absolute database-name guard.
+    -- ------------------------------------------------------------------------
+
+    IF DATABASE() <> 'uni-nexus' THEN
+        SET v_message = CONCAT(
+            'ABORTED: expected database uni-nexus, current database is ',
+            COALESCE(DATABASE(), '<NULL>')
+        );
+
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = v_message;
+    END IF;
+
+
+    -- ------------------------------------------------------------------------
+    -- Verify all protected tables exist.
+    -- ------------------------------------------------------------------------
+
+    SELECT COUNT(*)
+      INTO v_required_tables
+    FROM `information_schema`.`TABLES`
+    WHERE `TABLE_SCHEMA` = DATABASE()
+      AND `TABLE_TYPE` = 'BASE TABLE'
+      AND `TABLE_NAME` IN (
+          'organizations',
+          'business_units',
+          'users',
+          'roles',
+          'permissions',
+          'role_permissions',
+          'user_roles',
+          'user_business_units'
+      );
+
+    IF v_required_tables <> 8 THEN
+        SET v_message = CONCAT(
+            'ABORTED: expected 8 protected authentication tables, found ',
+            v_required_tables
+        );
+
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = v_message;
+    END IF;
+
+
+    -- ------------------------------------------------------------------------
+    -- Results remain available for this SQL session after procedure returns.
+    -- ------------------------------------------------------------------------
+
+    DROP TEMPORARY TABLE IF EXISTS `__uni_nexus_reset_results`;
+
+    CREATE TEMPORARY TABLE `__uni_nexus_reset_results` (
+        `table_name` VARCHAR(64) NOT NULL,
+        `rows_deleted` BIGINT NOT NULL DEFAULT 0,
+        `remaining_rows` BIGINT NOT NULL DEFAULT 0,
+        `auto_increment_reset` TINYINT(1) NOT NULL DEFAULT 0,
+        `note` VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (`table_name`)
+    );
+
+
+    -- ------------------------------------------------------------------------
+    -- Confirmation guard.
+    --
+    -- Default script execution reaches here and STOPS WITHOUT DELETING DATA.
+    -- ------------------------------------------------------------------------
+
+    IF p_confirmation <> 'RESET-UNI-NEXUS-TEST-DATA' THEN
+
+        INSERT INTO `__uni_nexus_reset_results`
+        (
+            `table_name`,
+            `rows_deleted`,
+            `remaining_rows`,
+            `auto_increment_reset`,
+            `note`
+        )
+        VALUES
+        (
+            '<DRY-RUN>',
+            0,
+            0,
+            0,
+            'NO DATA DELETED. Set @CONFIRM_RESET = RESET-UNI-NEXUS-TEST-DATA only after reviewing the preview.'
+        );
+
+        LEAVE reset_main;
+
+    END IF;
+
+
+    -- ------------------------------------------------------------------------
+    -- DESTRUCTIVE SECTION
+    -- ------------------------------------------------------------------------
+
+    SET FOREIGN_KEY_CHECKS = 0;
+    SET SQL_SAFE_UPDATES = 0;
+
+    OPEN reset_cursor;
+
+    reset_loop: LOOP
+
+        FETCH reset_cursor INTO v_table;
+
+        IF v_done = 1 THEN
+            LEAVE reset_loop;
+        END IF;
+
+
+        -- --------------------------------------------------------------------
+        -- Delete every row.
+        -- --------------------------------------------------------------------
+
+        SET @__reset_sql = CONCAT(
+            'DELETE FROM `',
+            REPLACE(v_table, '`', '``'),
+            '`'
+        );
+
+        PREPARE __reset_stmt FROM @__reset_sql;
+        EXECUTE __reset_stmt;
+
+        SET v_deleted = ROW_COUNT();
+
+        DEALLOCATE PREPARE __reset_stmt;
+
+
+        -- --------------------------------------------------------------------
+        -- Exact post-delete verification.
+        -- --------------------------------------------------------------------
+
+        SET @__reset_remaining = -1;
+
+        SET @__reset_sql = CONCAT(
+            'SELECT COUNT(*) INTO @__reset_remaining FROM `',
+            REPLACE(v_table, '`', '``'),
+            '`'
+        );
+
+        PREPARE __reset_stmt FROM @__reset_sql;
+        EXECUTE __reset_stmt;
+        DEALLOCATE PREPARE __reset_stmt;
+
+        SET v_remaining = COALESCE(@__reset_remaining, -1);
+
+        IF v_remaining <> 0 THEN
+
+            SET v_message = CONCAT(
+                'RESET FAILED: table ',
+                v_table,
+                ' still contains ',
+                v_remaining,
+                ' row(s).'
+            );
+
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = v_message;
+
+        END IF;
+
+
+        -- --------------------------------------------------------------------
+        -- Reset AUTO_INCREMENT on empty tables.
+        -- --------------------------------------------------------------------
+
+        SELECT COUNT(*)
+          INTO v_has_auto_increment
+        FROM `information_schema`.`COLUMNS`
+        WHERE `TABLE_SCHEMA` = DATABASE()
+          AND `TABLE_NAME` = v_table
+          AND `EXTRA` LIKE '%auto_increment%';
+
+        IF v_has_auto_increment > 0 THEN
+
+            SET @__reset_sql = CONCAT(
+                'ALTER TABLE `',
+                REPLACE(v_table, '`', '``'),
+                '` AUTO_INCREMENT = 1'
+            );
+
+            PREPARE __reset_stmt FROM @__reset_sql;
+            EXECUTE __reset_stmt;
+            DEALLOCATE PREPARE __reset_stmt;
+
+        END IF;
+
+
+        -- --------------------------------------------------------------------
+        -- Record result.
+        -- --------------------------------------------------------------------
+
+        INSERT INTO `__uni_nexus_reset_results`
+        (
+            `table_name`,
+            `rows_deleted`,
+            `remaining_rows`,
+            `auto_increment_reset`,
+            `note`
+        )
+        VALUES
+        (
+            v_table,
+            v_deleted,
+            v_remaining,
+            IF(v_has_auto_increment > 0, 1, 0),
+            'CLEARED'
+        );
+
+    END LOOP;
+
+    CLOSE reset_cursor;
+
+
+    -- ------------------------------------------------------------------------
+    -- Restore SQL session safety.
+    -- ------------------------------------------------------------------------
+
+    SET FOREIGN_KEY_CHECKS = @__reset_old_fk_checks;
+    SET SQL_SAFE_UPDATES   = @__reset_old_safe_updates;
+
+END$$
+
+DELIMITER ;
+
+
+-- ============================================================================
+-- 5. RUN
+-- ============================================================================
+
+CALL `__uni_nexus_strict_test_reset`(@CONFIRM_RESET);
+
+
+-- ============================================================================
+-- 6. RESULT
+-- ============================================================================
+
+SELECT
+    `table_name`,
+    `rows_deleted`,
+    `remaining_rows`,
+    `auto_increment_reset`,
+    `note`
+FROM `__uni_nexus_reset_results`
+ORDER BY `table_name`;
+
+
+-- ============================================================================
+-- 7. VERIFY PRESERVED AUTHENTICATION / RBAC TABLES
+-- ============================================================================
+
+SELECT
+    'organizations' AS table_name,
+    @before_organizations AS rows_before,
+    COUNT(*) AS rows_after,
+    IF(COUNT(*) = @before_organizations, 'PRESERVED', 'CHANGED') AS status
+FROM `organizations`
+
+UNION ALL
+
+SELECT
+    'business_units',
+    @before_business_units,
+    COUNT(*),
+    IF(COUNT(*) = @before_business_units, 'PRESERVED', 'CHANGED')
+FROM `business_units`
+
+UNION ALL
+
+SELECT
+    'users',
+    @before_users,
+    COUNT(*),
+    IF(COUNT(*) = @before_users, 'PRESERVED', 'CHANGED')
+FROM `users`
+
+UNION ALL
+
+SELECT
+    'roles',
+    @before_roles,
+    COUNT(*),
+    IF(COUNT(*) = @before_roles, 'PRESERVED', 'CHANGED')
+FROM `roles`
+
+UNION ALL
+
+SELECT
+    'permissions',
+    @before_permissions,
+    COUNT(*),
+    IF(COUNT(*) = @before_permissions, 'PRESERVED', 'CHANGED')
+FROM `permissions`
+
+UNION ALL
+
+SELECT
+    'role_permissions',
+    @before_role_permissions,
+    COUNT(*),
+    IF(COUNT(*) = @before_role_permissions, 'PRESERVED', 'CHANGED')
+FROM `role_permissions`
+
+UNION ALL
+
+SELECT
+    'user_roles',
+    @before_user_roles,
+    COUNT(*),
+    IF(COUNT(*) = @before_user_roles, 'PRESERVED', 'CHANGED')
+FROM `user_roles`
+
+UNION ALL
+
+SELECT
+    'user_business_units',
+    @before_user_business_units,
+    COUNT(*),
+    IF(COUNT(*) = @before_user_business_units, 'PRESERVED', 'CHANGED')
+FROM `user_business_units`;
+
+
+-- ============================================================================
+-- 8. AUTH / RBAC REFERENTIAL-INTEGRITY CHECK
+-- ============================================================================
+
+SELECT
+    (
+        SELECT COUNT(*)
+        FROM `users` u
+        LEFT JOIN `organizations` o
+          ON o.`id` = u.`organization_id`
+        WHERE o.`id` IS NULL
+    ) AS users_with_missing_organization,
+
+    (
+        SELECT COUNT(*)
+        FROM `user_roles` ur
+        LEFT JOIN `users` u
+          ON u.`id` = ur.`user_id`
+        LEFT JOIN `roles` r
+          ON r.`id` = ur.`role_id`
+        WHERE u.`id` IS NULL
+           OR r.`id` IS NULL
+    ) AS invalid_user_role_links,
+
+    (
+        SELECT COUNT(*)
+        FROM `role_permissions` rp
+        LEFT JOIN `roles` r
+          ON r.`id` = rp.`role_id`
+        LEFT JOIN `permissions` p
+          ON p.`id` = rp.`permission_id`
+        WHERE r.`id` IS NULL
+           OR p.`id` IS NULL
+    ) AS invalid_role_permission_links,
+
+    (
+        SELECT COUNT(*)
+        FROM `user_business_units` ubu
+        LEFT JOIN `users` u
+          ON u.`id` = ubu.`user_id`
+        LEFT JOIN `business_units` bu
+          ON bu.`id` = ubu.`business_unit_id`
+        WHERE u.`id` IS NULL
+           OR bu.`id` IS NULL
+    ) AS invalid_user_business_unit_links;
+
+
+-- EXPECTED:
+--
+-- users_with_missing_organization     = 0
+-- invalid_user_role_links             = 0
+-- invalid_role_permission_links       = 0
+-- invalid_user_business_unit_links    = 0
+
+
+-- ============================================================================
+-- 9. CLEAN UP THE TEMPORARY PROCEDURE
+-- ============================================================================
+
+DROP PROCEDURE IF EXISTS `__uni_nexus_strict_test_reset`;
+
+
+-- ============================================================================
+-- END
+-- ============================================================================

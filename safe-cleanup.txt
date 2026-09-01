@@ -1,0 +1,1768 @@
+MASTER PROMPT — UNI-NEXUS PRE-TESTING STRICT DATA CLEANUP
+
+EXTREME-CAUTION DATABASE RESET +
+PRESERVE ALL USER ACCOUNTS +
+PRESERVE RBAC +
+PRESERVE ORGANIZATION / WORKSPACE IDENTITY +
+CLEAR ALL BUSINESS / OPERATIONAL / CONFIGURATION DATA +
+CLEAR RUNTIME USER SESSIONS +
+CLEAR STORAGE ARTIFACTS SAFELY +
+VERIFY EMPTY FRONTEND BASELINE +
+ORGANIZE CLAUDE / CODEX DEVELOPMENT LOGS WITHOUT DELETING THEM +
+FINAL DATA-INTEGRITY VERIFICATION
+
+Repository:
+Taqizdihar/uni-nexus
+
+Environment:
+Claude Code running directly inside the local UNI-NEXUS VS Code workspace.
+
+Model:
+Claude Sonnet 5
+
+Effort:
+MAX
+
+
+======================================================================
+MISSION
+======================================================================
+
+UNI-NEXUS V1 + V2 development is now considered functionally complete
+enough to enter a dedicated full-system testing phase.
+
+Before testing begins, prepare the development database as a STRICT CLEAN
+BASELINE.
+
+The desired final state is:
+
+ALL BUSINESS / OPERATIONAL / RUNTIME / CONFIGURATION DATA = EMPTY
+
+EXCEPT:
+
+the user-account and authorization foundation required so the owner can
+still log in using existing accounts with different roles and permissions.
+
+This is a DESTRUCTIVE MAINTENANCE TASK.
+
+Extreme caution is mandatory.
+
+DO NOT improvise.
+
+DO NOT casually run DELETE statements.
+
+DO NOT delete any user account.
+
+DO NOT change any password hash.
+
+DO NOT alter user roles.
+
+DO NOT alter user workspace access.
+
+DO NOT drop schema objects.
+
+
+======================================================================
+LATEST KNOWN REPOSITORY STATE
+======================================================================
+
+When this prompt was prepared, latest observed main HEAD was:
+
+d0b93835830b97f2ef131f7d279279fa674f6935
+
+and the latest uni-nexus.sql was generated on:
+
+Sep 01, 2026 07:29 AM
+
+using MySQL 8.0.30.
+
+The repository now includes:
+
+012_global_integrations.sql
+
+and the active schema includes:
+
+integration_secrets
+
+plus:
+
+integrations.read
+integrations.manage
+integrations.sync
+
+Do NOT reset to the SHA above.
+
+Inspect actual current main first.
+
+
+======================================================================
+BRANCH SAFETY
+======================================================================
+
+Work on:
+
+main
+
+Do NOT create a new branch.
+
+At preflight run:
+
+git fetch origin
+git branch --show-current
+git status
+git log -1 --oneline
+
+Do not:
+
+force push
+reset --hard user work
+git clean blindly
+delete untracked files blindly
+
+Final report:
+
+BRANCH CREATED: NO
+WORKED ONLY ON main: YES
+
+
+======================================================================
+ABSOLUTE DATABASE RULE
+======================================================================
+
+The ONLY database eligible for cleanup is the confirmed local/development:
+
+uni-nexus
+
+database.
+
+Before ANY destructive query:
+
+inspect current server/src/config/env.ts
+
+inspect .env without printing credentials
+
+resolve:
+
+DB_HOST
+DB_PORT
+DB_USER
+DB_NAME
+
+Confirm DB_NAME is exactly the intended development:
+
+uni-nexus
+
+Do NOT clean:
+
+production
+staging
+another developer database
+a remotely ambiguous database
+
+
+======================================================================
+DATABASE BACKUP — HARD REQUIREMENT
+======================================================================
+
+DO NOT perform destructive cleanup until there is a recoverable backup.
+
+Preferred:
+
+create a fresh timestamped live database backup using mysqldump if the local
+environment supports it.
+
+Store backup OUTSIDE committed source control, for example:
+
+../uni-nexus-db-backups/
+
+or a clearly gitignored local backup directory.
+
+Do not commit the backup.
+
+The dump contains:
+
+password hashes
+personal account information
+possibly encrypted integration credentials
+
+and must remain private.
+
+If mysqldump is unavailable:
+
+verify that the newest uni-nexus.sql is sufficiently current to restore the
+current development state.
+
+If neither a fresh backup nor a clearly current dump is available:
+
+STOP.
+
+Do not perform cleanup.
+
+Report:
+
+CLEANUP BLOCKED — NO SAFE BACKUP
+
+
+======================================================================
+STOP APPLICATION WRITERS FIRST
+======================================================================
+
+Before database cleanup stop all UNI-NEXUS processes that can write data:
+
+Express backend
+
+AutomationWorker
+
+Vite frontend may also be stopped for simplicity.
+
+Especially ensure:
+
+AutomationWorker is NOT running.
+
+Also advise that currently open authenticated UNI-NEXUS browser tabs should
+be closed so Presence does not immediately repopulate after restart.
+
+Do not kill unrelated machine processes.
+
+
+======================================================================
+INSPECT THE ACTUAL LIVE SCHEMA
+======================================================================
+
+Do NOT rely only on uni-nexus.sql.
+
+Inspect:
+
+INFORMATION_SCHEMA.TABLES
+INFORMATION_SCHEMA.COLUMNS
+INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+
+for the ACTUAL selected development database.
+
+Also inspect the latest:
+
+uni-nexus.sql
+
+Cross-check that the live DB and dump are structurally compatible.
+
+
+======================================================================
+STRICT PRESERVATION WHITELIST
+======================================================================
+
+ONLY these database tables are allowed to retain rows:
+
+organizations
+
+business_units
+
+users
+
+roles
+
+permissions
+
+role_permissions
+
+user_roles
+
+user_business_units
+
+
+======================================================================
+WHY THESE EIGHT TABLES ARE PRESERVED
+======================================================================
+
+organizations:
+
+required by users.organization_id and tenant identity.
+
+business_units:
+
+required by Craft / Studio / Shared user access.
+
+users:
+
+contains existing:
+
+full_name
+username
+email
+password_hash
+phone
+avatar_path
+profile_banner_path
+status
+approval state
+default workspace
+account lifecycle fields
+
+roles:
+
+contains CEO/CTO/COO/Specialist/etc role definitions.
+
+permissions:
+
+contains ALL V1/V2 permissions.
+
+role_permissions:
+
+maps permissions to roles.
+
+user_roles:
+
+maps users to their existing roles.
+
+user_business_units:
+
+maps users to their existing Craft/Studio/Shared access.
+
+
+======================================================================
+DO NOT MODIFY PRESERVED TABLE CONTENT
+======================================================================
+
+Do not:
+
+DELETE
+UPDATE
+TRUNCATE
+REINSERT
+normalize
+reseed
+renumber
+reset AUTO_INCREMENT
+
+for any preserved table.
+
+Existing IDs must remain stable.
+
+Do not "clean up" inactive/deleted users.
+
+Do not change approval status.
+
+Do not change user default workspace.
+
+Do not change role assignments.
+
+Do not change permission grants.
+
+Do not change can_access values.
+
+
+======================================================================
+USER CREDENTIAL INVARIANT
+======================================================================
+
+Before cleanup create a safe internal snapshot/checksum of critical user
+identity state.
+
+At minimum capture before values/checksums for:
+
+users.id
+users.organization_id
+users.username
+users.email
+users.password_hash
+users.status_code
+users.approval_status_code
+users.deleted_at
+
+Do NOT print password hashes in the final report.
+
+After cleanup verify these values are byte-for-byte unchanged.
+
+A count-only check is not enough for Agent verification.
+
+Use hashes/checksums internally without leaking credential material.
+
+
+======================================================================
+USER AUTHORIZATION INVARIANT
+======================================================================
+
+Snapshot before cleanup:
+
+roles
+
+permissions
+
+role_permissions
+
+user_roles
+
+user_business_units
+
+After cleanup verify:
+
+same row counts
+same keys
+same mapping contents
+
+No RBAC drift is acceptable.
+
+
+======================================================================
+ORGANIZATION / BUSINESS-UNIT INVARIANT
+======================================================================
+
+Preserve existing organization and:
+
+CRAFT
+STUDIO
+SHARED
+
+business units exactly.
+
+Do not rename them.
+
+Do not deactivate them.
+
+Do not remove organization branding.
+
+
+======================================================================
+USER MEDIA MUST SURVIVE
+======================================================================
+
+Existing paths referenced by:
+
+users.avatar_path
+users.profile_banner_path
+
+must remain valid.
+
+Do NOT delete those physical files.
+
+
+======================================================================
+ORGANIZATION LOGO MUST SURVIVE
+======================================================================
+
+Because organizations is preserved:
+
+organizations.logo_path
+
+and its physical organization-logo asset should also remain.
+
+Do not accidentally delete it while cleaning managed storage.
+
+
+======================================================================
+EVERY OTHER TABLE MUST END WITH ZERO ROWS
+======================================================================
+
+All BASE TABLES outside the eight-table whitelist must contain:
+
+COUNT(*) = 0
+
+after cleanup.
+
+This includes but is not limited to all Global/Craft/Studio data.
+
+
+======================================================================
+INTENTIONALLY CLEAR USER RUNTIME / WORKFLOW TABLES
+======================================================================
+
+Despite containing "user" in their names, CLEAR:
+
+user_sessions
+
+user_presence_sessions
+
+user_deletion_requests
+
+user_reactivation_requests
+
+They are runtime/workflow state, not permanent login credentials.
+
+
+======================================================================
+LOGIN CONSEQUENCE
+======================================================================
+
+Existing active browser sessions may become invalid.
+
+That is expected.
+
+The permanent accounts remain available because users.password_hash is
+preserved.
+
+Do not try to preserve active session tokens.
+
+
+======================================================================
+CLEAR GLOBAL MODULE DATA
+======================================================================
+
+Examples that MUST be empty include:
+
+audit_logs
+
+notifications
+
+documents and document registry rows
+
+calendar_events and related calendar data
+
+tasks and task assignments
+
+Unified Finance runtime data
+
+master data/reference records
+
+report_definitions
+
+report_exports
+
+system_settings
+
+automation_rules
+
+automation_runs
+
+domain_events
+
+integrations
+
+integration_secrets
+
+integration_sync_logs
+
+and every other Global non-auth table.
+
+
+======================================================================
+CLEAR CRAFT DATA
+======================================================================
+
+EVERY Craft business/domain table must end empty.
+
+This includes all existing data for:
+
+Orders
+
+Order drafts/items/status history
+
+Production
+
+Print jobs
+
+QC
+
+Products
+
+Variants
+
+3D Design Library
+
+Print Profiles
+
+Printers
+
+Printer maintenance/issues/history
+
+Materials
+
+Filament
+
+Spools
+
+Stock movements
+
+Waste
+
+Customers
+
+Partners
+
+Suppliers
+
+Purchase requests
+
+Purchase orders
+
+Goods receipts
+
+Supplier invoices
+
+Craft finance
+
+Craft budgets/accounting
+
+Craft analytics persisted artifacts
+
+Marketplace channels/configurations/mappings
+
+Marketplace fee rules
+
+Marketplace settlements
+
+Marketplace integrations
+
+Marketplace sync logs
+
+Craft automations
+
+and all related child tables.
+
+
+======================================================================
+CLEAR STUDIO DATA
+======================================================================
+
+EVERY Studio business/domain table must end empty.
+
+This includes all existing data for:
+
+Projects
+
+Milestones
+
+Deliverables
+
+Project assignments
+
+Clients
+
+Services
+
+Service categories/packages
+
+Equipment/assets
+
+Asset assignments
+
+Asset maintenance
+
+Quotations
+
+Quotation items
+
+Invoices
+
+Invoice items
+
+Payment schedules
+
+Vendor/Freelancer/Partner parties
+
+Vendor assignments
+
+Studio finance
+
+Studio accounting/budgets
+
+Studio analytics persisted artifacts
+
+Studio automations
+
+and all related child tables.
+
+
+======================================================================
+STRICT RESET ALSO CLEARS APPLICATION DATA MASTER
+======================================================================
+
+This is intentional.
+
+Do NOT preserve domain master records merely because they look like defaults.
+
+Examples:
+
+payment methods
+
+transaction categories
+
+units
+
+sales channels
+
+product categories
+
+service categories
+
+and other Data Master datasets
+
+must be empty unless they are one of the explicit eight preserved auth
+tables.
+
+
+======================================================================
+REPORT DEFINITIONS
+======================================================================
+
+report_definitions is DATA.
+
+It is NOT in the whitelist.
+
+Therefore it must be empty.
+
+Do not silently reseed report definitions after cleanup.
+
+The purpose of this baseline includes testing empty states.
+
+
+======================================================================
+SYSTEM SETTINGS
+======================================================================
+
+system_settings is NOT preserved.
+
+Delete all overrides.
+
+The application must fall back to source-code registry defaults.
+
+Do not modify the Settings registry source code.
+
+
+======================================================================
+INTEGRATION CREDENTIALS
+======================================================================
+
+integration_secrets MUST be empty.
+
+integrations MUST be empty.
+
+integration_sync_logs MUST be empty.
+
+Do not print/decrypt secrets merely to clean them.
+
+Deleting encrypted rows is sufficient.
+
+
+======================================================================
+AUDIT LOG
+======================================================================
+
+audit_logs MUST be empty at the final baseline.
+
+Yes, this intentionally removes historical development Audit rows from the
+active testing database.
+
+The Git repository / old dump remains the historical development record.
+
+
+======================================================================
+AUTOMATION ENGINE DATA
+======================================================================
+
+automation_rules
+automation_runs
+domain_events
+
+must be empty.
+
+Do not preserve smoke rules.
+
+Do not preserve system test rules merely because is_system=1.
+
+The Automation engine code remains.
+
+Its DB runtime state resets to zero.
+
+
+======================================================================
+NO DROP / SCHEMA REBUILD
+======================================================================
+
+DO NOT:
+
+DROP DATABASE
+DROP TABLE
+re-import schema from scratch
+drop/recreate users
+drop/recreate roles
+drop/recreate permissions
+
+Only data rows are being reset.
+
+
+======================================================================
+NO MIGRATION EXECUTION
+======================================================================
+
+Do not rerun migrations 001-012 as part of cleanup.
+
+Schema is already built.
+
+This is a DATA reset, not a schema migration.
+
+
+======================================================================
+FOREIGN KEY STRATEGY
+======================================================================
+
+A controlled temporary:
+
+SET FOREIGN_KEY_CHECKS = 0
+
+is acceptable ONLY during the strict delete operation.
+
+Always restore its previous session value even if cleanup fails.
+
+Use try/finally semantics in programmatic maintenance code.
+
+
+======================================================================
+PREFERRED DELETION STRATEGY
+======================================================================
+
+Enumerate actual BASE TABLES from INFORMATION_SCHEMA.
+
+Whitelist only the eight preserved tables.
+
+For every other table:
+
+DELETE all rows.
+
+Verify exact COUNT(*) = 0.
+
+If it has AUTO_INCREMENT:
+
+reset it to 1 only AFTER it is empty.
+
+This approach ensures tables recently added during V1/V2 development are not
+accidentally missed.
+
+
+======================================================================
+DO NOT USE A FRAGILE MANUAL TABLE LIST
+======================================================================
+
+A hardcoded list may be used only as a review/diagnostic list.
+
+Actual cleanup must compare against:
+
+INFORMATION_SCHEMA
+
+so any new non-whitelisted table is detected.
+
+
+======================================================================
+SQL SCRIPT
+======================================================================
+
+Use the strict SQL reset semantics supplied by the owner/chat:
+
+preserve exactly the eight auth/system-scaffold tables
+
+clear every other BASE TABLE dynamically
+
+verify each cleared table has zero rows
+
+reset non-preserved AUTO_INCREMENT
+
+restore FOREIGN_KEY_CHECKS and SQL_SAFE_UPDATES
+
+
+======================================================================
+PREVIEW FIRST
+======================================================================
+
+Before destructive execution print:
+
+current database name
+
+MySQL version
+
+protected table names
+
+protected row counts
+
+every table that WILL be cleared
+
+estimated current row counts
+
+Do NOT continue automatically if anything unexpected appears.
+
+
+======================================================================
+CONFIRMATION GATE
+======================================================================
+
+Require an explicit one-time confirmation token such as:
+
+RESET-UNI-NEXUS-TEST-DATA
+
+Do not allow:
+
+yes
+y
+true
+
+as accidental confirmation.
+
+
+======================================================================
+POST-DELETE EXACT VERIFICATION
+======================================================================
+
+For EVERY non-whitelisted table:
+
+execute exact:
+
+SELECT COUNT(*)
+
+Expected:
+
+0
+
+Do not rely on INFORMATION_SCHEMA.TABLE_ROWS for post-reset verification.
+
+
+======================================================================
+PRESERVED DATA VERIFICATION
+======================================================================
+
+After cleanup verify:
+
+organizations unchanged
+
+business_units unchanged
+
+users unchanged
+
+roles unchanged
+
+permissions unchanged
+
+role_permissions unchanged
+
+user_roles unchanged
+
+user_business_units unchanged
+
+
+======================================================================
+FOREIGN KEY INTEGRITY
+======================================================================
+
+Verify zero orphan rows for:
+
+users -> organizations
+
+user_roles -> users
+
+user_roles -> roles
+
+user_roles.business_unit_id -> business_units when non-null
+
+role_permissions -> roles
+
+role_permissions -> permissions
+
+user_business_units -> users
+
+user_business_units -> business_units
+
+
+======================================================================
+DO NOT LOG IN DURING FINAL VERIFICATION
+======================================================================
+
+A login can recreate:
+
+audit_logs
+
+user_sessions
+
+presence-related data
+
+and therefore contaminate the zero-data baseline.
+
+Do not perform an authenticated browser smoke after the FINAL cleanup.
+
+Login testing belongs to the upcoming dedicated testing phase.
+
+
+======================================================================
+SAFE BUILD VERIFICATION
+======================================================================
+
+You MAY run tests that do not write database data, such as:
+
+npm run lint
+npm run build
+
+Do NOT run large smoke/browser test suites after the final cleanup unless
+you can prove they leave ALL non-whitelisted tables zero.
+
+Most existing smoke tests create fixtures and Audit rows.
+
+The final DB state takes precedence.
+
+
+======================================================================
+HEALTH CHECK
+======================================================================
+
+GET /api/v1/health may be tested because it should not create persistent
+business rows.
+
+If it does:
+
+that is a bug and must be investigated.
+
+
+======================================================================
+STORAGE CLEANUP
+======================================================================
+
+The SQL reset does not remove physical application files.
+
+Perform a careful managed-storage audit.
+
+
+======================================================================
+STORAGE — PRESERVE SET
+======================================================================
+
+Before DB cleanup snapshot paths that must survive:
+
+all non-null users.avatar_path
+
+all non-null users.profile_banner_path
+
+all non-null organizations.logo_path
+
+Never delete those files.
+
+
+======================================================================
+STORAGE — BUSINESS ARTIFACTS
+======================================================================
+
+Files belonging exclusively to rows being cleared should also be cleaned
+where safely identifiable.
+
+Examples may include:
+
+documents
+
+report exports
+
+invoice / quotation PDFs
+
+supplier invoice documents
+
+receipts
+
+product/design files
+
+marketplace import artifacts
+
+generated test artifacts
+
+Do not blindly delete the storage root.
+
+
+======================================================================
+NO RM -RF STORAGE ROOT
+======================================================================
+
+DO NOT:
+
+rm -rf uploads
+rm -rf storage
+rm -rf server/uploads
+
+or equivalent broad deletion.
+
+Use:
+
+StorageService policy knowledge
+
+known DB file references captured BEFORE deletion
+
+and/or storage:doctor diagnostics.
+
+
+======================================================================
+STORAGE DOCTOR
+======================================================================
+
+Run:
+
+npm --prefix server run storage:doctor
+
+where safe.
+
+Remember:
+
+storage:doctor is diagnostic.
+
+Do not turn it into an uncontrolled destructive orphan cleaner.
+
+
+======================================================================
+STORAGE POSTCONDITION
+======================================================================
+
+User avatars remain.
+
+User profile banners remain.
+
+Organization logo remains.
+
+Known business/test files removed where safe.
+
+No destructive deletion outside managed storage.
+
+
+======================================================================
+AI AGENT LOG ORGANIZATION
+======================================================================
+
+The owner explicitly wants Claude Code / Codex development logs preserved
+as historical notes.
+
+DO NOT DELETE THEM.
+
+
+======================================================================
+SEARCH LOCAL WORKSPACE FOR AGENT LOG ARTIFACTS
+======================================================================
+
+Inspect:
+
+repository root
+
+docs/
+
+logs/
+
+reports/
+
+temporary development-output folders
+
+for standalone exported/transcript/log files such as:
+
+Claude Code session reports
+
+Codex reports
+
+agent execution summaries
+
+debug transcripts
+
+master-prompt execution reports
+
+*.log
+*.txt
+*.md
+*.json
+
+that are clearly DEVELOPMENT LOG ARTIFACTS.
+
+
+======================================================================
+DO NOT MOVE TOOL INTERNAL STATE BLINDLY
+======================================================================
+
+Do NOT casually move/delete:
+
+.claude/
+
+.codex/
+
+.vscode/
+
+node_modules/
+
+.git/
+
+tool caches
+
+extension state directories
+
+unless a specific file inside is clearly a standalone exported log and safe
+to reorganize.
+
+When uncertain:
+
+LEAVE IT WHERE IT IS
+and report it.
+
+
+======================================================================
+LOG DESTINATION
+======================================================================
+
+For safe standalone log artifacts, organize them under:
+
+docs/agent-logs/
+
+Suggested layout:
+
+docs/agent-logs/
+  README.md
+  claude-code/
+  codex/
+  other/
+
+
+======================================================================
+PRESERVE HISTORY
+======================================================================
+
+For tracked files use:
+
+git mv
+
+so history is easier to follow.
+
+Do not rewrite contents merely to make them prettier.
+
+Do not delete old log content.
+
+
+======================================================================
+LOG INDEX
+======================================================================
+
+Create/update:
+
+docs/agent-logs/README.md
+
+with a concise index containing where possible:
+
+file
+
+agent/tool
+
+approximate date
+
+module/task
+
+original location if useful
+
+
+======================================================================
+SECRET REVIEW OF LOGS
+======================================================================
+
+Before committing/moving an Agent log, inspect it for:
+
+passwords
+
+JWT secrets
+
+database passwords
+
+API tokens
+
+integration encryption keys
+
+access tokens
+
+private keys
+
+Do not commit secrets merely because a log file contained them.
+
+If a historical log contains sensitive content:
+
+preserve the original LOCALLY in a safe ignored location
+
+and create a sanitized archival copy if appropriate.
+
+Do NOT delete the original solely to sanitize history.
+
+Report this condition without revealing the secret.
+
+
+======================================================================
+DO NOT MODIFY uni-nexus.sql BY HAND
+======================================================================
+
+Do not text-edit the dump to simulate an empty database.
+
+The LIVE database is what must be cleaned.
+
+After cleanup, the owner can make a fresh phpMyAdmin export.
+
+If you are capable of producing an equivalent safe dump automatically, do
+not replace the phpMyAdmin workflow without explicit reason.
+
+Final report:
+
+uni-nexus.sql MODIFIED BY CLEANUP AGENT: NO
+
+
+======================================================================
+NO SOURCE-CODE FEATURE CHANGES
+======================================================================
+
+This task is primarily:
+
+data cleanup
+verification
+log organization
+
+Do not opportunistically redesign UNI-NEXUS.
+
+If an empty database causes frontend/backend code to crash:
+
+document the exact bug.
+
+Only make a minimal defensive empty-state fix if clearly necessary and safe.
+
+Do not repopulate data to hide the bug.
+
+
+======================================================================
+EMPTY-STATE EXPECTATION
+======================================================================
+
+After reset, valid behavior is generally:
+
+0 notifications
+
+0 tasks
+
+0 calendar events
+
+0 orders
+
+0 products
+
+0 printers
+
+0 materials
+
+0 customers
+
+0 suppliers
+
+0 transactions
+
+0 projects
+
+0 clients
+
+0 services
+
+0 assets
+
+0 quotations
+
+0 invoices
+
+0 vendors
+
+0 automation rules
+
+0 automation runs
+
+0 integrations
+
+0 documents
+
+0 report definitions
+
+0 report exports
+
+0 settings overrides
+
+and corresponding empty-state UI.
+
+
+======================================================================
+EMPTY STATE MUST NOT BE A SERVER ERROR
+======================================================================
+
+A data module with zero rows should normally return:
+
+HTTP 200
+
+with:
+
+[]
+or zero-valued overview data
+
+as appropriate.
+
+It must not return 500 merely because there is no business data.
+
+
+======================================================================
+DO NOT CREATE TEST DATA TO VERIFY EMPTY STATE
+======================================================================
+
+The purpose is to finish with zero non-user rows.
+
+Do not "temporarily" seed orders/projects/tasks after cleanup unless they are
+fully removed again before final verification.
+
+
+======================================================================
+RESTART STRATEGY
+======================================================================
+
+After cleanup:
+
+you may restart:
+
+npm run dev
+
+ONLY after the database has passed the strict zero-row verification.
+
+
+======================================================================
+POST-RESTART WRITE CHECK
+======================================================================
+
+After restart:
+
+DO NOT log in.
+
+Do not open an authenticated existing browser tab.
+
+Wait long enough for background workers to initialize.
+
+Then query ALL non-whitelisted tables again.
+
+Expected:
+
+all remain zero.
+
+If AutomationWorker or startup logic creates data spontaneously:
+
+STOP
+
+identify the source
+
+determine whether this is legitimate system behavior or a bug
+
+do not hide it.
+
+
+======================================================================
+FINAL DATABASE INVARIANT
+======================================================================
+
+Final live database state MUST satisfy:
+
+PRESERVED TABLES:
+row count > 0 as appropriate
+contents unchanged
+
+EVERY OTHER BASE TABLE:
+COUNT(*) = 0
+
+
+======================================================================
+FINAL ACCOUNT READINESS
+======================================================================
+
+Do not log in after final cleanup.
+
+Instead verify structurally that there are usable accounts:
+
+active
+approved
+deleted_at IS NULL
+
+with existing role assignments and BU access.
+
+Report only:
+
+number of login-ready accounts
+role codes represented
+workspace access represented
+
+Do NOT print:
+
+password hashes
+
+personal credentials
+
+secrets
+
+
+======================================================================
+FINAL GIT REVIEW
+======================================================================
+
+Run:
+
+git branch --show-current
+git status
+git diff
+git log -1 --oneline
+
+Make sure log moves are intentional.
+
+Do not accidentally include:
+
+.env
+DB backups
+credential material
+temporary SQL output
+
+
+======================================================================
+FINAL ACCEPTANCE CRITERIA
+======================================================================
+
+Task is complete only when ALL applicable conditions are true:
+
+1. Actual latest workspace inspected.
+2. Actual latest uni-nexus.sql inspected.
+3. Live DB identity confirmed.
+4. Backup created/confirmed before destructive work.
+5. Backend stopped before cleanup.
+6. AutomationWorker stopped before cleanup.
+7. Exactly eight preserved database tables identified.
+8. organizations unchanged.
+9. business_units unchanged.
+10. users unchanged.
+11. password hashes unchanged.
+12. roles unchanged.
+13. permissions unchanged.
+14. role_permissions unchanged.
+15. user_roles unchanged.
+16. user_business_units unchanged.
+17. user_sessions empty.
+18. user_presence_sessions empty.
+19. user_deletion_requests empty.
+20. user_reactivation_requests empty.
+21. audit_logs empty.
+22. notifications empty.
+23. tasks empty.
+24. calendar runtime data empty.
+25. automation runtime/config data empty.
+26. integration data empty.
+27. integration_secrets empty.
+28. integration_sync_logs empty.
+29. documents empty.
+30. report definitions/exports empty.
+31. system_settings empty.
+32. Data Master records empty.
+33. Craft domain data empty.
+34. Studio domain data empty.
+35. Finance data empty.
+36. Every remaining non-whitelisted BASE TABLE COUNT(*) = 0.
+37. Non-whitelisted AUTO_INCREMENT reset where applicable.
+38. No schema table dropped.
+39. No migration rerun.
+40. User/RBAC FK integrity valid.
+41. User media files preserved.
+42. Organization logo preserved.
+43. Business storage artifacts cleaned only when safely identifiable.
+44. No rm -rf broad storage operation.
+45. Agent logs not deleted.
+46. Safe Agent logs organized under docs/agent-logs where appropriate.
+47. Tool internal directories not damaged.
+48. No secrets introduced into Git.
+49. Database backup not committed.
+50. uni-nexus.sql not manually edited.
+51. npm run lint passes if executed.
+52. npm run build passes if executed.
+53. No data-generating smoke suite contaminates final DB.
+54. No final authenticated login contaminates DB.
+55. Optional restart does not repopulate non-user tables.
+56. Final DB strict check still passes.
+57. Final branch remains main.
+
+
+======================================================================
+FINAL REPORT FORMAT
+======================================================================
+
+Report clearly:
+
+Starting HEAD
+
+Final HEAD if source/log organization changed
+
+Branch
+
+BRANCH CREATED: NO
+
+WORKED ONLY ON main: YES
+
+Database host classification:
+LOCAL/DEVELOPMENT only
+(do not print password)
+
+Database name
+
+Backup result
+
+Backup location category
+(do not expose credentials)
+
+Application processes stopped before cleanup
+
+AutomationWorker stopped:
+YES/NO
+
+Number of live BASE TABLES discovered
+
+Preserved table set
+
+Preserved row counts before
+
+Preserved row counts after
+
+User identity checksum result:
+UNCHANGED / ERROR
+
+RBAC checksum result:
+UNCHANGED / ERROR
+
+Number of tables cleared
+
+Exact names of tables that failed to reach zero, if any
+
+Final non-whitelisted non-zero table count
+
+Expected:
+0
+
+Foreign-key integrity result
+
+AUTO_INCREMENT reset result
+
+Storage audit result
+
+User avatars preserved:
+YES/NO
+
+Profile banners preserved:
+YES/NO
+
+Organization logo preserved:
+YES/NO
+
+Business artifact cleanup result
+
+storage:doctor result
+
+Agent-log files discovered
+
+Agent-log files moved
+
+Agent-log files left in place and why
+
+Agent-log files deleted:
+0
+
+Sensitive-log handling result
+
+uni-nexus.sql MODIFIED BY CLEANUP AGENT:
+NO
+
+npm run lint:
+PASS / FAIL / NOT RUN
+
+npm run build:
+PASS / FAIL / NOT RUN
+
+Development environment restart:
+YES / NO
+
+If restarted:
+post-restart zero-row verification result
+
+Login-ready account count
+(do not expose passwords)
+
+Represented role codes
+
+Represented BU access
+
+Final git branch
+
+Final git status
+
+Final git log -1 --oneline
+
+
+======================================================================
+FINAL GOAL
+======================================================================
+
+Leave UNI-NEXUS in the cleanest possible pre-testing state:
+
+Application schema:
+COMPLETE
+
+Source code:
+PRESERVED
+
+User accounts:
+PRESERVED
+
+Passwords:
+PRESERVED
+
+Roles:
+PRESERVED
+
+Permissions:
+PRESERVED
+
+Workspace access:
+PRESERVED
+
+Organization identity:
+PRESERVED
+
+Craft / Studio / Shared identity:
+PRESERVED
+
+Business data:
+EMPTY
+
+Runtime data:
+EMPTY
+
+Notifications:
+EMPTY
+
+Tasks:
+EMPTY
+
+Calendar:
+EMPTY
+
+Audit Log:
+EMPTY
+
+Documents:
+EMPTY
+
+Reports:
+EMPTY
+
+Settings overrides:
+EMPTY
+
+Automations:
+EMPTY
+
+Integrations:
+EMPTY
+
+Finance:
+EMPTY
+
+Craft:
+EMPTY
+
+Studio:
+EMPTY
+
+Agent development logs:
+PRESERVED AND ORGANIZED
+
+This clean database will become the starting point for the owner's upcoming
+dedicated UNI-NEXUS full-system testing phase.
+
+Be extremely careful.
+
+Data preservation is more important than speed.
