@@ -13,7 +13,7 @@ export interface FinanceExpense { id: number; expense_code: string; expense_date
 export interface ListSummary { total_amount: number; total_count: number; }
 export interface Paginated<T> { items: T[]; meta: { page: number; limit: number; total: number; totalPages: number }; summary: ListSummary; }
 
-export interface ProfitabilityOrder { id: number; order_code: string; order_date: string; status_code: string; revenue: number; marketplace_fee: number; direct_cost: number | null; direct_cost_available: boolean; direct_cost_is_estimated: boolean; gross_profit: number | null; margin_percent: number | null; }
+export interface ProfitabilityOrder { id: number; order_code: string; order_date: string; status_code: string; revenue: number; marketplace_fee: number; direct_cost: number | null; direct_cost_available: boolean; direct_cost_is_estimated: boolean; direct_cost_is_partially_estimated: boolean; gross_profit: number | null; margin_percent: number | null; }
 export interface ProfitabilitySummary { total_revenue: number; total_marketplace_fee: number; total_direct_cost: number; total_gross_profit: number; orders_with_cost_data: number; orders_missing_cost_data: number; waste_cost_informational: number; waste_events_informational: number; }
 export interface Profitability { orders: ProfitabilityOrder[]; period_summary: ProfitabilitySummary; }
 
@@ -30,7 +30,7 @@ export interface JournalDetail extends Journal { lines: JournalLine[]; }
 export interface Accounting { journals: Journal[]; periods: FinancialPeriod[]; }
 
 export interface TreasuryPayload { name: string; account_type: string; provider_name?: string | null; account_number_masked?: string | null; currency_code?: string; opening_balance?: number; }
-export interface IncomePayload { amount: number; transaction_date: string; treasury_account_id: number; category_code?: string; description: string; party_id?: number | null; }
+export interface IncomePayload { amount: number; transaction_date: string; treasury_account_id: number; category_code?: string; description: string; party_id?: number | null; reference_number?: string | null; }
 export interface ExpensePayload { expense_date: string; description: string; amount: number; tax_amount?: number; category_code?: string; party_id?: number | null; craft_order_id?: number | null; treasury_account_id?: number | null; status_code?: 'draft' | 'approved' | 'paid'; direct_payment_confirmed?: boolean; }
 export interface BudgetPayload { name: string; period_start: string; period_end: string; items: Array<{ name: string; allocated_amount: number; category_id?: number | null; notes?: string | null }>; }
 

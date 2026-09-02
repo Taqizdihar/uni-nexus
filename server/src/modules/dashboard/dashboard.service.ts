@@ -118,7 +118,7 @@ export class DashboardService {
     const [rows]: any = await pool.execute(
       `SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END), 0) AS revenue,
               COALESCE(SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END), 0) AS expense,
-              COALESCE(SUM(CASE WHEN transaction_type = 'adjustment' AND source_type = 'studio_expense_reversal' THEN amount ELSE 0 END), 0) AS reversal
+              COALESCE(SUM(CASE WHEN transaction_type = 'adjustment' AND source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal') THEN amount ELSE 0 END), 0) AS reversal
        FROM financial_transactions
        WHERE organization_id = ? AND business_unit_id ${inList(unitIds)} AND status_code = 'posted'
          AND transaction_date >= ? AND transaction_date < ? AND currency_code = ?`,
@@ -152,7 +152,7 @@ export class DashboardService {
   private async cashFlow(actor: DashboardActor, unitIds: number[], period: DashboardPeriod, currency: string) {
     if (!unitIds.length) return { cash_in: 0, cash_out: 0, net_cash_flow: 0 };
     const [rows]: any = await pool.execute(
-      `SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' OR (transaction_type = 'adjustment' AND source_type = 'studio_expense_reversal') THEN amount ELSE 0 END), 0) AS cash_in,
+      `SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' OR (transaction_type = 'adjustment' AND source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal')) THEN amount ELSE 0 END), 0) AS cash_in,
               COALESCE(SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END), 0) AS cash_out
        FROM financial_transactions WHERE organization_id = ? AND business_unit_id ${inList(unitIds)} AND status_code = 'posted'
          AND transaction_date >= ? AND transaction_date < ? AND currency_code = ?`,

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { pool } from '../../config/database';
 import { sendSuccess } from '../../shared/utils/response';
 import { AppError } from '../../shared/errors/AppError';
-import { getCraftBusinessUnit } from '../craft-orders/craft-orders.helpers';
+import { getBusinessUnitByCodeForAuthenticatedUser } from '../../shared/utils/business-unit';
 import { CraftFinanceService } from './craft-finance.service';
 import { budgetSchema, expenseSchema, incomeSchema, payExpenseSchema, paymentSchema, reverseExpenseSchema, treasurySchema } from './craft-finance.schema';
 
@@ -22,7 +22,13 @@ const listFilters = (query: Record<string, unknown>) => ({
 
 export class CraftFinanceController {
   private service = new CraftFinanceService();
-  private async ctx(req: Request) { const c = await getCraftBusinessUnit(); return { organizationId: c.organizationId, businessUnitId: c.id, userId: (req as any).user.id }; }
+  /** Scope is derived solely from the refreshed server principal, never request input. */
+  private async ctx(req: Request) {
+    const user = (req as any).user;
+    if (!user?.id || !user?.organization_id) throw new AppError(401, 'AUTH_REQUIRED', 'Otentikasi diperlukan.');
+    const c = await getBusinessUnitByCodeForAuthenticatedUser(Number(user.organization_id), Number(user.id), 'CRAFT');
+    return { organizationId: c.organizationId, businessUnitId: c.id, userId: Number(user.id) };
+  }
 
   overview = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.overview(await this.ctx(req))); } catch (e) { next(e); } };
   references = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.references(await this.ctx(req))); } catch (e) { next(e); } };
@@ -30,8 +36,8 @@ export class CraftFinanceController {
   createTreasury = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.createTreasury(await this.ctx(req), treasurySchema.parse(req.body)), undefined, 201); } catch (e) { next(e instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', 'Data akun kas tidak valid.', e.issues) : e); } };
   status = async (req: Request, res: Response, next: NextFunction) => { try { await this.service.setTreasuryStatus(await this.ctx(req), id(String(req.params.id)), Boolean(req.body.is_active)); sendSuccess(res, { message: 'Status akun kas diperbarui.' }); } catch (e) { next(e); } };
   transactions = async (req: Request, res: Response, next: NextFunction) => { try { const c = await this.ctx(req); const [rows]: any = await pool.execute(`SELECT ft.*,tc.name category_name,ta.name treasury_name,p.display_name party_name FROM financial_transactions ft LEFT JOIN transaction_categories tc ON tc.id=ft.category_id LEFT JOIN treasury_accounts ta ON ta.id=ft.treasury_account_id LEFT JOIN parties p ON p.id=ft.party_id WHERE ft.organization_id=? AND ft.business_unit_id=? ORDER BY ft.transaction_date DESC LIMIT 200`, [c.organizationId, c.businessUnitId]); sendSuccess(res, rows); } catch (e) { next(e); } };
-  receivables = async (req: Request, res: Response, next: NextFunction) => { try { const c = await this.ctx(req); const [rows]: any = await pool.execute(`SELECT i.*,p.display_name party_name,DATEDIFF(UTC_DATE(),i.due_date) days_overdue FROM invoices i JOIN parties p ON p.id=i.party_id WHERE i.organization_id=? AND i.business_unit_id=? AND i.balance_due>0 AND i.status_code!='void' ORDER BY i.due_date`, [c.organizationId, c.businessUnitId]); sendSuccess(res, rows); } catch (e) { next(e); } };
-  payables = async (req: Request, res: Response, next: NextFunction) => { try { const c = await this.ctx(req); const [rows]: any = await pool.execute(`SELECT si.*,p.display_name party_name,DATEDIFF(UTC_DATE(),si.due_date) days_overdue FROM supplier_invoices si JOIN parties p ON p.id=si.supplier_party_id WHERE si.business_unit_id=? AND si.balance_due>0 AND si.status_code!='void' ORDER BY si.due_date`, [c.businessUnitId]); sendSuccess(res, rows); } catch (e) { next(e); } };
+  receivables = async (req: Request, res: Response, next: NextFunction) => { try { const c = await this.ctx(req); const [rows]: any = await pool.execute(`SELECT i.*,p.display_name party_name,DATEDIFF(DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 HOUR),i.due_date) days_overdue FROM invoices i JOIN parties p ON p.id=i.party_id WHERE i.organization_id=? AND i.business_unit_id=? AND i.balance_due>0 AND i.status_code!='void' ORDER BY i.due_date`, [c.organizationId, c.businessUnitId]); sendSuccess(res, rows); } catch (e) { next(e); } };
+  payables = async (req: Request, res: Response, next: NextFunction) => { try { const c = await this.ctx(req); const [rows]: any = await pool.execute(`SELECT si.*,p.display_name party_name,DATEDIFF(DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 HOUR),si.due_date) days_overdue FROM supplier_invoices si JOIN parties p ON p.id=si.supplier_party_id WHERE si.business_unit_id=? AND si.balance_due>0 AND si.status_code!='void' ORDER BY si.due_date`, [c.businessUnitId]); sendSuccess(res, rows); } catch (e) { next(e); } };
   payCustomer = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.customerPayment(await this.ctx(req), id(String(req.params.id)), paymentSchema.parse(req.body)), undefined, 201); } catch (e) { next(e instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', 'Data pembayaran tidak valid.', e.issues) : e); } };
   paySupplier = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.supplierPayment(await this.ctx(req), id(String(req.params.id)), paymentSchema.parse(req.body)), undefined, 201); } catch (e) { next(e instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', 'Data pembayaran tidak valid.', e.issues) : e); } };
   income = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.income(await this.ctx(req), incomeSchema.parse(req.body)), undefined, 201); } catch (e) { next(e instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', 'Data pendapatan tidak valid.', e.issues) : e); } };
@@ -49,6 +55,8 @@ export class CraftFinanceController {
   budgets = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.budgets(await this.ctx(req))); } catch (e) { next(e); } };
   createBudget = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.createBudget(await this.ctx(req), budgetSchema.parse(req.body)), undefined, 201); } catch (e) { next(e instanceof z.ZodError ? new AppError(400, 'VALIDATION_ERROR', 'Data anggaran tidak valid.', e.issues) : e); } };
   approveBudget = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.approveBudget(await this.ctx(req), id(String(req.params.id)))); } catch (e) { next(e); } };
+  activateBudget = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.transitionBudget(await this.ctx(req), id(String(req.params.id)), 'approved', 'active')); } catch (e) { next(e); } };
+  closeBudget = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.transitionBudget(await this.ctx(req), id(String(req.params.id)), 'active', 'closed')); } catch (e) { next(e); } };
 
   accounting = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.accounting(await this.ctx(req))); } catch (e) { next(e); } };
   journalDetail = async (req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.journalDetail(await this.ctx(req), id(String(req.params.id)))); } catch (e) { next(e); } };

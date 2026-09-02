@@ -63,8 +63,10 @@ async function main() {
       }
     });
 
-    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const todayDate = today.slice(0, 10);
+    // Fixed future business date isolates deterministic arithmetic from ordinary
+    // development records while still using only temporary, rolled-back fixtures.
+    const today = '2038-01-19 12:00:00';
+    const todayDate = '2038-01-19';
 
     // --- Income ------------------------------------------------------------------------------------
     const incomeResult = await service.income(context, { amount: 250000, transaction_date: today, treasury_account_id: treasuryId, category_code: incomeCategoryCode, description: `${marker} manual income` });
@@ -104,6 +106,8 @@ async function main() {
     const cashFlow = await service.cashFlow(context, todayDate, todayDate);
     if (!cashFlow.daily.length) throw new Error('Expected cashFlow().daily to contain an entry for today given the postings above.');
     if (!cashFlow.by_treasury.some((row: any) => Number(row.treasury_account_id) === treasuryId)) throw new Error('Expected cashFlow().by_treasury to include the fixture treasury account.');
+    const day = cashFlow.daily.find((row: any) => String(row.day).slice(0, 10) === todayDate);
+    if (!day || money(day.cash_in) !== 350000 || money(day.cash_out) !== 100000 || money(day.net_cash_flow) !== 250000) throw new Error(`Cash Flow reversal reconciliation failed: ${JSON.stringify({ day, daily: cashFlow.daily })}`);
 
     // --- Profitability (order + print job) ------------------------------------------------------------
     const [channelRows]: any = await pool.execute('SELECT id FROM sales_channels WHERE business_unit_id=? LIMIT 1', [businessUnitId]);
@@ -117,7 +121,7 @@ async function main() {
     const partyId = Number(partyInsert.insertId);
     cleanup.push(async () => { await pool.execute('DELETE FROM parties WHERE id=?', [partyId]); });
 
-    const [orderInsert]: any = await pool.execute(`INSERT INTO craft_orders (business_unit_id, order_code, customer_party_id, sales_channel_id, order_date, total_amount, marketplace_fee_amount) VALUES (?, ?, ?, ?, ?, 500000, 15000)`, [businessUnitId, marker, partyId, channelId, today]);
+    const [orderInsert]: any = await pool.execute(`INSERT INTO craft_orders (business_unit_id, order_code, customer_party_id, sales_channel_id, order_date, completed_at, status_code, total_amount, marketplace_fee_amount) VALUES (?, ?, ?, ?, ?, ?, 'completed', 500000, 15000)`, [businessUnitId, marker, partyId, channelId, today, today]);
     const orderId = Number(orderInsert.insertId);
     cleanup.push(async () => { await pool.execute('DELETE FROM craft_orders WHERE id=?', [orderId]); });
 

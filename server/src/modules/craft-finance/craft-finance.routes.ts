@@ -18,6 +18,8 @@ craftFinanceRoutes.get('/cash-flow',requirePermission('craft.finance.read'),c.ca
 craftFinanceRoutes.get('/budgets',requirePermission('craft.finance.read'),c.budgets);
 craftFinanceRoutes.post('/budgets',requirePermission('craft.finance.write'),c.createBudget);
 craftFinanceRoutes.post('/budgets/:id/approve',requirePermission('craft.finance.write'),c.approveBudget);
+craftFinanceRoutes.post('/budgets/:id/activate',requirePermission('craft.finance.write'),c.activateBudget);
+craftFinanceRoutes.post('/budgets/:id/close',requirePermission('craft.finance.write'),c.closeBudget);
 
 craftFinanceRoutes.get('/accounting',requirePermission('craft.finance.read'),c.accounting);
 craftFinanceRoutes.get('/accounting/journals/:id',requirePermission('craft.finance.read'),c.journalDetail);

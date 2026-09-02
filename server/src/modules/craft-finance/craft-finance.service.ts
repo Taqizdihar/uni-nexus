@@ -38,7 +38,7 @@ export class CraftFinanceService {
   async setTreasuryStatus(context:PostingContext,id:number,active:boolean){const [r]:any=await pool.execute('UPDATE treasury_accounts SET is_active=? WHERE id=? AND organization_id=? AND business_unit_id=?',[active?1:0,id,context.organizationId,context.businessUnitId]);if(!r.affectedRows)throw new AppError(404,'TREASURY_NOT_FOUND','Akun kas tidak ditemukan.');}
   async supplierPayment(context:PostingContext,id:number,data:any){const c=await pool.getConnection();await c.beginTransaction();try{const [invoices]:any=await c.execute('SELECT supplier_party_id FROM supplier_invoices WHERE id=? AND business_unit_id=?',[id,context.businessUnitId]);if(!invoices.length)throw new AppError(404,'SUPPLIER_INVOICE_NOT_FOUND','Tagihan pemasok tidak ditemukan.');const result=await this.posting.postSupplierPayment(c,context,{supplierInvoiceId:id,partyId:invoices[0].supplier_party_id,paymentMethodId:data.payment_method_id,treasuryAccountId:data.treasury_account_id,amount:data.amount,paymentDate:data.payment_date,categoryCode:data.category_code,referenceNumber:data.reference_number,notes:data.notes});await c.commit();return{payment_id:result};}catch(e){await c.rollback();throw e;}finally{c.release();}}
   async customerPayment(context:PostingContext,id:number,data:any){const c=await pool.getConnection();await c.beginTransaction();try{const [invoices]:any=await c.execute('SELECT party_id FROM invoices WHERE id=? AND organization_id=? AND business_unit_id=?',[id,context.organizationId,context.businessUnitId]);if(!invoices.length)throw new AppError(404,'INVOICE_NOT_FOUND','Invoice tidak ditemukan.');const result=await this.posting.postCustomerPayment(c,context,{invoiceId:id,partyId:invoices[0].party_id,paymentMethodId:data.payment_method_id,treasuryAccountId:data.treasury_account_id,amount:data.amount,paymentDate:data.payment_date,referenceNumber:data.reference_number,notes:data.notes});await c.commit();return{payment_id:result};}catch(e){await c.rollback();throw e;}finally{c.release();}}
-  async income(context:PostingContext,data:any){const c=await pool.getConnection();await c.beginTransaction();try{const result=await this.posting.postCashMovement(c,context,{direction:'in',amount:data.amount,transactionDate:data.transaction_date,treasuryAccountId:data.treasury_account_id,categoryCode:data.category_code,description:data.description,partyId:data.party_id||null,sourceType:'craft_manual_income',enforceSourceIdempotency:false},{auditModule:'craft_finance',auditAction:'craft.finance.manual_income'});await c.commit();return{id:result.transactionId,transaction_code:result.transactionCode};}catch(e){await c.rollback();throw e;}finally{c.release();}}
+  async income(context:PostingContext,data:any){const c=await pool.getConnection();await c.beginTransaction();try{const result=await this.posting.postCashMovement(c,context,{direction:'in',amount:data.amount,transactionDate:data.transaction_date,treasuryAccountId:data.treasury_account_id,categoryCode:data.category_code,description:data.description,partyId:data.party_id||null,sourceType:'craft_manual_income',sourceCode:data.reference_number || null,enforceSourceIdempotency:false},{auditModule:'craft_finance',auditAction:'craft.finance.manual_income'});await publishCraftFinanceEvent(c,context,'craft.finance.manual_income_posted','financial_transaction',result.transactionId,result.transactionCode,{amount:result.amount,reference_number:data.reference_number || null});await c.commit();return{id:result.transactionId,transaction_code:result.transactionCode};}catch(e){await c.rollback();throw e;}finally{c.release();}}
 
   // ---------------------------------------------------------------------
   // Income & Expense ledgers
@@ -106,7 +106,9 @@ export class CraftFinanceService {
 
   private async payExpenseRow(connection: PoolConnection, context: PostingContext, expense: any, input: { treasury_account_id: number; payment_date: string; direct_payment_confirmed?: boolean }) {
     if (expense.financial_transaction_id || expense.status_code === 'paid') throw new AppError(409, 'EXPENSE_ALREADY_PAID', 'Pengeluaran ini sudah dibayar.');
-    if (expense.status_code !== 'approved' && !input.direct_payment_confirmed) throw new AppError(409, 'EXPENSE_APPROVAL_REQUIRED', 'Pengeluaran harus disetujui sebelum dibayar.');
+    // Direct payment is only an explicit creation workflow.  The normal /pay
+    // endpoint never accepts a client flag as a substitute for approval.
+    if (expense.status_code !== 'approved') throw new AppError(409, 'EXPENSE_APPROVAL_REQUIRED', 'Pengeluaran harus disetujui sebelum dibayar.');
     const total = money(expense.amount) + money(expense.tax_amount);
     const posted = await this.posting.postCashMovement(connection, context, { direction: 'out', amount: total, transactionDate: toSqlDateTime(input.payment_date), treasuryAccountId: input.treasury_account_id, categoryCode: expense.category_code, description: expense.description, partyId: expense.party_id || null, sourceType: 'craft_expense', sourceId: Number(expense.id), sourceCode: expense.expense_code, auditAction: 'craft.finance.expense_pay', auditEntityType: 'expense', auditEntityId: Number(expense.id), auditEntityCode: expense.expense_code }, { auditModule: 'craft_finance' });
     await connection.execute(`UPDATE expenses SET status_code='paid',treasury_account_id=?,financial_transaction_id=?,approved_by=COALESCE(approved_by,?),expense_date=? WHERE id=?`, [input.treasury_account_id, posted.transactionId, context.userId, toSqlDateTime(input.payment_date), expense.id]);
@@ -121,9 +123,11 @@ export class CraftFinanceService {
       if (direct && (!data.treasury_account_id || !data.direct_payment_confirmed)) throw new AppError(400, 'DIRECT_PAYMENT_CONFIRMATION_REQUIRED', 'Pembayaran langsung memerlukan akun kas dan konfirmasi.');
       const expense = await this.insertExpense(connection, context, data, initialStatus);
       await writeCraftFinanceAudit(connection, context, 'craft.finance.expense_create', 'expense', expense.id, expense.expense_code, `Membuat pengeluaran ${expense.expense_code}.`, undefined, { status: data.status_code, amount: data.amount, tax_amount: data.tax_amount });
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.expense_created', 'expense', expense.id, expense.expense_code, { amount: data.amount, status_code: initialStatus });
       if (!direct) return expense;
       const [rows]: any = await connection.execute(`SELECT e.*,c.code category_code FROM expenses e JOIN transaction_categories c ON c.id=e.category_id WHERE e.id=? FOR UPDATE`, [expense.id]);
       const posted = await this.payExpenseRow(connection, context, rows[0], { treasury_account_id: Number(data.treasury_account_id), payment_date: data.expense_date, direct_payment_confirmed: true });
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.expense_paid', 'expense', expense.id, expense.expense_code, { transaction_id: posted.transactionId, direct_payment: true });
       return { ...expense, transaction_id: posted.transactionId };
     });
   }
@@ -135,6 +139,7 @@ export class CraftFinanceService {
       if (rows[0].status_code !== 'draft') throw new AppError(409, 'EXPENSE_NOT_DRAFT', 'Hanya pengeluaran draf yang dapat disetujui.');
       await connection.execute(`UPDATE expenses SET status_code='approved',approved_by=? WHERE id=?`, [context.userId, expenseId]);
       await writeCraftFinanceAudit(connection, context, 'craft.finance.expense_approve', 'expense', expenseId, rows[0].expense_code, `Menyetujui pengeluaran ${rows[0].expense_code}.`);
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.expense_approved', 'expense', expenseId, rows[0].expense_code, {});
       return { id: expenseId, status_code: 'approved' };
     });
   }
@@ -144,6 +149,7 @@ export class CraftFinanceService {
       const [rows]: any = await connection.execute(`SELECT e.*,c.code category_code FROM expenses e JOIN transaction_categories c ON c.id=e.category_id WHERE e.id=? AND e.organization_id=? AND e.business_unit_id=? FOR UPDATE`, [expenseId, context.organizationId, context.businessUnitId]);
       if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
       const posted = await this.payExpenseRow(connection, context, rows[0], data);
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.expense_paid', 'expense', expenseId, rows[0].expense_code, { transaction_id: posted.transactionId, direct_payment: false });
       return { id: expenseId, transaction_id: posted.transactionId };
     });
   }
@@ -154,9 +160,10 @@ export class CraftFinanceService {
       if (!rows.length) throw new AppError(404, 'EXPENSE_NOT_FOUND', 'Pengeluaran tidak ditemukan.');
       const expense = rows[0];
       if (expense.status_code !== 'paid' || !expense.financial_transaction_id) throw new AppError(409, 'EXPENSE_NOT_PAID', 'Hanya pengeluaran yang sudah dibayar dapat dibalik.');
-      const reversal = await this.posting.postExpenseReversal(connection, context, { amount: money(expense.amount) + money(expense.tax_amount), reversalDate: toSqlDateTime(data.reversal_date), treasuryAccountId: Number(expense.treasury_account_id), categoryCode: expense.category_code, description: `Pembalikan ${expense.expense_code}: ${data.reason}`, partyId: expense.party_id || null, sourceId: expenseId, sourceCode: expense.expense_code }, { auditModule: 'craft_finance', auditAction: 'craft.finance.expense_reversal', entityType: 'expense', entityId: expenseId, entityCode: expense.expense_code });
+      const reversal = await this.posting.postExpenseReversal(connection, context, { amount: money(expense.amount) + money(expense.tax_amount), reversalDate: toSqlDateTime(data.reversal_date), treasuryAccountId: Number(expense.treasury_account_id), categoryCode: expense.category_code, description: `Pembalikan ${expense.expense_code}: ${data.reason}`, partyId: expense.party_id || null, sourceId: expenseId, sourceCode: expense.expense_code }, { auditModule: 'craft_finance', auditAction: 'craft.finance.expense_reversal', entityType: 'expense', entityId: expenseId, entityCode: expense.expense_code, sourceType: 'craft_expense_reversal' });
       await connection.execute(`UPDATE expenses SET status_code='void' WHERE id=?`, [expenseId]);
       await writeCraftFinanceAudit(connection, context, 'craft.finance.expense_void', 'expense', expenseId, expense.expense_code, `Membalik pengeluaran ${expense.expense_code}.`, { status_code: 'paid' }, { status_code: 'void', reversal_transaction_id: reversal.transactionId, reason: data.reason });
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.expense_reversed', 'expense', expenseId, expense.expense_code, { reversal_transaction_id: reversal.transactionId, reason: data.reason });
       return { id: expenseId, status_code: 'void', reversal_transaction_id: reversal.transactionId };
     });
   }
@@ -166,9 +173,12 @@ export class CraftFinanceService {
   // ---------------------------------------------------------------------
 
   async profitability(context: PostingContext, filters: { from?: string; to?: string }) {
-    let where = ' WHERE o.business_unit_id=? AND o.deleted_at IS NULL AND o.status_code NOT IN (\'cancelled\')'; const params: any[] = [context.businessUnitId];
-    if (filters.from) { where += ' AND DATE(o.order_date)>=?'; params.push(filters.from); }
-    if (filters.to) { where += ' AND DATE(o.order_date)<=?'; params.push(filters.to); }
+    // Recognize Craft revenue only after operational completion.  This matches the
+    // order lifecycle's terminal fulfilment states; new/confirmed orders remain
+    // pipeline, not realized revenue.
+    let where = " WHERE o.business_unit_id=? AND o.deleted_at IS NULL AND o.status_code IN ('completed','packed','shipped')"; const params: any[] = [context.businessUnitId];
+    if (filters.from) { where += ' AND DATE(COALESCE(o.completed_at,o.order_date))>=?'; params.push(filters.from); }
+    if (filters.to) { where += ' AND DATE(COALESCE(o.completed_at,o.order_date))<=?'; params.push(filters.to); }
     const [rows]: any = await pool.execute(
       `SELECT o.id, o.order_code, o.order_date, o.status_code, o.total_amount, o.paid_amount, o.marketplace_fee_amount,
               COALESCE(job.direct_cost, NULL) AS direct_cost, COALESCE(job.job_count, 0) AS job_count, COALESCE(job.estimated_job_count, 0) AS estimated_job_count
@@ -198,6 +208,7 @@ export class CraftFinanceService {
         id: Number(row.id), order_code: row.order_code, order_date: row.order_date, status_code: row.status_code,
         revenue, marketplace_fee: marketplaceFee,
         direct_cost: directCost, direct_cost_available: directCostAvailable, direct_cost_is_estimated: Number(row.estimated_job_count) > 0 && Number(row.job_count) === 0,
+        direct_cost_is_partially_estimated: Number(row.estimated_job_count) > 0 && Number(row.job_count) > 0,
         gross_profit: grossProfit, margin_percent: grossProfit !== null && revenue > 0 ? money((grossProfit / revenue) * 100) : null,
       };
     });
@@ -224,13 +235,15 @@ export class CraftFinanceService {
   async cashFlow(context: PostingContext, from?: string, to?: string) {
     const params: any[] = [context.organizationId, context.businessUnitId];
     const dateClauses: ((prefix: string) => string)[] = [];
-    if (from) { dateClauses.push((prefix) => `DATE(${prefix}transaction_date)>=?`); params.push(from); }
-    if (to) { dateClauses.push((prefix) => `DATE(${prefix}transaction_date)<=?`); params.push(to); }
-    const buildWhere = (prefix: string) => ` WHERE ${prefix}organization_id=? AND ${prefix}business_unit_id=? AND ${prefix}status_code='posted' AND ${prefix}transaction_type IN ('income','expense')${dateClauses.map((clause) => ` AND ${clause(prefix)}`).join('')}`;
+    if (from) { dateClauses.push((prefix) => `DATE(DATE_ADD(${prefix}transaction_date, INTERVAL 7 HOUR))>=?`); params.push(from); }
+    if (to) { dateClauses.push((prefix) => `DATE(DATE_ADD(${prefix}transaction_date, INTERVAL 7 HOUR))<=?`); params.push(to); }
+    // A posted expense reversal is an adjustment but still a real cash inflow.  Other
+    // adjustments are deliberately excluded until they have explicit cash semantics.
+    const buildWhere = (prefix: string) => ` WHERE ${prefix}organization_id=? AND ${prefix}business_unit_id=? AND ${prefix}status_code='posted' AND (${prefix}transaction_type IN ('income','expense') OR (${prefix}transaction_type='adjustment' AND ${prefix}source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal','finance_cash_reversal')))${dateClauses.map((clause) => ` AND ${clause(prefix)}`).join('')}`;
     const [[daily], [byTreasury], [byCategory]]: any = await Promise.all([
-      pool.execute(`SELECT DATE(transaction_date) day, COALESCE(SUM(CASE WHEN transaction_type='income' THEN amount ELSE 0 END),0) cash_in, COALESCE(SUM(CASE WHEN transaction_type='expense' THEN amount ELSE 0 END),0) cash_out FROM financial_transactions${buildWhere('')} GROUP BY DATE(transaction_date) ORDER BY day`, params),
-      pool.execute(`SELECT ft.treasury_account_id, ta.name treasury_name, COALESCE(SUM(CASE WHEN ft.transaction_type='income' THEN ft.amount ELSE 0 END),0) cash_in, COALESCE(SUM(CASE WHEN ft.transaction_type='expense' THEN ft.amount ELSE 0 END),0) cash_out FROM financial_transactions ft LEFT JOIN treasury_accounts ta ON ta.id=ft.treasury_account_id${buildWhere('ft.')} GROUP BY ft.treasury_account_id,ta.name ORDER BY ta.name`, params),
-      pool.execute(`SELECT ft.category_id, tc.name category_name, ft.transaction_type, COALESCE(SUM(ft.amount),0) amount FROM financial_transactions ft LEFT JOIN transaction_categories tc ON tc.id=ft.category_id${buildWhere('ft.')} GROUP BY ft.category_id,tc.name,ft.transaction_type ORDER BY amount DESC`, params),
+      pool.execute(`SELECT DATE_FORMAT(DATE_ADD(transaction_date, INTERVAL 7 HOUR),'%Y-%m-%d') day, COALESCE(SUM(CASE WHEN transaction_type='income' OR (transaction_type='adjustment' AND source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal')) THEN amount ELSE 0 END),0) cash_in, COALESCE(SUM(CASE WHEN transaction_type='expense' OR (transaction_type='adjustment' AND source_type='finance_cash_reversal') THEN amount ELSE 0 END),0) cash_out FROM financial_transactions${buildWhere('')} GROUP BY DATE_FORMAT(DATE_ADD(transaction_date, INTERVAL 7 HOUR),'%Y-%m-%d') ORDER BY day`, params),
+      pool.execute(`SELECT ft.treasury_account_id, ta.name treasury_name, COALESCE(SUM(CASE WHEN ft.transaction_type='income' OR (ft.transaction_type='adjustment' AND ft.source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal')) THEN ft.amount ELSE 0 END),0) cash_in, COALESCE(SUM(CASE WHEN ft.transaction_type='expense' OR (ft.transaction_type='adjustment' AND ft.source_type='finance_cash_reversal') THEN ft.amount ELSE 0 END),0) cash_out FROM financial_transactions ft LEFT JOIN treasury_accounts ta ON ta.id=ft.treasury_account_id${buildWhere('ft.')} GROUP BY ft.treasury_account_id,ta.name ORDER BY ta.name`, params),
+      pool.execute(`SELECT ft.category_id, tc.name category_name, CASE WHEN ft.transaction_type='income' OR (ft.transaction_type='adjustment' AND ft.source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal')) THEN 'income' ELSE 'expense' END transaction_type, COALESCE(SUM(ft.amount),0) amount FROM financial_transactions ft LEFT JOIN transaction_categories tc ON tc.id=ft.category_id${buildWhere('ft.')} GROUP BY ft.category_id,tc.name,CASE WHEN ft.transaction_type='income' OR (ft.transaction_type='adjustment' AND ft.source_type IN ('craft_expense_reversal','studio_expense_reversal','expense_reversal')) THEN 'income' ELSE 'expense' END ORDER BY amount DESC`, params),
     ]);
     return {
       daily: daily.map((row: any) => ({ ...row, cash_in: money(row.cash_in), cash_out: money(row.cash_out), net_cash_flow: money(row.cash_in) - money(row.cash_out) })),
@@ -251,12 +264,16 @@ export class CraftFinanceService {
   async createBudget(context: PostingContext, data: any) {
     if (data.period_end < data.period_start) throw new AppError(400, 'INVALID_BUDGET_PERIOD', 'Akhir periode anggaran tidak boleh mendahului awalnya.');
     return withCraftFinanceTransaction(async (connection) => {
+      const categoryIds = data.items.map((item: any) => Number(item.category_id)).filter(Boolean);
+      if (new Set(categoryIds).size !== categoryIds.length) throw new AppError(400, 'DUPLICATE_BUDGET_CATEGORY', 'Kategori anggaran tidak boleh dialokasikan lebih dari sekali.');
+      if (categoryIds.length) { const [categories]: any = await connection.query(`SELECT id FROM transaction_categories WHERE organization_id=? AND business_unit_id=? AND transaction_type='expense' AND is_active=1 AND id IN (${categoryIds.map(() => '?').join(',')})`, [context.organizationId, context.businessUnitId, ...categoryIds]); if (categories.length !== categoryIds.length) throw new AppError(400, 'INVALID_BUDGET_CATEGORY', 'Kategori anggaran tidak valid untuk Craft.'); }
       const total = data.items.reduce((sum: number, item: any) => sum + money(item.allocated_amount), 0);
       const [result]: any = await connection.execute(`INSERT INTO budgets (organization_id,business_unit_id,budget_code,name,period_start,period_end,status_code,total_amount,created_by) VALUES (?,?,?, ?,?,?, 'draft',?,?)`, [context.organizationId, context.businessUnitId, `TMP-${randomUUID()}`, data.name, data.period_start, data.period_end, total, context.userId]);
       const id = Number(result.insertId), budgetCode = financeCode('BDG', id);
       await connection.execute('UPDATE budgets SET budget_code=? WHERE id=?', [budgetCode, id]);
       for (const item of data.items) await connection.execute('INSERT INTO budget_items (budget_id,category_id,name,allocated_amount,notes) VALUES (?,?,?,?,?)', [id, item.category_id || null, item.name, item.allocated_amount, item.notes || null]);
       await writeCraftFinanceAudit(connection, context, 'craft.finance.budget_create', 'budget', id, budgetCode, `Membuat anggaran ${budgetCode}.`, undefined, { total, item_count: data.items.length });
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.budget_created', 'budget', id, budgetCode, { total, item_count: data.items.length });
       return { id, budget_code: budgetCode };
     });
   }
@@ -268,7 +285,20 @@ export class CraftFinanceService {
       if (rows[0].status_code !== 'draft') throw new AppError(409, 'BUDGET_NOT_DRAFT', 'Hanya anggaran draf yang dapat disetujui.');
       await connection.execute(`UPDATE budgets SET status_code='approved',approved_by=? WHERE id=?`, [context.userId, budgetId]);
       await writeCraftFinanceAudit(connection, context, 'craft.finance.budget_approve', 'budget', budgetId, rows[0].budget_code, `Menyetujui anggaran ${rows[0].budget_code}.`);
+      await publishCraftFinanceEvent(connection, context, 'craft.finance.budget_approved', 'budget', budgetId, rows[0].budget_code, {});
       return { id: budgetId, status_code: 'approved' };
+    });
+  }
+
+  async transitionBudget(context: PostingContext, budgetId: number, from: 'approved' | 'active', to: 'active' | 'closed') {
+    return withCraftFinanceTransaction(async (connection) => {
+      const [rows]: any = await connection.execute('SELECT budget_code,status_code FROM budgets WHERE id=? AND organization_id=? AND business_unit_id=? FOR UPDATE', [budgetId, context.organizationId, context.businessUnitId]);
+      if (!rows.length) throw new AppError(404, 'BUDGET_NOT_FOUND', 'Anggaran tidak ditemukan.');
+      if (rows[0].status_code !== from) throw new AppError(409, 'BUDGET_INVALID_TRANSITION', `Anggaran harus berstatus ${from} untuk melanjutkan.`);
+      await connection.execute('UPDATE budgets SET status_code=? WHERE id=?', [to, budgetId]);
+      await writeCraftFinanceAudit(connection, context, `craft.finance.budget_${to}`, 'budget', budgetId, rows[0].budget_code, `${to === 'active' ? 'Mengaktifkan' : 'Menutup'} anggaran ${rows[0].budget_code}.`, { status_code: from }, { status_code: to });
+      await publishCraftFinanceEvent(connection, context, `craft.finance.budget_${to}`, 'budget', budgetId, rows[0].budget_code, {});
+      return { id: budgetId, status_code: to };
     });
   }
 

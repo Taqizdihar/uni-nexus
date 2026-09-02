@@ -14,13 +14,14 @@ const isKnownWorkspace = (value: unknown): value is 'craft' | 'studio' => value 
 
 /** Resolves the workspace a freshly-authenticated user should land in: their configured
  * default if they can access it, otherwise the first workspace they can access at all. */
-function resolveDefaultWorkspace(user: { default_workspace_code: string; workspaces?: string[] } | null): 'craft' | 'studio' {
-  if (!user) return 'craft';
+function resolveDefaultWorkspace(user: { default_workspace_code: string; workspaces?: string[] } | null): Workspace {
+  if (!user) return 'global';
   const accessible = user.workspaces || [];
   const preferred = isKnownWorkspace(user.default_workspace_code) ? user.default_workspace_code : null;
   if (preferred && accessible.includes(preferred)) return preferred;
   const firstAccessible = accessible.find(isKnownWorkspace) as 'craft' | 'studio' | undefined;
-  return firstAccessible || preferred || 'craft';
+  // A saved preference is never an authorization grant.
+  return firstAccessible || 'global';
 }
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
@@ -42,7 +43,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     }
   }, [user?.id]);
 
-  const activeWorkspace = manualOverride ?? defaultWorkspace;
+  const activeWorkspace = manualOverride && (user?.workspaces || []).includes(manualOverride)
+    ? manualOverride
+    : defaultWorkspace;
 
   return (
     <WorkspaceContext.Provider value={{ activeWorkspace, setWorkspace: setManualOverride }}>

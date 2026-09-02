@@ -9,6 +9,11 @@ export interface SearchResultItem {
   module: string;
 }
 
+export interface SearchWorkspaceAccess {
+  craft: boolean;
+  studio: boolean;
+}
+
 export interface SearchResponse {
   query: string;
   results: SearchResultItem[];

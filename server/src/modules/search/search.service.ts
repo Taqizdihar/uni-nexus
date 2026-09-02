@@ -1,10 +1,11 @@
 import { pool } from '../../config/database';
 import { getBusinessUnitByCodeForOrganization } from '../../shared/utils/business-unit';
-import type { SearchResultItem, SearchResultType } from './search.types';
+import type { SearchResultItem, SearchResultType, SearchWorkspaceAccess } from './search.types';
 
 export interface SearchActor {
   organizationId: number;
   permissions: string[];
+  workspaceAccess: SearchWorkspaceAccess;
 }
 
 const MIN_QUERY_LENGTH = 2;
@@ -14,6 +15,7 @@ const PER_CATEGORY_LIMIT = 8;
 const likeTerm = (term: string) => `%${term.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
 
 async function craftOrders(actor: SearchActor, term: string): Promise<SearchResultItem[]> {
+  if (!actor.workspaceAccess.craft) return [];
   const craft = await getBusinessUnitByCodeForOrganization(actor.organizationId, 'CRAFT').catch(() => null);
   if (!craft) return [];
   const [rows]: any = await pool.execute(
@@ -36,6 +38,7 @@ async function craftOrders(actor: SearchActor, term: string): Promise<SearchResu
 }
 
 async function studioProjects(actor: SearchActor, term: string): Promise<SearchResultItem[]> {
+  if (!actor.workspaceAccess.studio) return [];
   const studio = await getBusinessUnitByCodeForOrganization(actor.organizationId, 'STUDIO').catch(() => null);
   if (!studio) return [];
   const [rows]: any = await pool.execute(
@@ -58,6 +61,7 @@ async function studioProjects(actor: SearchActor, term: string): Promise<SearchR
 }
 
 async function craftCustomers(actor: SearchActor, term: string): Promise<SearchResultItem[]> {
+  if (!actor.workspaceAccess.craft) return [];
   const craft = await getBusinessUnitByCodeForOrganization(actor.organizationId, 'CRAFT').catch(() => null);
   if (!craft) return [];
   const [rows]: any = await pool.execute(
@@ -80,6 +84,7 @@ async function craftCustomers(actor: SearchActor, term: string): Promise<SearchR
 }
 
 async function studioClients(actor: SearchActor, term: string): Promise<SearchResultItem[]> {
+  if (!actor.workspaceAccess.studio) return [];
   const studio = await getBusinessUnitByCodeForOrganization(actor.organizationId, 'STUDIO').catch(() => null);
   if (!studio) return [];
   const [rows]: any = await pool.execute(

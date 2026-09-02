@@ -41,25 +41,28 @@ async function main() {
     orderId = Number(orderInsert.insertId);
 
     // A user holding craft.orders.read must find the fixture order.
-    const authorized = await searchService.search({ organizationId, permissions: ['craft.orders.read'] }, marker);
+    const authorized = await searchService.search({ organizationId, permissions: ['craft.orders.read'], workspaceAccess: { craft: true, studio: false } }, marker);
     const found = authorized.results.find((item) => item.type === 'craft_order' && item.id === orderId);
     if (!found) throw new Error('Expected an authorized actor to find the fixture craft order.');
     if (found.route !== `/app/craft/orders/${orderId}`) throw new Error(`Unexpected result route: ${found.route}`);
 
     // A user without craft.orders.read must never see it, even though matching data exists.
-    const unauthorized = await searchService.search({ organizationId, permissions: [] }, marker);
+    const unauthorized = await searchService.search({ organizationId, permissions: [], workspaceAccess: { craft: true, studio: false } }, marker);
     if (unauthorized.results.some((item) => item.type === 'craft_order')) throw new Error('Permission leakage: craft order surfaced to an actor without craft.orders.read.');
     if (Object.keys(unauthorized.categories).length !== 0) throw new Error('Permission leakage: category counts exposed without any granted permission.');
 
     // A user with an unrelated permission must not see the craft order either.
-    const otherPermission = await searchService.search({ organizationId, permissions: ['studio.projects.read'] }, marker);
+    const otherPermission = await searchService.search({ organizationId, permissions: ['studio.projects.read'], workspaceAccess: { craft: true, studio: false } }, marker);
     if (otherPermission.results.some((item) => item.type === 'craft_order')) throw new Error('Permission leakage: craft order surfaced to an actor holding only studio.projects.read.');
 
     // Below the minimum query length, no query should run regardless of permissions.
-    const tooShort = await searchService.search({ organizationId, permissions: ['craft.orders.read'] }, marker.slice(0, 1));
+    const workspaceDenied = await searchService.search({ organizationId, permissions: ['craft.orders.read'], workspaceAccess: { craft: false, studio: false } }, marker);
+    if (workspaceDenied.results.length || Object.keys(workspaceDenied.categories).length) throw new Error('Workspace leakage: Craft result or count surfaced without Craft access.');
+
+    const tooShort = await searchService.search({ organizationId, permissions: ['craft.orders.read'], workspaceAccess: { craft: true, studio: false } }, marker.slice(0, 1));
     if (tooShort.results.length !== 0) throw new Error('Expected no results below the minimum query length.');
 
-    console.log('Search smoke passed: authorized lookup, permission-scoped leakage prevention, and minimum query length.');
+    console.log('Search smoke passed: authorized lookup, permission/workspace-scoped leakage prevention, and minimum query length.');
   } finally {
     if (orderId) await pool.execute('DELETE FROM craft_orders WHERE id=?', [orderId]);
     if (partyId) await pool.execute('DELETE FROM party_roles WHERE party_id=?', [partyId]);

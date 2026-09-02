@@ -125,20 +125,21 @@ export class FinancePostingService {
   async postExpenseReversal(connection: Connection, context: PostingContext, input: { amount: number; reversalDate: string; treasuryAccountId: number; categoryCode: string; description: string; partyId?: number | null; sourceId: number; sourceCode: string; }, options: PostingOptions = {}) {
     const amount = money(input.amount);
     if (amount <= 0) throw new AppError(400, 'INVALID_AMOUNT', 'Nilai pembalikan harus lebih dari nol.');
-    const [existing]: any = await connection.execute(`SELECT id FROM financial_transactions WHERE organization_id=? AND business_unit_id=? AND source_type='studio_expense_reversal' AND source_id=? AND status_code='posted' LIMIT 1 FOR UPDATE`, [context.organizationId, context.businessUnitId, input.sourceId]);
+    const sourceType = options.sourceType || 'expense_reversal';
+    const [existing]: any = await connection.execute(`SELECT id FROM financial_transactions WHERE organization_id=? AND business_unit_id=? AND source_type=? AND source_id=? AND status_code='posted' LIMIT 1 FOR UPDATE`, [context.organizationId, context.businessUnitId, sourceType, input.sourceId]);
     if (existing.length) throw new AppError(409, 'EXPENSE_ALREADY_REVERSED', 'Pengeluaran ini sudah dibalik.');
     const periodId = await this.financialPeriod(connection, context, input.reversalDate);
     const category = await this.category(connection, context, input.categoryCode, 'expense');
     const treasury = await this.treasury(connection, context, input.treasuryAccountId);
     const [result]: any = await connection.execute(
       `INSERT INTO financial_transactions (organization_id,business_unit_id,transaction_code,transaction_date,transaction_type,category_id,treasury_account_id,party_id,amount,currency_code,description,source_type,source_id,source_code,status_code,created_by,posted_by,posted_at)
-       VALUES (?, ?, ?, ?, 'adjustment', ?, ?, ?, ?, ?, ?, 'studio_expense_reversal', ?, ?, 'posted', ?, ?, UTC_TIMESTAMP())`,
-      [context.organizationId,context.businessUnitId,`TMP-${randomUUID()}`,input.reversalDate,category.id,treasury.id,input.partyId || null,amount,treasury.currency_code,input.description,input.sourceId,input.sourceCode,context.userId,context.userId],
+       VALUES (?, ?, ?, ?, 'adjustment', ?, ?, ?, ?, ?, ?, ?, ?, ?, 'posted', ?, ?, UTC_TIMESTAMP())`,
+      [context.organizationId,context.businessUnitId,`TMP-${randomUUID()}`,input.reversalDate,category.id,treasury.id,input.partyId || null,amount,treasury.currency_code,input.description,sourceType,input.sourceId,input.sourceCode,context.userId,context.userId],
     );
     const transactionId=Number(result.insertId),transactionCode=code('FTX',transactionId);
     await connection.execute('UPDATE financial_transactions SET transaction_code=? WHERE id=?',[transactionCode,transactionId]);
     await connection.execute('UPDATE treasury_accounts SET current_balance=current_balance+? WHERE id=?',[amount,treasury.id]);
-    await this.journal(connection,context,{transactionId,date:input.reversalDate,description:input.description,treasuryCoa:treasury.coa_account_id,counterpartyCoa:category.default_coa_account_id,direction:'in',amount,partyId:input.partyId || null,sourceType:'studio_expense_reversal',sourceId:input.sourceId,periodId});
+    await this.journal(connection,context,{transactionId,date:input.reversalDate,description:input.description,treasuryCoa:treasury.coa_account_id,counterpartyCoa:category.default_coa_account_id,direction:'in',amount,partyId:input.partyId || null,sourceType,sourceId:input.sourceId,periodId});
     await this.audit(connection,context,{module:options.auditModule || 'craft_finance',action:options.auditAction || 'finance.expense_reversal',entityType:options.entityType || 'financial_transaction',entityId:options.entityId || transactionId,entityCode:options.entityCode || transactionCode,description:input.description});
     return {transactionId,transactionCode};
   }

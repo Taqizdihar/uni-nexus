@@ -11,7 +11,10 @@ const businessUnitCache: Record<string, BusinessUnitContext> = {};
 
 const cacheKey = (organizationId: number, code: string) => `${organizationId}:${code.toUpperCase()}`;
 
-/** Resolves a business unit by its stable code so numeric IDs never get hardcoded. */
+/**
+ * Legacy, code-only lookup.  It is intentionally retained for bootstrap/migration
+ * code that has no authenticated tenant context.  Never use it in a request handler.
+ */
 export async function getBusinessUnitByCode(code: string): Promise<BusinessUnitContext> {
   const normalizedCode = code.toUpperCase();
   if (businessUnitCache[normalizedCode]) return businessUnitCache[normalizedCode];
@@ -65,4 +68,17 @@ export async function getBusinessUnitByCodeForOrganization(organizationId: numbe
   };
   businessUnitCache[key] = context;
   return context;
+}
+
+/** Resolves a workspace in the authenticated tenant and verifies explicit user access. */
+export async function getBusinessUnitByCodeForAuthenticatedUser(organizationId: number, userId: number, code: string): Promise<BusinessUnitContext> {
+  const unit = await getBusinessUnitByCodeForOrganization(organizationId, code);
+  const [rows]: any = await pool.execute(
+    `SELECT 1 FROM user_business_units
+     WHERE user_id=? AND business_unit_id=? AND can_access=1
+     LIMIT 1`,
+    [userId, unit.id],
+  );
+  if (!rows.length) throw new AppError(403, 'BUSINESS_UNIT_ACCESS_DENIED', 'Anda tidak memiliki akses ke unit bisnis ini.');
+  return unit;
 }
