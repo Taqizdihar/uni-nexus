@@ -62,6 +62,7 @@ const craftNav: NavGroup[] = [
         name: "Pesanan",
         icon: ShoppingCart,
         path: "/app/craft/orders",
+        permission: "craft.orders.read",
         subItems: [
           { name: "Semua Pesanan", path: "/app/craft/orders" },
           { name: "Pesanan Baru", path: "/app/craft/orders/new" },
@@ -246,6 +247,7 @@ const craftNav: NavGroup[] = [
           { name: "Template Otomasi", path: "/app/craft/automations/templates" },
           { name: "Riwayat Eksekusi", path: "/app/craft/automations/runs" },
           { name: "Pemicu & Aksi", path: "/app/craft/automations/catalog" },
+          { name: "Inbox Event", path: "/app/craft/automations/events" },
         ],
       },
     ],

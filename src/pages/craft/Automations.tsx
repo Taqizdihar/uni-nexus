@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { AutomationCatalogPage, AutomationOverviewPage, AutomationRuleDetailPage, AutomationRuleEditorPage, AutomationRulesPage, AutomationRunDetailPage, AutomationRunsPage, AutomationTemplatesPage } from './automations/AutomationPages';
+import { AutomationCatalogPage, AutomationEventsPage, AutomationOverviewPage, AutomationRuleDetailPage, AutomationRuleEditorPage, AutomationRulesPage, AutomationRunDetailPage, AutomationRunsPage, AutomationTemplatesPage } from './automations/AutomationPages';
 
 export function CraftAutomations() {
   return <Routes>
@@ -13,6 +13,7 @@ export function CraftAutomations() {
     <Route path="runs" element={<AutomationRunsPage />} />
     <Route path="runs/:id" element={<AutomationRunDetailPage />} />
     <Route path="catalog" element={<AutomationCatalogPage />} />
+    <Route path="events" element={<AutomationEventsPage />} />
     <Route path="*" element={<Navigate to="." replace />} />
   </Routes>;
 }

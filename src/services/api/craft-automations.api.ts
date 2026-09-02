@@ -1,12 +1,12 @@
 import { api } from '../../lib/api';
-import type { AutomationCatalog, AutomationOverview, AutomationRule, AutomationRun, AutomationTemplate, DomainEventSummary } from '../../types/craft-automations';
+import type { AutomationCatalog, AutomationOverview, AutomationRule, AutomationRun, AutomationTemplate, DomainEventFilters, DomainEventPage } from '../../types/craft-automations';
 
 const base = '/craft/automations';
 const query = (filters: Record<string, string | number | undefined>) => { const params = new URLSearchParams(); Object.entries(filters).forEach(([key, value]) => { if (value !== undefined && value !== '') params.set(key, String(value)); }); const value = params.toString(); return value ? `?${value}` : ''; };
 export const craftAutomationsApi = {
   overview: () => api.get<AutomationOverview>(`${base}/overview`),
   catalog: () => api.get<AutomationCatalog>(`${base}/catalog`),
-  events: () => api.get<DomainEventSummary[]>(`${base}/events`),
+  events: (filters: DomainEventFilters = {}) => api.get<DomainEventPage>(`${base}/events${query(filters as Record<string, string | number | undefined>)}`),
   rules: (filters: Record<string, string | number | undefined> = {}) => api.get<AutomationRule[]>(`${base}/rules${query(filters)}`),
   rule: (id: number) => api.get<AutomationRule>(`${base}/rules/${id}`),
   createRule: (data: Record<string, unknown>) => api.post<{ id: number; rule_code: string }>(`${base}/rules`, data),

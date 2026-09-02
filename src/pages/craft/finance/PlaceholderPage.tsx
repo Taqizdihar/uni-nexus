@@ -1,2 +1,0 @@
-import React from 'react'; import { Card, CardContent } from '../../../components/ui/Card';
-export function FinancePlaceholderPage({title}:{title:string}){return <div className="max-w-7xl mx-auto space-y-5"><h1 className="text-2xl font-bold">{title}</h1><Card><CardContent className="p-8 text-sm text-[var(--nexus-muted)]">Halaman ini menampilkan keadaan kosong sampai data operasional yang relevan tersedia. Tidak ada data contoh atau asumsi bisnis yang digunakan.</CardContent></Card></div>}

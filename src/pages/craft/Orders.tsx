@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { PermissionGate } from '../../components/auth/PermissionGate';
 import { OrdersListPage } from './orders/OrdersListPage';
 import { OrderCreatePage } from './orders/OrderCreatePage';
 import { OrderDetailPage } from './orders/OrderDetailPage';
@@ -17,16 +18,16 @@ export function CraftOrders() {
   return (
     <Routes>
       <Route index element={<OrdersListPage />} />
-      <Route path="new" element={<OrderCreatePage />} />
+      <Route path="new" element={<PermissionGate permission="craft.orders.write"><OrderCreatePage /></PermissionGate>} />
       <Route path="drafts" element={<DraftOrdersPage />} />
-      <Route path="drafts/:draftId" element={<OrderDraftPage />} />
+      <Route path="drafts/:draftId" element={<PermissionGate permission="craft.orders.write"><OrderDraftPage /></PermissionGate>} />
       <Route path="priority" element={<OrderPriorityPage />} />
       <Route path="queue" element={<ProductionQueuePage />} />
       <Route path="custom" element={<CustomOrdersPage />} />
       <Route path="partners" element={<PartnerOrdersPage />} />
       <Route path="completed" element={<CompletedOrdersPage />} />
       <Route path="cancelled" element={<CancelledOrdersPage />} />
-      <Route path=":id/edit" element={<OrderEditPage />} />
+      <Route path=":id/edit" element={<PermissionGate permission="craft.orders.write"><OrderEditPage /></PermissionGate>} />
       <Route path=":id" element={<OrderDetailPage />} />
     </Routes>
   );

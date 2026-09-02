@@ -52,7 +52,14 @@ export class UsersService {
       );
       permissions = perms.map(permission => permission.code);
     }
-    return { ...user, role, permissions };
+    const [workspaceRows] = await pool.execute<any[]>(
+      `SELECT bu.code FROM business_units bu
+       JOIN user_business_units ubu ON ubu.business_unit_id = bu.id AND ubu.user_id = ? AND ubu.can_access = 1
+       WHERE bu.organization_id = ? AND bu.is_active = 1 AND bu.code IN ('CRAFT', 'STUDIO')`,
+      [user.id, user.organization_id],
+    );
+    const workspaces = workspaceRows.map(row => String(row.code).toLowerCase());
+    return { ...user, role, permissions, workspaces };
   }
 
   static async getUsers(filters?: Record<string, unknown>): Promise<UserResponse[]> {

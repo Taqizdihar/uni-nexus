@@ -108,7 +108,7 @@ const router = createBrowserRouter(
           path="audit-log"
           element={<PermissionGate permission="audit.read"><AuditLog /></PermissionGate>}
         />
-        <Route path="craft/orders/*" element={<CraftOrders />} />
+        <Route path="craft/orders/*" element={<PermissionGate permission="craft.orders.read"><CraftOrders /></PermissionGate>} />
         <Route
           path="craft/production/*"
           element={

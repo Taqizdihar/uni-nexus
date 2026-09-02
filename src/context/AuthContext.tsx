@@ -18,6 +18,7 @@ export interface AuthUser {
     name: string;
   };
   permissions?: string[];
+  workspaces?: string[];
 }
 
 interface AuthContextType {

@@ -80,6 +80,26 @@ export class CraftAutomationsRepository {
   }
   async getRun(id: number, businessUnitId: number, organizationId?: number) { const params: unknown[] = [id, businessUnitId]; const organizationClause = organizationId === undefined ? '' : ' AND r.organization_id=?'; if (organizationId !== undefined) params.push(organizationId); const [rows]: any = await pool.execute(`SELECT ar.*,r.rule_code,r.name rule_name,r.module_code FROM automation_runs ar JOIN automation_rules r ON r.id=ar.rule_id WHERE ar.id=? AND r.business_unit_id=?${organizationClause}`, params as any[]); return rows.length ? normalizeRun(rows[0]) : null; }
   async recentEvents(businessUnitId: number, organizationId?: number) { const params: unknown[] = [businessUnitId]; const organizationClause = organizationId === undefined ? '' : ' AND organization_id=?'; if (organizationId !== undefined) params.push(organizationId); const [rows]: any = await pool.execute(`SELECT id,event_name,module_code,entity_type,entity_id,entity_code,correlation_id,chain_depth,status_code,attempt_count,available_at,locked_at,processed_at,last_error,created_at FROM domain_events WHERE business_unit_id=?${organizationClause} ORDER BY id DESC LIMIT 100`, params as any[]); return rows.map((row: any) => ({ ...row, id: Number(row.id), entity_id: row.entity_id === null ? null : Number(row.entity_id), chain_depth: Number(row.chain_depth || 0), attempt_count: Number(row.attempt_count || 0) })); }
+
+  async events(businessUnitId: number, filters: Record<string, unknown>, organizationId?: number) {
+    const safeNumber = (value: unknown, fallback: number) => (Number.isInteger(Number(value)) ? Number(value) : fallback);
+    const page = Math.max(1, safeNumber(filters.page, 1));
+    const limit = Math.min(100, Math.max(1, safeNumber(filters.limit, 25)));
+    const where = ['business_unit_id=?']; const params: unknown[] = [businessUnitId];
+    if (organizationId !== undefined) { where.push('organization_id=?'); params.push(organizationId); }
+    if (filters.status) { where.push('status_code=?'); params.push(String(filters.status)); }
+    if (filters.module) { where.push('module_code=?'); params.push(String(filters.module)); }
+    if (filters.event) { where.push('event_name=?'); params.push(String(filters.event)); }
+    if (filters.search) { where.push('(event_name LIKE ? OR entity_code LIKE ? OR correlation_id LIKE ?)'); params.push(...Array(3).fill(`%${String(filters.search).slice(0, 120)}%`)); }
+    const clause = where.join(' AND ');
+    const [[countRows], [rows]]: any = await Promise.all([
+      pool.execute(`SELECT COUNT(*) total FROM domain_events WHERE ${clause}`, params as any[]),
+      pool.execute(`SELECT id,event_name,module_code,entity_type,entity_id,entity_code,correlation_id,chain_depth,status_code,attempt_count,available_at,locked_at,processed_at,last_error,created_at FROM domain_events WHERE ${clause} ORDER BY id DESC LIMIT ${limit} OFFSET ${(page - 1) * limit}`, params as any[]),
+    ]);
+    const items = rows.map((row: any) => ({ ...row, id: Number(row.id), entity_id: row.entity_id === null ? null : Number(row.entity_id), chain_depth: Number(row.chain_depth || 0), attempt_count: Number(row.attempt_count || 0) }));
+    const total = Number(countRows[0]?.total || 0);
+    return { items, page, limit, total, total_pages: Math.max(1, Math.ceil(total / limit)) };
+  }
   async audit(connection: any, context: { organizationId: number; businessUnitId: number; userId: number; auditModuleCode?: string }, action: string, entityType: string, entityId: number, entityCode: string, description: string, oldValues?: unknown, newValues?: unknown) { await AuditService.write({ organizationId: context.organizationId, businessUnitId: context.businessUnitId, userId: context.userId, moduleCode: context.auditModuleCode || 'craft_automations', actionCode: action, entityType, entityId, entityCode, description, oldValues, newValues }, connection); }
 }
 

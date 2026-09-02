@@ -30,5 +30,5 @@ export class CraftAutomationsController {
   templates = async (_req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, this.service.rules.templates.list()); } catch (error) { next(error); } };
   useTemplate = async (req: Request, res: Response, next: NextFunction) => { try { const context = await this.context(req); sendSuccess(res, await this.service.rules.useTemplate(String(req.params.code), actor(req), context), undefined, 201); } catch (error) { next(error); } };
   catalog = async (_req: Request, res: Response, next: NextFunction) => { try { sendSuccess(res, await this.service.catalog()); } catch (error) { next(error); } };
-  events = async (req: Request, res: Response, next: NextFunction) => { try { const context = await this.context(req); sendSuccess(res, await this.service.rules.repository.recentEvents(context.businessUnitId, context.organizationId)); } catch (error) { next(error); } };
+  events = async (req: Request, res: Response, next: NextFunction) => { try { const context = await this.context(req); sendSuccess(res, await this.service.rules.repository.events(context.businessUnitId, req.query, context.organizationId)); } catch (error) { next(error); } };
 }

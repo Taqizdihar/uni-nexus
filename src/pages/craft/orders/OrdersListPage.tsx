@@ -3,6 +3,7 @@ import { ChevronDown, Download, Filter, Plus, RotateCcw, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 import { Card } from '../../../components/ui/Card';
+import { useAuth } from '../../../context/AuthContext';
 import { formatCurrency } from '../../../lib/utils';
 import { craftOrdersApi } from '../../../services/api/craft-orders.api';
 import type { CraftOrder, CraftOrderFilters, SalesChannelOption } from '../../../types/craft-orders';
@@ -14,6 +15,8 @@ const priorityLabels: Record<string, string> = { low: 'Rendah', normal: 'Normal'
 
 export function OrdersListPage() {
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
+  const canWrite = hasPermission('craft.orders.write');
   const [orders, setOrders] = useState<CraftOrder[]>([]);
   const [channels, setChannels] = useState<SalesChannelOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +50,7 @@ export function OrdersListPage() {
   ].filter(Boolean) as { key: keyof CraftOrderFilters; label: string }[], [channels, filters]);
 
   return <div className="flex h-full flex-col gap-6 pb-8">
-    <OrderPageHeader title="Semua Pesanan" description="Kelola seluruh pesanan operasional Uni-Inside Craft." actions={<><Button variant="outline" onClick={exportCsv} disabled={exporting}><Download className="h-4 w-4" />{exporting ? 'Mengekspor...' : 'Ekspor CSV'}</Button><Button onClick={() => navigate('/app/craft/orders/new')}><Plus className="h-4 w-4" /> Pesanan Baru</Button></>} />
+    <OrderPageHeader title="Semua Pesanan" description="Kelola seluruh pesanan operasional Uni-Inside Craft." actions={<><Button variant="outline" onClick={exportCsv} disabled={exporting}><Download className="h-4 w-4" />{exporting ? 'Mengekspor...' : 'Ekspor CSV'}</Button>{canWrite && <Button onClick={() => navigate('/app/craft/orders/new')}><Plus className="h-4 w-4" /> Pesanan Baru</Button>}</>} />
     {error && <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
     <Card className="flex min-h-0 flex-1 overflow-hidden">
       <div className="flex min-h-0 w-full flex-col">
