@@ -71,7 +71,7 @@ export class DocumentsService {
 
   async list(user: Principal, filters: Filters) {
     const page = Math.max(1, Math.min(100000, Number(filters.page) || 1)); const limit = Math.max(1, Math.min(100, Number(filters.limit) || 25)); const { where, params } = this.listWhere(user, filters);
-    const [rows]: any = await pool.execute(`SELECT d.*,bu.code AS business_unit_code,bu.name AS business_unit_name,u.full_name AS uploaded_by_name FROM documents d LEFT JOIN business_units bu ON bu.id=d.business_unit_id LEFT JOIN users u ON u.id=d.uploaded_by WHERE ${where} ORDER BY d.updated_at DESC,d.id DESC LIMIT ? OFFSET ?`, [...params, limit, (page - 1) * limit]);
+    const [rows]: any = await pool.execute(`SELECT d.*,bu.code AS business_unit_code,bu.name AS business_unit_name,u.full_name AS uploaded_by_name FROM documents d LEFT JOIN business_units bu ON bu.id=d.business_unit_id LEFT JOIN users u ON u.id=d.uploaded_by WHERE ${where} ORDER BY d.updated_at DESC,d.id DESC LIMIT ${limit} OFFSET ${(page - 1) * limit}`, params);
     const [countRows]: any = await pool.execute(`SELECT COUNT(*) AS total FROM documents d WHERE ${where}`, params);
     const total = Number(countRows[0].total); return { items: rows.map((row: any) => this.dto(row)), pagination: { page, limit, total, total_pages: Math.max(1, Math.ceil(total / limit)) } };
   }
