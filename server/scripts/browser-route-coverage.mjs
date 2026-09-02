@@ -120,7 +120,7 @@ async function run() {
       await cdp.send('Page.navigate', { url: `${frontend}${route}` });
       // Cold Vite module transforms + a real /auth/me round-trip can take longer than a fixed
       // delay, especially for the first route hit in a fresh headless profile — poll instead.
-      let page = await evalPage(); const deadline = Date.now() + 15000;
+      let page = await evalPage(); const deadline = Date.now() + 25000;
       while (!page.heading && Date.now() < deadline) { await delay(250); page = await evalPage(); }
       const routeFailures = [];
       if (!page.heading) routeFailures.push('no <h1> heading found');

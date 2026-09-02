@@ -40,19 +40,16 @@ export class PresenceService {
 
   async heartbeat(actor: PresenceActor, sessionKey: string, workspace: PresenceWorkspace) {
     await this.cleanup();
-    const [updated]: any = await pool.execute(
-      `UPDATE user_presence_sessions
-       SET workspace_code = ?, last_seen_at = UTC_TIMESTAMP(3), left_at = NULL
-       WHERE organization_id = ? AND user_id = ? AND session_key = ?`,
-      [workspace, actor.organization_id, actor.id, sessionKey],
+    // A single atomic upsert avoids the race in a separate UPDATE-then-INSERT: two concurrent
+    // heartbeats for the same session (e.g. rapid navigation firing overlapping requests) could
+    // both see zero rows updated and then both attempt to INSERT, tripping the unique constraint
+    // on (user_id, session_key) as an unhandled 500.
+    await pool.execute(
+      `INSERT INTO user_presence_sessions (organization_id, user_id, session_key, workspace_code, connected_at, last_seen_at, left_at)
+       VALUES (?, ?, ?, ?, UTC_TIMESTAMP(3), UTC_TIMESTAMP(3), NULL)
+       ON DUPLICATE KEY UPDATE workspace_code = VALUES(workspace_code), last_seen_at = VALUES(last_seen_at), left_at = NULL`,
+      [actor.organization_id, actor.id, sessionKey, workspace],
     );
-    if (!updated.affectedRows) {
-      await pool.execute(
-        `INSERT INTO user_presence_sessions (organization_id, user_id, session_key, workspace_code, connected_at, last_seen_at, left_at)
-         VALUES (?, ?, ?, ?, UTC_TIMESTAMP(3), UTC_TIMESTAMP(3), NULL)`,
-        [actor.organization_id, actor.id, sessionKey, workspace],
-      );
-    }
     return this.active(actor);
   }
 
