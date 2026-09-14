@@ -1,0 +1,178 @@
+- generic [ref=f3e6]:
+  - complementary [ref=f3e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e9]
+    - generic [ref=f3e10]:
+      - generic [ref=f3e11]:
+        - heading "GLOBAL" [level=3] [ref=f3e12]
+        - link "Dasbor Global" [ref=f3e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e21]
+        - generic [ref=f3e22]:
+          - button "Pesanan" [ref=f3e24]
+          - button "Produksi" [ref=f3e33]
+          - button "Produk & Desain" [ref=f3e42]
+          - button "Printer" [ref=f3e53]
+          - button "Material" [ref=f3e62]
+      - generic [ref=f3e69]:
+        - heading "BISNIS" [level=3] [ref=f3e70]
+        - generic [ref=f3e71]:
+          - button "Pelanggan & Mitra" [ref=f3e73]
+          - button "Pengadaan" [ref=f3e83]
+          - button "Keuangan" [ref=f3e94]
+          - button "Laporan & Analitik" [ref=f3e102]
+      - generic [ref=f3e111]:
+        - heading "SISTEM" [level=3] [ref=f3e112]
+        - generic [ref=f3e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f3e115]
+          - button "Otomasi" [ref=f3e125]
+      - generic [ref=f3e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e132]
+        - generic [ref=f3e133]:
+          - link "Keuangan Terpadu" [active] [ref=f3e134] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f3e138] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e143] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e146] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f3e150] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f3e156] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e159] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e165] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e168] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e174] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e179] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e183]:
+    - banner [ref=f3e184]:
+      - combobox [ref=f3e186]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e190]
+        - generic [ref=f3e191]:
+          - generic [ref=f3e192]: ⌘
+          - generic [ref=f3e193]: K
+      - generic [ref=f3e194]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e196]'
+        - button [ref=f3e205]:
+          - generic [ref=f3e209]:
+            - text: "Workspace:"
+            - generic [ref=f3e210]:
+              - img "Craft Logo" [ref=f3e211]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e213]
+        - button [ref=f3e218]
+    - main [ref=f3e219]:
+      - main [ref=f3e482]:
+        - generic [ref=f3e483]:
+          - generic [ref=f3e484]:
+            - heading "Keuangan Terpadu" [level=1] [ref=f3e485]
+            - paragraph [ref=f3e486]: Keuangan Craft, Studio, dan operasional bersama dalam satu pusat kontrol.
+          - generic [ref=f3e487]:
+            - button "Refresh" [ref=f3e488]
+            - button "Transfer Dana" [ref=f3e494]
+            - button "Catat Transaksi Bersama" [ref=f3e498]
+            - button "Kelola Keuangan" [ref=f3e500]
+            - button "Export" [ref=f3e503]
+        - generic [ref=f3e508]:
+          - generic [ref=f3e509]:
+            - text: Periode
+            - combobox "Periode" [ref=f3e510]:
+              - option "Hari ini"
+              - option "Minggu ini"
+              - option "Bulan ini" [selected]
+              - option "Tahun ini"
+          - generic [ref=f3e511]:
+            - text: Workspace
+            - combobox "Workspace" [ref=f3e512]:
+              - option "Semua workspace" [selected]
+              - option "Uni-Inside Craft"
+              - option "Uni-Inside Studio"
+              - option "Uni-Inside Shared"
+          - generic [ref=f3e513]:
+            - text: Mata Uang
+            - combobox "Mata Uang" [ref=f3e514]:
+              - option "IDR" [selected]
+        - navigation "Bagian Keuangan Terpadu" [ref=f3e515]:
+          - generic [ref=f3e516]:
+            - button "Ringkasan" [ref=f3e517]
+            - button "Transaksi" [ref=f3e518]
+            - button "Kas & Bank" [ref=f3e519]
+            - button "Transfer Internal" [ref=f3e520]
+            - button "Piutang & Hutang" [ref=f3e521]
+            - button "Arus Kas" [ref=f3e522]
+            - button "Laba / Rugi" [ref=f3e523]
+            - button "Anggaran" [ref=f3e524]
+            - button "Jurnal & Periode" [ref=f3e525]
+        - generic [ref=f3e526]:
+          - generic [ref=f3e527]:
+            - article [ref=f3e528]:
+              - paragraph [ref=f3e529]: Total Kas
+              - paragraph [ref=f3e530]: Rp 0
+              - paragraph [ref=f3e531]: Saldo saat ini
+            - article [ref=f3e532]:
+              - paragraph [ref=f3e533]: Pendapatan
+              - paragraph [ref=f3e534]: Rp 0
+              - paragraph [ref=f3e535]: Periode terpilih
+            - article [ref=f3e536]:
+              - paragraph [ref=f3e537]: Pengeluaran
+              - paragraph [ref=f3e538]: Rp 0
+              - paragraph [ref=f3e539]: Periode terpilih
+            - article [ref=f3e540]:
+              - paragraph [ref=f3e541]: Arus Kas Bersih
+              - paragraph [ref=f3e542]: Rp 0
+              - paragraph [ref=f3e543]: Periode terpilih
+          - generic [ref=f3e544]:
+            - heading "Kontribusi Workspace" [level=2] [ref=f3e545]
+            - generic [ref=f3e546]:
+              - generic [ref=f3e547]:
+                - heading "craft" [level=3] [ref=f3e548]
+                - generic [ref=f3e549]:
+                  - generic [ref=f3e550]:
+                    - term [ref=f3e551]: Kas
+                    - definition [ref=f3e552]: Rp 0
+                  - generic [ref=f3e553]:
+                    - term [ref=f3e554]: Pendapatan
+                    - definition [ref=f3e555]: Rp 0
+                  - generic [ref=f3e556]:
+                    - term [ref=f3e557]: Pengeluaran
+                    - definition [ref=f3e558]: Rp 0
+                  - generic [ref=f3e559]:
+                    - term [ref=f3e560]: Hasil bersih
+                    - definition [ref=f3e561]: Rp 0
+              - generic [ref=f3e562]:
+                - heading "studio" [level=3] [ref=f3e563]
+                - generic [ref=f3e564]:
+                  - generic [ref=f3e565]:
+                    - term [ref=f3e566]: Kas
+                    - definition [ref=f3e567]: Rp 0
+                  - generic [ref=f3e568]:
+                    - term [ref=f3e569]: Pendapatan
+                    - definition [ref=f3e570]: Rp 0
+                  - generic [ref=f3e571]:
+                    - term [ref=f3e572]: Pengeluaran
+                    - definition [ref=f3e573]: Rp 0
+                  - generic [ref=f3e574]:
+                    - term [ref=f3e575]: Hasil bersih
+                    - definition [ref=f3e576]: Rp 0
+              - generic [ref=f3e577]:
+                - heading "shared" [level=3] [ref=f3e578]
+                - generic [ref=f3e579]:
+                  - generic [ref=f3e580]:
+                    - term [ref=f3e581]: Kas
+                    - definition [ref=f3e582]: Rp 0
+                  - generic [ref=f3e583]:
+                    - term [ref=f3e584]: Pendapatan
+                    - definition [ref=f3e585]: Rp 0
+                  - generic [ref=f3e586]:
+                    - term [ref=f3e587]: Pengeluaran
+                    - definition [ref=f3e588]: Rp 0
+                  - generic [ref=f3e589]:
+                    - term [ref=f3e590]: Hasil bersih
+                    - definition [ref=f3e591]: Rp 0

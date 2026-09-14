@@ -1,0 +1,58 @@
+- generic [ref=e66]:
+  - complementary [ref=e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=e69]
+    - generic [ref=e70]:
+      - generic [ref=e71]:
+        - heading "GLOBAL" [level=3] [ref=e72]
+        - link "Dasbor Global" [ref=e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=e80]:
+        - heading "OPERASIONAL" [level=3] [ref=e81]
+        - generic [ref=e82]:
+          - button "Proyek" [ref=e84]
+          - link "Klien" [ref=e90] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=e96]:
+        - heading "BISNIS" [level=3] [ref=e97]
+        - button "Keuangan" [ref=e100]
+      - heading "SISTEM" [level=3] [ref=e108]
+      - generic [ref=e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=e110]
+        - generic [ref=e111]:
+          - link "Pusat Dokumen" [ref=e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=e151]:
+    - banner [ref=e152]:
+      - combobox [ref=e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=e158]
+        - generic [ref=e159]:
+          - generic [ref=e160]: ⌘
+          - generic [ref=e161]: K
+      - generic [ref=e162]:
+        - 'button "Pengguna aktif: 0 pengguna aktif" [ref=e164]'
+        - button [ref=e173]:
+          - generic [ref=e177]:
+            - text: "Workspace:"
+            - generic [ref=e178]:
+              - img "Studio Logo" [ref=e179]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=e181]
+        - button [ref=e186]:
+          - generic [aria-hidden] [ref=e187]: QU
+    - main [ref=e188]

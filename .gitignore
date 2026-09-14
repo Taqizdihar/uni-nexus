@@ -6,6 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+/.env.user.local
+/.qa-artifacts/
+/.qa-backups/
 server/uploads/**
 !server/uploads/.gitkeep
 artifacts/craft-materials-browser-*/

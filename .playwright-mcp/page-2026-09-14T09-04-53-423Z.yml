@@ -1,0 +1,313 @@
+- generic [ref=f1e34]:
+  - complementary [ref=f1e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f1e37]
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]:
+        - heading "GLOBAL" [level=3] [ref=f1e40]
+        - link "Dasbor Global" [ref=f1e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f1e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f1e49]
+        - generic [ref=f1e50]:
+          - button "Pesanan" [ref=f1e52]
+          - button "Produksi" [ref=f1e61]
+          - button "Produk & Desain" [ref=f1e70]
+          - button "Printer" [ref=f1e81]
+          - button "Material" [ref=f1e90]
+      - generic [ref=f1e97]:
+        - heading "BISNIS" [level=3] [ref=f1e98]
+        - generic [ref=f1e99]:
+          - button "Pelanggan & Mitra" [ref=f1e101]
+          - button "Pengadaan" [ref=f1e111]
+          - button "Keuangan" [ref=f1e122]
+          - button "Laporan & Analitik" [ref=f1e130]
+      - generic [ref=f1e139]:
+        - heading "SISTEM" [level=3] [ref=f1e140]
+        - generic [ref=f1e141]:
+          - button "Marketplace & Kanal Penjualan" [ref=f1e143]
+          - button "Otomasi" [ref=f1e153]
+      - generic [ref=f1e159]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f1e160]
+        - generic [ref=f1e161]:
+          - link "Keuangan Terpadu" [ref=f1e162] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f1e166] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f1e171] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f1e174] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f1e178] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f1e184] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f1e187] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f1e193] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f1e196] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f1e202] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f1e207] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f1e211]:
+    - banner [ref=f1e212]:
+      - combobox [ref=f1e214]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f1e218]
+        - generic [ref=f1e219]:
+          - generic [ref=f1e220]: ⌘
+          - generic [ref=f1e221]: K
+      - generic [ref=f1e222]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f1e224]'
+        - button [ref=f1e233]:
+          - generic [ref=f1e237]:
+            - text: "Workspace:"
+            - generic [ref=f1e238]:
+              - img "Craft Logo" [ref=f1e239]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f1e241]
+        - button [ref=f1e246]
+    - main [ref=f1e247]:
+      - generic [ref=f1e427]:
+        - generic [ref=f1e428]:
+          - generic [ref=f1e429]:
+            - paragraph [ref=f1e430]: KONTROL GLOBAL
+            - heading "Pengaturan" [level=1] [ref=f1e431]
+            - paragraph [ref=f1e432]: Konfigurasi efektif untuk organisasi, Craft, dan Studio.
+          - generic [ref=f1e433]: "Kode organisasi: UNI-INSIDE"
+        - generic [ref=f1e434]:
+          - heading "Organisasi & Branding" [level=3] [ref=f1e436]
+          - generic [ref=f1e441]:
+            - generic [ref=f1e442]:
+              - generic [ref=f1e443]:
+                - text: Kode organisasi
+                - textbox "Kode organisasi" [ref=f1e444]: UNI-INSIDE
+              - generic [ref=f1e445]:
+                - text: Name
+                - textbox "Name" [ref=f1e446]: Uni-Inside Studio
+              - generic [ref=f1e447]:
+                - text: Legal Name
+                - textbox "Legal Name" [ref=f1e448]: Uni-Inside Studio
+              - generic [ref=f1e449]:
+                - text: Email
+                - textbox "Email" [ref=f1e450]: uninsidemed@gmail.com
+              - generic [ref=f1e451]:
+                - text: Phone
+                - textbox "Phone" [ref=f1e452]: "6281316556908"
+              - generic [ref=f1e453]:
+                - text: Address
+                - textbox "Address" [ref=f1e454]: Jl. Telekomunikasi No. 1, Sukapura, Kec. Dayeuhkolot.
+              - generic [ref=f1e455]:
+                - text: City
+                - textbox "City" [ref=f1e456]: Kabupaten Bandung
+              - generic [ref=f1e457]:
+                - text: Province
+                - textbox "Province" [ref=f1e458]: Jawa Barat
+              - generic [ref=f1e459]:
+                - text: Postal Code
+                - textbox "Postal Code" [ref=f1e460]: "40257"
+              - generic [ref=f1e461]:
+                - text: Country Code
+                - textbox "Country Code" [ref=f1e462]: ID
+              - generic [ref=f1e463]:
+                - text: Currency Code
+                - combobox "Currency Code" [ref=f1e464]:
+                  - option "IDR"
+                  - option "USD" [selected]
+                  - option "EUR"
+                  - option "SGD"
+                  - option "MYR"
+                  - option "GBP"
+                  - option "JPY"
+                  - option "CNY"
+                  - option "AUD"
+                  - option "CAD"
+              - generic [ref=f1e465]:
+                - text: Timezone
+                - combobox "Timezone" [ref=f1e466]: Asia/Jakarta
+            - generic [ref=f1e467]:
+              - button "Batal" [ref=f1e688]
+              - button "Simpan Organisasi" [ref=f1e689]
+            - generic [ref=f1e468]:
+              - paragraph [ref=f1e469]: Logo organisasi
+              - paragraph [ref=f1e470]: JPG, PNG, atau WEBP maksimal 5 MB. File dinormalisasi menjadi WEBP dan disimpan privat.
+              - generic [ref=f1e471]:
+                - img "Logo organisasi" [ref=f1e472]
+                - generic [ref=f1e473] [cursor=pointer]:
+                  - text: Unggah
+                  - button "Unggah" [ref=f1e478]
+                - button "Hapus" [ref=f1e479]
+        - generic [ref=f1e483]:
+          - generic [ref=f1e484]:
+            - heading "Sistem" [level=3] [ref=f1e485]
+            - paragraph [ref=f1e489]: "Scope: Organisasi"
+          - generic [ref=f1e490]:
+            - generic [ref=f1e493]:
+              - generic [ref=f1e494]:
+                - generic [ref=f1e495]:
+                  - generic [ref=f1e496]: Hari awal minggu
+                  - generic [ref=f1e497]: Ditimpa
+                - paragraph [ref=f1e498]: Menentukan batas periode minggu pada laporan dan ringkasan global.
+                - combobox [ref=f1e499]:
+                  - option "Senin" [selected]
+                  - option "Minggu"
+                - paragraph [ref=f1e500]: "Digunakan oleh: Periode mingguan organisasi."
+              - button "Reset ke default" [ref=f1e501]
+            - generic [ref=f1e505]:
+              - button "Simpan Sistem" [disabled]
+        - generic [ref=f1e506]:
+          - generic [ref=f1e507]:
+            - heading "Dokumen & Branding" [level=3] [ref=f1e508]
+            - paragraph [ref=f1e512]: "Scope: Organisasi"
+          - generic [ref=f1e513]:
+            - generic [ref=f1e514]:
+              - generic [ref=f1e516]:
+                - generic [ref=f1e517]:
+                  - generic [ref=f1e518]:
+                    - generic [ref=f1e519]: Footer PDF
+                    - generic [ref=f1e520]: Ditimpa
+                  - paragraph [ref=f1e521]: Teks footer opsional pada PDF baru.
+                  - textbox "Tidak ada footer tambahan" [ref=f1e522]: Uni-Inside Studio, all rights reserved
+                  - paragraph [ref=f1e523]: "Digunakan oleh: PDF laporan dan dokumen komersial baru."
+                - button "Reset ke default" [ref=f1e524]
+              - generic [ref=f1e529]:
+                - generic [ref=f1e530]:
+                  - generic [ref=f1e531]:
+                    - generic [ref=f1e532]: Tampilkan kontak organisasi
+                    - generic [ref=f1e533]: Ditimpa
+                  - paragraph [ref=f1e534]: Menampilkan email, telepon, dan alamat pada PDF baru.
+                  - generic [ref=f1e535] [cursor=pointer]:
+                    - checkbox "Aktif" [checked] [ref=f1e536]
+                    - text: Aktif
+                  - paragraph [ref=f1e537]: "Digunakan oleh: PDF laporan dan dokumen komersial baru."
+                - button "Reset ke default" [ref=f1e538]
+              - generic [ref=f1e543]:
+                - generic [ref=f1e544]:
+                  - generic [ref=f1e545]:
+                    - generic [ref=f1e546]: Tampilkan logo organisasi
+                    - generic [ref=f1e547]: Ditimpa
+                  - paragraph [ref=f1e548]: Menampilkan logo privat organisasi pada PDF baru jika tersedia.
+                  - generic [ref=f1e549] [cursor=pointer]:
+                    - checkbox "Aktif" [checked] [ref=f1e550]
+                    - text: Aktif
+                  - paragraph [ref=f1e551]: "Digunakan oleh: PDF laporan dan dokumen komersial baru."
+                - button "Reset ke default" [ref=f1e552]
+            - generic [ref=f1e556]:
+              - button "Simpan Dokumen & Branding" [disabled]
+        - generic [ref=f1e557]:
+          - generic [ref=f1e558]:
+            - heading "Craft" [level=3] [ref=f1e559]
+            - paragraph [ref=f1e563]: "Scope: Craft"
+          - generic [ref=f1e564]:
+            - generic [ref=f1e567]:
+              - generic [ref=f1e568]:
+                - generic [ref=f1e569]:
+                  - generic [ref=f1e570]: Peringatan deadline pesanan
+                  - generic [ref=f1e571]: Ditimpa
+                - paragraph [ref=f1e572]: Jam sebelum deadline pesanan Craft ketika sensor otomatis memberi peringatan.
+                - spinbutton [ref=f1e573]: "21"
+                - paragraph [ref=f1e574]: "Digunakan oleh: Automation Sensor Craft."
+              - button "Reset ke default" [ref=f1e575]
+            - generic [ref=f1e579]:
+              - button "Simpan Craft" [disabled]
+        - generic [ref=f1e580]:
+          - generic [ref=f1e581]:
+            - heading "Studio & Keuangan" [level=3] [ref=f1e582]
+            - paragraph [ref=f1e586]: "Scope: Studio"
+          - generic [ref=f1e587]:
+            - generic [ref=f1e588]:
+              - generic [ref=f1e590]:
+                - generic [ref=f1e591]:
+                  - generic [ref=f1e592]:
+                    - generic [ref=f1e593]: Masa berlaku penawaran
+                    - generic [ref=f1e594]: Default
+                  - paragraph [ref=f1e595]: Jumlah hari default untuk penawaran Studio baru.
+                  - spinbutton [ref=f1e596]: "14"
+                  - paragraph [ref=f1e597]: "Digunakan oleh: Form penawaran Studio baru."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e599]:
+                - generic [ref=f1e600]:
+                  - generic [ref=f1e601]:
+                    - generic [ref=f1e602]: Jatuh tempo invoice
+                    - generic [ref=f1e603]: Default
+                  - paragraph [ref=f1e604]: Jumlah hari default untuk invoice Studio baru.
+                  - spinbutton [ref=f1e605]: "14"
+                  - paragraph [ref=f1e606]: "Digunakan oleh: Form invoice Studio baru."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e608]:
+                - generic [ref=f1e609]:
+                  - generic [ref=f1e610]:
+                    - generic [ref=f1e611]: Interval termin pembayaran
+                    - generic [ref=f1e612]: Default
+                  - paragraph [ref=f1e613]: Interval hari default untuk preset jadwal pembayaran Studio baru.
+                  - spinbutton [ref=f1e614]: "14"
+                  - paragraph [ref=f1e615]: "Digunakan oleh: Form invoice Studio baru."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e617]:
+                - generic [ref=f1e618]:
+                  - generic [ref=f1e619]:
+                    - generic [ref=f1e620]: Jendela segera jatuh tempo
+                    - generic [ref=f1e621]: Default
+                  - paragraph [ref=f1e622]: Hari ke depan untuk ringkasan dashboard Studio.
+                  - spinbutton [ref=f1e623]: "7"
+                  - paragraph [ref=f1e624]: "Digunakan oleh: Dashboard Studio."
+                - button "Reset ke default" [disabled]
+            - generic [ref=f1e625]:
+              - button "Simpan Studio & Keuangan" [disabled]
+        - generic [ref=f1e626]:
+          - generic [ref=f1e627]:
+            - heading "Notifikasi Studio" [level=3] [ref=f1e628]
+            - paragraph [ref=f1e632]: "Scope: Studio"
+          - generic [ref=f1e633]:
+            - generic [ref=f1e634]:
+              - generic [ref=f1e636]:
+                - generic [ref=f1e637]:
+                  - generic [ref=f1e638]:
+                    - generic [ref=f1e639]: Peringatan deadline proyek
+                    - generic [ref=f1e640]: Default
+                  - paragraph [ref=f1e641]: Jam sebelum deadline proyek Studio.
+                  - spinbutton [ref=f1e642]: "24"
+                  - paragraph [ref=f1e643]: "Digunakan oleh: Automation Sensor Studio."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e645]:
+                - generic [ref=f1e646]:
+                  - generic [ref=f1e647]:
+                    - generic [ref=f1e648]: Peringatan masa berlaku penawaran
+                    - generic [ref=f1e649]: Default
+                  - paragraph [ref=f1e650]: Hari sebelum penawaran Studio berakhir.
+                  - spinbutton [ref=f1e651]: "3"
+                  - paragraph [ref=f1e652]: "Digunakan oleh: Automation Sensor Studio."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e654]:
+                - generic [ref=f1e655]:
+                  - generic [ref=f1e656]:
+                    - generic [ref=f1e657]: Peringatan invoice segera jatuh tempo
+                    - generic [ref=f1e658]: Default
+                  - paragraph [ref=f1e659]: Hari sebelum invoice Studio jatuh tempo.
+                  - spinbutton [ref=f1e660]: "3"
+                  - paragraph [ref=f1e661]: "Digunakan oleh: Automation Sensor Studio."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e663]:
+                - generic [ref=f1e664]:
+                  - generic [ref=f1e665]:
+                    - generic [ref=f1e666]: Peringatan termin pembayaran
+                    - generic [ref=f1e667]: Default
+                  - paragraph [ref=f1e668]: Hari sebelum termin pembayaran jatuh tempo.
+                  - spinbutton [ref=f1e669]: "1"
+                  - paragraph [ref=f1e670]: "Digunakan oleh: Automation Sensor Studio."
+                - button "Reset ke default" [disabled]
+              - generic [ref=f1e672]:
+                - generic [ref=f1e673]:
+                  - generic [ref=f1e674]:
+                    - generic [ref=f1e675]: Peringatan perawatan aset
+                    - generic [ref=f1e676]: Default
+                  - paragraph [ref=f1e677]: Hari sebelum jadwal perawatan aset Studio.
+                  - spinbutton [ref=f1e678]: "7"
+                  - paragraph [ref=f1e679]: "Digunakan oleh: Automation Sensor Studio."
+                - button "Reset ke default" [disabled]
+            - generic [ref=f1e680]:
+              - button "Simpan Notifikasi Studio" [disabled]
+        - generic [ref=f1e681]:
+          - heading "Batas Integrasi" [level=3] [ref=f1e683]
+          - paragraph [ref=f1e687]: Kredensial database, SMTP, OAuth, payment gateway, marketplace, dan provider eksternal tidak dikelola di sini. Nilai rahasia tetap berada pada environment/secret management atau modul Integrasi khusus.
