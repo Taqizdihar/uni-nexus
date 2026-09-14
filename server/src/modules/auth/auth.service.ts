@@ -38,8 +38,8 @@ export class AuthService {
       if (usernameMatch && (!emailMatch || Number(usernameMatch.id) !== Number(emailMatch.id))) {
         throw new AppError(409, 'USERNAME_ALREADY_USED', 'Username sudah digunakan oleh akun lain.');
       }
-      if (emailMatch?.deleted_at === null) throw new AppError(409, 'EMAIL_ALREADY_REGISTERED', 'Email sudah terdaftar.');
-      if (emailMatch?.deleted_at !== null) {
+      if (emailMatch && emailMatch.deleted_at === null) throw new AppError(409, 'EMAIL_ALREADY_REGISTERED', 'Email sudah terdaftar.');
+      if (emailMatch && emailMatch.deleted_at !== null) {
         // Release this short preflight transaction; lifecycle creation re-locks
         // the archived identity and owns its own complete transaction.
         await connection.commit();
