@@ -1,0 +1,153 @@
+- generic [ref=f22e3]:
+  - complementary [ref=f22e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f22e6]
+    - generic [ref=f22e7]:
+      - generic [ref=f22e8]:
+        - heading "GLOBAL" [level=3] [ref=f22e9]
+        - link "Dasbor Global" [ref=f22e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f22e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f22e18]
+        - generic [ref=f22e19]:
+          - button "Pesanan" [ref=f22e236]
+          - button "Produksi" [ref=f22e245]
+          - generic [ref=f22e253]:
+            - button "Produk & Desain" [ref=f22e254]
+            - generic [ref=f22e264]:
+              - link "Katalog Produk" [ref=f22e265] [cursor=pointer]:
+                - /url: /app/craft/products
+              - link "Pustaka Desain 3D" [ref=f22e266] [cursor=pointer]:
+                - /url: /app/craft/products/design-library
+              - link "Profil Cetak" [ref=f22e267] [cursor=pointer]:
+                - /url: /app/craft/products/print-profiles
+              - link "Biaya & Penetapan Harga" [ref=f22e268] [cursor=pointer]:
+                - /url: /app/craft/products/cost-pricing
+          - button "Printer" [ref=f22e270]
+          - button "Material" [ref=f22e279]
+      - generic [ref=f22e33]:
+        - heading "BISNIS" [level=3] [ref=f22e34]
+        - generic [ref=f22e35]:
+          - button "Pelanggan & Mitra" [ref=f22e287]
+          - button "Pengadaan" [ref=f22e297]
+          - button "Keuangan" [ref=f22e37]
+          - button "Laporan & Analitik" [ref=f22e308]
+      - generic [ref=f22e44]:
+        - heading "SISTEM" [level=3] [ref=f22e45]
+        - generic [ref=f22e317]:
+          - button "Marketplace & Kanal Penjualan" [ref=f22e319]
+          - button "Otomasi" [ref=f22e329]
+      - generic [ref=f22e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f22e47]
+        - generic [ref=f22e48]:
+          - link "Pusat Dokumen" [ref=f22e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f22e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f22e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f22e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f22e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f22e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f22e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f22e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f22e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f22e88]:
+    - banner [ref=f22e89]:
+      - combobox [ref=f22e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f22e95]
+        - generic [ref=f22e96]:
+          - generic [ref=f22e97]: ⌘
+          - generic [ref=f22e98]: K
+      - generic [ref=f22e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f22e101]'
+        - button [ref=f22e335]:
+          - generic [ref=f22e114]:
+            - text: "Workspace:"
+            - generic [ref=f22e115]:
+              - img "Craft Logo" [ref=f22e336]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f22e118]
+        - button [ref=f22e123]:
+          - generic [aria-hidden] [ref=f22e124]: QU
+    - main [ref=f22e125]:
+      - generic [ref=f22e587]:
+        - generic [ref=f22e588]:
+          - link [ref=f22e589] [cursor=pointer]:
+            - /url: /app/craft/products
+            - button "Katalog Produk" [ref=f22e590]
+          - generic [ref=f22e593]:
+            - generic [ref=f22e594]:
+              - img "Gambar produk" [ref=f22e597]
+              - generic [ref=f22e598]:
+                - generic [ref=f22e599]:
+                  - paragraph [ref=f22e600]: PRD-000001
+                  - generic [ref=f22e601]: Aktif
+                - heading "Produk QA Edited 20260914_2256" [level=1] [ref=f22e602]
+                - paragraph [ref=f22e603]: Kategori Child Edited QA 20260914_2256 · Produk Jadi
+            - generic [ref=f22e604]:
+              - link [ref=f22e605] [cursor=pointer]:
+                - /url: /app/craft/products/1/edit
+                - button "Edit" [ref=f22e606]
+              - button "Nonaktifkan" [ref=f22e610]
+        - navigation [ref=f22e614]:
+          - button "Ringkasan" [ref=f22e615]
+          - button "Varian" [ref=f22e616]
+          - button "BOM / Material" [ref=f22e617]
+          - button "Desain 3D" [ref=f22e618]
+          - button "Profil Cetak" [ref=f22e619]
+          - button "Riwayat Penggunaan" [ref=f22e620]
+        - generic [ref=f22e621]:
+          - generic [ref=f22e622]:
+            - generic [ref=f22e623]:
+              - generic [ref=f22e624]:
+                - paragraph [ref=f22e628]: Harga Jual
+                - paragraph [ref=f22e629]: Rp 160.000
+              - generic [ref=f22e630]:
+                - paragraph [ref=f22e634]: Estimasi Biaya
+                - paragraph [ref=f22e635]: Rp 96.000
+              - generic [ref=f22e636]:
+                - paragraph [ref=f22e640]: Margin Saat Ini
+                - paragraph [ref=f22e641]: 40.0%
+              - generic [ref=f22e642]:
+                - paragraph [ref=f22e647]: Estimasi Material
+                - paragraph [ref=f22e648]: 125 g
+              - generic [ref=f22e649]:
+                - paragraph [ref=f22e653]: Estimasi Cetak
+                - paragraph [ref=f22e654]: 3j 20m
+              - generic [ref=f22e655]:
+                - paragraph [ref=f22e659]: Target Margin
+                - paragraph [ref=f22e660]: 40%
+            - generic [ref=f22e661]:
+              - heading "Deskripsi" [level=2] [ref=f22e662]
+              - paragraph [ref=f22e663]: Produk utama untuk pengujian Craft setelah edit.
+          - complementary [ref=f22e664]:
+            - generic [ref=f22e669]:
+              - heading "Kesiapan Produksi" [level=2] [ref=f22e670]
+              - paragraph [ref=f22e671]: Informasi ini tidak menghalangi pembuatan produk.
+            - generic [ref=f22e672]:
+              - generic [ref=f22e673]:
+                - generic [ref=f22e674]: Produk aktif
+                - generic [ref=f22e675]: ✓
+              - generic [ref=f22e676]:
+                - generic [ref=f22e677]: Harga tersedia
+                - generic [ref=f22e678]: ✓
+              - generic [ref=f22e679]:
+                - generic [ref=f22e680]: BOM tersedia
+                - generic [ref=f22e681]: –
+              - generic [ref=f22e682]:
+                - generic [ref=f22e683]: File desain tersedia
+                - generic [ref=f22e684]: –
+              - generic [ref=f22e685]:
+                - generic [ref=f22e686]: Profil cetak tersedia
+                - generic [ref=f22e687]: –
+            - generic [ref=f22e688]:
+              - paragraph [ref=f22e689]: BOM material belum tersedia.
+              - paragraph [ref=f22e690]: File desain belum tersedia.
+              - paragraph [ref=f22e691]: Profil cetak belum tersedia.
+            - button "Lengkapi data produksi" [ref=f22e692]

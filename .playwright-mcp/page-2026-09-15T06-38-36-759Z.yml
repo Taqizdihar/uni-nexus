@@ -1,0 +1,167 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [active] [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e1933]:
+        - generic [ref=f3e1935]:
+          - paragraph [ref=f3e1936]: Sistem Craft
+          - heading "Template Otomasi" [level=1] [ref=f3e1937]
+          - paragraph [ref=f3e1938]: Blueprint kode yang aman. Menggunakan template selalu membuat Draf untuk ditinjau.
+        - generic [ref=f3e1939]:
+          - generic [ref=f3e1941]:
+            - heading "Deadline Pesanan Mendekat" [level=2] [ref=f3e1942]
+            - paragraph [ref=f3e1943]: Naikkan prioritas pesanan dalam 24 jam menuju tenggat.
+            - paragraph [ref=f3e1944]: sensor · order.deadline_approaching
+            - paragraph [ref=f3e1945]: "Aksi: order.priority.set"
+            - button "Gunakan Template" [ref=f3e1946]
+          - generic [ref=f3e1951]:
+            - heading "Pesanan Ready → Antrean Produksi" [level=2] [ref=f3e1952]
+            - paragraph [ref=f3e1953]: Antrikan item pesanan ketika status berubah menjadi Ready.
+            - paragraph [ref=f3e1954]: event · order.status_changed
+            - paragraph [ref=f3e1955]: "Aksi: production.enqueue_order_items"
+            - button "Gunakan Template" [ref=f3e1956]
+          - generic [ref=f3e1961]:
+            - heading "Stok Material Menipis" [level=2] [ref=f3e1962]
+            - paragraph [ref=f3e1963]: Beri peringatan tim Craft saat stok melewati batas rendah.
+            - paragraph [ref=f3e1964]: event · material.low_stock
+            - paragraph [ref=f3e1965]: "Aksi: notification.create"
+            - button "Gunakan Template" [ref=f3e1966]
+          - generic [ref=f3e1971]:
+            - heading "Stok Menipis → Buat Permintaan Pembelian" [level=2] [ref=f3e1972]
+            - paragraph [ref=f3e1973]: Buat draft PR untuk material rendah; tetap membutuhkan persetujuan manusia.
+            - paragraph [ref=f3e1974]: event · material.low_stock
+            - paragraph [ref=f3e1975]: "Aksi: procurement.create_purchase_request"
+            - button "Gunakan Template" [ref=f3e1976]
+          - generic [ref=f3e1981]:
+            - heading "Cetak Gagal" [level=2] [ref=f3e1982]
+            - paragraph [ref=f3e1983]: Kirim peringatan kritis saat pekerjaan cetak gagal.
+            - paragraph [ref=f3e1984]: event · production.job_failed
+            - paragraph [ref=f3e1985]: "Aksi: notification.create"
+            - button "Gunakan Template" [ref=f3e1986]
+          - generic [ref=f3e1991]:
+            - heading "Perawatan Printer Mendekat" [level=2] [ref=f3e1992]
+            - paragraph [ref=f3e1993]: Peringatkan tim bila perawatan printer sudah jatuh tempo.
+            - paragraph [ref=f3e1994]: sensor · printer.maintenance_due
+            - paragraph [ref=f3e1995]: "Aksi: notification.create"
+            - button "Gunakan Template" [ref=f3e1996]
+          - generic [ref=f3e2001]:
+            - heading "Invoice Pelanggan Terlambat" [level=2] [ref=f3e2002]
+            - paragraph [ref=f3e2003]: Buat peringatan untuk invoice pelanggan yang lewat jatuh tempo.
+            - paragraph [ref=f3e2004]: sensor · finance.customer_invoice_overdue
+            - paragraph [ref=f3e2005]: "Aksi: notification.create"
+            - button "Gunakan Template" [ref=f3e2006]
+          - generic [ref=f3e2011]:
+            - heading "Tagihan Pemasok Terlambat" [level=2] [ref=f3e2012]
+            - paragraph [ref=f3e2013]: Buat peringatan untuk tagihan pemasok yang lewat jatuh tempo.
+            - paragraph [ref=f3e2014]: sensor · procurement.supplier_invoice_overdue
+            - paragraph [ref=f3e2015]: "Aksi: notification.create"
+            - button "Gunakan Template" [ref=f3e2016]
+          - generic [ref=f3e2021]:
+            - heading "Sinkronisasi Marketplace Berkala" [level=2] [ref=f3e2022]
+            - paragraph [ref=f3e2023]: Menjalankan connector marketplace yang benar-benar tersedia setiap jam.
+            - paragraph [ref=f3e2024]: schedule · schedule
+            - paragraph [ref=f3e2025]: "Aksi: marketplace.sync"
+            - button "Gunakan Template" [ref=f3e2026]
+          - generic [ref=f3e2031]:
+            - heading "Laporan Craft Mingguan" [level=2] [ref=f3e2032]
+            - paragraph [ref=f3e2033]: Menjadwalkan generation laporan mingguan bila generator tersedia.
+            - paragraph [ref=f3e2034]: schedule · schedule
+            - paragraph [ref=f3e2035]: "Aksi: analytics.generate_report"
+            - button "Gunakan Template" [ref=f3e2036]

@@ -1,0 +1,144 @@
+- generic [ref=f7e971]:
+  - complementary [ref=f7e972]:
+    - heading "UNI-NEXUS" [level=1] [ref=f7e974]
+    - generic [ref=f7e975]:
+      - generic [ref=f7e976]:
+        - heading "GLOBAL" [level=3] [ref=f7e977]
+        - link "Dasbor Global" [ref=f7e979] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f7e985]:
+        - heading "OPERASIONAL" [level=3] [ref=f7e986]
+        - generic [ref=f7e987]:
+          - button "Pesanan" [ref=f7e1268]
+          - button "Produksi" [ref=f7e1277]
+          - button "Produk & Desain" [ref=f7e1286]
+          - button "Printer" [ref=f7e1297]
+          - button "Material" [ref=f7e1306]
+      - generic [ref=f7e1001]:
+        - heading "BISNIS" [level=3] [ref=f7e1002]
+        - generic [ref=f7e1003]:
+          - generic [ref=f7e1313]:
+            - button "Pelanggan & Mitra" [ref=f7e1314]
+            - generic [ref=f7e1364]:
+              - link "Pelanggan" [ref=f7e1365] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f7e1366] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f7e1324]
+          - button "Keuangan" [ref=f7e1005]
+          - button "Laporan & Analitik" [ref=f7e1335]
+      - generic [ref=f7e1012]:
+        - heading "SISTEM" [level=3] [ref=f7e1013]
+        - generic [ref=f7e1344]:
+          - button "Marketplace & Kanal Penjualan" [ref=f7e1346]
+          - button "Otomasi" [ref=f7e1356]
+      - generic [ref=f7e1014]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f7e1015]
+        - generic [ref=f7e1016]:
+          - link "Pusat Dokumen" [ref=f7e1017] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f7e1022] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f7e1025] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f7e1029] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f7e1032] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f7e1038] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f7e1041] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f7e1047] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f7e1052] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f7e1056]:
+    - banner [ref=f7e1057]:
+      - combobox [ref=f7e1059]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f7e1063]
+        - generic [ref=f7e1064]:
+          - generic [ref=f7e1065]: ⌘
+          - generic [ref=f7e1066]: K
+      - generic [ref=f7e1067]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f7e1069]'
+        - button [ref=f7e1362]:
+          - generic [ref=f7e1082]:
+            - text: "Workspace:"
+            - generic [ref=f7e1083]:
+              - img "Craft Logo" [ref=f7e1363]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f7e1086]:
+          - generic [ref=f7e1090]: "2"
+        - button [ref=f7e1092]:
+          - generic [aria-hidden] [ref=f7e1093]: QU
+    - main [ref=f7e1094]:
+      - generic [ref=f7e2038]:
+        - generic [ref=f7e2039]:
+          - paragraph [ref=f7e2040]: Bisnis Craft / Pelanggan
+          - heading "Tambah Pelanggan" [level=1] [ref=f7e2041]
+          - paragraph [ref=f7e2042]: Buat satu Party baru dengan peran Craft Customer.
+        - generic [ref=f7e2043]:
+          - generic [ref=f7e2044]:
+            - paragraph [ref=f7e2045]: Identitas
+            - generic [ref=f7e2046]:
+              - generic [ref=f7e2047]:
+                - text: Jenis Pelanggan *
+                - combobox "Jenis Pelanggan *" [ref=f7e2048]:
+                  - option "Individu" [selected]
+                  - option "Perusahaan"
+                  - option "Institusi"
+              - generic [ref=f7e2049]:
+                - text: Nama / Display Name *
+                - textbox "Nama / Display Name *" [ref=f7e2050]
+              - generic [ref=f7e2051]:
+                - text: Nama Legal
+                - textbox "Nama Legal" [ref=f7e2052]
+              - generic [ref=f7e2053]:
+                - text: Email
+                - textbox "Email" [ref=f7e2054]
+              - generic [ref=f7e2055]:
+                - text: Nomor Telepon
+                - textbox "Nomor Telepon" [ref=f7e2056]:
+                  - /placeholder: "Contoh: +62 812..."
+              - generic [ref=f7e2057]:
+                - text: Website
+                - textbox "Website" [ref=f7e2058]:
+                  - /placeholder: https://
+              - generic [ref=f7e2059]:
+                - text: NPWP / Tax ID
+                - textbox "NPWP / Tax ID" [ref=f7e2060]
+              - generic [ref=f7e2061]:
+                - text: Status
+                - combobox "Status" [ref=f7e2062]:
+                  - option "Aktif" [selected]
+                  - option "Tidak Aktif"
+          - generic [ref=f7e2063]:
+            - paragraph [ref=f7e2064]: Alamat
+            - generic [ref=f7e2065]:
+              - generic [ref=f7e2066]:
+                - text: Alamat Baris 1
+                - textbox "Alamat Baris 1" [ref=f7e2067]
+              - generic [ref=f7e2068]:
+                - text: Alamat Baris 2
+                - textbox "Alamat Baris 2" [ref=f7e2069]
+              - generic [ref=f7e2070]:
+                - text: Kota
+                - textbox "Kota" [ref=f7e2071]
+              - generic [ref=f7e2072]:
+                - text: Provinsi
+                - textbox "Provinsi" [ref=f7e2073]
+              - generic [ref=f7e2074]:
+                - text: Kode Pos
+                - textbox "Kode Pos" [ref=f7e2075]
+              - generic [ref=f7e2076]:
+                - text: Negara
+                - textbox "Negara" [ref=f7e2077]: ID
+          - generic [ref=f7e2078]:
+            - paragraph [ref=f7e2079]: Informasi Tambahan
+            - generic [ref=f7e2080]:
+              - text: Catatan
+              - textbox "Catatan" [ref=f7e2081]
+          - generic [ref=f7e2082]:
+            - button "Batal" [ref=f7e2083]
+            - button "Simpan Pelanggan" [ref=f7e2084]

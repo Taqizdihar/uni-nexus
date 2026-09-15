@@ -1,0 +1,82 @@
+- generic [ref=f25e6]:
+  - complementary [ref=f25e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f25e9]
+    - generic [ref=f25e10]:
+      - generic [ref=f25e11]:
+        - heading "GLOBAL" [level=3] [ref=f25e12]
+        - link "Dasbor Global" [ref=f25e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f25e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f25e21]
+        - generic [ref=f25e22]:
+          - button "Pesanan" [ref=f25e24]
+          - button "Produksi" [ref=f25e33]
+          - button "Produk & Desain" [ref=f25e42]
+          - button "Printer" [ref=f25e53]
+          - button "Material" [ref=f25e62]
+      - generic [ref=f25e69]:
+        - heading "BISNIS" [level=3] [ref=f25e70]
+        - generic [ref=f25e71]:
+          - button "Pelanggan & Mitra" [ref=f25e73]
+          - button "Pengadaan" [ref=f25e83]
+          - button "Keuangan" [ref=f25e94]
+          - button "Laporan & Analitik" [ref=f25e102]
+      - generic [ref=f25e111]:
+        - heading "SISTEM" [level=3] [ref=f25e112]
+        - generic [ref=f25e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f25e115]
+          - button "Otomasi" [ref=f25e125]
+      - generic [ref=f25e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f25e132]
+        - generic [ref=f25e133]:
+          - link "Pusat Dokumen" [ref=f25e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f25e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f25e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f25e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f25e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f25e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f25e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f25e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f25e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f25e173]:
+    - banner [ref=f25e174]:
+      - combobox [ref=f25e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f25e180]
+        - generic [ref=f25e181]:
+          - generic [ref=f25e182]: ⌘
+          - generic [ref=f25e183]: K
+      - generic [ref=f25e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f25e186]'
+        - button [ref=f25e195]:
+          - generic [ref=f25e199]:
+            - text: "Workspace:"
+            - generic [ref=f25e200]:
+              - img "Craft Logo" [ref=f25e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f25e203]:
+          - generic [ref=f25e207]: "3"
+        - button [ref=f25e209]:
+          - generic [aria-hidden] [ref=f25e210]: AR
+    - main [ref=f25e211]:
+      - generic [ref=f25e213]:
+        - generic [ref=f25e214]:
+          - generic [ref=f25e215]:
+            - heading "Dalam Pengembangan" [level=1] [ref=f25e216]
+            - paragraph [ref=f25e217]: Modul ini direncanakan untuk pembaruan mendatang.
+          - generic [ref=f25e218]: Tahap Berikutnya
+        - generic [ref=f25e219]:
+          - heading "Ringkasan Dalam Pengembangan" [level=3] [ref=f25e224]
+          - paragraph [ref=f25e225]: Modul ini adalah bagian dari peta jalan yang direncanakan dan akan menyediakan kemampuan dalam pengembangan lengkap setelah arsitektur backend diintegrasikan.
+          - button "Lihat Dokumentasi" [ref=f25e227]
+          - paragraph [ref=f25e231]:
+            - strong [ref=f25e232]: "Mode Pratinjau:"
+            - text: Fitur di halaman ini saat ini adalah demonstrasi UI. Data yang dimasukkan di sini tidak akan disimpan sampai integrasi backend selesai.

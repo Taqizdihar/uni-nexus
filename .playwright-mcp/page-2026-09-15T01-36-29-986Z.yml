@@ -1,0 +1,121 @@
+- generic [ref=f38e6]:
+  - complementary [ref=f38e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f38e9]
+    - generic [ref=f38e10]:
+      - generic [ref=f38e11]:
+        - heading "GLOBAL" [level=3] [ref=f38e12]
+        - link "Dasbor Global" [ref=f38e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f38e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f38e21]
+        - generic [ref=f38e22]:
+          - button "Pesanan" [ref=f38e148]
+          - button "Produksi" [ref=f38e157]
+          - button "Produk & Desain" [ref=f38e166]
+          - button "Printer" [ref=f38e177]
+          - button "Material" [ref=f38e186]
+      - generic [ref=f38e36]:
+        - heading "BISNIS" [level=3] [ref=f38e37]
+        - generic [ref=f38e38]:
+          - button "Pelanggan & Mitra" [ref=f38e194]
+          - generic [ref=f38e203]:
+            - button "Pengadaan" [ref=f38e204]
+            - generic [ref=f38e214]:
+              - link "Ringkasan Pengadaan" [ref=f38e215] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f38e216] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f38e217] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f38e218] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f38e219] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [ref=f38e220] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [active] [ref=f38e221] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f38e40]
+          - button "Laporan & Analitik" [ref=f38e223]
+      - generic [ref=f38e47]:
+        - heading "SISTEM" [level=3] [ref=f38e48]
+        - generic [ref=f38e232]:
+          - button "Marketplace & Kanal Penjualan" [ref=f38e234]
+          - button "Otomasi" [ref=f38e244]
+      - generic [ref=f38e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f38e50]
+        - generic [ref=f38e51]:
+          - link "Pusat Dokumen" [ref=f38e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f38e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f38e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f38e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f38e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f38e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f38e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f38e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f38e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f38e91]:
+    - banner [ref=f38e92]:
+      - combobox [ref=f38e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f38e98]
+        - generic [ref=f38e99]:
+          - generic [ref=f38e100]: ⌘
+          - generic [ref=f38e101]: K
+      - generic [ref=f38e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f38e104]'
+        - button [ref=f38e250]:
+          - generic [ref=f38e117]:
+            - text: "Workspace:"
+            - generic [ref=f38e118]:
+              - img "Craft Logo" [ref=f38e251]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f38e121]:
+          - generic [ref=f38e125]: "2"
+        - button [ref=f38e127]:
+          - generic [aria-hidden] [ref=f38e128]: QU
+    - main [ref=f38e129]:
+      - generic [ref=f38e330]:
+        - generic [ref=f38e332]:
+          - paragraph [ref=f38e333]: PENGADAAN
+          - heading "Riwayat Pengadaan" [level=1] [ref=f38e334]
+          - paragraph [ref=f38e335]: Jejak audit untuk peran pemasok, permintaan, PO, penerimaan barang, dan tagihan pemasok.
+        - generic [ref=f38e336]:
+          - article [ref=f38e337]:
+            - generic [ref=f38e338]:
+              - paragraph [ref=f38e339]: SUP-000020
+              - paragraph [ref=f38e340]: 15 Sep 2026
+            - paragraph [ref=f38e341]: Menambahkan kontak pemasok SUP-000020.
+            - paragraph [ref=f38e342]: supplier.contact_create
+          - article [ref=f38e343]:
+            - generic [ref=f38e344]:
+              - paragraph [ref=f38e345]: SUP-000020
+              - paragraph [ref=f38e346]: 15 Sep 2026
+            - paragraph [ref=f38e347]: Menambahkan kontak pemasok SUP-000020.
+            - paragraph [ref=f38e348]: supplier.contact_create
+          - article [ref=f38e349]:
+            - generic [ref=f38e350]:
+              - paragraph [ref=f38e351]: SUP-000020
+              - paragraph [ref=f38e352]: 15 Sep 2026
+            - paragraph [ref=f38e353]: Memperbarui pemasok SUP-000020.
+            - paragraph [ref=f38e354]: supplier.update
+          - article [ref=f38e355]:
+            - generic [ref=f38e356]:
+              - paragraph [ref=f38e357]: SUP-000020
+              - paragraph [ref=f38e358]: 15 Sep 2026
+            - paragraph [ref=f38e359]: Menambahkan peran pemasok Craft pada SUP-000020.
+            - paragraph [ref=f38e360]: supplier.role_add
+          - article [ref=f38e361]:
+            - generic [ref=f38e362]:
+              - paragraph [ref=f38e363]: SUP-000020
+              - paragraph [ref=f38e364]: 15 Sep 2026
+            - paragraph [ref=f38e365]: Membuat pemasok Craft SUP-000020.
+            - paragraph [ref=f38e366]: supplier.create

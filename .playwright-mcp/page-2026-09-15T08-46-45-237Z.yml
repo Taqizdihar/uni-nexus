@@ -1,0 +1,139 @@
+- generic [ref=f27e6]:
+  - complementary [ref=f27e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f27e9]
+    - generic [ref=f27e10]:
+      - generic [ref=f27e11]:
+        - heading "GLOBAL" [level=3] [ref=f27e12]
+        - link "Dasbor Global" [ref=f27e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f27e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f27e21]
+        - generic [ref=f27e22]:
+          - generic [ref=f27e23]:
+            - button "Proyek" [ref=f27e24]
+            - generic [ref=f27e30]:
+              - link "Semua Proyek" [ref=f27e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f27e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f27e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f27e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f27e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f27e41]:
+        - heading "BISNIS" [level=3] [ref=f27e42]
+        - button "Keuangan" [ref=f27e45]
+      - heading "SISTEM" [level=3] [ref=f27e53]
+      - generic [ref=f27e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f27e55]
+        - generic [ref=f27e56]:
+          - link "Pusat Dokumen" [ref=f27e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f27e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f27e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f27e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f27e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f27e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f27e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f27e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f27e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f27e96]:
+    - banner [ref=f27e97]:
+      - combobox [ref=f27e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f27e103]
+        - generic [ref=f27e104]:
+          - generic [ref=f27e105]: ⌘
+          - generic [ref=f27e106]: K
+      - generic [ref=f27e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f27e109]'
+        - button [ref=f27e118]:
+          - generic [ref=f27e122]:
+            - text: "Workspace:"
+            - generic [ref=f27e123]:
+              - img "Studio Logo" [ref=f27e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f27e126]:
+          - generic [ref=f27e130]: "2"
+        - button [ref=f27e132]:
+          - generic [aria-hidden] [ref=f27e133]: QU
+    - main [ref=f27e134]:
+      - generic [ref=f27e966]:
+        - generic [ref=f27e967]:
+          - generic [ref=f27e968]:
+            - button "Kembali" [ref=f27e969]
+            - generic [ref=f27e972]:
+              - paragraph [ref=f27e973]: CUS-000026
+              - heading "QA Customer S09" [level=1] [ref=f27e974]
+              - paragraph [ref=f27e975]: qa.customer@example.com · 081234567890
+          - generic [ref=f27e976]:
+            - button "Proyek Baru" [ref=f27e977]
+            - button "Edit Klien" [ref=f27e979]
+            - button "Nonaktifkan" [ref=f27e983]
+        - generic [ref=f27e988]:
+          - generic [ref=f27e989]: Aktif
+          - generic [ref=f27e990]: Perorangan
+        - generic [ref=f27e991]:
+          - generic [ref=f27e992]:
+            - paragraph [ref=f27e993]: Total Proyek
+            - generic [ref=f27e994]: "0"
+            - paragraph [ref=f27e995]: 0 sedang aktif
+          - generic [ref=f27e996]:
+            - paragraph [ref=f27e997]: Nilai Kontrak Komitmen
+            - generic [ref=f27e998]: Rp 0
+            - paragraph [ref=f27e999]: Approved ke atas.
+          - generic [ref=f27e1000]:
+            - paragraph [ref=f27e1001]: Pipeline
+            - generic [ref=f27e1002]: Rp 0
+            - paragraph [ref=f27e1003]: Prospek & penawaran.
+          - generic [ref=f27e1004]:
+            - paragraph [ref=f27e1005]: Kontak
+            - generic [ref=f27e1006]: 0 kontak
+            - paragraph [ref=f27e1007]: Belum ada kontak utama
+        - generic [ref=f27e1008]:
+          - button "Ringkasan" [ref=f27e1009]
+          - button "Kontak" [ref=f27e1010]
+          - button "Proyek" [ref=f27e1011]
+          - button "Komersial" [active] [pressed] [ref=f27e1012]
+          - button "Aktivitas" [ref=f27e1013]
+        - generic [ref=f27e1137]:
+          - generic [ref=f27e1138]:
+            - generic [ref=f27e1139]:
+              - paragraph [ref=f27e1140]: Nilai Kontrak Komitmen
+              - paragraph [ref=f27e1141]: Rp 0
+              - paragraph [ref=f27e1142]: Approved/dikerjakan/tinjauan/selesai/lunas.
+            - generic [ref=f27e1143]:
+              - paragraph [ref=f27e1144]: Pipeline
+              - paragraph [ref=f27e1145]: Rp 0
+              - paragraph [ref=f27e1146]: Prospek & penawaran.
+            - generic [ref=f27e1147]:
+              - paragraph [ref=f27e1148]: Total Ditagih
+              - paragraph [ref=f27e1149]: Rp 0
+              - paragraph [ref=f27e1150]: 0 invoice.
+            - generic [ref=f27e1151]:
+              - paragraph [ref=f27e1152]: Total Terbayar
+              - paragraph [ref=f27e1153]: Rp 0
+              - paragraph [ref=f27e1154]: Dari data invoice.
+            - generic [ref=f27e1155]:
+              - paragraph [ref=f27e1156]: Outstanding
+              - paragraph [ref=f27e1157]: Rp 0
+              - paragraph [ref=f27e1158]: 0 penawaran aktif.
+          - generic [ref=f27e1160]:
+            - generic [ref=f27e1163]:
+              - heading "Penawaran" [level=2] [ref=f27e1164]
+              - paragraph [ref=f27e1165]: Dikelola oleh modul Penawaran & Penagihan.
+            - paragraph [ref=f27e1166]: Belum Ada Penawaran
+          - generic [ref=f27e1168]:
+            - generic [ref=f27e1171]:
+              - heading "Invoice" [level=2] [ref=f27e1172]
+              - paragraph [ref=f27e1173]: Pencatatan pembayaran dilakukan dari modul Penagihan/Keuangan.
+            - paragraph [ref=f27e1174]: Belum Ada Invoice

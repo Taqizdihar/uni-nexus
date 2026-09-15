@@ -1,0 +1,32 @@
+- generic [ref=f11e506]:
+  - link "U N I - N E X U S" [ref=f11e507] [cursor=pointer]:
+    - /url: /
+    - generic [ref=f11e509]:
+      - generic [ref=f11e510]: U
+      - generic [ref=f11e511]: "N"
+      - generic [ref=f11e512]: I
+      - generic [ref=f11e513]: "-"
+      - generic [ref=f11e514]: "N"
+      - generic [ref=f11e515]: E
+      - generic [ref=f11e516]: X
+      - generic [ref=f11e517]: U
+      - generic [ref=f11e518]: S
+  - generic [ref=f11e519]:
+    - generic [ref=f11e520]:
+      - heading "Masuk ke UNI-NEXUS" [level=2] [ref=f11e521]
+      - paragraph [ref=f11e522]: Nexus Creationis et Productionis
+    - generic [ref=f11e523]:
+      - generic [ref=f11e524]:
+        - generic [ref=f11e525]: Email atau Nama Pengguna
+        - textbox "Email atau Nama Pengguna" [ref=f11e526]
+      - generic [ref=f11e527]:
+        - generic [ref=f11e528]: Kata Sandi
+        - textbox "Kata Sandi" [ref=f11e529]
+      - generic [ref=f11e531] [cursor=pointer]:
+        - checkbox "Ingat Saya" [ref=f11e532]
+        - text: Ingat Saya
+      - button "Tekan Enter untuk Masuk" [ref=f11e533]
+    - generic [ref=f11e534]:
+      - text: Belum memiliki akun?
+      - link "Daftar" [ref=f11e535] [cursor=pointer]:
+        - /url: /register

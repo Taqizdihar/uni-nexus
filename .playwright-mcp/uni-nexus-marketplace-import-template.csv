@@ -1,0 +1,1 @@
+﻿external_order_id,order_date,customer_name,customer_email,customer_phone,recipient_name,recipient_phone,shipping_address,courier,deadline,external_product_id,external_sku,item_name,quantity,unit_price,item_discount,order_discount,shipping_amount,marketplace_fee,tax,external_order_total

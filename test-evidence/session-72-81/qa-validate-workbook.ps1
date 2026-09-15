@@ -1,0 +1,55 @@
+$ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$workbook = Join-Path (Get-Location) 'Pengujian UNI-NEXUS.xlsx'
+$safety = 'C:\Users\Lenovo\AppData\Local\Temp\UNI-NEXUS-QA-20260915-080149\Pengujian UNI-NEXUS.xlsx'
+$mainNs = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
+$target = @{}; foreach ($row in 72..81) { $target["F$row"] = $true; $target["H$row"] = $true }
+
+function Get-EntryBytes($archive, $name) {
+    $entry = $archive.GetEntry($name); if ($null -eq $entry) { throw "ZIP entry missing: $name" }
+    $stream = $entry.Open(); $memory = New-Object IO.MemoryStream
+    try { $stream.CopyTo($memory); return $memory.ToArray() } finally { $stream.Dispose(); $memory.Dispose() }
+}
+function Get-EntryText($archive, $name) { return [Text.Encoding]::UTF8.GetString((Get-EntryBytes $archive $name)) }
+function Open-Docs($path) {
+    $archive = [IO.Compression.ZipFile]::OpenRead($path)
+    $sst = New-Object Xml.XmlDocument; $sst.PreserveWhitespace=$true; $sst.LoadXml((Get-EntryText $archive 'xl/sharedStrings.xml'))
+    $sheet = New-Object Xml.XmlDocument; $sheet.PreserveWhitespace=$true; $sheet.LoadXml((Get-EntryText $archive 'xl/worksheets/sheet1.xml'))
+    $ns = New-Object Xml.XmlNamespaceManager($sheet.NameTable); $ns.AddNamespace('x',$mainNs)
+    $items = $sst.SelectNodes('/x:sst/x:si',$ns)
+    $cells = @{}
+    foreach ($cell in $sheet.SelectNodes('//x:sheetData/x:row/x:c',$ns)) {
+        $v = $cell.SelectSingleNode('./x:v',$ns); $value=''
+        if ($cell.GetAttribute('t') -eq 's' -and $null -ne $v) { $value=$items[[int]$v.InnerText.Trim()].InnerText }
+        elseif ($cell.GetAttribute('t') -eq 'inlineStr') { $value=$cell.InnerText }
+        elseif ($null -ne $v) { $value=$v.InnerText }
+        $cells[$cell.GetAttribute('r')]=$value
+    }
+    return @{ Archive=$archive; Sst=$sst; Sheet=$sheet; Ns=$ns; Cells=$cells; WorkbookXml=(Get-EntryText $archive 'xl/workbook.xml') }
+}
+function Assert-Equal($condition, $message) { if (-not $condition) { throw $message } }
+function Cell-Attrs($cell) { $parts=@(); foreach($a in $cell.Attributes) { if($a.Name -ne 't') { $parts += ($a.Name+'='+$a.Value) } }; return ($parts -join '|') }
+
+Assert-Equal (Test-Path -LiteralPath $workbook) 'Final workbook missing.'
+Assert-Equal (Test-Path -LiteralPath $safety) 'Safety copy missing.'
+$lock = [IO.File]::Open($workbook,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read); $lock.Dispose()
+$before = Open-Docs $safety; $after = Open-Docs $workbook
+try {
+    $beforeEntries = @($before.Archive.Entries | ForEach-Object FullName | Sort-Object); $afterEntries = @($after.Archive.Entries | ForEach-Object FullName | Sort-Object)
+    Assert-Equal (($beforeEntries -join "`n") -eq ($afterEntries -join "`n")) 'ZIP entry list changed.'
+    $rawChanged=@()
+    foreach($name in $beforeEntries) { if($name -in @('xl/sharedStrings.xml','xl/worksheets/sheet1.xml')) { continue }; $h1=[Security.Cryptography.SHA256]::Create().ComputeHash((Get-EntryBytes $before.Archive $name)); $h2=[Security.Cryptography.SHA256]::Create().ComputeHash((Get-EntryBytes $after.Archive $name)); if(([BitConverter]::ToString($h1)) -ne ([BitConverter]::ToString($h2))) { $rawChanged += $name } }
+    Assert-Equal ($rawChanged.Count -eq 0) ('Unexpected non-target ZIP entries changed: '+($rawChanged -join ', '))
+    foreach($address in $before.Cells.Keys) { if(-not $target.ContainsKey($address)) { Assert-Equal ($after.Cells[$address] -eq $before.Cells[$address]) "Unexpected logical cell change: $address" } }
+    foreach($row in 72..81) { Assert-Equal ($after.Cells["F$row"] -in @('Pass','Bug/Failed')) "Invalid status F$row"; Assert-Equal (-not [string]::IsNullOrWhiteSpace($after.Cells["H$row"])) "Note missing H$row" }
+    foreach($address in @('A1','B1','C1','D1','E1','F1','G1','H1','I1')) { Assert-Equal ($after.Cells[$address] -eq $before.Cells[$address]) "Header changed: $address" }
+    $beforeIds=@($before.Cells.Keys | Where-Object {$_ -match '^A\d+$'} | Sort-Object {[int]($_ -replace '^A','')} | ForEach-Object {$before.Cells[$_]}); $afterIds=@($after.Cells.Keys | Where-Object {$_ -match '^A\d+$'} | Sort-Object {[int]($_ -replace '^A','')} | ForEach-Object {$after.Cells[$_]})
+    Assert-Equal (($beforeIds -join "`n") -eq ($afterIds -join "`n")) 'Test Case ID ordering changed.'
+    $beforeDim=$before.Sheet.SelectSingleNode('//x:dimension',$before.Ns).GetAttribute('ref'); $afterDim=$after.Sheet.SelectSingleNode('//x:dimension',$after.Ns).GetAttribute('ref'); Assert-Equal ($beforeDim -eq $afterDim) 'Worksheet dimension changed.'
+    $beforeNonTargetMeta=@($before.Sheet.SelectNodes('//x:sheetData/x:row/x:c',$before.Ns) | Where-Object {-not $target.ContainsKey($_.GetAttribute('r'))} | ForEach-Object {$_.GetAttribute('r')+'|'+(Cell-Attrs $_)}); $afterNonTargetMeta=@($after.Sheet.SelectNodes('//x:sheetData/x:row/x:c',$after.Ns) | Where-Object {-not $target.ContainsKey($_.GetAttribute('r'))} | ForEach-Object {$_.GetAttribute('r')+'|'+(Cell-Attrs $_)}); Assert-Equal (($beforeNonTargetMeta -join "`n") -eq ($afterNonTargetMeta -join "`n")) 'Non-target cell metadata changed.'
+    foreach($row in 34,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61) { foreach($col in 'A','B','C','D','E','F','G','H','I') { $a="$col$row"; Assert-Equal ($before.Cells[$a] -eq $after.Cells[$a]) "Historical/completed cell changed: $a" } }
+    $workbookDoc=New-Object Xml.XmlDocument; $workbookDoc.LoadXml($after.WorkbookXml); $wNs=New-Object Xml.XmlNamespaceManager($workbookDoc.NameTable); $wNs.AddNamespace('x','http://schemas.openxmlformats.org/spreadsheetml/2006/main'); $sheetInfo=@($workbookDoc.SelectNodes('//x:sheets/x:sheet',$wNs) | ForEach-Object {$_.GetAttribute('name')+'|'+$_.GetAttribute('sheetId')+'|'+$_.GetAttribute('r:id')})
+    $beforeW=New-Object Xml.XmlDocument; $beforeW.LoadXml($before.WorkbookXml); $beforeWN=New-Object Xml.XmlNamespaceManager($beforeW.NameTable); $beforeWN.AddNamespace('x','http://schemas.openxmlformats.org/spreadsheetml/2006/main'); $beforeSheetInfo=@($beforeW.SelectNodes('//x:sheets/x:sheet',$beforeWN) | ForEach-Object {$_.GetAttribute('name')+'|'+$_.GetAttribute('sheetId')+'|'+$_.GetAttribute('r:id')}); Assert-Equal (($sheetInfo -join "`n") -eq ($beforeSheetInfo -join "`n")) 'Worksheet names or order changed.'
+    $hash=[BitConverter]::ToString(([Security.Cryptography.SHA256]::Create().ComputeHash([IO.File]::ReadAllBytes($workbook)))).Replace('-','')
+    Write-Output 'Workbook integrity validation: PASS'; Write-Output ('Final SHA-256: '+$hash); Write-Output 'Non-target ZIP entries changed: 0'; Write-Output 'Target cells changed: F72:F81 and H72:H81'; Write-Output 'Historical/completed rows unchanged: 34,39,40,41,42-71'
+} finally { $before.Archive.Dispose(); $after.Archive.Dispose() }

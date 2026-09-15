@@ -1,0 +1,139 @@
+- generic [ref=f23e3]:
+  - complementary [ref=f23e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f23e6]
+    - generic [ref=f23e7]:
+      - generic [ref=f23e8]:
+        - heading "GLOBAL" [level=3] [ref=f23e9]
+        - link "Dasbor Global" [ref=f23e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f23e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f23e18]
+        - generic [ref=f23e19]:
+          - generic [ref=f23e235]:
+            - button "Pesanan" [ref=f23e236]
+            - generic [ref=f23e527]:
+              - link "Semua Pesanan" [ref=f23e528] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f23e529] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f23e530] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f23e531] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f23e532] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [ref=f23e533] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f23e534] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f23e535] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f23e536] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f23e245]
+          - generic [ref=f23e253]:
+            - button "Produk & Desain" [ref=f23e254]
+            - generic [ref=f23e264]:
+              - link "Katalog Produk" [ref=f23e265] [cursor=pointer]:
+                - /url: /app/craft/products
+              - link "Pustaka Desain 3D" [ref=f23e266] [cursor=pointer]:
+                - /url: /app/craft/products/design-library
+              - link "Profil Cetak" [ref=f23e267] [cursor=pointer]:
+                - /url: /app/craft/products/print-profiles
+              - link "Biaya & Penetapan Harga" [ref=f23e268] [cursor=pointer]:
+                - /url: /app/craft/products/cost-pricing
+          - button "Printer" [ref=f23e270]
+          - button "Material" [ref=f23e279]
+      - generic [ref=f23e33]:
+        - heading "BISNIS" [level=3] [ref=f23e34]
+        - generic [ref=f23e35]:
+          - button "Pelanggan & Mitra" [ref=f23e287]
+          - button "Pengadaan" [ref=f23e297]
+          - button "Keuangan" [ref=f23e37]
+          - button "Laporan & Analitik" [ref=f23e308]
+      - generic [ref=f23e44]:
+        - heading "SISTEM" [level=3] [ref=f23e45]
+        - generic [ref=f23e317]:
+          - button "Marketplace & Kanal Penjualan" [ref=f23e319]
+          - button "Otomasi" [ref=f23e329]
+      - generic [ref=f23e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f23e47]
+        - generic [ref=f23e48]:
+          - link "Pusat Dokumen" [ref=f23e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f23e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f23e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f23e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f23e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f23e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f23e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f23e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f23e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f23e88]:
+    - banner [ref=f23e89]:
+      - combobox [ref=f23e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f23e95]
+        - generic [ref=f23e96]:
+          - generic [ref=f23e97]: ⌘
+          - generic [ref=f23e98]: K
+      - generic [ref=f23e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f23e101]'
+        - button [ref=f23e335]:
+          - generic [ref=f23e114]:
+            - text: "Workspace:"
+            - generic [ref=f23e115]:
+              - img "Craft Logo" [ref=f23e336]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f23e118]
+        - button [ref=f23e123]:
+          - generic [aria-hidden] [ref=f23e124]: QU
+    - main [ref=f23e125]:
+      - generic [ref=f23e1432]:
+        - generic [ref=f23e1433]:
+          - generic [ref=f23e1434]:
+            - paragraph [ref=f23e1435]: Produk & Desain
+            - heading "Pustaka Desain 3D" [level=1] [ref=f23e1436]
+            - paragraph [ref=f23e1437]: Kelola file STL, 3MF, STEP, SCAD, OBJ, dan BLEND dengan metadata versi yang aman.
+          - link [ref=f23e1438] [cursor=pointer]:
+            - /url: /app/craft/products
+            - button "Katalog Produk" [ref=f23e1439]
+        - generic [ref=f23e1440]:
+          - generic [ref=f23e1441]:
+            - generic [ref=f23e1442]:
+              - text: Filter produk
+              - combobox "Filter produk" [ref=f23e1443]:
+                - option "Semua desain Craft"
+                - option "Produk QA Edited 20260914_2256 (PRD-000001)" [selected]
+                - option "Produk Layanan QA 20260914_2256 (QA-SVC-20260914-2256)"
+            - button "Muat Ulang" [ref=f23e1444]
+          - generic [ref=f23e1450]:
+            - generic [ref=f23e1451]:
+              - text: File desain
+              - button "File desain" [ref=f23e1452]
+            - generic [ref=f23e1453]:
+              - text: Nama desain
+              - textbox "Nama desain" [ref=f23e1454]
+            - generic [ref=f23e1455]:
+              - text: Versi
+              - textbox "Versi" [ref=f23e1456]:
+                - /placeholder: v1.0
+            - generic [ref=f23e1457]:
+              - text: Catatan
+              - textbox "Catatan" [ref=f23e1458]
+            - generic [ref=f23e1459]:
+              - checkbox "Tandai sebagai file final" [ref=f23e1460]
+              - text: Tandai sebagai file final
+            - button "Unggah Desain" [ref=f23e1462]
+        - generic [ref=f23e1467]:
+          - heading "File Tersimpan" [level=2] [ref=f23e1469]
+          - generic [ref=f23e1470]:
+            - paragraph [ref=f23e1475]: Belum Ada File Desain
+            - paragraph [ref=f23e1476]: Unggah desain saat siap digunakan di perencanaan produksi.

@@ -1,0 +1,85 @@
+- generic [ref=f15e34]:
+  - complementary [ref=f15e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f15e37]
+    - generic [ref=f15e38]:
+      - generic [ref=f15e39]:
+        - heading "GLOBAL" [level=3] [ref=f15e40]
+        - link "Dasbor Global" [ref=f15e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f15e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f15e49]
+        - generic [ref=f15e50]:
+          - button "Proyek" [ref=f15e52]
+          - link "Klien" [ref=f15e58] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f15e64]:
+        - heading "BISNIS" [level=3] [ref=f15e65]
+        - button "Keuangan" [ref=f15e68]
+      - heading "SISTEM" [level=3] [ref=f15e76]
+      - generic [ref=f15e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f15e78]
+        - generic [ref=f15e79]:
+          - link "Pusat Dokumen" [ref=f15e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f15e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f15e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f15e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f15e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f15e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f15e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f15e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f15e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f15e119]:
+    - banner [ref=f15e120]:
+      - combobox [ref=f15e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f15e126]
+        - generic [ref=f15e127]:
+          - generic [ref=f15e128]: ⌘
+          - generic [ref=f15e129]: K
+      - generic [ref=f15e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f15e132]'
+        - button [ref=f15e141]:
+          - generic [ref=f15e145]:
+            - text: "Workspace:"
+            - generic [ref=f15e146]:
+              - img "Studio Logo" [ref=f15e147]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f15e149]:
+          - generic [ref=f15e153]: "2"
+        - button [ref=f15e155]:
+          - generic [aria-hidden] [ref=f15e156]: QU
+    - main [ref=f15e157]:
+      - generic [ref=f15e159]:
+        - generic [ref=f15e160]:
+          - heading "Ringkasan Analitik" [level=1] [ref=f15e161]
+          - paragraph [ref=f15e162]: "Terakhir diperbarui: 15/9/2026, 11.27.01"
+        - generic [ref=f15e163]:
+          - generic [ref=f15e165]:
+            - paragraph [ref=f15e166]: Jumlah Pesanan
+            - paragraph [ref=f15e167]: "0"
+          - generic [ref=f15e169]:
+            - paragraph [ref=f15e170]: Nilai Pesanan
+            - paragraph [ref=f15e171]: Rp 0
+          - generic [ref=f15e173]:
+            - paragraph [ref=f15e174]: Kas Diterima
+            - paragraph [ref=f15e175]: Rp 0
+          - generic [ref=f15e177]:
+            - paragraph [ref=f15e178]: Material Terpakai
+            - paragraph [ref=f15e179]: 0.00 g
+          - generic [ref=f15e181]:
+            - paragraph [ref=f15e182]: Print Success Rate
+            - paragraph [ref=f15e183]: —
+        - generic [ref=f15e184]:
+          - heading "Produk Teratas" [level=3] [ref=f15e186]
+          - paragraph [ref=f15e188]: Belum ada data untuk periode ini.
+        - generic [ref=f15e189]:
+          - heading "Tren Nilai Pesanan" [level=3] [ref=f15e191]
+          - paragraph [ref=f15e193]: Belum ada data untuk periode ini.

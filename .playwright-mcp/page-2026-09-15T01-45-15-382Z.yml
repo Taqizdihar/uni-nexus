@@ -1,0 +1,101 @@
+- generic [ref=f39e66]:
+  - complementary [ref=f39e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f39e69]
+    - generic [ref=f39e70]:
+      - generic [ref=f39e71]:
+        - heading "GLOBAL" [level=3] [ref=f39e72]
+        - link "Dasbor Global" [ref=f39e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f39e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f39e81]
+        - generic [ref=f39e82]:
+          - generic [ref=f39e362]:
+            - button "Pesanan" [ref=f39e363]
+            - generic [ref=f39e459]:
+              - link "Semua Pesanan" [ref=f39e460] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f39e461] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f39e462] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f39e463] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f39e464] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [active] [ref=f39e465] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f39e466] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f39e467] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f39e468] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f39e372]
+          - button "Produk & Desain" [ref=f39e381]
+          - button "Printer" [ref=f39e392]
+          - button "Material" [ref=f39e401]
+      - generic [ref=f39e96]:
+        - heading "BISNIS" [level=3] [ref=f39e97]
+        - generic [ref=f39e98]:
+          - button "Pelanggan & Mitra" [ref=f39e409]
+          - button "Pengadaan" [ref=f39e419]
+          - button "Keuangan" [ref=f39e100]
+          - button "Laporan & Analitik" [ref=f39e430]
+      - generic [ref=f39e107]:
+        - heading "SISTEM" [level=3] [ref=f39e108]
+        - generic [ref=f39e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f39e441]
+          - button "Otomasi" [ref=f39e451]
+      - generic [ref=f39e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f39e110]
+        - generic [ref=f39e111]:
+          - link "Pusat Dokumen" [ref=f39e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f39e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f39e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f39e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f39e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f39e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f39e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f39e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f39e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f39e151]:
+    - banner [ref=f39e152]:
+      - combobox [ref=f39e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f39e158]
+        - generic [ref=f39e159]:
+          - generic [ref=f39e160]: ⌘
+          - generic [ref=f39e161]: K
+      - generic [ref=f39e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f39e164]'
+        - button [ref=f39e457]:
+          - generic [ref=f39e177]:
+            - text: "Workspace:"
+            - generic [ref=f39e178]:
+              - img "Craft Logo" [ref=f39e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f39e181]:
+          - generic [ref=f39e185]: "2"
+        - button [ref=f39e187]:
+          - generic [aria-hidden] [ref=f39e188]: QU
+    - main [ref=f39e189]:
+      - generic [ref=f39e610]:
+        - generic [ref=f39e611]:
+          - generic [ref=f39e613]:
+            - paragraph [ref=f39e614]: Craft Orders
+            - heading "Pesanan Custom" [level=1] [ref=f39e615]
+            - paragraph [ref=f39e616]: Pesanan dengan spesifikasi kustom.
+          - button "Pesanan Baru" [ref=f39e618]
+        - generic [ref=f39e621]:
+          - generic [ref=f39e622]: ✦
+          - heading "Belum Ada Pesanan Custom" [level=3] [ref=f39e624]
+          - paragraph [ref=f39e625]: Pesanan Craft dari marketplace, pelanggan langsung, dan mitra akan muncul di sini.
+          - button "Buat Pesanan" [ref=f39e627]

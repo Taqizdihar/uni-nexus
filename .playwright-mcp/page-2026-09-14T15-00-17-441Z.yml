@@ -1,0 +1,104 @@
+- generic [ref=f10e1234]:
+  - complementary [ref=f10e1235]:
+    - heading "UNI-NEXUS" [level=1] [ref=f10e1237]
+    - generic [ref=f10e1238]:
+      - generic [ref=f10e1239]:
+        - heading "GLOBAL" [level=3] [ref=f10e1240]
+        - link "Dasbor Global" [ref=f10e1242] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f10e1248]:
+        - heading "OPERASIONAL" [level=3] [ref=f10e1249]
+        - generic [ref=f10e1250]:
+          - button "Pesanan" [ref=f10e1252]
+          - button "Produksi" [ref=f10e1261]
+          - button "Produk & Desain" [ref=f10e1270]
+          - button "Printer" [ref=f10e1281]
+          - button "Material" [ref=f10e1290]
+      - generic [ref=f10e1297]:
+        - heading "BISNIS" [level=3] [ref=f10e1298]
+        - generic [ref=f10e1299]:
+          - button "Pelanggan & Mitra" [ref=f10e1301]
+          - button "Pengadaan" [ref=f10e1311]
+          - generic [ref=f10e1321]:
+            - button "Keuangan" [ref=f10e1322]
+            - generic [ref=f10e2286]:
+              - link "Ringkasan Keuangan" [ref=f10e2287] [cursor=pointer]:
+                - /url: /app/craft/finance
+              - link "Transaksi" [ref=f10e2288] [cursor=pointer]:
+                - /url: /app/craft/finance/transactions
+              - link "Kas & Bank" [ref=f10e2289] [cursor=pointer]:
+                - /url: /app/craft/finance/treasury
+              - link "Pendapatan" [ref=f10e2290] [cursor=pointer]:
+                - /url: /app/craft/finance/income
+              - link "Pengeluaran" [ref=f10e2291] [cursor=pointer]:
+                - /url: /app/craft/finance/expenses
+              - link "Piutang Pelanggan" [ref=f10e2292] [cursor=pointer]:
+                - /url: /app/craft/finance/receivables
+              - link "Hutang Pemasok" [ref=f10e2293] [cursor=pointer]:
+                - /url: /app/craft/finance/payables
+              - link "HPP & Profitabilitas" [ref=f10e2294] [cursor=pointer]:
+                - /url: /app/craft/finance/profitability
+              - link "Kalkulator Biaya Produk" [ref=f10e2295] [cursor=pointer]:
+                - /url: /app/craft/finance/calculator
+              - link "Arus Kas" [ref=f10e2296] [cursor=pointer]:
+                - /url: /app/craft/finance/cash-flow
+              - link "Anggaran" [ref=f10e2297] [cursor=pointer]:
+                - /url: /app/craft/finance/budgets
+              - link "Jurnal & Periode" [ref=f10e2298] [cursor=pointer]:
+                - /url: /app/craft/finance/accounting
+          - button "Laporan & Analitik" [ref=f10e1330]
+      - generic [ref=f10e1339]:
+        - heading "SISTEM" [level=3] [ref=f10e1340]
+        - generic [ref=f10e1341]:
+          - button "Marketplace & Kanal Penjualan" [ref=f10e1343]
+          - button "Otomasi" [ref=f10e1353]
+      - generic [ref=f10e1359]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f10e1360]
+        - generic [ref=f10e1361]:
+          - link "Keuangan Terpadu" [ref=f10e1362] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f10e1366] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f10e1371] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f10e1374] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f10e1378] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f10e1384] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f10e1387] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f10e1393] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f10e1396] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f10e1402] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f10e1407] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f10e1411]:
+    - banner [ref=f10e1412]:
+      - combobox [ref=f10e1414]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f10e1418]
+        - generic [ref=f10e1419]:
+          - generic [ref=f10e1420]: ⌘
+          - generic [ref=f10e1421]: K
+      - generic [ref=f10e1422]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f10e1424]'
+        - button [ref=f10e1433]:
+          - generic [ref=f10e1437]:
+            - text: "Workspace:"
+            - generic [ref=f10e1438]:
+              - img "Craft Logo" [ref=f10e1439]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f10e1441]
+        - button [ref=f10e1446]
+    - main [ref=f10e1447]:
+      - generic [ref=f10e2477]:
+        - generic [ref=f10e2478]:
+          - generic [ref=f10e2479]:
+            - heading "Anggaran" [level=1] [ref=f10e2480]
+            - paragraph [ref=f10e2481]: Anggaran per periode untuk unit Craft, dibandingkan dengan realisasi pengeluaran yang sudah dibayar.
+          - button "Buat Anggaran" [ref=f10e2482]
+        - generic [ref=f10e2484]: Belum ada anggaran yang dibuat.

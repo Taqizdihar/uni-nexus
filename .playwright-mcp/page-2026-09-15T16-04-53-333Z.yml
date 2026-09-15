@@ -1,0 +1,110 @@
+- generic [ref=f13e6]:
+  - complementary [ref=f13e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f13e9]
+    - generic [ref=f13e10]:
+      - generic [ref=f13e11]:
+        - heading "GLOBAL" [level=3] [ref=f13e12]
+        - link "Dasbor Global" [ref=f13e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f13e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f13e21]
+        - generic [ref=f13e22]:
+          - button "Pesanan" [ref=f13e24]
+          - button "Produksi" [ref=f13e33]
+          - button "Produk & Desain" [ref=f13e42]
+          - button "Printer" [ref=f13e53]
+          - button "Material" [ref=f13e62]
+      - generic [ref=f13e69]:
+        - heading "BISNIS" [level=3] [ref=f13e70]
+        - generic [ref=f13e71]:
+          - button "Pelanggan & Mitra" [ref=f13e73]
+          - button "Pengadaan" [ref=f13e83]
+          - button "Keuangan" [ref=f13e94]
+          - button "Laporan & Analitik" [ref=f13e102]
+      - generic [ref=f13e111]:
+        - heading "SISTEM" [level=3] [ref=f13e112]
+        - generic [ref=f13e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f13e115]
+          - button "Otomasi" [ref=f13e125]
+      - generic [ref=f13e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f13e132]
+        - generic [ref=f13e133]:
+          - link "Pusat Dokumen" [ref=f13e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f13e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f13e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f13e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f13e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f13e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f13e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f13e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f13e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f13e173]:
+    - banner [ref=f13e174]:
+      - combobox [ref=f13e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f13e180]
+        - generic [ref=f13e181]:
+          - generic [ref=f13e182]: ⌘
+          - generic [ref=f13e183]: K
+      - generic [ref=f13e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f13e186]'
+        - button [ref=f13e195]:
+          - generic [ref=f13e199]:
+            - text: "Workspace:"
+            - generic [ref=f13e200]:
+              - img "Craft Logo" [ref=f13e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f13e203]:
+          - generic [ref=f13e207]: "3"
+        - button [ref=f13e209]:
+          - generic [aria-hidden] [ref=f13e210]: AR
+    - main [ref=f13e211]:
+      - generic [ref=f13e261]:
+        - generic [ref=f13e262]:
+          - generic [ref=f13e263]:
+            - paragraph [ref=f13e264]: Fitur Global
+            - heading "Koneksi Baru" [level=1] [ref=f13e265]
+            - paragraph [ref=f13e266]: Ikuti langkah berikut untuk menghubungkan layanan eksternal.
+          - link [ref=f13e268] [cursor=pointer]:
+            - /url: /app/integrations/connections
+            - button "Kembali" [ref=f13e269]
+        - generic [ref=f13e272]:
+          - generic [ref=f13e273]: 1. Pilih Provider
+          - generic [ref=f13e274]: 2. Pilih Scope
+          - generic [ref=f13e275]: 3. Konfigurasi
+          - generic [ref=f13e276]: 4. Kredensial
+          - generic [ref=f13e277]: 5. Review
+          - generic [ref=f13e278]: 6. Simpan & Uji Koneksi
+        - generic [ref=f13e280]:
+          - generic [ref=f13e281]:
+            - generic [ref=f13e282] [cursor=pointer]:
+              - radio "Google Drive Verifikasi akses folder Google Drive menggunakan Service Account." [ref=f13e283]
+              - text: Google Drive
+              - paragraph [ref=f13e284]: Verifikasi akses folder Google Drive menggunakan Service Account.
+            - generic [ref=f13e285] [cursor=pointer]:
+              - radio "Google Sheets Verifikasi akses spreadsheet Google Sheets menggunakan Service Account." [ref=f13e286]
+              - text: Google Sheets
+              - paragraph [ref=f13e287]: Verifikasi akses spreadsheet Google Sheets menggunakan Service Account.
+            - generic [ref=f13e288] [cursor=pointer]:
+              - radio "Google Calendar Verifikasi akses kalender Google Calendar menggunakan Service Account." [ref=f13e289]
+              - text: Google Calendar
+              - paragraph [ref=f13e290]: Verifikasi akses kalender Google Calendar menggunakan Service Account.
+            - generic [ref=f13e291] [cursor=pointer]:
+              - radio "WhatsApp Cloud API Verifikasi nomor WhatsApp Business melalui Meta Graph API." [ref=f13e292]
+              - text: WhatsApp Cloud API
+              - paragraph [ref=f13e293]: Verifikasi nomor WhatsApp Business melalui Meta Graph API.
+            - generic [ref=f13e294] [cursor=pointer]:
+              - radio "Mock Test Connector (Development Only) Connector simulasi untuk smoke test dan browser acceptance test. Tidak pernah tersedia di production." [ref=f13e295]
+              - text: Mock Test Connector (Development Only)
+              - paragraph [ref=f13e296]: Connector simulasi untuk smoke test dan browser acceptance test. Tidak pernah tersedia di production.
+          - generic [ref=f13e297]:
+            - button "Sebelumnya" [disabled]
+            - button "Selanjutnya" [disabled]

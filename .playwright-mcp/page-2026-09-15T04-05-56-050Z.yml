@@ -1,0 +1,126 @@
+- generic [ref=f8e66]:
+  - complementary [ref=f8e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f8e69]
+    - generic [ref=f8e70]:
+      - generic [ref=f8e71]:
+        - heading "GLOBAL" [level=3] [ref=f8e72]
+        - link "Dasbor Global" [ref=f8e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f8e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f8e81]
+        - generic [ref=f8e82]:
+          - button "Pesanan" [ref=f8e363]
+          - button "Produksi" [ref=f8e372]
+          - button "Produk & Desain" [ref=f8e381]
+          - button "Printer" [ref=f8e392]
+          - button "Material" [ref=f8e401]
+      - generic [ref=f8e96]:
+        - heading "BISNIS" [level=3] [ref=f8e97]
+        - generic [ref=f8e98]:
+          - button "Pelanggan & Mitra" [ref=f8e409]
+          - button "Pengadaan" [ref=f8e419]
+          - generic [ref=f8e99]:
+            - button "Keuangan" [ref=f8e100]
+            - generic [ref=f8e459]:
+              - link "Ringkasan Keuangan" [ref=f8e460] [cursor=pointer]:
+                - /url: /app/craft/finance
+              - link "Transaksi" [ref=f8e461] [cursor=pointer]:
+                - /url: /app/craft/finance/transactions
+              - link "Kas & Bank" [ref=f8e462] [cursor=pointer]:
+                - /url: /app/craft/finance/treasury
+              - link "Pendapatan" [ref=f8e463] [cursor=pointer]:
+                - /url: /app/craft/finance/income
+              - link "Pengeluaran" [ref=f8e464] [cursor=pointer]:
+                - /url: /app/craft/finance/expenses
+              - link "Piutang Pelanggan" [ref=f8e465] [cursor=pointer]:
+                - /url: /app/craft/finance/receivables
+              - link "Hutang Pemasok" [ref=f8e466] [cursor=pointer]:
+                - /url: /app/craft/finance/payables
+              - link "HPP & Profitabilitas" [ref=f8e467] [cursor=pointer]:
+                - /url: /app/craft/finance/profitability
+              - link "Kalkulator Biaya Produk" [ref=f8e468] [cursor=pointer]:
+                - /url: /app/craft/finance/calculator
+              - link "Arus Kas" [ref=f8e469] [cursor=pointer]:
+                - /url: /app/craft/finance/cash-flow
+              - link "Anggaran" [ref=f8e470] [cursor=pointer]:
+                - /url: /app/craft/finance/budgets
+              - link "Jurnal & Periode" [ref=f8e471] [cursor=pointer]:
+                - /url: /app/craft/finance/accounting
+          - button "Laporan & Analitik" [ref=f8e430]
+      - generic [ref=f8e107]:
+        - heading "SISTEM" [level=3] [ref=f8e108]
+        - generic [ref=f8e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f8e441]
+          - button "Otomasi" [ref=f8e451]
+      - generic [ref=f8e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f8e110]
+        - generic [ref=f8e111]:
+          - link "Pusat Dokumen" [ref=f8e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f8e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f8e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f8e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f8e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f8e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f8e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f8e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f8e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f8e151]:
+    - banner [ref=f8e152]:
+      - combobox [ref=f8e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f8e158]
+        - generic [ref=f8e159]:
+          - generic [ref=f8e160]: ⌘
+          - generic [ref=f8e161]: K
+      - generic [ref=f8e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f8e164]'
+        - button [ref=f8e457]:
+          - generic [ref=f8e177]:
+            - text: "Workspace:"
+            - generic [ref=f8e178]:
+              - img "Craft Logo" [ref=f8e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f8e181]:
+          - generic [ref=f8e185]: "2"
+        - button [ref=f8e187]:
+          - generic [aria-hidden] [ref=f8e188]: QU
+    - main [ref=f8e189]:
+      - generic [ref=f8e960]:
+        - generic [ref=f8e961]:
+          - heading "Jurnal & Periode" [level=1] [ref=f8e962]
+          - paragraph [ref=f8e963]: Jurnal double-entry yang diposting otomatis dari transaksi Craft (250 entri terakhir).
+        - generic [ref=f8e964]:
+          - generic [ref=f8e965]:
+            - heading "Jurnal" [level=3] [ref=f8e966]
+            - textbox "Cari nomor, sumber, atau deskripsi..." [ref=f8e967]
+          - table [ref=f8e969]:
+            - rowgroup [ref=f8e970]:
+              - row [ref=f8e971]:
+                - columnheader "Nomor" [ref=f8e972]
+                - columnheader "Tanggal" [ref=f8e973]
+                - columnheader "Sumber" [ref=f8e974]
+                - columnheader "Deskripsi" [ref=f8e975]
+                - columnheader "Debit" [ref=f8e976]
+                - columnheader "Kredit" [ref=f8e977]
+                - columnheader "Saldo" [ref=f8e978]
+            - rowgroup [ref=f8e979]:
+              - row [ref=f8e980] [cursor=pointer]:
+                - cell "JRN-000005" [ref=f8e981]
+                - cell "2/9/2026" [ref=f8e982]
+                - cell "studio_expense_reversal" [ref=f8e983]
+                - 'cell "Pembalikan EXP-000001: Smoke test reversal" [ref=f8e984]'
+                - cell "Rp 100.000" [ref=f8e985]
+                - cell "Rp 100.000" [ref=f8e986]
+                - cell "Seimbang" [ref=f8e987]
+        - generic [ref=f8e989]:
+          - heading "Periode Keuangan" [level=3] [ref=f8e991]
+          - generic [ref=f8e992]: Periode keuangan berlaku untuk seluruh organisasi. Pembuatan, penutupan, dan pembukaan kembali periode dikelola terpusat di Unified Finance untuk menjaga satu sumber kebenaran.
+          - generic [ref=f8e993]: Belum ada periode keuangan yang dikonfigurasi.

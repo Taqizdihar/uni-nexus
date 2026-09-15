@@ -1,0 +1,134 @@
+- generic [ref=f10e6]:
+  - complementary [ref=f10e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f10e9]
+    - generic [ref=f10e10]:
+      - generic [ref=f10e11]:
+        - heading "GLOBAL" [level=3] [ref=f10e12]
+        - link "Dasbor Global" [ref=f10e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f10e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f10e21]
+        - generic [ref=f10e22]:
+          - button "Pesanan" [ref=f10e224]
+          - button "Produksi" [ref=f10e233]
+          - button "Produk & Desain" [ref=f10e242]
+          - button "Printer" [ref=f10e253]
+          - button "Material" [ref=f10e262]
+      - generic [ref=f10e36]:
+        - heading "BISNIS" [level=3] [ref=f10e37]
+        - generic [ref=f10e38]:
+          - generic [ref=f10e269]:
+            - button "Pelanggan & Mitra" [ref=f10e270]
+            - generic [ref=f10e279]:
+              - link "Pelanggan" [ref=f10e280] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f10e281] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f10e283]
+          - button "Keuangan" [ref=f10e40]
+          - button "Laporan & Analitik" [ref=f10e294]
+      - generic [ref=f10e47]:
+        - heading "SISTEM" [level=3] [ref=f10e48]
+        - generic [ref=f10e303]:
+          - button "Marketplace & Kanal Penjualan" [ref=f10e305]
+          - button "Otomasi" [ref=f10e315]
+      - generic [ref=f10e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f10e50]
+        - generic [ref=f10e51]:
+          - link "Pusat Dokumen" [ref=f10e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f10e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f10e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f10e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f10e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f10e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f10e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f10e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f10e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f10e91]:
+    - banner [ref=f10e92]:
+      - combobox [ref=f10e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f10e98]
+        - generic [ref=f10e99]:
+          - generic [ref=f10e100]: ⌘
+          - generic [ref=f10e101]: K
+      - generic [ref=f10e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f10e104]'
+        - button [ref=f10e321]:
+          - generic [ref=f10e117]:
+            - text: "Workspace:"
+            - generic [ref=f10e118]:
+              - img "Craft Logo" [ref=f10e322]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f10e121]:
+          - generic [ref=f10e125]: "2"
+        - button [ref=f10e127]:
+          - generic [aria-hidden] [ref=f10e128]: QU
+    - main [ref=f10e129]:
+      - generic [ref=f10e131]:
+        - button "Kembali" [ref=f10e132]
+        - generic [ref=f10e135]:
+          - generic [ref=f10e136]:
+            - generic [ref=f10e137]:
+              - generic [ref=f10e138]: CQ
+              - generic [ref=f10e139]:
+                - paragraph [ref=f10e140]: CUS-000023
+                - heading "Customer QA Edited 091507" [level=1] [ref=f10e141]
+                - generic [ref=f10e142]:
+                  - generic [ref=f10e143]: Perusahaan
+                  - generic [ref=f10e144]: Aktif
+            - generic [ref=f10e145]:
+              - button "Pesanan Baru" [ref=f10e146]
+              - button "Edit" [ref=f10e151]
+              - button "Promosikan Jadi Mitra" [ref=f10e154]
+              - button "Nonaktifkan" [ref=f10e157]
+          - generic [ref=f10e158]:
+            - generic [ref=f10e160]:
+              - paragraph [ref=f10e161]: Total Pesanan
+              - paragraph [ref=f10e162]: "0"
+            - generic [ref=f10e164]:
+              - paragraph [ref=f10e165]: Nilai Pesanan
+              - paragraph [ref=f10e166]: Rp 0
+            - generic [ref=f10e168]:
+              - paragraph [ref=f10e169]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f10e170]: Rp 0
+            - generic [ref=f10e172]:
+              - paragraph [ref=f10e173]: Saldo Invoice
+              - paragraph [ref=f10e174]: Rp 0
+        - navigation "Profil pelanggan" [ref=f10e175]:
+          - button "Ringkasan" [ref=f10e176]
+          - button "Kontak" [active] [ref=f10e177]
+          - button "Pesanan" [ref=f10e178]
+          - button "Keuangan" [ref=f10e179]
+        - generic [ref=f10e323]:
+          - generic [ref=f10e324]:
+            - generic [ref=f10e325]:
+              - heading "Kontak" [level=2] [ref=f10e326]
+              - paragraph [ref=f10e327]: PIC dan kontak komunikasi pelanggan.
+            - button "Tambah Kontak" [ref=f10e328]
+          - generic [ref=f10e332]:
+            - generic [ref=f10e333]:
+              - generic [ref=f10e334]:
+                - generic [ref=f10e335]:
+                  - paragraph [ref=f10e336]: PIC QA A Edited 091507
+                  - generic [ref=f10e337]: MITRA
+                - paragraph [ref=f10e338]: PIC Utama Edited QA · pic.a.edited.091507@example.test
+              - generic [ref=f10e339]:
+                - button "Edit" [ref=f10e340]
+                - button [ref=f10e341]
+            - generic [ref=f10e345]:
+              - generic [ref=f10e346]:
+                - paragraph [ref=f10e348]: PIC QA B 091507
+                - paragraph [ref=f10e349]: Kontak Alternatif QA · pic.b.091507@example.test
+              - generic [ref=f10e350]:
+                - button "Edit" [ref=f10e351]
+                - button "Jadikan Utama" [ref=f10e352]
+                - button [ref=f10e353]

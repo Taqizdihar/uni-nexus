@@ -1,0 +1,140 @@
+- generic [ref=f38e6]:
+  - complementary [ref=f38e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f38e9]
+    - generic [ref=f38e10]:
+      - generic [ref=f38e11]:
+        - heading "GLOBAL" [level=3] [ref=f38e12]
+        - link "Dasbor Global" [ref=f38e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f38e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f38e21]
+        - generic [ref=f38e22]:
+          - button "Pesanan" [ref=f38e148]
+          - button "Produksi" [ref=f38e157]
+          - button "Produk & Desain" [ref=f38e166]
+          - button "Printer" [ref=f38e177]
+          - button "Material" [ref=f38e186]
+      - generic [ref=f38e36]:
+        - heading "BISNIS" [level=3] [ref=f38e37]
+        - generic [ref=f38e38]:
+          - button "Pelanggan & Mitra" [ref=f38e194]
+          - generic [ref=f38e203]:
+            - button "Pengadaan" [ref=f38e204]
+            - generic [ref=f38e214]:
+              - link "Ringkasan Pengadaan" [active] [ref=f38e215] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f38e216] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f38e217] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f38e218] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f38e219] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [ref=f38e220] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [ref=f38e221] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f38e40]
+          - button "Laporan & Analitik" [ref=f38e223]
+      - generic [ref=f38e47]:
+        - heading "SISTEM" [level=3] [ref=f38e48]
+        - generic [ref=f38e232]:
+          - button "Marketplace & Kanal Penjualan" [ref=f38e234]
+          - button "Otomasi" [ref=f38e244]
+      - generic [ref=f38e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f38e50]
+        - generic [ref=f38e51]:
+          - link "Pusat Dokumen" [ref=f38e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f38e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f38e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f38e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f38e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f38e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f38e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f38e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f38e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f38e91]:
+    - banner [ref=f38e92]:
+      - combobox [ref=f38e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f38e98]
+        - generic [ref=f38e99]:
+          - generic [ref=f38e100]: ⌘
+          - generic [ref=f38e101]: K
+      - generic [ref=f38e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f38e104]'
+        - button [ref=f38e250]:
+          - generic [ref=f38e117]:
+            - text: "Workspace:"
+            - generic [ref=f38e118]:
+              - img "Craft Logo" [ref=f38e251]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f38e121]:
+          - generic [ref=f38e125]: "2"
+        - button [ref=f38e127]:
+          - generic [aria-hidden] [ref=f38e128]: QU
+    - main [ref=f38e129]:
+      - generic [ref=f38e252]:
+        - generic [ref=f38e253]:
+          - generic [ref=f38e254]:
+            - paragraph [ref=f38e255]: PENGADAAN
+            - heading "Ringkasan Pengadaan" [level=1] [ref=f38e256]
+            - paragraph [ref=f38e257]: Pantau kebutuhan pembelian, pesanan pemasok, penerimaan barang, dan kewajiban tagihan Craft.
+          - generic [ref=f38e258]:
+            - link [ref=f38e259] [cursor=pointer]:
+              - /url: /app/craft/procurement/requests/new
+              - button "Permintaan Baru" [ref=f38e260]
+            - link [ref=f38e261] [cursor=pointer]:
+              - /url: /app/craft/procurement/orders/new
+              - button "Buat PO" [ref=f38e262]
+        - generic [ref=f38e263]:
+          - link [ref=f38e264] [cursor=pointer]:
+            - /url: /app/craft/procurement/requests?status=submitted
+            - paragraph [ref=f38e268]: "0"
+            - paragraph [ref=f38e269]: Permintaan Menunggu Persetujuan
+          - link [ref=f38e270] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders
+            - paragraph [ref=f38e276]: "0"
+            - paragraph [ref=f38e277]: PO Aktif
+          - link [ref=f38e278] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders?status=partial
+            - paragraph [ref=f38e281]: "0"
+            - paragraph [ref=f38e282]: PO Terlambat
+          - link [ref=f38e283] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders
+            - paragraph [ref=f38e286]: "0"
+            - paragraph [ref=f38e287]: Diharapkan Minggu Ini
+          - link [ref=f38e288] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders
+            - paragraph [ref=f38e292]: Rp 0
+            - paragraph [ref=f38e293]: Nilai PO Terbuka
+          - link [ref=f38e294] [cursor=pointer]:
+            - /url: /app/craft/procurement/invoices
+            - paragraph [ref=f38e298]: Rp 0
+            - paragraph [ref=f38e299]: Tagihan Belum Dibayar
+          - link [ref=f38e300] [cursor=pointer]:
+            - /url: /app/craft/materials/low-stock
+            - paragraph [ref=f38e307]: "0"
+            - paragraph [ref=f38e308]: Material Stok Menipis
+        - generic [ref=f38e309]:
+          - generic [ref=f38e310]:
+            - heading "Material stok menipis tanpa pengadaan terbuka" [level=2] [ref=f38e312]
+            - paragraph [ref=f38e314]: Semua material menipis sudah memiliki pengadaan terbuka.
+          - generic [ref=f38e315]:
+            - heading "Permintaan menunggu persetujuan" [level=2] [ref=f38e317]
+            - paragraph [ref=f38e319]: Tidak ada permintaan yang menunggu keputusan.
+          - generic [ref=f38e320]:
+            - heading "PO yang terlambat / parsial" [level=2] [ref=f38e322]
+            - paragraph [ref=f38e324]: Tidak ada PO yang memerlukan perhatian.
+          - generic [ref=f38e325]:
+            - heading "Barang ditolak dan tagihan dekat jatuh tempo" [level=2] [ref=f38e327]
+            - paragraph [ref=f38e329]: Tidak ada pengecualian penerimaan atau tagihan mendesak.

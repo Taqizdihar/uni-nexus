@@ -1,0 +1,510 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [active] [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e718]:
+        - generic [ref=f3e719]:
+          - generic [ref=f3e720]:
+            - paragraph [ref=f3e721]: Sistem Craft
+            - heading "Pemicu & Aksi" [level=1] [ref=f3e722]
+            - paragraph [ref=f3e723]: Katalog allowlist Automation dan diagnostik event domain terbaru.
+          - link [ref=f3e725] [cursor=pointer]:
+            - /url: /app/craft/automations/events
+            - button "Buka Inbox Event" [ref=f3e726]
+        - generic [ref=f3e732]:
+          - generic [ref=f3e733]:
+            - heading "Pemicu Terdaftar" [level=3] [ref=f3e735]
+            - generic [ref=f3e736]:
+              - generic [ref=f3e737]:
+                - generic [ref=f3e738]:
+                  - generic [ref=f3e739]:
+                    - paragraph [ref=f3e740]: order.created
+                    - paragraph [ref=f3e741]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e742]: craft_orders
+                - paragraph [ref=f3e743]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e744]:
+                - generic [ref=f3e745]:
+                  - generic [ref=f3e746]:
+                    - paragraph [ref=f3e747]: order.status_changed
+                    - paragraph [ref=f3e748]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e749]: craft_orders
+                - paragraph [ref=f3e750]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e751]:
+                - generic [ref=f3e752]:
+                  - generic [ref=f3e753]:
+                    - paragraph [ref=f3e754]: order.priority_changed
+                    - paragraph [ref=f3e755]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e756]: craft_orders
+                - paragraph [ref=f3e757]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e758]:
+                - generic [ref=f3e759]:
+                  - generic [ref=f3e760]:
+                    - paragraph [ref=f3e761]: order.completed
+                    - paragraph [ref=f3e762]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e763]: craft_orders
+                - paragraph [ref=f3e764]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e765]:
+                - generic [ref=f3e766]:
+                  - generic [ref=f3e767]:
+                    - paragraph [ref=f3e768]: order.cancelled
+                    - paragraph [ref=f3e769]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e770]: craft_orders
+                - paragraph [ref=f3e771]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e772]:
+                - generic [ref=f3e773]:
+                  - generic [ref=f3e774]:
+                    - paragraph [ref=f3e775]: order.returned
+                    - paragraph [ref=f3e776]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e777]: craft_orders
+                - paragraph [ref=f3e778]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e779]:
+                - generic [ref=f3e780]:
+                  - generic [ref=f3e781]:
+                    - paragraph [ref=f3e782]: order.deadline_approaching
+                    - paragraph [ref=f3e783]: Peristiwa pesanan Craft.
+                  - generic [ref=f3e784]: craft_orders
+                - paragraph [ref=f3e785]: "Field: Kode pesanan, Status pesanan, Status sebelumnya, Status baru, Tipe pesanan, Prioritas, Tenggat waktu, Total pesanan"
+              - generic [ref=f3e786]:
+                - generic [ref=f3e787]:
+                  - generic [ref=f3e788]:
+                    - paragraph [ref=f3e789]: production.job_created
+                    - paragraph [ref=f3e790]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e791]: craft_production
+                - paragraph [ref=f3e792]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e793]:
+                - generic [ref=f3e794]:
+                  - generic [ref=f3e795]:
+                    - paragraph [ref=f3e796]: production.job_started
+                    - paragraph [ref=f3e797]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e798]: craft_production
+                - paragraph [ref=f3e799]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e800]:
+                - generic [ref=f3e801]:
+                  - generic [ref=f3e802]:
+                    - paragraph [ref=f3e803]: production.job_completed
+                    - paragraph [ref=f3e804]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e805]: craft_production
+                - paragraph [ref=f3e806]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e807]:
+                - generic [ref=f3e808]:
+                  - generic [ref=f3e809]:
+                    - paragraph [ref=f3e810]: production.job_failed
+                    - paragraph [ref=f3e811]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e812]: craft_production
+                - paragraph [ref=f3e813]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e814]:
+                - generic [ref=f3e815]:
+                  - generic [ref=f3e816]:
+                    - paragraph [ref=f3e817]: production.qc_passed
+                    - paragraph [ref=f3e818]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e819]: craft_production
+                - paragraph [ref=f3e820]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e821]:
+                - generic [ref=f3e822]:
+                  - generic [ref=f3e823]:
+                    - paragraph [ref=f3e824]: production.qc_failed
+                    - paragraph [ref=f3e825]: Peristiwa pekerjaan produksi.
+                  - generic [ref=f3e826]: craft_production
+                - paragraph [ref=f3e827]: "Field: Kode pekerjaan cetak, Status pekerjaan, Jenis kegagalan, Perlu cetak ulang"
+              - generic [ref=f3e828]:
+                - generic [ref=f3e829]:
+                  - generic [ref=f3e830]:
+                    - paragraph [ref=f3e831]: printer.status_changed
+                    - paragraph [ref=f3e832]: Peristiwa printer atau perawatan.
+                  - generic [ref=f3e833]: craft_printers
+                - paragraph [ref=f3e834]: "Field: Kode printer, Nama printer, Status printer, Perawatan berikutnya"
+              - generic [ref=f3e835]:
+                - generic [ref=f3e836]:
+                  - generic [ref=f3e837]:
+                    - paragraph [ref=f3e838]: printer.issue_created
+                    - paragraph [ref=f3e839]: Peristiwa printer atau perawatan.
+                  - generic [ref=f3e840]: craft_printers
+                - paragraph [ref=f3e841]: "Field: Kode printer, Nama printer, Status printer, Perawatan berikutnya"
+              - generic [ref=f3e842]:
+                - generic [ref=f3e843]:
+                  - generic [ref=f3e844]:
+                    - paragraph [ref=f3e845]: printer.maintenance_recorded
+                    - paragraph [ref=f3e846]: Peristiwa printer atau perawatan.
+                  - generic [ref=f3e847]: craft_printers
+                - paragraph [ref=f3e848]: "Field: Kode printer, Nama printer, Status printer, Perawatan berikutnya"
+              - generic [ref=f3e849]:
+                - generic [ref=f3e850]:
+                  - generic [ref=f3e851]:
+                    - paragraph [ref=f3e852]: printer.maintenance_due
+                    - paragraph [ref=f3e853]: Peristiwa printer atau perawatan.
+                  - generic [ref=f3e854]: craft_printers
+                - paragraph [ref=f3e855]: "Field: Kode printer, Nama printer, Status printer, Perawatan berikutnya"
+              - generic [ref=f3e856]:
+                - generic [ref=f3e857]:
+                  - generic [ref=f3e858]:
+                    - paragraph [ref=f3e859]: material.stock_changed
+                    - paragraph [ref=f3e860]: Peristiwa persediaan material.
+                  - generic [ref=f3e861]: craft_materials
+                - paragraph [ref=f3e862]: "Field: Kode material, Nama material, Stok tersedia, Titik pesan ulang"
+              - generic [ref=f3e863]:
+                - generic [ref=f3e864]:
+                  - generic [ref=f3e865]:
+                    - paragraph [ref=f3e866]: material.low_stock
+                    - paragraph [ref=f3e867]: Peristiwa persediaan material.
+                  - generic [ref=f3e868]: craft_materials
+                - paragraph [ref=f3e869]: "Field: Kode material, Nama material, Stok tersedia, Titik pesan ulang"
+              - generic [ref=f3e870]:
+                - generic [ref=f3e871]:
+                  - generic [ref=f3e872]:
+                    - paragraph [ref=f3e873]: material.out_of_stock
+                    - paragraph [ref=f3e874]: Peristiwa persediaan material.
+                  - generic [ref=f3e875]: craft_materials
+                - paragraph [ref=f3e876]: "Field: Kode material, Nama material, Stok tersedia, Titik pesan ulang"
+              - generic [ref=f3e877]:
+                - generic [ref=f3e878]:
+                  - generic [ref=f3e879]:
+                    - paragraph [ref=f3e880]: material.waste_recorded
+                    - paragraph [ref=f3e881]: Peristiwa persediaan material.
+                  - generic [ref=f3e882]: craft_materials
+                - paragraph [ref=f3e883]: "Field: Kode material, Nama material, Stok tersedia, Titik pesan ulang"
+              - generic [ref=f3e884]:
+                - generic [ref=f3e885]:
+                  - generic [ref=f3e886]:
+                    - paragraph [ref=f3e887]: material.stock_received
+                    - paragraph [ref=f3e888]: Peristiwa persediaan material.
+                  - generic [ref=f3e889]: craft_materials
+                - paragraph [ref=f3e890]: "Field: Kode material, Nama material, Stok tersedia, Titik pesan ulang"
+              - generic [ref=f3e891]:
+                - generic [ref=f3e892]:
+                  - generic [ref=f3e893]:
+                    - paragraph [ref=f3e894]: procurement.request_created
+                    - paragraph [ref=f3e895]: Peristiwa pengadaan.
+                  - generic [ref=f3e896]: craft_procurement
+                - paragraph [ref=f3e897]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e898]:
+                - generic [ref=f3e899]:
+                  - generic [ref=f3e900]:
+                    - paragraph [ref=f3e901]: procurement.request_submitted
+                    - paragraph [ref=f3e902]: Peristiwa pengadaan.
+                  - generic [ref=f3e903]: craft_procurement
+                - paragraph [ref=f3e904]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e905]:
+                - generic [ref=f3e906]:
+                  - generic [ref=f3e907]:
+                    - paragraph [ref=f3e908]: procurement.request_approved
+                    - paragraph [ref=f3e909]: Peristiwa pengadaan.
+                  - generic [ref=f3e910]: craft_procurement
+                - paragraph [ref=f3e911]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e912]:
+                - generic [ref=f3e913]:
+                  - generic [ref=f3e914]:
+                    - paragraph [ref=f3e915]: procurement.po_created
+                    - paragraph [ref=f3e916]: Peristiwa pengadaan.
+                  - generic [ref=f3e917]: craft_procurement
+                - paragraph [ref=f3e918]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e919]:
+                - generic [ref=f3e920]:
+                  - generic [ref=f3e921]:
+                    - paragraph [ref=f3e922]: procurement.goods_received
+                    - paragraph [ref=f3e923]: Peristiwa pengadaan.
+                  - generic [ref=f3e924]: craft_procurement
+                - paragraph [ref=f3e925]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e926]:
+                - generic [ref=f3e927]:
+                  - generic [ref=f3e928]:
+                    - paragraph [ref=f3e929]: procurement.supplier_invoice_created
+                    - paragraph [ref=f3e930]: Peristiwa pengadaan.
+                  - generic [ref=f3e931]: craft_procurement
+                - paragraph [ref=f3e932]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e933]:
+                - generic [ref=f3e934]:
+                  - generic [ref=f3e935]:
+                    - paragraph [ref=f3e936]: procurement.supplier_invoice_overdue
+                    - paragraph [ref=f3e937]: Peristiwa pengadaan.
+                  - generic [ref=f3e938]: craft_procurement
+                - paragraph [ref=f3e939]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e940]:
+                - generic [ref=f3e941]:
+                  - generic [ref=f3e942]:
+                    - paragraph [ref=f3e943]: finance.customer_payment_confirmed
+                    - paragraph [ref=f3e944]: Peristiwa keuangan yang telah diposting.
+                  - generic [ref=f3e945]: craft_finance
+                - paragraph [ref=f3e946]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e947]:
+                - generic [ref=f3e948]:
+                  - generic [ref=f3e949]:
+                    - paragraph [ref=f3e950]: finance.supplier_payment_confirmed
+                    - paragraph [ref=f3e951]: Peristiwa keuangan yang telah diposting.
+                  - generic [ref=f3e952]: craft_finance
+                - paragraph [ref=f3e953]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e954]:
+                - generic [ref=f3e955]:
+                  - generic [ref=f3e956]:
+                    - paragraph [ref=f3e957]: finance.expense_paid
+                    - paragraph [ref=f3e958]: Peristiwa keuangan yang telah diposting.
+                  - generic [ref=f3e959]: craft_finance
+                - paragraph [ref=f3e960]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e961]:
+                - generic [ref=f3e962]:
+                  - generic [ref=f3e963]:
+                    - paragraph [ref=f3e964]: finance.customer_invoice_overdue
+                    - paragraph [ref=f3e965]: Peristiwa keuangan yang telah diposting.
+                  - generic [ref=f3e966]: craft_finance
+                - paragraph [ref=f3e967]: "Field: Kode invoice, Tanggal jatuh tempo, Nilai tertunggak"
+              - generic [ref=f3e968]:
+                - generic [ref=f3e969]:
+                  - generic [ref=f3e970]:
+                    - paragraph [ref=f3e971]: marketplace.order_imported
+                    - paragraph [ref=f3e972]: Peristiwa kanal penjualan.
+                  - generic [ref=f3e973]: craft_marketplace
+                - paragraph [ref=f3e974]: "Field: Tidak ada"
+              - generic [ref=f3e975]:
+                - generic [ref=f3e976]:
+                  - generic [ref=f3e977]:
+                    - paragraph [ref=f3e978]: marketplace.sync_completed
+                    - paragraph [ref=f3e979]: Peristiwa kanal penjualan.
+                  - generic [ref=f3e980]: craft_marketplace
+                - paragraph [ref=f3e981]: "Field: Tidak ada"
+              - generic [ref=f3e982]:
+                - generic [ref=f3e983]:
+                  - generic [ref=f3e984]:
+                    - paragraph [ref=f3e985]: marketplace.sync_failed
+                    - paragraph [ref=f3e986]: Peristiwa kanal penjualan.
+                  - generic [ref=f3e987]: craft_marketplace
+                - paragraph [ref=f3e988]: "Field: Tidak ada"
+              - generic [ref=f3e989]:
+                - generic [ref=f3e990]:
+                  - generic [ref=f3e991]:
+                    - paragraph [ref=f3e992]: marketplace.settlement_received
+                    - paragraph [ref=f3e993]: Peristiwa kanal penjualan.
+                  - generic [ref=f3e994]: craft_marketplace
+                - paragraph [ref=f3e995]: "Field: Tidak ada"
+              - generic [ref=f3e996]:
+                - generic [ref=f3e997]:
+                  - generic [ref=f3e998]:
+                    - paragraph [ref=f3e999]: marketplace.settlement_reconciled
+                    - paragraph [ref=f3e1000]: Peristiwa kanal penjualan.
+                  - generic [ref=f3e1001]: craft_marketplace
+                - paragraph [ref=f3e1002]: "Field: Tidak ada"
+          - generic [ref=f3e1003]:
+            - heading "Aksi yang Diizinkan" [level=3] [ref=f3e1005]
+            - generic [ref=f3e1006]:
+              - generic [ref=f3e1007]:
+                - generic [ref=f3e1008]:
+                  - generic [ref=f3e1009]:
+                    - paragraph [ref=f3e1010]: Buat Notifikasi
+                    - paragraph [ref=f3e1011]: notification.create · Membuat notifikasi workspace yang dapat dilacak.
+                  - generic [ref=f3e1012]: Informasi
+                - paragraph [ref=f3e1013]: "Retry aman: Ya · Izin: automation.write"
+              - generic [ref=f3e1014]:
+                - generic [ref=f3e1015]:
+                  - generic [ref=f3e1016]:
+                    - paragraph [ref=f3e1017]: Buat Tugas Tindak Lanjut
+                    - paragraph [ref=f3e1018]: tasks.create · Menambahkan tugas tindak lanjut yang dapat dilacak.
+                  - generic [ref=f3e1019]: Perubahan Data
+                - paragraph [ref=f3e1020]: "Retry aman: Ya · Izin: automation.write"
+              - generic [ref=f3e1021]:
+                - generic [ref=f3e1022]:
+                  - generic [ref=f3e1023]:
+                    - paragraph [ref=f3e1024]: Atur Prioritas Pesanan
+                    - paragraph [ref=f3e1025]: order.priority.set · Menetapkan prioritas manual pada pesanan.
+                  - generic [ref=f3e1026]: Perubahan Data
+                - paragraph [ref=f3e1027]: "Retry aman: Ya · Izin: craft.orders.write"
+              - generic [ref=f3e1028]:
+                - generic [ref=f3e1029]:
+                  - generic [ref=f3e1030]:
+                    - paragraph [ref=f3e1031]: Hitung Ulang Prioritas
+                    - paragraph [ref=f3e1032]: order.priority.recalculate · Menjalankan mesin prioritas pesanan kanonik.
+                  - generic [ref=f3e1033]: Operasional
+                - paragraph [ref=f3e1034]: "Retry aman: Ya · Izin: craft.orders.write"
+              - generic [ref=f3e1035]:
+                - generic [ref=f3e1036]:
+                  - generic [ref=f3e1037]:
+                    - paragraph [ref=f3e1038]: Masukkan ke Antrean Produksi
+                    - paragraph [ref=f3e1039]: production.enqueue_order_items · Menambahkan item pesanan Ready ke antrean produksi bila memenuhi syarat.
+                  - generic [ref=f3e1040]: Perubahan Data
+                - paragraph [ref=f3e1041]: "Retry aman: Ya · Izin: craft.production.write"
+              - generic [ref=f3e1042]:
+                - generic [ref=f3e1043]:
+                  - generic [ref=f3e1044]:
+                    - paragraph [ref=f3e1045]: Buat Permintaan Pembelian
+                    - paragraph [ref=f3e1046]: procurement.create_purchase_request · Membuat draft purchase request; tidak dapat menyetujui atau membayar.
+                  - generic [ref=f3e1047]: Perubahan Data
+                - paragraph [ref=f3e1048]: "Retry aman: Ya · Izin: craft.procurement.write"
+              - generic [ref=f3e1049]:
+                - generic [ref=f3e1050]:
+                  - generic [ref=f3e1051]:
+                    - paragraph [ref=f3e1052]: Sinkronkan Marketplace
+                    - paragraph [ref=f3e1053]: marketplace.sync · Memanggil connector marketplace yang benar-benar terhubung.
+                  - generic [ref=f3e1054]: Operasional
+                - paragraph [ref=f3e1055]: "Retry aman: Tidak · Izin: craft.marketplace.sync"
+              - generic [ref=f3e1056]:
+                - generic [ref=f3e1057]:
+                  - generic [ref=f3e1058]:
+                    - paragraph [ref=f3e1059]: Generate Laporan
+                    - paragraph [ref=f3e1060]: analytics.generate_report · Belum tersedia untuk otomasi sampai integrasi Report Center Craft aman tersedia.
+                  - generic [ref=f3e1061]: Operasional
+                - paragraph [ref=f3e1062]: "Retry aman: Tidak · Izin: craft.analytics.export"
+        - generic [ref=f3e1063]:
+          - heading "Event Domain Terbaru" [level=3] [ref=f3e1065]
+          - table [ref=f3e1067]:
+            - rowgroup [ref=f3e1068]:
+              - row [ref=f3e1069]:
+                - columnheader "Event" [ref=f3e1070]
+                - columnheader "Entitas" [ref=f3e1071]
+                - columnheader "Status" [ref=f3e1072]
+                - columnheader "Chain" [ref=f3e1073]
+                - columnheader "Waktu" [ref=f3e1074]
+            - rowgroup [ref=f3e1075]:
+              - row [ref=f3e1076]:
+                - cell "printer.issue_created" [ref=f3e1077]
+                - cell "printer PRN-000008" [ref=f3e1078]
+                - cell "Diproses" [ref=f3e1079]
+                - cell "0" [ref=f3e1081]
+                - cell "15 Sep 2026, 08.13" [ref=f3e1082]
+              - row [ref=f3e1083]:
+                - cell "printer.issue_created" [ref=f3e1084]
+                - cell "printer PRN-000008" [ref=f3e1085]
+                - cell "Diproses" [ref=f3e1086]
+                - cell "0" [ref=f3e1088]
+                - cell "15 Sep 2026, 08.13" [ref=f3e1089]
+              - row [ref=f3e1090]:
+                - cell "printer.maintenance_recorded" [ref=f3e1091]
+                - cell "printer PRN-000008" [ref=f3e1092]
+                - cell "Diproses" [ref=f3e1093]
+                - cell "0" [ref=f3e1095]
+                - cell "15 Sep 2026, 08.12" [ref=f3e1096]
+              - row [ref=f3e1097]:
+                - cell "printer.status_changed" [ref=f3e1098]
+                - cell "printer QA-PRN-001" [ref=f3e1099]
+                - cell "Diproses" [ref=f3e1100]
+                - cell "0" [ref=f3e1102]
+                - cell "15 Sep 2026, 08.09" [ref=f3e1103]
+              - row [ref=f3e1104]:
+                - cell "printer.status_changed" [ref=f3e1105]
+                - cell "printer PRN-000008" [ref=f3e1106]
+                - cell "Diproses" [ref=f3e1107]
+                - cell "0" [ref=f3e1109]
+                - cell "15 Sep 2026, 08.08" [ref=f3e1110]
+              - row [ref=f3e1111]:
+                - cell "printer.status_changed" [ref=f3e1112]
+                - cell "printer PRN-000008" [ref=f3e1113]
+                - cell "Diproses" [ref=f3e1114]
+                - cell "0" [ref=f3e1116]
+                - cell "15 Sep 2026, 08.08" [ref=f3e1117]
+              - row [ref=f3e1118]:
+                - cell "craft.finance.budget_approved" [ref=f3e1119]
+                - cell "budget BDG-000006" [ref=f3e1120]
+                - cell "Diproses" [ref=f3e1121]
+                - cell "0" [ref=f3e1123]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1124]
+              - row [ref=f3e1125]:
+                - cell "craft.finance.budget_created" [ref=f3e1126]
+                - cell "budget BDG-000006" [ref=f3e1127]
+                - cell "Diproses" [ref=f3e1128]
+                - cell "0" [ref=f3e1130]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1131]
+              - row [ref=f3e1132]:
+                - cell "craft.finance.expense_reversed" [ref=f3e1133]
+                - cell "expense EXP-000012" [ref=f3e1134]
+                - cell "Diproses" [ref=f3e1135]
+                - cell "0" [ref=f3e1137]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1138]
+              - row [ref=f3e1139]:
+                - cell "craft.finance.expense_paid" [ref=f3e1140]
+                - cell "expense EXP-000012" [ref=f3e1141]
+                - cell "Diproses" [ref=f3e1142]
+                - cell "0" [ref=f3e1144]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1145]

@@ -1,0 +1,16 @@
+{
+  "session_start_row": 202,
+  "session_end_row": 211,
+  "selected": [
+    {"row": 202, "test_case_id": "UNX-S14-006", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-006/01-equipment-access-denied.png"},
+    {"row": 203, "test_case_id": "UNX-S14-007", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-007/01-equipment-access-denied.png"},
+    {"row": 204, "test_case_id": "UNX-S14-008", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-008/01-equipment-access-denied.png"},
+    {"row": 205, "test_case_id": "UNX-S14-009", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-009/01-equipment-access-denied.png"},
+    {"row": 206, "test_case_id": "UNX-S14-010", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-010/01-equipment-access-denied.png"},
+    {"row": 207, "test_case_id": "UNX-S14-011", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-011/01-equipment-access-denied.png"},
+    {"row": 208, "test_case_id": "UNX-S14-012", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-012/01-equipment-access-denied.png"},
+    {"row": 209, "test_case_id": "UNX-S14-013", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-013/01-equipment-access-denied.png"},
+    {"row": 210, "test_case_id": "UNX-S14-014", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-014/01-equipment-access-denied.png"},
+    {"row": 211, "test_case_id": "UNX-S14-015", "status": "Bug/Failed", "evidence": "test-evidence/session-202-211/UNX-S14-015/01-equipment-access-denied.png"}
+  ]
+}

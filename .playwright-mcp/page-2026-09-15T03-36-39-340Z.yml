@@ -1,0 +1,120 @@
+- generic [ref=f1e34]:
+  - complementary [ref=f1e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f1e37]
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]:
+        - heading "GLOBAL" [level=3] [ref=f1e40]
+        - link "Dasbor Global" [ref=f1e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f1e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f1e49]
+        - generic [ref=f1e50]:
+          - button "Pesanan" [ref=f1e331]
+          - generic [ref=f1e339]:
+            - button "Produksi" [ref=f1e340]
+            - generic [ref=f1e427]:
+              - link "Papan Produksi" [ref=f1e428] [cursor=pointer]:
+                - /url: /app/craft/production
+              - link "Produksi Aktif" [ref=f1e429] [cursor=pointer]:
+                - /url: /app/craft/production/active
+              - link "Antrean Cetak" [ref=f1e430] [cursor=pointer]:
+                - /url: /app/craft/production/queue
+              - link "Pekerjaan Cetak" [ref=f1e431] [cursor=pointer]:
+                - /url: /app/craft/production/jobs
+              - link "Cetak Gagal" [ref=f1e432] [cursor=pointer]:
+                - /url: /app/craft/production/failures
+              - link "Kontrol Kualitas" [ref=f1e433] [cursor=pointer]:
+                - /url: /app/craft/production/qc
+              - link "Kalender Produksi" [ref=f1e434] [cursor=pointer]:
+                - /url: /app/craft/production/calendar
+          - button "Produk & Desain" [ref=f1e349]
+          - button "Printer" [ref=f1e360]
+          - button "Material" [ref=f1e369]
+      - generic [ref=f1e64]:
+        - heading "BISNIS" [level=3] [ref=f1e65]
+        - generic [ref=f1e66]:
+          - button "Pelanggan & Mitra" [ref=f1e377]
+          - button "Pengadaan" [ref=f1e387]
+          - generic [ref=f1e67]:
+            - button "Keuangan" [active] [ref=f1e68]
+            - generic [ref=f1e660]:
+              - link "Ringkasan Keuangan" [ref=f1e661] [cursor=pointer]:
+                - /url: /app/craft/finance
+              - link "Transaksi" [ref=f1e662] [cursor=pointer]:
+                - /url: /app/craft/finance/transactions
+              - link "Kas & Bank" [ref=f1e663] [cursor=pointer]:
+                - /url: /app/craft/finance/treasury
+              - link "Pendapatan" [ref=f1e664] [cursor=pointer]:
+                - /url: /app/craft/finance/income
+              - link "Pengeluaran" [ref=f1e665] [cursor=pointer]:
+                - /url: /app/craft/finance/expenses
+              - link "Piutang Pelanggan" [ref=f1e666] [cursor=pointer]:
+                - /url: /app/craft/finance/receivables
+              - link "Hutang Pemasok" [ref=f1e667] [cursor=pointer]:
+                - /url: /app/craft/finance/payables
+              - link "HPP & Profitabilitas" [ref=f1e668] [cursor=pointer]:
+                - /url: /app/craft/finance/profitability
+              - link "Kalkulator Biaya Produk" [ref=f1e669] [cursor=pointer]:
+                - /url: /app/craft/finance/calculator
+              - link "Arus Kas" [ref=f1e670] [cursor=pointer]:
+                - /url: /app/craft/finance/cash-flow
+              - link "Anggaran" [ref=f1e671] [cursor=pointer]:
+                - /url: /app/craft/finance/budgets
+              - link "Jurnal & Periode" [ref=f1e672] [cursor=pointer]:
+                - /url: /app/craft/finance/accounting
+          - button "Laporan & Analitik" [ref=f1e398]
+      - generic [ref=f1e75]:
+        - heading "SISTEM" [level=3] [ref=f1e76]
+        - generic [ref=f1e407]:
+          - button "Marketplace & Kanal Penjualan" [ref=f1e409]
+          - button "Otomasi" [ref=f1e419]
+      - generic [ref=f1e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f1e78]
+        - generic [ref=f1e79]:
+          - link "Pusat Dokumen" [ref=f1e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f1e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f1e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f1e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f1e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f1e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f1e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f1e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f1e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f1e119]:
+    - banner [ref=f1e120]:
+      - combobox [ref=f1e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f1e126]
+        - generic [ref=f1e127]:
+          - generic [ref=f1e128]: ⌘
+          - generic [ref=f1e129]: K
+      - generic [ref=f1e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f1e132]'
+        - button [ref=f1e425]:
+          - generic [ref=f1e145]:
+            - text: "Workspace:"
+            - generic [ref=f1e146]:
+              - img "Craft Logo" [ref=f1e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f1e149]:
+          - generic [ref=f1e153]: "2"
+        - button [ref=f1e155]:
+          - generic [aria-hidden] [ref=f1e156]: QU
+    - main [ref=f1e157]:
+      - generic [ref=f1e643]:
+        - generic [ref=f1e646]:
+          - paragraph [ref=f1e647]: Craft Production
+          - heading "Kontrol Kualitas" [level=1] [ref=f1e648]
+          - paragraph [ref=f1e649]: Periksa hasil fisik sebelum output dihitung sebagai produksi selesai.
+        - generic [ref=f1e651]:
+          - heading "Belum Ada Pekerjaan Menunggu QC" [level=3] [ref=f1e657]
+          - paragraph [ref=f1e658]: Pekerjaan yang selesai mencetak akan masuk ke halaman ini untuk diperiksa.
+        - generic [ref=f1e659]: QC tidak memerlukan template untuk berjalan. Jika tidak ada template database yang sesuai, checklist umum disimpan sebagai butir inspeksi ad-hoc.

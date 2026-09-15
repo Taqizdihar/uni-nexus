@@ -1,0 +1,146 @@
+- generic [ref=f11e536]:
+  - complementary [ref=f11e537]:
+    - heading "UNI-NEXUS" [level=1] [ref=f11e539]
+    - generic [ref=f11e540]:
+      - generic [ref=f11e541]:
+        - heading "GLOBAL" [level=3] [ref=f11e542]
+        - link "Dasbor Global" [ref=f11e544] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f11e550]:
+        - heading "OPERASIONAL" [level=3] [ref=f11e551]
+        - generic [ref=f11e552]:
+          - button "Pesanan" [ref=f11e832]
+          - button "Produksi" [ref=f11e841]
+          - button "Produk & Desain" [ref=f11e850]
+          - button "Printer" [ref=f11e861]
+          - button "Material" [ref=f11e870]
+      - generic [ref=f11e566]:
+        - heading "BISNIS" [level=3] [ref=f11e567]
+        - generic [ref=f11e568]:
+          - generic [ref=f11e877]:
+            - button "Pelanggan & Mitra" [ref=f11e878]
+            - generic [ref=f11e928]:
+              - link "Pelanggan" [active] [ref=f11e929] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f11e930] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f11e888]
+          - button "Keuangan" [ref=f11e570]
+          - button "Laporan & Analitik" [ref=f11e899]
+      - generic [ref=f11e577]:
+        - heading "SISTEM" [level=3] [ref=f11e578]
+        - generic [ref=f11e908]:
+          - button "Marketplace & Kanal Penjualan" [ref=f11e910]
+          - button "Otomasi" [ref=f11e920]
+      - generic [ref=f11e579]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f11e580]
+        - generic [ref=f11e581]:
+          - link "Pusat Dokumen" [ref=f11e582] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f11e587] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f11e590] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f11e594] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f11e597] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f11e603] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f11e606] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f11e612] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f11e617] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f11e621]:
+    - banner [ref=f11e622]:
+      - combobox [ref=f11e624]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f11e628]
+        - generic [ref=f11e629]:
+          - generic [ref=f11e630]: ⌘
+          - generic [ref=f11e631]: K
+      - generic [ref=f11e632]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f11e634]'
+        - button [ref=f11e926]:
+          - generic [ref=f11e647]:
+            - text: "Workspace:"
+            - generic [ref=f11e648]:
+              - img "Craft Logo" [ref=f11e927]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f11e651]
+        - button [ref=f11e656]:
+          - generic [aria-hidden] [ref=f11e657]: QU
+    - main [ref=f11e658]:
+      - generic [ref=f11e1287]:
+        - generic [ref=f11e1288]:
+          - generic [ref=f11e1289]:
+            - paragraph [ref=f11e1290]: Bisnis Craft
+            - heading "Pelanggan" [level=1] [ref=f11e1291]
+            - paragraph [ref=f11e1292]: Kelola pelanggan Craft, informasi kontak, dan riwayat hubungan bisnis.
+          - generic [ref=f11e1293]:
+            - button "Ekspor CSV" [ref=f11e1294]
+            - button "Tambah Pelanggan" [ref=f11e1298]
+        - generic [ref=f11e1300]:
+          - generic [ref=f11e1309]:
+            - paragraph [ref=f11e1310]: Total Pelanggan
+            - paragraph [ref=f11e1311]: "1"
+          - generic [ref=f11e1319]:
+            - paragraph [ref=f11e1320]: Pelanggan Aktif
+            - paragraph [ref=f11e1321]: "1"
+          - generic [ref=f11e1330]:
+            - paragraph [ref=f11e1331]: Mitra Aktif
+            - paragraph [ref=f11e1332]: "0"
+          - generic [ref=f11e1339]:
+            - paragraph [ref=f11e1340]: Pesanan Aktif
+            - paragraph [ref=f11e1341]: "0"
+        - generic [ref=f11e1342]:
+          - generic [ref=f11e1343]:
+            - textbox [ref=f11e1345]:
+              - /placeholder: Cari kode, nama, email, telepon, WhatsApp, atau NPWP...
+            - generic [ref=f11e1346]: 1 hubungan bisnis
+          - generic [ref=f11e1348]:
+            - combobox [ref=f11e1349]:
+              - option "Semua jenis" [selected]
+              - option "Individu"
+              - option "Perusahaan"
+              - option "Institusi"
+            - combobox [ref=f11e1350]:
+              - option "Semua hubungan" [selected]
+              - option "Pelanggan"
+              - option "Mitra"
+            - combobox [ref=f11e1351]:
+              - option "Semua status" [selected]
+              - option "Aktif"
+              - option "Tidak Aktif"
+            - generic [ref=f11e1352]:
+              - checkbox "Pesanan aktif" [ref=f11e1353]
+              - text: Pesanan aktif
+            - combobox [ref=f11e1354]:
+              - option "Nama A–Z" [selected]
+              - option "Pesanan terbaru"
+              - option "Nilai pesanan tertinggi"
+              - option "Jumlah pesanan"
+              - option "Baru ditambahkan"
+        - button "CQ CUS-000015 Customer QA 20260914_2114 Individu Aktif customer.20260914_2114@example.test 081234562114 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f11e1356]:
+          - generic [ref=f11e1357]:
+            - generic [ref=f11e1358]: CQ
+            - generic [ref=f11e1359]:
+              - paragraph [ref=f11e1360]: CUS-000015
+              - heading "Customer QA 20260914_2114" [level=2] [ref=f11e1361]
+              - generic [ref=f11e1362]:
+                - generic [ref=f11e1363]: Individu
+                - generic [ref=f11e1364]: Aktif
+          - generic [ref=f11e1365]:
+            - paragraph [ref=f11e1366]: customer.20260914_2114@example.test
+            - paragraph [ref=f11e1367]: "081234562114"
+          - generic [ref=f11e1368]:
+            - generic [ref=f11e1369]:
+              - paragraph [ref=f11e1370]: Pesanan
+              - paragraph [ref=f11e1371]: "0"
+            - generic [ref=f11e1372]:
+              - paragraph [ref=f11e1373]: Nilai Pesanan
+              - paragraph [ref=f11e1374]: Rp 0
+            - generic [ref=f11e1375]:
+              - paragraph [ref=f11e1376]: Terakhir
+              - paragraph [ref=f11e1377]: Belum ada

@@ -1,0 +1,74 @@
+- generic [ref=f38e6]:
+  - complementary [ref=f38e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f38e9]
+    - generic [ref=f38e10]:
+      - generic [ref=f38e11]:
+        - heading "GLOBAL" [level=3] [ref=f38e12]
+        - link "Dasbor Global" [ref=f38e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f38e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f38e21]
+        - generic [ref=f38e22]:
+          - button "Proyek" [ref=f38e24]
+          - link "Klien" [ref=f38e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f38e36]:
+        - heading "BISNIS" [level=3] [ref=f38e37]
+        - button "Keuangan" [ref=f38e40]
+      - heading "SISTEM" [level=3] [ref=f38e48]
+      - generic [ref=f38e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f38e50]
+        - generic [ref=f38e51]:
+          - link "Pusat Dokumen" [ref=f38e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f38e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f38e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f38e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f38e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f38e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f38e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f38e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f38e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f38e91]:
+    - banner [ref=f38e92]:
+      - combobox [ref=f38e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f38e98]
+        - generic [ref=f38e99]:
+          - generic [ref=f38e100]: ⌘
+          - generic [ref=f38e101]: K
+      - generic [ref=f38e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f38e104]'
+        - button [ref=f38e113]:
+          - generic [ref=f38e117]:
+            - text: "Workspace:"
+            - generic [ref=f38e118]:
+              - img "Studio Logo" [ref=f38e119]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f38e121]:
+          - generic [ref=f38e125]: "2"
+        - button [ref=f38e127]:
+          - generic [aria-hidden] [ref=f38e128]: QU
+    - main [ref=f38e129]:
+      - generic [ref=f38e131]:
+        - generic [ref=f38e132]:
+          - generic [ref=f38e133]:
+            - paragraph [ref=f38e134]: PENGADAAN
+            - heading "Pesanan Pembelian" [level=1] [ref=f38e135]
+            - paragraph [ref=f38e136]: Komitmen pembelian kepada pemasok; membuat PO tidak mencatat pembayaran atau pengeluaran.
+          - link [ref=f38e138] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders/new
+            - button "Buat PO" [ref=f38e139]
+        - generic [ref=f38e141]:
+          - heading "Belum Ada Pesanan Pembelian" [level=2] [ref=f38e142]
+          - paragraph [ref=f38e143]: Buat PO dari permintaan pembelian yang telah disetujui atau untuk pembelian langsung.
+          - link [ref=f38e145] [cursor=pointer]:
+            - /url: /app/craft/procurement/orders/new
+            - button "Buat PO" [ref=f38e146]

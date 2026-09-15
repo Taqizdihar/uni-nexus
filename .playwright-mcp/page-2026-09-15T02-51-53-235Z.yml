@@ -1,0 +1,255 @@
+- generic [ref=f6e2839]:
+  - complementary [ref=f6e2840]:
+    - heading "UNI-NEXUS" [level=1] [ref=f6e2842]
+    - generic [ref=f6e2843]:
+      - generic [ref=f6e2844]:
+        - heading "GLOBAL" [level=3] [ref=f6e2845]
+        - link "Dasbor Global" [ref=f6e2847] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f6e2853]:
+        - heading "OPERASIONAL" [level=3] [ref=f6e2854]
+        - generic [ref=f6e2855]:
+          - button "Pesanan" [ref=f6e2857]
+          - button "Produksi" [ref=f6e2866]
+          - button "Produk & Desain" [ref=f6e2875]
+          - button "Printer" [ref=f6e2886]
+          - button "Material" [ref=f6e2895]
+      - generic [ref=f6e2902]:
+        - heading "BISNIS" [level=3] [ref=f6e2903]
+        - generic [ref=f6e2904]:
+          - button "Pelanggan & Mitra" [ref=f6e2906]
+          - button "Pengadaan" [ref=f6e2916]
+          - generic [ref=f6e2926]:
+            - button "Keuangan" [active] [ref=f6e2927]
+            - generic [ref=f6e4903]:
+              - link "Ringkasan Keuangan" [ref=f6e4904] [cursor=pointer]:
+                - /url: /app/craft/finance
+              - link "Transaksi" [ref=f6e4905] [cursor=pointer]:
+                - /url: /app/craft/finance/transactions
+              - link "Kas & Bank" [ref=f6e4906] [cursor=pointer]:
+                - /url: /app/craft/finance/treasury
+              - link "Pendapatan" [ref=f6e4907] [cursor=pointer]:
+                - /url: /app/craft/finance/income
+              - link "Pengeluaran" [ref=f6e4908] [cursor=pointer]:
+                - /url: /app/craft/finance/expenses
+              - link "Piutang Pelanggan" [ref=f6e4909] [cursor=pointer]:
+                - /url: /app/craft/finance/receivables
+              - link "Hutang Pemasok" [ref=f6e4910] [cursor=pointer]:
+                - /url: /app/craft/finance/payables
+              - link "HPP & Profitabilitas" [ref=f6e4911] [cursor=pointer]:
+                - /url: /app/craft/finance/profitability
+              - link "Kalkulator Biaya Produk" [ref=f6e4912] [cursor=pointer]:
+                - /url: /app/craft/finance/calculator
+              - link "Arus Kas" [ref=f6e4913] [cursor=pointer]:
+                - /url: /app/craft/finance/cash-flow
+              - link "Anggaran" [ref=f6e4914] [cursor=pointer]:
+                - /url: /app/craft/finance/budgets
+              - link "Jurnal & Periode" [ref=f6e4915] [cursor=pointer]:
+                - /url: /app/craft/finance/accounting
+          - button "Laporan & Analitik" [ref=f6e2935]
+      - generic [ref=f6e2944]:
+        - heading "SISTEM" [level=3] [ref=f6e2945]
+        - generic [ref=f6e2946]:
+          - button "Marketplace & Kanal Penjualan" [ref=f6e2948]
+          - button "Otomasi" [ref=f6e2958]
+      - generic [ref=f6e2964]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f6e2965]
+        - generic [ref=f6e2966]:
+          - link "Keuangan Terpadu" [ref=f6e2967] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f6e2971] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f6e2976] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f6e2979] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f6e2983] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f6e2989] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f6e2992] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f6e2998] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f6e3001] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f6e3007] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f6e3012] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f6e3016]:
+    - banner [ref=f6e3017]:
+      - combobox [ref=f6e3019]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f6e3023]
+        - generic [ref=f6e3024]:
+          - generic [ref=f6e3025]: ⌘
+          - generic [ref=f6e3026]: K
+      - generic [ref=f6e3027]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f6e3029]'
+        - button [ref=f6e3038]:
+          - generic [ref=f6e3042]:
+            - text: "Workspace:"
+            - generic [ref=f6e3043]:
+              - img "Craft Logo" [ref=f6e3044]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f6e3046]:
+          - generic [ref=f6e3050]: "2"
+        - button [ref=f6e3052]
+    - main [ref=f6e3053]:
+      - main [ref=f6e3226]:
+        - generic [ref=f6e3227]:
+          - generic [ref=f6e3228]:
+            - paragraph [ref=f6e3229]: Global Control Center
+            - heading "Data Master" [level=1] [ref=f6e3230]
+            - paragraph [ref=f6e3231]: Kelola data referensi UNI-NEXUS dari satu pusat agar seluruh workspace tetap konsisten.
+          - generic [ref=f6e3232]:
+            - button "Refresh" [ref=f6e3233]
+            - button "Tambah Data" [ref=f6e3239]
+            - generic [ref=f6e3241]:
+              - button "Ekspor CSV" [ref=f6e3242]: CSV
+              - button "Ekspor XLSX" [ref=f6e3246]
+        - generic [ref=f6e3250]:
+          - generic [ref=f6e3251]:
+            - paragraph [ref=f6e3253]: Dataset Tersedia
+            - paragraph [ref=f6e3259]: "7"
+          - generic [ref=f6e3260]:
+            - paragraph [ref=f6e3262]: Data Aktif
+            - paragraph [ref=f6e3267]: "19"
+          - generic [ref=f6e3268]:
+            - paragraph [ref=f6e3270]: Data Nonaktif
+            - paragraph [ref=f6e3275]: "1"
+          - generic [ref=f6e3276]:
+            - paragraph [ref=f6e3278]: Referensi Tercatat
+            - paragraph [ref=f6e3282]: "20"
+        - generic [ref=f6e4709]:
+          - generic [ref=f6e4710]:
+            - heading "Umum" [level=2] [ref=f6e4711]
+            - generic [ref=f6e4712]:
+              - button "Satuan Satuan ukur reusable untuk material, BOM, stok, dan pengadaan. Sistem 1 aktif 0 nonaktif Kelola" [ref=f6e4713]:
+                - generic [ref=f6e4714]:
+                  - generic [ref=f6e4715]:
+                    - heading "Satuan" [level=3] [ref=f6e4716]
+                    - paragraph [ref=f6e4717]: Satuan ukur reusable untuk material, BOM, stok, dan pengadaan.
+                  - generic [ref=f6e4718]: Sistem
+                - generic [ref=f6e4719]:
+                  - generic [ref=f6e4720]: 1 aktif
+                  - generic [ref=f6e4721]: 0 nonaktif
+                  - generic [ref=f6e4722]: Kelola
+              - button "Metode Pembayaran Pilihan metode pembayaran global untuk transaksi dan tagihan. Sistem 2 aktif 0 nonaktif Kelola" [ref=f6e4723]:
+                - generic [ref=f6e4724]:
+                  - generic [ref=f6e4725]:
+                    - heading "Metode Pembayaran" [level=3] [ref=f6e4726]
+                    - paragraph [ref=f6e4727]: Pilihan metode pembayaran global untuk transaksi dan tagihan.
+                  - generic [ref=f6e4728]: Sistem
+                - generic [ref=f6e4729]:
+                  - generic [ref=f6e4730]: 2 aktif
+                  - generic [ref=f6e4731]: 0 nonaktif
+                  - generic [ref=f6e4732]: Kelola
+          - generic [ref=f6e4733]:
+            - heading "Craft" [level=2] [ref=f6e4734]
+            - generic [ref=f6e4735]:
+              - button "Kategori Produk Struktur kategori produk Uni-Inside Craft. Craft 7 aktif 0 nonaktif Kelola" [ref=f6e4736]:
+                - generic [ref=f6e4737]:
+                  - generic [ref=f6e4738]:
+                    - heading "Kategori Produk" [level=3] [ref=f6e4739]
+                    - paragraph [ref=f6e4740]: Struktur kategori produk Uni-Inside Craft.
+                  - generic [ref=f6e4741]: Craft
+                - generic [ref=f6e4742]:
+                  - generic [ref=f6e4743]: 7 aktif
+                  - generic [ref=f6e4744]: 0 nonaktif
+                  - generic [ref=f6e4745]: Kelola
+              - button "Kategori Material Jenis material dan perlengkapan produksi Craft. Craft 3 aktif 0 nonaktif Kelola" [ref=f6e4746]:
+                - generic [ref=f6e4747]:
+                  - generic [ref=f6e4748]:
+                    - heading "Kategori Material" [level=3] [ref=f6e4749]
+                    - paragraph [ref=f6e4750]: Jenis material dan perlengkapan produksi Craft.
+                  - generic [ref=f6e4751]: Craft
+                - generic [ref=f6e4752]:
+                  - generic [ref=f6e4753]: 3 aktif
+                  - generic [ref=f6e4754]: 0 nonaktif
+                  - generic [ref=f6e4755]: Kelola
+              - button "Sales Channel Kanal asal pesanan dan integrasi marketplace Craft. Craft 2 aktif 0 nonaktif Kelola" [ref=f6e4756]:
+                - generic [ref=f6e4757]:
+                  - generic [ref=f6e4758]:
+                    - heading "Sales Channel" [level=3] [ref=f6e4759]
+                    - paragraph [ref=f6e4760]: Kanal asal pesanan dan integrasi marketplace Craft.
+                  - generic [ref=f6e4761]: Craft
+                - generic [ref=f6e4762]:
+                  - generic [ref=f6e4763]: 2 aktif
+                  - generic [ref=f6e4764]: 0 nonaktif
+                  - generic [ref=f6e4765]: Kelola
+          - generic [ref=f6e4766]:
+            - heading "Studio" [level=2] [ref=f6e4767]
+            - button "Kategori Layanan Kategori referensi untuk katalog layanan Studio. Studio 2 aktif 0 nonaktif Kelola" [ref=f6e4769]:
+              - generic [ref=f6e4770]:
+                - generic [ref=f6e4771]:
+                  - heading "Kategori Layanan" [level=3] [ref=f6e4772]
+                  - paragraph [ref=f6e4773]: Kategori referensi untuk katalog layanan Studio.
+                - generic [ref=f6e4774]: Studio
+              - generic [ref=f6e4775]:
+                - generic [ref=f6e4776]: 2 aktif
+                - generic [ref=f6e4777]: 0 nonaktif
+                - generic [ref=f6e4778]: Kelola
+          - generic [ref=f6e4779]:
+            - heading "Keuangan" [level=2] [ref=f6e4780]
+            - button "Kategori Transaksi Kategori pendapatan dan pengeluaran sesuai scope keuangan. Keuangan 2 aktif 1 nonaktif Kelola" [ref=f6e4782]:
+              - generic [ref=f6e4783]:
+                - generic [ref=f6e4784]:
+                  - heading "Kategori Transaksi" [level=3] [ref=f6e4785]
+                  - paragraph [ref=f6e4786]: Kategori pendapatan dan pengeluaran sesuai scope keuangan.
+                - generic [ref=f6e4787]: Keuangan
+              - generic [ref=f6e4788]:
+                - generic [ref=f6e4789]: 2 aktif
+                - generic [ref=f6e4790]: 1 nonaktif
+                - generic [ref=f6e4791]: Kelola
+        - generic [ref=f6e4792]:
+          - generic [ref=f6e4793]:
+            - generic [ref=f6e4794]:
+              - heading "Kategori Transaksi" [level=2] [ref=f6e4795]
+              - paragraph [ref=f6e4796]: Kategori pendapatan dan pengeluaran sesuai scope keuangan.
+            - generic [ref=f6e4797]:
+              - textbox "Cari data referensi" [ref=f6e4799]:
+                - /placeholder: Cari kode atau nama...
+              - combobox "Status data" [ref=f6e4801]:
+                - option "Semua Status"
+                - option "Aktif"
+                - option "Nonaktif" [selected]
+              - combobox "Tipe transaksi" [ref=f6e4802]:
+                - option "Semua Tipe" [selected]
+                - option "Pendapatan"
+                - option "Pengeluaran"
+              - combobox "Scope keuangan" [ref=f6e4803]:
+                - option "Semua Scope" [selected]
+                - option "Craft"
+                - option "Studio"
+                - option "Shared"
+          - table [ref=f6e4869]:
+            - rowgroup [ref=f6e4870]:
+              - row [ref=f6e4871]:
+                - columnheader "Kode" [ref=f6e4872]
+                - columnheader "Nama" [ref=f6e4873]
+                - columnheader "Scope" [ref=f6e4874]
+                - columnheader "Rincian" [ref=f6e4875]
+                - columnheader "Status" [ref=f6e4876]
+                - columnheader "Penggunaan" [ref=f6e4877]
+                - columnheader "Aksi" [ref=f6e4878]
+            - rowgroup [ref=f6e4879]:
+              - row [ref=f6e4880]:
+                - cell "QA_FINCAT_091506" [ref=f6e4881]
+                - cell "Kategori Finance QA Edit 091506" [ref=f6e4882]
+                - cell "Craft" [ref=f6e4883]
+                - cell "Pendapatan · SMKC0523E-EXP" [ref=f6e4885]
+                - cell "Nonaktif" [ref=f6e4886]
+                - cell [ref=f6e4888]:
+                  - button "0 record" [ref=f6e4889]
+                - cell [ref=f6e4890]:
+                  - generic [ref=f6e4891]:
+                    - button "Lihat penggunaan Kategori Finance QA Edit 091506" [ref=f6e4892]: Penggunaan
+                    - button "Edit" [ref=f6e4896]
+                    - button "Aktifkan" [ref=f6e4899]
+          - generic [ref=f6e4863]:
+            - generic [ref=f6e4864]: 1 data · Halaman 1 dari 1
+            - generic [ref=f6e4865]:
+              - button "Sebelumnya" [disabled]
+              - button "Berikutnya" [disabled]
+          - paragraph [ref=f6e4866]: 3 referensi terlihat sesuai hak akses Anda. Kode referensi dikunci setelah dibuat untuk menjaga integritas sistem.

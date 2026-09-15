@@ -1,0 +1,153 @@
+- generic [ref=e34]:
+  - complementary [ref=e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=e37]
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - heading "GLOBAL" [level=3] [ref=e40]
+        - link "Dasbor Global" [ref=e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=e48]:
+        - heading "OPERASIONAL" [level=3] [ref=e49]
+        - generic [ref=e50]:
+          - button "Pesanan" [ref=e327]
+          - button "Produksi" [ref=e336]
+          - button "Produk & Desain" [ref=e345]
+          - button "Printer" [ref=e356]
+          - button "Material" [ref=e365]
+      - generic [ref=e64]:
+        - heading "BISNIS" [level=3] [ref=e65]
+        - generic [ref=e66]:
+          - button "Pelanggan & Mitra" [ref=e373]
+          - button "Pengadaan" [ref=e383]
+          - button "Keuangan" [ref=e68]
+          - button "Laporan & Analitik" [ref=e394]
+      - generic [ref=e75]:
+        - heading "SISTEM" [level=3] [ref=e76]
+        - generic [ref=e403]:
+          - generic [ref=e404]:
+            - button "Marketplace & Kanal Penjualan" [ref=e405]
+            - generic [ref=e423]:
+              - link "Ringkasan Kanal" [ref=e424] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=e425] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=e426] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=e427] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=e428] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=e429] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=e430] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=e431] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - button "Otomasi" [ref=e415]
+      - generic [ref=e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=e78]
+        - generic [ref=e79]:
+          - link "Pusat Dokumen" [ref=e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=e119]:
+    - banner [ref=e120]:
+      - combobox [ref=e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=e126]
+        - generic [ref=e127]:
+          - generic [ref=e128]: ⌘
+          - generic [ref=e129]: K
+      - generic [ref=e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=e479]'
+        - button [ref=e421]:
+          - generic [ref=e141]:
+            - text: "Workspace:"
+            - generic [ref=e142]:
+              - img "Craft Logo" [ref=e422]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=e145]:
+          - generic [ref=e149]: "2"
+        - button [ref=e151]:
+          - generic [aria-hidden] [ref=e152]: QU
+    - main [ref=e153]:
+      - generic [ref=e432]:
+        - generic [ref=e433]:
+          - generic [ref=e434]:
+            - paragraph [ref=e435]: Sistem Craft
+            - heading "Pemetaan Produk" [level=1] [ref=e436]
+            - paragraph [ref=e437]: Hubungkan SKU eksternal marketplace dengan Produk dan Varian UNI-NEXUS.
+          - button "Tambah Mapping" [ref=e439]
+        - table [ref=e488]:
+          - rowgroup [ref=e489]:
+            - row [ref=e490]:
+              - columnheader "Kanal" [ref=e491]
+              - columnheader "Produk UNI-NEXUS" [ref=e492]
+              - columnheader "Varian" [ref=e493]
+              - columnheader "SKU Eksternal" [ref=e494]
+              - columnheader "Status" [ref=e495]
+              - columnheader "Sinkron Terakhir" [ref=e496]
+              - columnheader "Aksi" [ref=e497]
+          - rowgroup [ref=e498]:
+            - row [ref=e499]:
+              - cell "QA Marketplace S09 20260915" [ref=e500]
+              - cell [ref=e501]:
+                - text: Produk QA Edited 20260914_2256
+                - paragraph [ref=e502]: PRD-000001
+              - cell "—" [ref=e503]
+              - cell "SKU_S09_20260915" [ref=e504]
+              - cell "Manual" [ref=e505]
+              - cell "Manual" [ref=e507]
+              - cell [ref=e508]:
+                - button "Hapus" [ref=e509]
+        - generic [ref=e511]:
+          - generic [ref=e512]:
+            - heading "Tambah Pemetaan Produk" [level=2] [ref=e513]
+            - button "Tutup" [ref=e514]: ×
+          - generic [ref=e515]:
+            - generic [ref=e516]:
+              - generic [ref=e517]: Kanal *
+              - combobox "Kanal *" [ref=e518]:
+                - option "Pilih kanal"
+                - option "Channel Edit 091504"
+                - option "Channel QA Edit 20260914_2114"
+                - option "QA Invalid Code Updated"
+                - option "QA Marketplace S09 20260915" [selected]
+            - generic [ref=e519]:
+              - generic [ref=e520]: Produk *
+              - combobox "Produk *" [ref=e521]:
+                - option "Pilih produk"
+                - option "Produk QA Edited 20260914_2256 · PRD-000001" [selected]
+            - generic [ref=e522]:
+              - generic [ref=e523]: Varian
+              - combobox "Varian" [ref=e524]:
+                - option "Produk default" [selected]
+                - option "Varian Fallback QA 20260914_2256 · VAR-000002"
+                - option "Varian QA 20260914_2256 · VAR-000001"
+            - generic [ref=e525]:
+              - generic [ref=e526]:
+                - generic [ref=e527]: SKU Eksternal *
+                - textbox "SKU Eksternal *" [active] [ref=e528]
+              - generic [ref=e529]:
+                - generic [ref=e530]: ID Produk Eksternal
+                - textbox "ID Produk Eksternal" [ref=e531]
+            - generic [ref=e532]:
+              - generic [ref=e533]: URL Produk Eksternal
+              - textbox "URL Produk Eksternal" [ref=e534]
+            - generic [ref=e535]:
+              - button "Batal" [ref=e536]
+              - button "Simpan Mapping" [ref=e537]

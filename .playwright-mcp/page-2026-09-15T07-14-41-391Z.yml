@@ -1,0 +1,140 @@
+- generic [ref=f5e6]:
+  - complementary [ref=f5e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f5e9]
+    - generic [ref=f5e10]:
+      - generic [ref=f5e11]:
+        - heading "GLOBAL" [level=3] [ref=f5e12]
+        - link "Dasbor Global" [ref=f5e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f5e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f5e21]
+        - generic [ref=f5e22]:
+          - generic [ref=f5e23]:
+            - button "Proyek" [active] [ref=f5e24]
+            - generic [ref=f5e1030]:
+              - link "Semua Proyek" [ref=f5e1031] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f5e1032] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f5e1033] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f5e1034] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f5e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f5e41]:
+        - heading "BISNIS" [level=3] [ref=f5e42]
+        - generic [ref=f5e44]:
+          - button "Keuangan" [ref=f5e45]
+          - generic [ref=f5e679]:
+            - link "Ringkasan Keuangan" [ref=f5e680] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f5e681] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f5e682] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f5e683] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f5e684] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f5e685] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f5e686] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f5e687] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f5e688] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f5e689] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [ref=f5e690] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f5e53]
+      - generic [ref=f5e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f5e55]
+        - generic [ref=f5e56]:
+          - link "Pusat Dokumen" [ref=f5e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f5e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f5e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f5e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f5e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f5e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f5e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f5e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f5e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f5e96]:
+    - banner [ref=f5e97]:
+      - combobox [ref=f5e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f5e103]
+        - generic [ref=f5e104]:
+          - generic [ref=f5e105]: ⌘
+          - generic [ref=f5e106]: K
+      - generic [ref=f5e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f5e109]'
+        - button [ref=f5e118]:
+          - generic [ref=f5e122]:
+            - text: "Workspace:"
+            - generic [ref=f5e123]:
+              - img "Studio Logo" [ref=f5e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f5e126]:
+          - generic [ref=f5e130]: "2"
+        - button [ref=f5e132]:
+          - generic [aria-hidden] [ref=f5e133]: QU
+    - main [ref=f5e134]:
+      - generic [ref=f5e980]:
+        - generic [ref=f5e981]:
+          - generic [ref=f5e983]:
+            - paragraph [ref=f5e984]: Operasional Studio
+            - heading "Proyek" [level=1] [ref=f5e985]
+            - paragraph [ref=f5e986]: Kelola pekerjaan kreatif, deadline, tahapan, tim, dan hasil proyek Uni-Inside Studio.
+          - generic [ref=f5e987]:
+            - button "Filter" [ref=f5e988]
+            - button "Proyek Baru" [ref=f5e991]
+        - generic [ref=f5e993]:
+          - generic [ref=f5e994]:
+            - paragraph [ref=f5e995]: Proyek Aktif
+            - generic [ref=f5e996]: "0"
+            - paragraph [ref=f5e997]: Disetujui, dikerjakan, dan tinjauan.
+          - generic [ref=f5e998]:
+            - paragraph [ref=f5e999]: Deadline 7 Hari
+            - generic [ref=f5e1000]: "0"
+            - paragraph [ref=f5e1001]: Jatuh tempo dalam sepekan.
+          - generic [ref=f5e1002]:
+            - paragraph [ref=f5e1003]: Terlambat
+            - generic [ref=f5e1004]: "0"
+            - paragraph [ref=f5e1005]: Melewati deadline dan belum ditutup.
+          - generic [ref=f5e1006]:
+            - paragraph [ref=f5e1007]: Dalam Tinjauan
+            - generic [ref=f5e1008]: "0"
+            - paragraph [ref=f5e1009]: Menunggu persetujuan klien.
+          - generic [ref=f5e1010]:
+            - paragraph [ref=f5e1011]: Selesai Bulan Ini
+            - generic [ref=f5e1012]: "0"
+            - paragraph [ref=f5e1013]: Berdasarkan tanggal penyelesaian.
+        - generic [ref=f5e1014]:
+          - generic [ref=f5e1015]:
+            - textbox "Cari kode, nama proyek, klien, tipe, atau brief..." [ref=f5e1017]
+            - generic [ref=f5e1018]:
+              - generic [ref=f5e1019]: Urutkan
+              - combobox "Urutkan" [ref=f5e1020]:
+                - option "Deadline Terdekat" [selected]
+                - option "Terbaru"
+                - option "Nama (A-Z)"
+                - option "Nilai Kontrak Tertinggi"
+                - option "Prioritas Tertinggi"
+                - option "Klien (A-Z)"
+          - generic [ref=f5e1022]:
+            - generic [ref=f5e1023]: ✦
+            - heading "Belum Ada Proyek" [level=3] [ref=f5e1025]
+            - paragraph [ref=f5e1026]: Mulai dengan membuat proyek pertama untuk klien Uni-Inside Studio.
+            - button "Proyek Baru" [ref=f5e1028]

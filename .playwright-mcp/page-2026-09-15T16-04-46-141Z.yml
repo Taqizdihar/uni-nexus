@@ -1,0 +1,129 @@
+- generic [ref=f13e6]:
+  - complementary [ref=f13e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f13e9]
+    - generic [ref=f13e10]:
+      - generic [ref=f13e11]:
+        - heading "GLOBAL" [level=3] [ref=f13e12]
+        - link "Dasbor Global" [ref=f13e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f13e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f13e21]
+        - generic [ref=f13e22]:
+          - button "Pesanan" [ref=f13e24]
+          - button "Produksi" [ref=f13e33]
+          - button "Produk & Desain" [ref=f13e42]
+          - button "Printer" [ref=f13e53]
+          - button "Material" [ref=f13e62]
+      - generic [ref=f13e69]:
+        - heading "BISNIS" [level=3] [ref=f13e70]
+        - generic [ref=f13e71]:
+          - button "Pelanggan & Mitra" [ref=f13e73]
+          - button "Pengadaan" [ref=f13e83]
+          - button "Keuangan" [ref=f13e94]
+          - button "Laporan & Analitik" [ref=f13e102]
+      - generic [ref=f13e111]:
+        - heading "SISTEM" [level=3] [ref=f13e112]
+        - generic [ref=f13e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f13e115]
+          - button "Otomasi" [ref=f13e125]
+      - generic [ref=f13e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f13e132]
+        - generic [ref=f13e133]:
+          - link "Pusat Dokumen" [ref=f13e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f13e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f13e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f13e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f13e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f13e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f13e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f13e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f13e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f13e173]:
+    - banner [ref=f13e174]:
+      - combobox [ref=f13e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f13e180]
+        - generic [ref=f13e181]:
+          - generic [ref=f13e182]: ⌘
+          - generic [ref=f13e183]: K
+      - generic [ref=f13e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f13e186]'
+        - button [ref=f13e195]:
+          - generic [ref=f13e199]:
+            - text: "Workspace:"
+            - generic [ref=f13e200]:
+              - img "Craft Logo" [ref=f13e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f13e203]:
+          - generic [ref=f13e207]: "3"
+        - button [ref=f13e209]:
+          - generic [aria-hidden] [ref=f13e210]: AR
+    - main [ref=f13e211]:
+      - generic [ref=f13e213]:
+        - generic [ref=f13e214]:
+          - generic [ref=f13e215]:
+            - paragraph [ref=f13e216]: Fitur Global
+            - heading "Koneksi Integrasi" [level=1] [ref=f13e217]
+            - paragraph [ref=f13e218]: Kelola koneksi ke layanan eksternal di seluruh organisasi.
+          - link [ref=f13e220] [cursor=pointer]:
+            - /url: /app/integrations/connections/new
+            - button "Koneksi Baru" [ref=f13e221]
+        - generic [ref=f13e224]:
+          - textbox "Cari koneksi..." [ref=f13e225]
+          - combobox [ref=f13e226]:
+            - option "Semua Kategori" [selected]
+            - option "Google Workspace"
+            - option "Messaging"
+            - option "Marketplace"
+            - option "Payment"
+            - option "API / Webhook"
+            - option "Lainnya"
+          - combobox [ref=f13e227]:
+            - option "Semua Scope" [selected]
+            - option "Organisasi"
+            - option "Craft"
+            - option "Studio"
+          - combobox [ref=f13e228]:
+            - option "Semua Status" [selected]
+            - option "Belum Terhubung"
+            - option "Terhubung"
+            - option "Error"
+            - option "Dinonaktifkan"
+        - table [ref=f13e231]:
+          - rowgroup [ref=f13e232]:
+            - row [ref=f13e233]:
+              - columnheader "Koneksi" [ref=f13e234]
+              - columnheader "Provider" [ref=f13e235]
+              - columnheader "Scope" [ref=f13e236]
+              - columnheader "Status" [ref=f13e237]
+              - columnheader "Kemampuan" [ref=f13e238]
+              - columnheader "Sinkron Terakhir" [ref=f13e239]
+          - rowgroup [ref=f13e240]:
+            - row [ref=f13e241]:
+              - cell [ref=f13e242]:
+                - link "QA API Integration S10" [ref=f13e243] [cursor=pointer]:
+                  - /url: /app/integrations/connections/2
+                - paragraph [ref=f13e244]: MKT-000002
+              - cell "UNSUPPORTED_PROVIDER_S10" [ref=f13e245]
+              - cell "Craft" [ref=f13e246]
+              - cell "Dinonaktifkan" [ref=f13e247]
+              - cell [ref=f13e249]
+              - cell "—" [ref=f13e250]
+            - row [ref=f13e251]:
+              - cell [ref=f13e252]:
+                - link "QA Manual Integration S10" [ref=f13e253] [cursor=pointer]:
+                  - /url: /app/integrations/connections/1
+                - paragraph [ref=f13e254]: MKT-000001
+              - cell "TEST_PROVIDER_S10" [ref=f13e255]
+              - cell "Craft" [ref=f13e256]
+              - cell "Belum Terhubung" [ref=f13e257]
+              - cell [ref=f13e259]
+              - cell "—" [ref=f13e260]

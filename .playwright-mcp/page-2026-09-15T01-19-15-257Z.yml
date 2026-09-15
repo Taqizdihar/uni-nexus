@@ -1,0 +1,171 @@
+- generic [ref=f34e6]:
+  - complementary [ref=f34e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f34e9]
+    - generic [ref=f34e10]:
+      - generic [ref=f34e11]:
+        - heading "GLOBAL" [level=3] [ref=f34e12]
+        - link "Dasbor Global" [ref=f34e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f34e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f34e21]
+        - generic [ref=f34e22]:
+          - button "Pesanan" [ref=f34e377]
+          - button "Produksi" [ref=f34e386]
+          - button "Produk & Desain" [ref=f34e395]
+          - generic [ref=f34e405]:
+            - button "Printer" [ref=f34e406]
+            - generic [ref=f34e414]:
+              - link "Daftar Printer" [ref=f34e415] [cursor=pointer]:
+                - /url: /app/craft/printers
+              - link "Aktivitas Saat Ini" [ref=f34e416] [cursor=pointer]:
+                - /url: /app/craft/printers/activity
+              - link "Riwayat Cetak" [ref=f34e417] [cursor=pointer]:
+                - /url: /app/craft/printers/history
+              - link "Perawatan" [ref=f34e418] [cursor=pointer]:
+                - /url: /app/craft/printers/maintenance
+              - link "Masalah Printer" [ref=f34e419] [cursor=pointer]:
+                - /url: /app/craft/printers/issues
+          - generic [ref=f34e420]:
+            - button "Material" [ref=f34e421]
+            - generic [ref=f34e1524]:
+              - link "Inventaris Filament" [ref=f34e1525] [cursor=pointer]:
+                - /url: /app/craft/materials/filament
+              - link "Spool Filament" [ref=f34e1526] [cursor=pointer]:
+                - /url: /app/craft/materials/spools
+              - link "Pergerakan Stok" [ref=f34e1527] [cursor=pointer]:
+                - /url: /app/craft/materials/movements
+              - link "Stok Menipis" [ref=f34e1528] [cursor=pointer]:
+                - /url: /app/craft/materials/low-stock
+              - link "Limbah Filament" [ref=f34e1529] [cursor=pointer]:
+                - /url: /app/craft/materials/waste
+      - generic [ref=f34e36]:
+        - heading "BISNIS" [level=3] [ref=f34e37]
+        - generic [ref=f34e38]:
+          - button "Pelanggan & Mitra" [ref=f34e429]
+          - generic [ref=f34e438]:
+            - button "Pengadaan" [ref=f34e439]
+            - generic [ref=f34e1438]:
+              - link "Ringkasan Pengadaan" [ref=f34e1439] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f34e1440] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f34e1441] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f34e1442] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f34e1443] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [ref=f34e1444] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [ref=f34e1445] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f34e40]
+          - button "Laporan & Analitik" [ref=f34e450]
+      - generic [ref=f34e47]:
+        - heading "SISTEM" [level=3] [ref=f34e48]
+        - generic [ref=f34e459]:
+          - button "Marketplace & Kanal Penjualan" [ref=f34e461]
+          - button "Otomasi" [ref=f34e471]
+      - generic [ref=f34e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f34e50]
+        - generic [ref=f34e51]:
+          - link "Pusat Dokumen" [ref=f34e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f34e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f34e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f34e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f34e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f34e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f34e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f34e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f34e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f34e91]:
+    - banner [ref=f34e92]:
+      - combobox [ref=f34e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f34e98]
+        - generic [ref=f34e99]:
+          - generic [ref=f34e100]: ⌘
+          - generic [ref=f34e101]: K
+      - generic [ref=f34e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f34e104]'
+        - button [ref=f34e477]:
+          - generic [ref=f34e117]:
+            - text: "Workspace:"
+            - generic [ref=f34e118]:
+              - img "Craft Logo" [ref=f34e478]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f34e121]:
+          - generic [ref=f34e1063]: "2"
+        - button [ref=f34e126]:
+          - generic [aria-hidden] [ref=f34e127]: QU
+    - main [ref=f34e128]:
+      - generic [ref=f34e1952]:
+        - generic [ref=f34e1953]:
+          - generic [ref=f34e1954]:
+            - link "Kembali" [ref=f34e1955] [cursor=pointer]:
+              - /url: /app/craft/procurement/suppliers
+            - paragraph [ref=f34e1958]: PENGADAAN
+            - heading "QA Supplier Primary" [level=1] [ref=f34e1959]
+            - paragraph [ref=f34e1960]: SUP-000020 · Party kanonis dengan peran supplier untuk Craft.
+          - generic [ref=f34e1961]:
+            - link [ref=f34e1962] [cursor=pointer]:
+              - /url: /app/craft/procurement/suppliers/20/edit
+              - button "Edit" [ref=f34e1963]
+            - button "Nonaktifkan" [ref=f34e1966]
+        - generic [ref=f34e1969]:
+          - article [ref=f34e1970]:
+            - generic [ref=f34e1971]:
+              - generic [ref=f34e1972]:
+                - paragraph [ref=f34e1973]: Profil Pemasok
+                - paragraph [ref=f34e1974]: company
+              - generic [ref=f34e1975]: Disetujui
+            - generic [ref=f34e1976]:
+              - generic [ref=f34e1977]:
+                - term [ref=f34e1978]: Email
+                - definition [ref=f34e1979]: qa-supplier-primary@example.test
+              - generic [ref=f34e1980]:
+                - term [ref=f34e1981]: Telepon
+                - definition [ref=f34e1982]: "081200000601"
+              - generic [ref=f34e1983]:
+                - term [ref=f34e1984]: Tax ID
+                - definition [ref=f34e1985]: QA-NPWP-0601
+              - generic [ref=f34e1986]:
+                - term [ref=f34e1987]: Alamat
+                - definition [ref=f34e1988]: —
+          - article [ref=f34e1989]:
+            - paragraph [ref=f34e1990]: Kinerja Faktual
+            - generic [ref=f34e1991]:
+              - generic [ref=f34e1992]:
+                - paragraph [ref=f34e1993]: "0"
+                - paragraph [ref=f34e1994]: Total PO
+              - generic [ref=f34e1995]:
+                - paragraph [ref=f34e1996]: "0"
+                - paragraph [ref=f34e1997]: PO terbuka
+              - generic [ref=f34e1998]:
+                - paragraph [ref=f34e1999]: "0"
+                - paragraph [ref=f34e2000]: PO diterima
+              - generic [ref=f34e2001]:
+                - paragraph [ref=f34e2002]: Rp 0
+                - paragraph [ref=f34e2003]: Nilai pembelian
+        - generic [ref=f34e2004]:
+          - article [ref=f34e2005]:
+            - generic [ref=f34e2006]:
+              - heading "Kontak" [level=2] [ref=f34e2007]
+              - button "Kontak" [ref=f34e2008]
+            - paragraph [ref=f34e2011]: Belum ada kontak pemasok.
+          - article [ref=f34e2012]:
+            - heading "Material Terkait" [level=2] [ref=f34e2014]
+            - paragraph [ref=f34e2016]: Belum ada material terkait.
+        - generic [ref=f34e2017]:
+          - heading "Pesanan Pembelian" [level=2] [ref=f34e2019]
+          - table:
+            - rowgroup
+          - paragraph [ref=f34e2020]: Belum ada PO.

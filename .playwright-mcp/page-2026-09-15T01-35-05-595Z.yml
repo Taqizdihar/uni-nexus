@@ -1,0 +1,95 @@
+- generic [ref=f36e66]:
+  - complementary [ref=f36e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f36e69]
+    - generic [ref=f36e70]:
+      - generic [ref=f36e71]:
+        - heading "GLOBAL" [level=3] [ref=f36e72]
+        - link "Dasbor Global" [ref=f36e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f36e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f36e81]
+        - generic [ref=f36e82]:
+          - button "Pesanan" [ref=f36e363]
+          - button "Produksi" [ref=f36e372]
+          - button "Produk & Desain" [ref=f36e381]
+          - button "Printer" [ref=f36e392]
+          - button "Material" [ref=f36e401]
+      - generic [ref=f36e96]:
+        - heading "BISNIS" [level=3] [ref=f36e97]
+        - generic [ref=f36e98]:
+          - button "Pelanggan & Mitra" [ref=f36e409]
+          - generic [ref=f36e418]:
+            - button "Pengadaan" [ref=f36e419]
+            - generic [ref=f36e459]:
+              - link "Ringkasan Pengadaan" [ref=f36e460] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f36e461] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f36e462] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f36e463] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f36e464] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [active] [ref=f36e465] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [ref=f36e466] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f36e100]
+          - button "Laporan & Analitik" [ref=f36e430]
+      - generic [ref=f36e107]:
+        - heading "SISTEM" [level=3] [ref=f36e108]
+        - generic [ref=f36e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f36e441]
+          - button "Otomasi" [ref=f36e451]
+      - generic [ref=f36e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f36e110]
+        - generic [ref=f36e111]:
+          - link "Pusat Dokumen" [ref=f36e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f36e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f36e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f36e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f36e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f36e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f36e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f36e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f36e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f36e151]:
+    - banner [ref=f36e152]:
+      - combobox [ref=f36e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f36e158]
+        - generic [ref=f36e159]:
+          - generic [ref=f36e160]: ⌘
+          - generic [ref=f36e161]: K
+      - generic [ref=f36e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f36e164]'
+        - button [ref=f36e457]:
+          - generic [ref=f36e177]:
+            - text: "Workspace:"
+            - generic [ref=f36e178]:
+              - img "Craft Logo" [ref=f36e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f36e181]:
+          - generic [ref=f36e185]: "2"
+        - button [ref=f36e187]:
+          - generic [aria-hidden] [ref=f36e188]: QU
+    - main [ref=f36e189]:
+      - generic [ref=f36e771]:
+        - generic [ref=f36e772]:
+          - generic [ref=f36e773]:
+            - paragraph [ref=f36e774]: PENGADAAN
+            - heading "Tagihan Pemasok" [level=1] [ref=f36e775]
+            - paragraph [ref=f36e776]: Tagihan menampilkan Accounts Payable. Pembayaran dan kas tidak diubah oleh modul Pengadaan.
+          - button "Catat Tagihan" [ref=f36e778]
+        - generic [ref=f36e780]:
+          - heading "Belum Ada Tagihan Pemasok" [level=2] [ref=f36e781]
+          - paragraph [ref=f36e782]: Catat invoice dari pemasok untuk visibilitas utang usaha, tanpa menandai pembayaran.

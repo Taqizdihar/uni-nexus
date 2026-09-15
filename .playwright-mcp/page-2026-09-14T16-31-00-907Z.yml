@@ -1,0 +1,152 @@
+- generic [ref=f25e6]:
+  - complementary [ref=f25e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f25e9]
+    - generic [ref=f25e10]:
+      - generic [ref=f25e11]:
+        - heading "GLOBAL" [level=3] [ref=f25e12]
+        - link "Dasbor Global" [ref=f25e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f25e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f25e21]
+        - generic [ref=f25e22]:
+          - button "Pesanan" [ref=f25e225]
+          - button "Produksi" [ref=f25e234]
+          - button "Produk & Desain" [ref=f25e243]
+          - button "Printer" [ref=f25e254]
+          - button "Material" [ref=f25e263]
+      - generic [ref=f25e36]:
+        - heading "BISNIS" [level=3] [ref=f25e37]
+        - generic [ref=f25e38]:
+          - generic [ref=f25e270]:
+            - button "Pelanggan & Mitra" [ref=f25e271]
+            - generic [ref=f25e280]:
+              - link "Pelanggan" [ref=f25e281] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f25e282] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f25e284]
+          - button "Keuangan" [ref=f25e40]
+          - button "Laporan & Analitik" [ref=f25e295]
+      - generic [ref=f25e47]:
+        - heading "SISTEM" [level=3] [ref=f25e48]
+        - generic [ref=f25e304]:
+          - button "Marketplace & Kanal Penjualan" [ref=f25e306]
+          - button "Otomasi" [ref=f25e316]
+      - generic [ref=f25e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f25e50]
+        - generic [ref=f25e51]:
+          - link "Pusat Dokumen" [ref=f25e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f25e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f25e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f25e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f25e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f25e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f25e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f25e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f25e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f25e91]:
+    - banner [ref=f25e92]:
+      - combobox [ref=f25e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f25e98]
+        - generic [ref=f25e99]:
+          - generic [ref=f25e100]: ⌘
+          - generic [ref=f25e101]: K
+      - generic [ref=f25e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f25e104]'
+        - button [ref=f25e322]:
+          - generic [ref=f25e117]:
+            - text: "Workspace:"
+            - generic [ref=f25e118]:
+              - img "Craft Logo" [ref=f25e323]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f25e121]
+        - button [ref=f25e126]:
+          - generic [aria-hidden] [ref=f25e127]: QU
+    - main [ref=f25e128]:
+      - generic [ref=f25e130]:
+        - button "Kembali" [ref=f25e131]
+        - generic [ref=f25e134]:
+          - generic [ref=f25e135]:
+            - generic [ref=f25e136]:
+              - generic [ref=f25e137]: CQ
+              - generic [ref=f25e138]:
+                - paragraph [ref=f25e139]: CUS-000015
+                - heading "Customer QA Edited 20260914_2114" [level=1] [ref=f25e140]
+                - generic [ref=f25e141]:
+                  - generic [ref=f25e142]: Perusahaan
+                  - generic [ref=f25e143]: MITRA
+                  - generic [ref=f25e144]: Aktif
+            - generic [ref=f25e145]:
+              - button "Pesanan Baru" [ref=f25e146]
+              - button "Edit" [ref=f25e151]
+              - button "Kelola Kemitraan" [ref=f25e154]
+              - button "Nonaktifkan" [ref=f25e157]
+          - generic [ref=f25e158]:
+            - generic [ref=f25e160]:
+              - paragraph [ref=f25e161]: Total Pesanan
+              - paragraph [ref=f25e162]: "0"
+            - generic [ref=f25e164]:
+              - paragraph [ref=f25e165]: Nilai Pesanan
+              - paragraph [ref=f25e166]: Rp 0
+            - generic [ref=f25e168]:
+              - paragraph [ref=f25e169]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f25e170]: Rp 0
+            - generic [ref=f25e172]:
+              - paragraph [ref=f25e173]: Saldo Invoice
+              - paragraph [ref=f25e174]: Rp 0
+        - navigation "Profil pelanggan" [ref=f25e175]:
+          - button "Ringkasan" [ref=f25e176]
+          - button "Kontak" [ref=f25e177]
+          - button "Pesanan" [ref=f25e178]
+          - button "Keuangan" [ref=f25e179]
+          - button "Harga Mitra" [active] [ref=f25e180]
+        - generic [ref=f25e324]:
+          - generic [ref=f25e325]:
+            - generic [ref=f25e326]:
+              - heading "Harga Mitra" [level=2] [ref=f25e327]
+              - paragraph [ref=f25e328]: Aturan ini hanya berlaku untuk pesanan baru yang memenuhi syarat.
+            - button "Tambah Harga Mitra" [ref=f25e329]
+          - table [ref=f25e332]:
+            - rowgroup [ref=f25e333]:
+              - row [ref=f25e334]:
+                - columnheader "Produk / Varian" [ref=f25e335]
+                - columnheader "Minimum" [ref=f25e336]
+                - columnheader "Harga katalog" [ref=f25e337]
+                - columnheader "Harga Mitra" [ref=f25e338]
+                - columnheader "Periode" [ref=f25e339]
+                - columnheader "Status" [ref=f25e340]
+                - columnheader [ref=f25e341]
+            - rowgroup [ref=f25e342]:
+              - row [ref=f25e343]:
+                - cell [ref=f25e344]:
+                  - paragraph [ref=f25e345]: Produk QA Edited 20260914_2256
+                  - paragraph [ref=f25e346]: Varian QA 20260914_2256
+                - cell "6" [ref=f25e347]
+                - cell "Rp 175.000" [ref=f25e348]
+                - cell "Rp 125.000" [ref=f25e349]
+                - cell "2026-07-31T17:00:00.000Z — 2026-08-30T17:00:00.000Z" [ref=f25e350]
+                - cell "Aktif" [ref=f25e351]
+                - cell [ref=f25e353]:
+                  - button "Edit" [ref=f25e354]
+                  - button [ref=f25e355]
+              - row [ref=f25e359]:
+                - cell [ref=f25e360]:
+                  - paragraph [ref=f25e361]: Produk QA Edited 20260914_2256
+                  - paragraph [ref=f25e362]: Semua varian
+                - cell "1" [ref=f25e363]
+                - cell "Rp 160.000" [ref=f25e364]
+                - cell "10% diskon" [ref=f25e365]
+                - cell "Tanpa batas" [ref=f25e366]
+                - cell "Aktif" [ref=f25e367]
+                - cell [ref=f25e369]:
+                  - button "Edit" [ref=f25e370]
+                  - button [ref=f25e371]

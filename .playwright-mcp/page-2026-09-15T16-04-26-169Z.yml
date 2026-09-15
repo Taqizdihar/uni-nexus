@@ -1,0 +1,111 @@
+- generic [ref=f12e6]:
+  - complementary [ref=f12e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f12e9]
+    - generic [ref=f12e10]:
+      - generic [ref=f12e11]:
+        - heading "GLOBAL" [level=3] [ref=f12e12]
+        - link "Dasbor Global" [ref=f12e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f12e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f12e21]
+        - generic [ref=f12e22]:
+          - button "Pesanan" [ref=f12e24]
+          - button "Produksi" [ref=f12e33]
+          - button "Produk & Desain" [ref=f12e42]
+          - button "Printer" [ref=f12e53]
+          - button "Material" [ref=f12e62]
+      - generic [ref=f12e69]:
+        - heading "BISNIS" [level=3] [ref=f12e70]
+        - generic [ref=f12e71]:
+          - button "Pelanggan & Mitra" [ref=f12e73]
+          - button "Pengadaan" [ref=f12e83]
+          - button "Keuangan" [ref=f12e94]
+          - button "Laporan & Analitik" [ref=f12e102]
+      - generic [ref=f12e111]:
+        - heading "SISTEM" [level=3] [ref=f12e112]
+        - generic [ref=f12e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f12e115]
+          - button "Otomasi" [ref=f12e125]
+      - generic [ref=f12e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f12e132]
+        - generic [ref=f12e133]:
+          - link "Pusat Dokumen" [ref=f12e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f12e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f12e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f12e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [active] [ref=f12e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f12e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f12e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f12e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f12e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f12e173]:
+    - banner [ref=f12e174]:
+      - combobox [ref=f12e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f12e180]
+        - generic [ref=f12e181]:
+          - generic [ref=f12e182]: ⌘
+          - generic [ref=f12e183]: K
+      - generic [ref=f12e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f12e219]'
+        - button [ref=f12e195]:
+          - generic [ref=f12e199]:
+            - text: "Workspace:"
+            - generic [ref=f12e200]:
+              - img "Craft Logo" [ref=f12e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f12e202]:
+          - generic [ref=f12e221]: "3"
+        - button [ref=f12e207]:
+          - generic [aria-hidden] [ref=f12e208]: AR
+    - main [ref=f12e209]:
+      - generic [ref=f12e1605]:
+        - generic [ref=f12e1606]:
+          - generic [ref=f12e1607]:
+            - paragraph [ref=f12e1608]: Fitur Global
+            - heading "Pusat Integrasi" [level=1] [ref=f12e1609]
+            - paragraph [ref=f12e1610]: Pantau layanan eksternal yang terhubung ke UNI-NEXUS, kemampuannya, dan riwayat sinkronisasi.
+          - generic [ref=f12e1611]:
+            - link [ref=f12e1612] [cursor=pointer]:
+              - /url: /app/integrations/connections/new
+              - button "Koneksi Baru" [ref=f12e1613]
+            - link [ref=f12e1615] [cursor=pointer]:
+              - /url: /app/integrations/providers
+              - button "Katalog Provider" [ref=f12e1616]
+        - generic [ref=f12e1617]:
+          - generic [ref=f12e1619]:
+            - paragraph [ref=f12e1620]: "2"
+            - paragraph [ref=f12e1621]: Total Koneksi
+          - generic [ref=f12e1623]:
+            - paragraph [ref=f12e1624]: "0"
+            - paragraph [ref=f12e1625]: Terhubung
+          - generic [ref=f12e1627]:
+            - paragraph [ref=f12e1628]: "0"
+            - paragraph [ref=f12e1629]: Perlu Perhatian
+          - generic [ref=f12e1631]:
+            - paragraph [ref=f12e1632]: "1"
+            - paragraph [ref=f12e1633]: Belum Terhubung
+          - generic [ref=f12e1635]:
+            - paragraph [ref=f12e1636]: "1"
+            - paragraph [ref=f12e1637]: Dinonaktifkan
+          - generic [ref=f12e1639]:
+            - paragraph [ref=f12e1640]: "5"
+            - paragraph [ref=f12e1641]: Provider Direncanakan
+        - generic [ref=f12e1642]:
+          - generic [ref=f12e1643]:
+            - heading "Uji Koneksi Terbaru" [level=3] [ref=f12e1645]
+            - paragraph [ref=f12e1647]: Belum ada uji koneksi.
+          - generic [ref=f12e1648]:
+            - heading "Sinkronisasi Terbaru" [level=3] [ref=f12e1650]
+            - paragraph [ref=f12e1652]: Belum ada sinkronisasi.
+          - generic [ref=f12e1653]:
+            - heading "Kegagalan Terbaru" [level=3] [ref=f12e1655]
+            - paragraph [ref=f12e1657]: Tidak ada kegagalan terbaru.

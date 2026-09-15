@@ -1,0 +1,124 @@
+- generic [ref=e34]:
+  - complementary [ref=e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=e37]
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - heading "GLOBAL" [level=3] [ref=e40]
+        - link "Dasbor Global" [ref=e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=e48]:
+        - heading "OPERASIONAL" [level=3] [ref=e49]
+        - generic [ref=e50]:
+          - button "Pesanan" [ref=e327]
+          - button "Produksi" [ref=e336]
+          - button "Produk & Desain" [ref=e345]
+          - button "Printer" [ref=e356]
+          - button "Material" [ref=e365]
+      - generic [ref=e64]:
+        - heading "BISNIS" [level=3] [ref=e65]
+        - generic [ref=e66]:
+          - button "Pelanggan & Mitra" [ref=e373]
+          - button "Pengadaan" [ref=e383]
+          - button "Keuangan" [ref=e68]
+          - button "Laporan & Analitik" [ref=e394]
+      - generic [ref=e75]:
+        - heading "SISTEM" [level=3] [ref=e76]
+        - generic [ref=e403]:
+          - generic [ref=e404]:
+            - button "Marketplace & Kanal Penjualan" [ref=e405]
+            - generic [ref=e423]:
+              - link "Ringkasan Kanal" [ref=e424] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=e425] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=e426] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=e427] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=e428] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=e429] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=e430] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=e431] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - button "Otomasi" [ref=e415]
+      - generic [ref=e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=e78]
+        - generic [ref=e79]:
+          - link "Pusat Dokumen" [ref=e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=e119]:
+    - banner [ref=e120]:
+      - combobox [ref=e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=e126]
+        - generic [ref=e127]:
+          - generic [ref=e128]: ⌘
+          - generic [ref=e129]: K
+      - generic [ref=e130]:
+        - 'button "Pengguna aktif: 2 pengguna aktif" [ref=e132]':
+          - generic "Naura Ramadhani · Staf Spesialis" [ref=e134]:
+            - generic [aria-hidden] [ref=e135]: NR
+        - button [ref=e421]:
+          - generic [ref=e141]:
+            - text: "Workspace:"
+            - generic [ref=e142]:
+              - img "Craft Logo" [ref=e422]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=e145]:
+          - generic [ref=e149]: "2"
+        - button [ref=e151]:
+          - generic [aria-hidden] [ref=e152]: QU
+    - main [ref=e153]:
+      - generic [ref=e532]:
+        - generic [ref=e533]:
+          - generic [ref=e534]:
+            - paragraph [ref=e535]: Sistem Craft
+            - heading "Channel Edit 091504" [level=1] [ref=e536]
+            - paragraph [ref=e537]: QA_SC_091504 · Langsung
+          - link [ref=e539] [cursor=pointer]:
+            - /url: /app/craft/marketplace/channels
+            - button "Kembali" [ref=e540]
+        - generic [ref=e541]:
+          - generic [ref=e543]:
+            - paragraph [ref=e544]: "0"
+            - paragraph [ref=e545]: Total Pesanan
+          - generic [ref=e547]:
+            - paragraph [ref=e548]: "0"
+            - paragraph [ref=e549]: Pesanan Aktif
+          - generic [ref=e551]:
+            - paragraph [ref=e552]: Rp 0
+            - paragraph [ref=e553]: Nilai Pesanan
+          - generic [ref=e555]:
+            - paragraph [ref=e556]: Rp 0
+            - paragraph [ref=e557]: Dibayar
+        - generic [ref=e558]:
+          - generic [ref=e559]:
+            - heading "Pesanan" [level=3] [ref=e561]
+            - paragraph [ref=e563]: Belum ada pesanan dari kanal ini.
+          - generic [ref=e564]:
+            - heading "Produk Terpetakan" [level=3] [ref=e566]
+            - paragraph [ref=e568]: Belum ada pemetaan produk.
+          - generic [ref=e569]:
+            - heading "Biaya" [level=3] [ref=e571]
+            - paragraph [ref=e573]: Belum ada aturan biaya.
+          - generic [ref=e574]:
+            - heading "Integrasi" [level=3] [ref=e576]
+            - paragraph [ref=e578]: Belum Ada API Marketplace yang Terhubung

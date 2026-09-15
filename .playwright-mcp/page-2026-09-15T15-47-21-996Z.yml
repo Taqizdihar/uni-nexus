@@ -1,0 +1,98 @@
+- generic [ref=f11e6]:
+  - complementary [ref=f11e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f11e9]
+    - generic [ref=f11e10]:
+      - generic [ref=f11e11]:
+        - heading "GLOBAL" [level=3] [ref=f11e12]
+        - link "Dasbor Global" [ref=f11e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f11e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f11e21]
+        - generic [ref=f11e22]:
+          - button "Pesanan" [ref=f11e24]
+          - button "Produksi" [ref=f11e33]
+          - button "Produk & Desain" [ref=f11e42]
+          - button "Printer" [ref=f11e53]
+          - button "Material" [ref=f11e62]
+      - generic [ref=f11e69]:
+        - heading "BISNIS" [level=3] [ref=f11e70]
+        - generic [ref=f11e71]:
+          - button "Pelanggan & Mitra" [ref=f11e73]
+          - button "Pengadaan" [ref=f11e83]
+          - button "Keuangan" [ref=f11e94]
+          - button "Laporan & Analitik" [ref=f11e102]
+      - generic [ref=f11e111]:
+        - heading "SISTEM" [level=3] [ref=f11e112]
+        - generic [ref=f11e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f11e115]
+          - button "Otomasi" [ref=f11e125]
+      - generic [ref=f11e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f11e132]
+        - generic [ref=f11e133]:
+          - link "Pusat Dokumen" [ref=f11e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f11e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f11e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f11e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f11e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f11e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f11e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f11e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f11e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f11e173]:
+    - banner [ref=f11e174]:
+      - combobox [ref=f11e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f11e180]
+        - generic [ref=f11e181]:
+          - generic [ref=f11e182]: ⌘
+          - generic [ref=f11e183]: K
+      - generic [ref=f11e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f11e219]'
+        - button [ref=f11e195]:
+          - generic [ref=f11e199]:
+            - text: "Workspace:"
+            - generic [ref=f11e200]:
+              - img "Craft Logo" [ref=f11e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f11e202]:
+          - generic [ref=f11e221]: "3"
+        - button [ref=f11e207]:
+          - generic [aria-hidden] [ref=f11e208]: AR
+    - main [ref=f11e209]:
+      - generic [ref=f11e467]:
+        - generic [ref=f11e468]:
+          - generic [ref=f11e469]:
+            - heading "Kalender & Tugas" [level=1] [ref=f11e470]
+            - paragraph [ref=f11e471]: Jadwal, tenggat, dan pekerjaan tim Uni-Inside dalam satu tempat.
+          - generic [ref=f11e472]:
+            - button "Hari Ini" [ref=f11e473]
+            - button "Refresh" [ref=f11e474]
+            - button "Tambah Acara" [ref=f11e480]
+            - button "Tambah Tugas" [ref=f11e483]
+        - generic [ref=f11e487]:
+          - button "Kalender" [ref=f11e488]
+          - button "Tugas" [ref=f11e489]
+        - generic [ref=f11e491]:
+          - generic [ref=f11e492]:
+            - button "Periode sebelumnya" [ref=f11e493]
+            - heading "Sep 2026" [level=2] [ref=f11e599]
+            - button "Periode berikutnya" [ref=f11e497]
+          - generic [ref=f11e500]:
+            - combobox "Filter workspace" [ref=f11e501]:
+              - option "Semua workspace"
+              - option "Global"
+              - option "Uni-Inside Craft"
+              - option "Uni-Inside Shared"
+              - option "Uni-Inside Studio" [selected]
+            - button "Bulan" [ref=f11e502]
+            - button "Minggu" [ref=f11e503]
+            - button "Agenda" [ref=f11e504]
+        - paragraph [ref=f11e641]: Tidak ada jadwal dalam rentang ini.

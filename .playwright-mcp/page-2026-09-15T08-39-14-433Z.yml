@@ -1,0 +1,137 @@
+- generic [ref=f27e6]:
+  - complementary [ref=f27e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f27e9]
+    - generic [ref=f27e10]:
+      - generic [ref=f27e11]:
+        - heading "GLOBAL" [level=3] [ref=f27e12]
+        - link "Dasbor Global" [ref=f27e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f27e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f27e21]
+        - generic [ref=f27e22]:
+          - generic [ref=f27e23]:
+            - button "Proyek" [ref=f27e24]
+            - generic [ref=f27e30]:
+              - link "Semua Proyek" [ref=f27e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f27e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f27e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f27e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f27e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f27e41]:
+        - heading "BISNIS" [level=3] [ref=f27e42]
+        - button "Keuangan" [ref=f27e45]
+      - heading "SISTEM" [level=3] [ref=f27e53]
+      - generic [ref=f27e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f27e55]
+        - generic [ref=f27e56]:
+          - link "Pusat Dokumen" [ref=f27e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f27e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f27e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f27e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f27e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f27e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f27e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f27e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f27e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f27e96]:
+    - banner [ref=f27e97]:
+      - combobox [ref=f27e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f27e103]
+        - generic [ref=f27e104]:
+          - generic [ref=f27e105]: ⌘
+          - generic [ref=f27e106]: K
+      - generic [ref=f27e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f27e109]'
+        - button [ref=f27e118]:
+          - generic [ref=f27e122]:
+            - text: "Workspace:"
+            - generic [ref=f27e123]:
+              - img "Studio Logo" [ref=f27e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f27e126]:
+          - generic [ref=f27e130]: "2"
+        - button [ref=f27e132]:
+          - generic [aria-hidden] [ref=f27e133]: QU
+    - main [ref=f27e134]:
+      - generic [ref=f27e483]:
+        - generic [ref=f27e485]:
+          - button "Kembali" [ref=f27e486]
+          - generic [ref=f27e489]:
+            - paragraph [ref=f27e490]: Operasional Studio
+            - heading "Tambah Klien" [level=1] [ref=f27e491]
+            - paragraph [ref=f27e492]: Catat klien baru Uni-Inside Studio. Hanya nama klien yang wajib diisi — data lain dapat dilengkapi kemudian.
+        - generic [ref=f27e493]:
+          - generic [ref=f27e495]:
+            - generic [ref=f27e497]:
+              - generic [ref=f27e498]: "01"
+              - generic [ref=f27e504]:
+                - heading "Identitas Klien" [level=2] [ref=f27e505]
+                - paragraph [ref=f27e506]: Jenis dan nama klien.
+            - generic [ref=f27e507]:
+              - generic [ref=f27e508]:
+                - generic [ref=f27e509]: Jenis klien
+                - combobox "Jenis klien" [ref=f27e510]:
+                  - option "Perorangan" [selected]
+                  - option "Perusahaan"
+                  - option "Institusi"
+              - generic [ref=f27e512]:
+                - generic [ref=f27e513]: Nama Lengkap *
+                - textbox "Nama Lengkap *" [active] [ref=f27e514]
+              - generic [ref=f27e515]:
+                - generic [ref=f27e516]:
+                  - generic [ref=f27e517]: Email
+                  - textbox "Email" [ref=f27e518]
+                - generic [ref=f27e519]:
+                  - generic [ref=f27e520]: Telepon
+                  - textbox "Telepon" [ref=f27e521]
+                - generic [ref=f27e522]:
+                  - generic [ref=f27e523]: Website
+                  - textbox "Website Harus diawali http:// atau https://." [ref=f27e524]:
+                    - /placeholder: https://
+                  - generic [ref=f27e525]: Harus diawali http:// atau https://.
+                - generic [ref=f27e526]:
+                  - generic [ref=f27e527]: NPWP / Tax ID
+                  - textbox "NPWP / Tax ID" [ref=f27e528]
+              - generic [ref=f27e529]:
+                - generic [ref=f27e530]:
+                  - generic [ref=f27e531]: Alamat
+                  - textbox "Alamat" [ref=f27e532]
+                - generic [ref=f27e533]:
+                  - generic [ref=f27e534]: Alamat (baris 2)
+                  - textbox "Alamat (baris 2)" [ref=f27e535]
+                - generic [ref=f27e536]:
+                  - generic [ref=f27e537]: Kota
+                  - textbox "Kota" [ref=f27e538]
+                - generic [ref=f27e539]:
+                  - generic [ref=f27e540]: Provinsi
+                  - textbox "Provinsi" [ref=f27e541]
+                - generic [ref=f27e542]:
+                  - generic [ref=f27e543]: Kode Pos
+                  - textbox "Kode Pos" [ref=f27e544]
+              - generic [ref=f27e545]:
+                - generic [ref=f27e546]: Catatan
+                - textbox "Catatan" [ref=f27e547]
+          - generic [ref=f27e549]:
+            - generic [ref=f27e551]:
+              - generic [ref=f27e552]: "02"
+              - generic [ref=f27e559]:
+                - heading "PIC / Contact Person" [level=2] [ref=f27e560]
+                - paragraph [ref=f27e561]: Opsional, namun disarankan untuk klien perusahaan atau institusi.
+            - button "Tambah Kontak" [ref=f27e563]
+          - generic [ref=f27e565]:
+            - button "Batal" [ref=f27e566]
+            - button "Simpan Klien" [ref=f27e567]

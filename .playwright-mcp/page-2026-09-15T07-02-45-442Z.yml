@@ -1,0 +1,126 @@
+- generic [ref=f3e6]:
+  - complementary [ref=f3e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e9]
+    - generic [ref=f3e10]:
+      - generic [ref=f3e11]:
+        - heading "GLOBAL" [level=3] [ref=f3e12]
+        - link "Dasbor Global" [ref=f3e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e21]
+        - generic [ref=f3e22]:
+          - generic [ref=f3e23]:
+            - button "Proyek" [ref=f3e24]
+            - generic [ref=f3e172]:
+              - link "Semua Proyek" [ref=f3e173] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f3e174] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f3e175] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f3e176] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f3e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f3e36]:
+        - heading "BISNIS" [level=3] [ref=f3e37]
+        - button "Keuangan" [ref=f3e40]
+      - heading "SISTEM" [level=3] [ref=f3e48]
+      - generic [ref=f3e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e50]
+        - generic [ref=f3e51]:
+          - link "Pusat Dokumen" [ref=f3e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e91]:
+    - banner [ref=f3e92]:
+      - combobox [ref=f3e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e98]
+        - generic [ref=f3e99]:
+          - generic [ref=f3e100]: ⌘
+          - generic [ref=f3e101]: K
+      - generic [ref=f3e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e177]'
+        - button [ref=f3e113]:
+          - generic [ref=f3e117]:
+            - text: "Workspace:"
+            - generic [ref=f3e118]:
+              - img "Studio Logo" [ref=f3e178]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f3e120]:
+          - generic [ref=f3e179]: "2"
+        - generic [ref=f3e124] [cursor=pointer]:
+          - button [active] [ref=f3e125]:
+            - generic [aria-hidden] [ref=f3e126]: QU
+          - generic [ref=f3e188]:
+            - generic [ref=f3e189]:
+              - paragraph [ref=f3e190]: QA User-1
+              - paragraph [ref=f3e191]: Insinyur 3D
+            - link "Profil Saya" [ref=f3e192]:
+              - /url: /app/profile
+            - link "Pengaturan Sistem" [ref=f3e193]:
+              - /url: /app/settings
+            - button "Keluar" [ref=f3e194]
+    - main [ref=f3e127]:
+      - generic [ref=f3e129]:
+        - generic [ref=f3e130]:
+          - generic [ref=f3e132]:
+            - paragraph [ref=f3e133]: Operasional Studio
+            - heading "Proyek" [level=1] [ref=f3e134]
+            - paragraph [ref=f3e135]: Kelola pekerjaan kreatif, deadline, tahapan, tim, dan hasil proyek Uni-Inside Studio.
+          - generic [ref=f3e136]:
+            - button "Filter" [ref=f3e137]
+            - button "Proyek Baru" [ref=f3e140]
+        - generic [ref=f3e142]:
+          - generic [ref=f3e143]:
+            - paragraph [ref=f3e144]: Proyek Aktif
+            - generic [ref=f3e145]: "0"
+            - paragraph [ref=f3e146]: Disetujui, dikerjakan, dan tinjauan.
+          - generic [ref=f3e147]:
+            - paragraph [ref=f3e148]: Deadline 7 Hari
+            - generic [ref=f3e149]: "0"
+            - paragraph [ref=f3e150]: Jatuh tempo dalam sepekan.
+          - generic [ref=f3e151]:
+            - paragraph [ref=f3e152]: Terlambat
+            - generic [ref=f3e153]: "0"
+            - paragraph [ref=f3e154]: Melewati deadline dan belum ditutup.
+          - generic [ref=f3e155]:
+            - paragraph [ref=f3e156]: Dalam Tinjauan
+            - generic [ref=f3e157]: "0"
+            - paragraph [ref=f3e158]: Menunggu persetujuan klien.
+          - generic [ref=f3e159]:
+            - paragraph [ref=f3e160]: Selesai Bulan Ini
+            - generic [ref=f3e161]: "0"
+            - paragraph [ref=f3e162]: Berdasarkan tanggal penyelesaian.
+        - generic [ref=f3e163]:
+          - generic [ref=f3e164]:
+            - textbox "Cari kode, nama proyek, klien, tipe, atau brief..." [ref=f3e166]
+            - generic [ref=f3e167]:
+              - generic [ref=f3e168]: Urutkan
+              - combobox "Urutkan" [ref=f3e169]:
+                - option "Deadline Terdekat" [selected]
+                - option "Terbaru"
+                - option "Nama (A-Z)"
+                - option "Nilai Kontrak Tertinggi"
+                - option "Prioritas Tertinggi"
+                - option "Klien (A-Z)"
+          - generic [ref=f3e180]:
+            - generic [ref=f3e181]: ✦
+            - heading "Belum Ada Proyek" [level=3] [ref=f3e183]
+            - paragraph [ref=f3e184]: Mulai dengan membuat proyek pertama untuk klien Uni-Inside Studio.
+            - button "Proyek Baru" [ref=f3e186]

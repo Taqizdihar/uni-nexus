@@ -1,0 +1,303 @@
+- generic [ref=f7e971]:
+  - complementary [ref=f7e972]:
+    - heading "UNI-NEXUS" [level=1] [ref=f7e974]
+    - generic [ref=f7e975]:
+      - generic [ref=f7e976]:
+        - heading "GLOBAL" [level=3] [ref=f7e977]
+        - link "Dasbor Global" [ref=f7e979] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f7e985]:
+        - heading "OPERASIONAL" [level=3] [ref=f7e986]
+        - generic [ref=f7e987]:
+          - button "Pesanan" [ref=f7e1268]
+          - button "Produksi" [ref=f7e1277]
+          - button "Produk & Desain" [ref=f7e1286]
+          - button "Printer" [ref=f7e1297]
+          - button "Material" [ref=f7e1306]
+      - generic [ref=f7e1001]:
+        - heading "BISNIS" [level=3] [ref=f7e1002]
+        - generic [ref=f7e1003]:
+          - generic [ref=f7e1313]:
+            - button "Pelanggan & Mitra" [ref=f7e1314]
+            - generic [ref=f7e1364]:
+              - link "Pelanggan" [ref=f7e1365] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f7e1366] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f7e1324]
+          - button "Keuangan" [ref=f7e1005]
+          - button "Laporan & Analitik" [ref=f7e1335]
+      - generic [ref=f7e1012]:
+        - heading "SISTEM" [level=3] [ref=f7e1013]
+        - generic [ref=f7e1344]:
+          - button "Marketplace & Kanal Penjualan" [ref=f7e1346]
+          - button "Otomasi" [ref=f7e1356]
+      - generic [ref=f7e1014]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f7e1015]
+        - generic [ref=f7e1016]:
+          - link "Pusat Dokumen" [ref=f7e1017] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f7e1022] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f7e1025] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f7e1029] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f7e1032] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f7e1038] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f7e1041] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f7e1047] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f7e1052] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f7e1056]:
+    - banner [ref=f7e1057]:
+      - combobox [ref=f7e1059]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f7e1063]
+        - generic [ref=f7e1064]:
+          - generic [ref=f7e1065]: ⌘
+          - generic [ref=f7e1066]: K
+      - generic [ref=f7e1067]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f7e1069]'
+        - button [ref=f7e1362]:
+          - generic [ref=f7e1082]:
+            - text: "Workspace:"
+            - generic [ref=f7e1083]:
+              - img "Craft Logo" [ref=f7e1363]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f7e1086]:
+          - generic [ref=f7e1090]: "2"
+        - button [ref=f7e1092]:
+          - generic [aria-hidden] [ref=f7e1093]: QU
+    - main [ref=f7e1094]:
+      - generic [ref=f7e1792]:
+        - generic [ref=f7e1793]:
+          - generic [ref=f7e1794]:
+            - paragraph [ref=f7e1795]: Bisnis Craft
+            - heading "Pelanggan" [level=1] [ref=f7e1796]
+            - paragraph [ref=f7e1797]: Kelola pelanggan Craft, informasi kontak, dan riwayat hubungan bisnis.
+          - generic [ref=f7e1798]:
+            - button "Ekspor CSV" [ref=f7e1799]
+            - button "Tambah Pelanggan" [ref=f7e1803]
+        - generic [ref=f7e1805]:
+          - generic [ref=f7e1814]:
+            - paragraph [ref=f7e1815]: Total Pelanggan
+            - paragraph [ref=f7e1816]: "8"
+          - generic [ref=f7e1824]:
+            - paragraph [ref=f7e1825]: Pelanggan Aktif
+            - paragraph [ref=f7e1826]: "4"
+          - generic [ref=f7e1835]:
+            - paragraph [ref=f7e1836]: Mitra Aktif
+            - paragraph [ref=f7e1837]: "1"
+          - generic [ref=f7e1844]:
+            - paragraph [ref=f7e1845]: Pesanan Aktif
+            - paragraph [ref=f7e1846]: "0"
+        - generic [ref=f7e1847]:
+          - generic [ref=f7e1848]:
+            - textbox [ref=f7e1850]:
+              - /placeholder: Cari kode, nama, email, telepon, WhatsApp, atau NPWP...
+            - generic [ref=f7e1851]: 8 hubungan bisnis
+          - generic [ref=f7e1853]:
+            - combobox [ref=f7e1854]:
+              - option "Semua jenis" [selected]
+              - option "Individu"
+              - option "Perusahaan"
+              - option "Institusi"
+            - combobox [ref=f7e1855]:
+              - option "Semua hubungan" [selected]
+              - option "Pelanggan"
+              - option "Mitra"
+            - combobox [ref=f7e1856]:
+              - option "Semua status" [selected]
+              - option "Aktif"
+              - option "Tidak Aktif"
+            - generic [ref=f7e1857]:
+              - checkbox "Pesanan aktif" [ref=f7e1858]
+              - text: Pesanan aktif
+            - combobox [ref=f7e1859]:
+              - option "Nama A–Z" [selected]
+              - option "Pesanan terbaru"
+              - option "Nilai pesanan tertinggi"
+              - option "Jumlah pesanan"
+              - option "Baru ditambahkan"
+        - generic [ref=f7e1860]:
+          - button "CD CUS-000016 Customer Duplicate QA 20260914_2114 Individu Tidak Aktif customer.duplicate.20260914_2114@example.test 081234562115 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1861]:
+            - generic [ref=f7e1862]:
+              - generic [ref=f7e1863]: CD
+              - generic [ref=f7e1864]:
+                - paragraph [ref=f7e1865]: CUS-000016
+                - heading "Customer Duplicate QA 20260914_2114" [level=2] [ref=f7e1866]
+                - generic [ref=f7e1867]:
+                  - generic [ref=f7e1868]: Individu
+                  - generic [ref=f7e1869]: Tidak Aktif
+            - generic [ref=f7e1870]:
+              - paragraph [ref=f7e1871]: customer.duplicate.20260914_2114@example.test
+              - paragraph [ref=f7e1872]: "081234562115"
+            - generic [ref=f7e1873]:
+              - generic [ref=f7e1874]:
+                - paragraph [ref=f7e1875]: Pesanan
+                - paragraph [ref=f7e1876]: "0"
+              - generic [ref=f7e1877]:
+                - paragraph [ref=f7e1878]: Nilai Pesanan
+                - paragraph [ref=f7e1879]: Rp 0
+              - generic [ref=f7e1880]:
+                - paragraph [ref=f7e1881]: Terakhir
+                - paragraph [ref=f7e1882]: Belum ada
+          - button "CI CUS-000018 Customer invalid country 20260914_2114 Individu Tidak Aktif valid.country.20260914_2114@example.test 081234562119 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1883]:
+            - generic [ref=f7e1884]:
+              - generic [ref=f7e1885]: CI
+              - generic [ref=f7e1886]:
+                - paragraph [ref=f7e1887]: CUS-000018
+                - heading "Customer invalid country 20260914_2114" [level=2] [ref=f7e1888]
+                - generic [ref=f7e1889]:
+                  - generic [ref=f7e1890]: Individu
+                  - generic [ref=f7e1891]: Tidak Aktif
+            - generic [ref=f7e1892]:
+              - paragraph [ref=f7e1893]: valid.country.20260914_2114@example.test
+              - paragraph [ref=f7e1894]: "081234562119"
+            - generic [ref=f7e1895]:
+              - generic [ref=f7e1896]:
+                - paragraph [ref=f7e1897]: Pesanan
+                - paragraph [ref=f7e1898]: "0"
+              - generic [ref=f7e1899]:
+                - paragraph [ref=f7e1900]: Nilai Pesanan
+                - paragraph [ref=f7e1901]: Rp 0
+              - generic [ref=f7e1902]:
+                - paragraph [ref=f7e1903]: Terakhir
+                - paragraph [ref=f7e1904]: Belum ada
+          - button "CI CUS-000019 Customer invalid note 20260914_2114 Individu Tidak Aktif valid.note.unique.20260914_2114@example.test 081234562120 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1905]:
+            - generic [ref=f7e1906]:
+              - generic [ref=f7e1907]: CI
+              - generic [ref=f7e1908]:
+                - paragraph [ref=f7e1909]: CUS-000019
+                - heading "Customer invalid note 20260914_2114" [level=2] [ref=f7e1910]
+                - generic [ref=f7e1911]:
+                  - generic [ref=f7e1912]: Individu
+                  - generic [ref=f7e1913]: Tidak Aktif
+            - generic [ref=f7e1914]:
+              - paragraph [ref=f7e1915]: valid.note.unique.20260914_2114@example.test
+              - paragraph [ref=f7e1916]: "081234562120"
+            - generic [ref=f7e1917]:
+              - generic [ref=f7e1918]:
+                - paragraph [ref=f7e1919]: Pesanan
+                - paragraph [ref=f7e1920]: "0"
+              - generic [ref=f7e1921]:
+                - paragraph [ref=f7e1922]: Nilai Pesanan
+                - paragraph [ref=f7e1923]: Rp 0
+              - generic [ref=f7e1924]:
+                - paragraph [ref=f7e1925]: Terakhir
+                - paragraph [ref=f7e1926]: Belum ada
+          - button "CQ CUS-000023 Customer QA 091507 Individu Aktif customer.091507@example.test 08123456091507 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1927]:
+            - generic [ref=f7e1928]:
+              - generic [ref=f7e1929]: CQ
+              - generic [ref=f7e1930]:
+                - paragraph [ref=f7e1931]: CUS-000023
+                - heading "Customer QA 091507" [level=2] [ref=f7e1932]
+                - generic [ref=f7e1933]:
+                  - generic [ref=f7e1934]: Individu
+                  - generic [ref=f7e1935]: Aktif
+            - generic [ref=f7e1936]:
+              - paragraph [ref=f7e1937]: customer.091507@example.test
+              - paragraph [ref=f7e1938]: "08123456091507"
+            - generic [ref=f7e1939]:
+              - generic [ref=f7e1940]:
+                - paragraph [ref=f7e1941]: Pesanan
+                - paragraph [ref=f7e1942]: "0"
+              - generic [ref=f7e1943]:
+                - paragraph [ref=f7e1944]: Nilai Pesanan
+                - paragraph [ref=f7e1945]: Rp 0
+              - generic [ref=f7e1946]:
+                - paragraph [ref=f7e1947]: Terakhir
+                - paragraph [ref=f7e1948]: Belum ada
+          - button "CQ CUS-000015 Customer QA Edited 20260914_2114 Perusahaan MITRA Aktif customer.edited.20260914_2114@example.test 081234562121 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1949]:
+            - generic [ref=f7e1950]:
+              - generic [ref=f7e1951]: CQ
+              - generic [ref=f7e1952]:
+                - paragraph [ref=f7e1953]: CUS-000015
+                - heading "Customer QA Edited 20260914_2114" [level=2] [ref=f7e1954]
+                - generic [ref=f7e1955]:
+                  - generic [ref=f7e1956]: Perusahaan
+                  - generic [ref=f7e1957]: MITRA
+                  - generic [ref=f7e1958]: Aktif
+            - generic [ref=f7e1959]:
+              - paragraph [ref=f7e1960]: customer.edited.20260914_2114@example.test
+              - paragraph [ref=f7e1961]: "081234562121"
+            - generic [ref=f7e1962]:
+              - generic [ref=f7e1963]:
+                - paragraph [ref=f7e1964]: Pesanan
+                - paragraph [ref=f7e1965]: "0"
+              - generic [ref=f7e1966]:
+                - paragraph [ref=f7e1967]: Nilai Pesanan
+                - paragraph [ref=f7e1968]: Rp 0
+              - generic [ref=f7e1969]:
+                - paragraph [ref=f7e1970]: Terakhir
+                - paragraph [ref=f7e1971]: Belum ada
+          - button "N CUS-000017 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN Individu Tidak Aktif Email belum tersedia Telepon belum tersedia Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1972]:
+            - generic [ref=f7e1973]:
+              - generic [ref=f7e1974]: "N"
+              - generic [ref=f7e1975]:
+                - paragraph [ref=f7e1976]: CUS-000017
+                - heading "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN" [level=2] [ref=f7e1977]
+                - generic [ref=f7e1978]:
+                  - generic [ref=f7e1979]: Individu
+                  - generic [ref=f7e1980]: Tidak Aktif
+            - generic [ref=f7e1981]:
+              - paragraph [ref=f7e1982]: Email belum tersedia
+              - paragraph [ref=f7e1983]: Telepon belum tersedia
+            - generic [ref=f7e1984]:
+              - generic [ref=f7e1985]:
+                - paragraph [ref=f7e1986]: Pesanan
+                - paragraph [ref=f7e1987]: "0"
+              - generic [ref=f7e1988]:
+                - paragraph [ref=f7e1989]: Nilai Pesanan
+                - paragraph [ref=f7e1990]: Rp 0
+              - generic [ref=f7e1991]:
+                - paragraph [ref=f7e1992]: Terakhir
+                - paragraph [ref=f7e1993]: Belum ada
+          - button "QC CUS-000021 QA Customer S07 Individu Aktif qa.customer.s07@example.com 081200000701 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e1994]:
+            - generic [ref=f7e1995]:
+              - generic [ref=f7e1996]: QC
+              - generic [ref=f7e1997]:
+                - paragraph [ref=f7e1998]: CUS-000021
+                - heading "QA Customer S07" [level=2] [ref=f7e1999]
+                - generic [ref=f7e2000]:
+                  - generic [ref=f7e2001]: Individu
+                  - generic [ref=f7e2002]: Aktif
+            - generic [ref=f7e2003]:
+              - paragraph [ref=f7e2004]: qa.customer.s07@example.com
+              - paragraph [ref=f7e2005]: "081200000701"
+            - generic [ref=f7e2006]:
+              - generic [ref=f7e2007]:
+                - paragraph [ref=f7e2008]: Pesanan
+                - paragraph [ref=f7e2009]: "0"
+              - generic [ref=f7e2010]:
+                - paragraph [ref=f7e2011]: Nilai Pesanan
+                - paragraph [ref=f7e2012]: Rp 0
+              - generic [ref=f7e2013]:
+                - paragraph [ref=f7e2014]: Terakhir
+                - paragraph [ref=f7e2015]: Belum ada
+          - button "QC CUS-000022 QA Customer S07 Optional Individu Aktif Email belum tersedia 081200000702 Pesanan 0 Nilai Pesanan Rp 0 Terakhir Belum ada" [ref=f7e2016]:
+            - generic [ref=f7e2017]:
+              - generic [ref=f7e2018]: QC
+              - generic [ref=f7e2019]:
+                - paragraph [ref=f7e2020]: CUS-000022
+                - heading "QA Customer S07 Optional" [level=2] [ref=f7e2021]
+                - generic [ref=f7e2022]:
+                  - generic [ref=f7e2023]: Individu
+                  - generic [ref=f7e2024]: Aktif
+            - generic [ref=f7e2025]:
+              - paragraph [ref=f7e2026]: Email belum tersedia
+              - paragraph [ref=f7e2027]: "081200000702"
+            - generic [ref=f7e2028]:
+              - generic [ref=f7e2029]:
+                - paragraph [ref=f7e2030]: Pesanan
+                - paragraph [ref=f7e2031]: "0"
+              - generic [ref=f7e2032]:
+                - paragraph [ref=f7e2033]: Nilai Pesanan
+                - paragraph [ref=f7e2034]: Rp 0
+              - generic [ref=f7e2035]:
+                - paragraph [ref=f7e2036]: Terakhir
+                - paragraph [ref=f7e2037]: Belum ada

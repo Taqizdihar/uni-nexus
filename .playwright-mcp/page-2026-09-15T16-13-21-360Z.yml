@@ -1,0 +1,72 @@
+- generic [ref=f20e3]:
+  - complementary [ref=f20e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f20e6]
+    - generic [ref=f20e7]:
+      - generic [ref=f20e8]:
+        - heading "GLOBAL" [level=3] [ref=f20e9]
+        - link "Dasbor Global" [ref=f20e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f20e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f20e18]
+        - generic [ref=f20e19]:
+          - button "Proyek" [ref=f20e21]
+          - link "Klien" [ref=f20e27] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f20e33]:
+        - heading "BISNIS" [level=3] [ref=f20e34]
+        - button "Keuangan" [ref=f20e37]
+      - heading "SISTEM" [level=3] [ref=f20e45]
+      - generic [ref=f20e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f20e47]
+        - generic [ref=f20e48]:
+          - link "Pusat Dokumen" [ref=f20e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f20e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f20e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f20e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f20e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f20e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f20e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f20e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f20e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f20e88]:
+    - banner [ref=f20e89]:
+      - combobox [ref=f20e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f20e95]
+        - generic [ref=f20e96]:
+          - generic [ref=f20e97]: ⌘
+          - generic [ref=f20e98]: K
+      - generic [ref=f20e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f20e146]'
+        - button [ref=f20e110]:
+          - generic [ref=f20e114]:
+            - text: "Workspace:"
+            - generic [ref=f20e115]:
+              - img "Studio Logo" [ref=f20e147]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f20e117]:
+          - generic [ref=f20e148]: "2"
+        - button [ref=f20e122]:
+          - generic [aria-hidden] [ref=f20e123]: QU
+    - main [ref=f20e124]:
+      - generic [ref=f20e126]:
+        - generic [ref=f20e127]:
+          - generic [ref=f20e128]:
+            - heading "Dalam Pengembangan" [level=1] [ref=f20e129]
+            - paragraph [ref=f20e130]: Modul ini direncanakan untuk pembaruan mendatang.
+          - generic [ref=f20e131]: Tahap Berikutnya
+        - generic [ref=f20e132]:
+          - heading "Ringkasan Dalam Pengembangan" [level=3] [ref=f20e137]
+          - paragraph [ref=f20e138]: Modul ini adalah bagian dari peta jalan yang direncanakan dan akan menyediakan kemampuan dalam pengembangan lengkap setelah arsitektur backend diintegrasikan.
+          - button "Lihat Dokumentasi" [ref=f20e140]
+          - paragraph [ref=f20e144]:
+            - strong [ref=f20e145]: "Mode Pratinjau:"
+            - text: Fitur di halaman ini saat ini adalah demonstrasi UI. Data yang dimasukkan di sini tidak akan disimpan sampai integrasi backend selesai.

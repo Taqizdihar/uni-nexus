@@ -1,0 +1,132 @@
+- generic [ref=f32e6]:
+  - complementary [ref=f32e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f32e9]
+    - generic [ref=f32e10]:
+      - generic [ref=f32e11]:
+        - heading "GLOBAL" [level=3] [ref=f32e12]
+        - link "Dasbor Global" [ref=f32e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f32e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f32e21]
+        - generic [ref=f32e22]:
+          - button "Proyek" [ref=f32e24]
+          - link "Klien" [ref=f32e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f32e36]:
+        - heading "BISNIS" [level=3] [ref=f32e37]
+        - button "Keuangan" [ref=f32e40]
+      - heading "SISTEM" [level=3] [ref=f32e48]
+      - generic [ref=f32e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f32e50]
+        - generic [ref=f32e51]:
+          - link "Pusat Dokumen" [ref=f32e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f32e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f32e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f32e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f32e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f32e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f32e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f32e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f32e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f32e91]:
+    - banner [ref=f32e92]:
+      - combobox [ref=f32e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f32e98]
+        - generic [ref=f32e99]:
+          - generic [ref=f32e100]: ⌘
+          - generic [ref=f32e101]: K
+      - generic [ref=f32e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f32e104]'
+        - button [ref=f32e113]:
+          - generic [ref=f32e117]:
+            - text: "Workspace:"
+            - generic [ref=f32e118]:
+              - img "Studio Logo" [ref=f32e119]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f32e121]:
+          - generic [ref=f32e125]: "2"
+        - button [ref=f32e127]:
+          - generic [aria-hidden] [ref=f32e128]: QU
+    - main [ref=f32e129]:
+      - generic [ref=f32e131]:
+        - generic [ref=f32e132]:
+          - generic [ref=f32e134]:
+            - paragraph [ref=f32e135]: Operasional Studio
+            - heading "Klien" [level=1] [ref=f32e136]
+            - paragraph [ref=f32e137]: Kelola identitas, kontak, riwayat proyek, dan hubungan bisnis klien Uni-Inside Studio.
+          - generic [ref=f32e138]:
+            - button "Filter" [ref=f32e139]
+            - button "Ekspor CSV" [ref=f32e142]
+            - button "Tambah Klien" [ref=f32e146]
+        - generic [ref=f32e148]:
+          - generic [ref=f32e149]:
+            - paragraph [ref=f32e150]: Klien Aktif
+            - generic [ref=f32e151]: "1"
+          - generic [ref=f32e152]:
+            - paragraph [ref=f32e153]: Klien dengan Proyek Aktif
+            - generic [ref=f32e154]: "0"
+          - generic [ref=f32e155]:
+            - paragraph [ref=f32e156]: Klien Berulang
+            - generic [ref=f32e157]: "0"
+            - paragraph [ref=f32e158]: ≥2 proyek yang tidak dibatalkan.
+          - generic [ref=f32e159]:
+            - paragraph [ref=f32e160]: Proyek Aktif
+            - generic [ref=f32e161]: "0"
+          - generic [ref=f32e162]:
+            - paragraph [ref=f32e163]: Piutang Studio
+            - generic [ref=f32e164]: Rp 0
+        - generic [ref=f32e165]:
+          - generic [ref=f32e166]:
+            - textbox "Cari kode, nama, email, telepon, NPWP, atau kontak..." [ref=f32e168]
+            - generic [ref=f32e169]:
+              - generic [ref=f32e170]: Urutkan
+              - combobox "Urutkan" [ref=f32e171]:
+                - option "Nama (A-Z)" [selected]
+                - option "Terbaru"
+                - option "Proyek Terbaru"
+                - option "Proyek Aktif Terbanyak"
+                - option "Nilai Kontrak Tertinggi"
+                - option "Outstanding Tertinggi"
+          - table [ref=f32e173]:
+            - rowgroup [ref=f32e174]:
+              - row [ref=f32e175]:
+                - columnheader "Klien" [ref=f32e176]
+                - columnheader "Kontak Utama" [ref=f32e177]
+                - columnheader "Jenis" [ref=f32e178]
+                - columnheader "Kota" [ref=f32e179]
+                - columnheader "Proyek Aktif" [ref=f32e180]
+                - columnheader "Total Proyek" [ref=f32e181]
+                - columnheader "Nilai Kontrak" [ref=f32e182]
+                - columnheader "Outstanding" [ref=f32e183]
+                - columnheader "Status" [ref=f32e184]
+            - rowgroup [ref=f32e185]:
+              - row [ref=f32e186] [cursor=pointer]:
+                - cell [ref=f32e187]:
+                  - generic [ref=f32e193]:
+                    - paragraph [ref=f32e194]: QA Customer S09
+                    - paragraph [ref=f32e195]: CUS-000026
+                - cell [ref=f32e196]:
+                  - paragraph [ref=f32e197]: "-"
+                  - paragraph [ref=f32e198]: "-"
+                - cell "Perorangan" [ref=f32e199]
+                - cell "-" [ref=f32e201]
+                - cell "0" [ref=f32e202]
+                - cell "0" [ref=f32e203]
+                - cell "Rp 0" [ref=f32e204]
+                - cell "Rp 0" [ref=f32e205]
+                - cell "Aktif" [ref=f32e206]
+          - generic [ref=f32e208]:
+            - paragraph [ref=f32e209]: Menampilkan 1–1 dari 1 klien
+            - generic [ref=f32e210]:
+              - button "Sebelumnya" [disabled]
+              - generic [ref=f32e211]: Halaman 1 / 1
+              - button "Berikutnya" [disabled]

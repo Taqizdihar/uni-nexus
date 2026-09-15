@@ -1,0 +1,108 @@
+- generic [ref=f28e34]:
+  - complementary [ref=f28e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f28e37]
+    - generic [ref=f28e38]:
+      - generic [ref=f28e39]:
+        - heading "GLOBAL" [level=3] [ref=f28e40]
+        - link "Dasbor Global" [ref=f28e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f28e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f28e49]
+        - generic [ref=f28e50]:
+          - button "Pesanan" [ref=f28e330]
+          - button "Produksi" [ref=f28e339]
+          - button "Produk & Desain" [ref=f28e348]
+          - button "Printer" [ref=f28e359]
+          - generic [ref=f28e367]:
+            - button "Material" [ref=f28e368]
+            - generic [ref=f28e426]:
+              - link "Inventaris Filament" [ref=f28e427] [cursor=pointer]:
+                - /url: /app/craft/materials/filament
+              - link "Spool Filament" [ref=f28e428] [cursor=pointer]:
+                - /url: /app/craft/materials/spools
+              - link "Pergerakan Stok" [ref=f28e429] [cursor=pointer]:
+                - /url: /app/craft/materials/movements
+              - link "Stok Menipis" [ref=f28e430] [cursor=pointer]:
+                - /url: /app/craft/materials/low-stock
+              - link "Limbah Filament" [ref=f28e431] [cursor=pointer]:
+                - /url: /app/craft/materials/waste
+      - generic [ref=f28e64]:
+        - heading "BISNIS" [level=3] [ref=f28e65]
+        - generic [ref=f28e66]:
+          - button "Pelanggan & Mitra" [ref=f28e376]
+          - button "Pengadaan" [ref=f28e386]
+          - button "Keuangan" [ref=f28e68]
+          - button "Laporan & Analitik" [ref=f28e397]
+      - generic [ref=f28e75]:
+        - heading "SISTEM" [level=3] [ref=f28e76]
+        - generic [ref=f28e406]:
+          - button "Marketplace & Kanal Penjualan" [ref=f28e408]
+          - button "Otomasi" [ref=f28e418]
+      - generic [ref=f28e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f28e78]
+        - generic [ref=f28e79]:
+          - link "Pusat Dokumen" [ref=f28e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f28e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f28e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f28e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f28e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f28e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f28e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f28e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f28e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f28e119]:
+    - banner [ref=f28e120]:
+      - combobox [ref=f28e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f28e126]
+        - generic [ref=f28e127]:
+          - generic [ref=f28e128]: ⌘
+          - generic [ref=f28e129]: K
+      - generic [ref=f28e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f28e132]'
+        - button [ref=f28e424]:
+          - generic [ref=f28e145]:
+            - text: "Workspace:"
+            - generic [ref=f28e146]:
+              - img "Craft Logo" [ref=f28e425]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f28e149]
+        - button [ref=f28e154]:
+          - generic [aria-hidden] [ref=f28e155]: QU
+    - main [ref=f28e156]:
+      - generic [ref=f28e432]:
+        - generic [ref=f28e433]:
+          - generic [ref=f28e434]:
+            - paragraph [ref=f28e435]: MATERIAL
+            - heading "Inventaris Material" [level=1] [ref=f28e436]
+            - paragraph [ref=f28e437]: Kelola filament dan material produksi Uni-Inside Craft.
+          - generic [ref=f28e438]:
+            - button "Kelola Kategori" [ref=f28e439]
+            - button "Terima Stok" [ref=f28e445]
+            - link [ref=f28e450] [cursor=pointer]:
+              - /url: /app/craft/materials/new
+              - button "Tambah Material" [ref=f28e451]
+        - generic [ref=f28e454]:
+          - generic [ref=f28e455]:
+            - button "Filament" [ref=f28e456]
+            - button "Resin" [ref=f28e457]
+            - button "Hardware" [ref=f28e458]
+            - button "Kemasan" [ref=f28e459]
+            - button "Consumable" [ref=f28e460]
+            - button "Lainnya" [ref=f28e461]
+          - textbox [ref=f28e463]:
+            - /placeholder: Cari SKU, material, warna...
+        - generic [ref=f28e464]:
+          - heading "Belum Ada Filament" [level=2] [ref=f28e510]
+          - paragraph [ref=f28e511]: Tidak ada data contoh. Tambahkan material pertama untuk mulai melacak stok fisik.
+          - link [ref=f28e512] [cursor=pointer]:
+            - /url: /app/craft/materials/new
+            - button "Tambah Material" [ref=f28e513]

@@ -1,0 +1,114 @@
+- generic [ref=f16e6]:
+  - complementary [ref=f16e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f16e9]
+    - generic [ref=f16e10]:
+      - generic [ref=f16e11]:
+        - heading "GLOBAL" [level=3] [ref=f16e12]
+        - link "Dasbor Global" [ref=f16e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f16e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f16e21]
+        - generic [ref=f16e22]:
+          - button "Pesanan" [ref=f16e24]
+          - button "Produksi" [ref=f16e33]
+          - button "Produk & Desain" [ref=f16e42]
+          - button "Printer" [ref=f16e53]
+          - button "Material" [ref=f16e62]
+      - generic [ref=f16e69]:
+        - heading "BISNIS" [level=3] [ref=f16e70]
+        - generic [ref=f16e71]:
+          - button "Pelanggan & Mitra" [ref=f16e73]
+          - button "Pengadaan" [ref=f16e83]
+          - button "Keuangan" [ref=f16e94]
+          - button "Laporan & Analitik" [ref=f16e102]
+      - generic [ref=f16e111]:
+        - heading "SISTEM" [level=3] [ref=f16e112]
+        - generic [ref=f16e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f16e115]
+          - button "Otomasi" [ref=f16e125]
+      - generic [ref=f16e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f16e132]
+        - generic [ref=f16e133]:
+          - link "Pusat Dokumen" [ref=f16e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f16e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f16e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f16e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f16e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f16e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f16e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f16e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f16e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f16e173]:
+    - banner [ref=f16e174]:
+      - combobox [ref=f16e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f16e180]
+        - generic [ref=f16e181]:
+          - generic [ref=f16e182]: ⌘
+          - generic [ref=f16e183]: K
+      - generic [ref=f16e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f16e186]'
+        - button [ref=f16e195]:
+          - generic [ref=f16e199]:
+            - text: "Workspace:"
+            - generic [ref=f16e200]:
+              - img "Craft Logo" [ref=f16e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f16e203]:
+          - generic [ref=f16e207]: "3"
+        - button [ref=f16e209]:
+          - generic [aria-hidden] [ref=f16e210]: AR
+    - main [ref=f16e211]:
+      - generic [ref=f16e486]:
+        - generic [ref=f16e487]:
+          - generic [ref=f16e488]:
+            - paragraph [ref=f16e489]: Fitur Global
+            - heading "QA API Integration S10" [level=1] [ref=f16e490]
+            - paragraph [ref=f16e491]: MKT-000002 · UNSUPPORTED_PROVIDER_S10
+          - link [ref=f16e493] [cursor=pointer]:
+            - /url: /app/integrations/connections
+            - button "Kembali" [ref=f16e494]
+        - generic [ref=f16e497]:
+          - generic [ref=f16e498]:
+            - heading "Status Koneksi" [level=3] [ref=f16e500]
+            - generic [ref=f16e501]:
+              - generic [ref=f16e502]:
+                - generic [ref=f16e503]: Dinonaktifkan
+                - generic [ref=f16e504]: Craft
+                - generic [ref=f16e505]: Lainnya
+                - generic [ref=f16e506]: Connector Tidak Tersedia
+              - paragraph [ref=f16e507]: "Sinkron terakhir: Belum pernah"
+              - generic [ref=f16e508]:
+                - button "Aktifkan Kembali" [ref=f16e509]
+                - button "Putuskan & Hapus Kredensial" [ref=f16e510]
+          - generic [ref=f16e511]:
+            - heading "Kredensial" [level=3] [ref=f16e513]
+            - generic [ref=f16e514]:
+              - paragraph [ref=f16e515]: Belum ada kredensial dikonfigurasi.
+              - button "Kelola Kredensial" [ref=f16e516]
+        - generic [ref=f16e520]:
+          - heading "Konfigurasi Publik" [level=3] [ref=f16e522]
+          - generic [ref=f16e524]:
+            - generic [ref=f16e525]:
+              - term [ref=f16e526]: mode
+              - definition [ref=f16e527]: api
+            - generic [ref=f16e528]:
+              - term [ref=f16e529]: region
+              - definition [ref=f16e530]: ID
+            - generic [ref=f16e531]:
+              - term [ref=f16e532]: shop_name
+              - definition [ref=f16e533]: QA API Shop S10
+            - generic [ref=f16e534]:
+              - term [ref=f16e535]: external_shop_id
+              - definition [ref=f16e536]: EXT_API_SHOP_S10
+        - generic [ref=f16e537]:
+          - heading "Riwayat Terbaru" [level=3] [ref=f16e539]
+          - generic [ref=f16e540]: Belum ada riwayat.

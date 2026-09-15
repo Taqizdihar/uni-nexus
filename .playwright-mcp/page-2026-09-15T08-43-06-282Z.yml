@@ -1,0 +1,142 @@
+- generic [ref=f27e6]:
+  - complementary [ref=f27e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f27e9]
+    - generic [ref=f27e10]:
+      - generic [ref=f27e11]:
+        - heading "GLOBAL" [level=3] [ref=f27e12]
+        - link "Dasbor Global" [ref=f27e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f27e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f27e21]
+        - generic [ref=f27e22]:
+          - generic [ref=f27e23]:
+            - button "Proyek" [ref=f27e24]
+            - generic [ref=f27e30]:
+              - link "Semua Proyek" [ref=f27e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f27e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f27e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f27e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [active] [ref=f27e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f27e41]:
+        - heading "BISNIS" [level=3] [ref=f27e42]
+        - button "Keuangan" [ref=f27e45]
+      - heading "SISTEM" [level=3] [ref=f27e53]
+      - generic [ref=f27e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f27e55]
+        - generic [ref=f27e56]:
+          - link "Pusat Dokumen" [ref=f27e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f27e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f27e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f27e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f27e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f27e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f27e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f27e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f27e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f27e96]:
+    - banner [ref=f27e97]:
+      - combobox [ref=f27e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f27e103]
+        - generic [ref=f27e104]:
+          - generic [ref=f27e105]: ⌘
+          - generic [ref=f27e106]: K
+      - generic [ref=f27e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f27e109]'
+        - button [ref=f27e118]:
+          - generic [ref=f27e122]:
+            - text: "Workspace:"
+            - generic [ref=f27e123]:
+              - img "Studio Logo" [ref=f27e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f27e126]:
+          - generic [ref=f27e130]: "2"
+        - button [ref=f27e132]:
+          - generic [aria-hidden] [ref=f27e133]: QU
+    - main [ref=f27e134]:
+      - generic [ref=f27e885]:
+        - generic [ref=f27e886]:
+          - generic [ref=f27e888]:
+            - paragraph [ref=f27e889]: Operasional Studio
+            - heading "Klien" [level=1] [ref=f27e890]
+            - paragraph [ref=f27e891]: Kelola identitas, kontak, riwayat proyek, dan hubungan bisnis klien Uni-Inside Studio.
+          - generic [ref=f27e892]:
+            - button "Filter" [ref=f27e893]
+            - button "Ekspor CSV" [ref=f27e896]
+            - button "Tambah Klien" [ref=f27e900]
+        - generic [ref=f27e902]:
+          - generic [ref=f27e903]:
+            - paragraph [ref=f27e904]: Klien Aktif
+            - generic [ref=f27e905]: "1"
+          - generic [ref=f27e906]:
+            - paragraph [ref=f27e907]: Klien dengan Proyek Aktif
+            - generic [ref=f27e908]: "0"
+          - generic [ref=f27e909]:
+            - paragraph [ref=f27e910]: Klien Berulang
+            - generic [ref=f27e911]: "0"
+            - paragraph [ref=f27e912]: ≥2 proyek yang tidak dibatalkan.
+          - generic [ref=f27e913]:
+            - paragraph [ref=f27e914]: Proyek Aktif
+            - generic [ref=f27e915]: "0"
+          - generic [ref=f27e916]:
+            - paragraph [ref=f27e917]: Piutang Studio
+            - generic [ref=f27e918]: Rp 0
+        - generic [ref=f27e919]:
+          - generic [ref=f27e920]:
+            - textbox "Cari kode, nama, email, telepon, NPWP, atau kontak..." [ref=f27e922]
+            - generic [ref=f27e923]:
+              - generic [ref=f27e924]: Urutkan
+              - combobox "Urutkan" [ref=f27e925]:
+                - option "Nama (A-Z)" [selected]
+                - option "Terbaru"
+                - option "Proyek Terbaru"
+                - option "Proyek Aktif Terbanyak"
+                - option "Nilai Kontrak Tertinggi"
+                - option "Outstanding Tertinggi"
+          - table [ref=f27e927]:
+            - rowgroup [ref=f27e928]:
+              - row [ref=f27e929]:
+                - columnheader "Klien" [ref=f27e930]
+                - columnheader "Kontak Utama" [ref=f27e931]
+                - columnheader "Jenis" [ref=f27e932]
+                - columnheader "Kota" [ref=f27e933]
+                - columnheader "Proyek Aktif" [ref=f27e934]
+                - columnheader "Total Proyek" [ref=f27e935]
+                - columnheader "Nilai Kontrak" [ref=f27e936]
+                - columnheader "Outstanding" [ref=f27e937]
+                - columnheader "Status" [ref=f27e938]
+            - rowgroup [ref=f27e939]:
+              - row [ref=f27e940] [cursor=pointer]:
+                - cell [ref=f27e941]:
+                  - generic [ref=f27e947]:
+                    - paragraph [ref=f27e948]: QA Customer S09
+                    - paragraph [ref=f27e949]: CUS-000026
+                - cell [ref=f27e950]:
+                  - paragraph [ref=f27e951]: "-"
+                  - paragraph [ref=f27e952]: "-"
+                - cell "Perorangan" [ref=f27e953]
+                - cell "-" [ref=f27e955]
+                - cell "0" [ref=f27e956]
+                - cell "0" [ref=f27e957]
+                - cell "Rp 0" [ref=f27e958]
+                - cell "Rp 0" [ref=f27e959]
+                - cell "Aktif" [ref=f27e960]
+          - generic [ref=f27e962]:
+            - paragraph [ref=f27e963]: Menampilkan 1–1 dari 1 klien
+            - generic [ref=f27e964]:
+              - button "Sebelumnya" [disabled]
+              - generic [ref=f27e965]: Halaman 1 / 1
+              - button "Berikutnya" [disabled]

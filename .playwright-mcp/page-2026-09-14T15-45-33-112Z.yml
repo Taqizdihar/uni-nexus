@@ -1,0 +1,157 @@
+- generic [ref=f18e34]:
+  - complementary [ref=f18e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f18e37]
+    - generic [ref=f18e38]:
+      - generic [ref=f18e39]:
+        - heading "GLOBAL" [level=3] [ref=f18e40]
+        - link "Dasbor Global" [ref=f18e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f18e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f18e49]
+        - generic [ref=f18e50]:
+          - button "Pesanan" [ref=f18e52]
+          - button "Produksi" [ref=f18e61]
+          - button "Produk & Desain" [ref=f18e70]
+          - button "Printer" [ref=f18e81]
+          - button "Material" [ref=f18e90]
+      - generic [ref=f18e97]:
+        - heading "BISNIS" [level=3] [ref=f18e98]
+        - generic [ref=f18e99]:
+          - generic [ref=f18e100]:
+            - button "Pelanggan & Mitra" [ref=f18e101]
+            - generic [ref=f18e411]:
+              - link "Pelanggan" [ref=f18e412] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f18e413] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f18e111]
+          - button "Keuangan" [ref=f18e122]
+          - button "Laporan & Analitik" [ref=f18e130]
+      - generic [ref=f18e139]:
+        - heading "SISTEM" [level=3] [ref=f18e140]
+        - generic [ref=f18e141]:
+          - button "Marketplace & Kanal Penjualan" [ref=f18e143]
+          - button "Otomasi" [ref=f18e153]
+      - generic [ref=f18e159]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f18e160]
+        - generic [ref=f18e161]:
+          - link "Pusat Dokumen" [ref=f18e162] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f18e167] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f18e170] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f18e174] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f18e177] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f18e183] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f18e186] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f18e192] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f18e197] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f18e201]:
+    - banner [ref=f18e202]:
+      - combobox [ref=f18e204]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f18e208]
+        - generic [ref=f18e209]:
+          - generic [ref=f18e210]: ⌘
+          - generic [ref=f18e211]: K
+      - generic [ref=f18e212]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f18e214]'
+        - button [ref=f18e223]:
+          - generic [ref=f18e227]:
+            - text: "Workspace:"
+            - generic [ref=f18e228]:
+              - img "Craft Logo" [ref=f18e229]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f18e231]
+        - button [ref=f18e236]:
+          - generic [aria-hidden] [ref=f18e237]: QU
+    - main [ref=f18e238]:
+      - generic [ref=f18e414]:
+        - button "Kembali" [ref=f18e415]
+        - generic [ref=f18e521]: Data kemitraan tidak valid.
+        - generic [ref=f18e418]:
+          - generic [ref=f18e419]:
+            - generic [ref=f18e420]:
+              - generic [ref=f18e421]: CQ
+              - generic [ref=f18e422]:
+                - paragraph [ref=f18e423]: CUS-000015
+                - heading "Customer QA Edited 20260914_2114" [level=1] [ref=f18e424]
+                - generic [ref=f18e425]:
+                  - generic [ref=f18e426]: Perusahaan
+                  - generic [ref=f18e427]: Aktif
+            - generic [ref=f18e428]:
+              - button "Pesanan Baru" [ref=f18e429]
+              - button "Edit" [ref=f18e434]
+              - button "Promosikan Jadi Mitra" [ref=f18e437]
+              - button "Nonaktifkan" [ref=f18e440]
+          - generic [ref=f18e441]:
+            - generic [ref=f18e443]:
+              - paragraph [ref=f18e444]: Total Pesanan
+              - paragraph [ref=f18e445]: "0"
+            - generic [ref=f18e447]:
+              - paragraph [ref=f18e448]: Nilai Pesanan
+              - paragraph [ref=f18e449]: Rp 0
+            - generic [ref=f18e451]:
+              - paragraph [ref=f18e452]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f18e453]: Rp 0
+            - generic [ref=f18e455]:
+              - paragraph [ref=f18e456]: Saldo Invoice
+              - paragraph [ref=f18e457]: Rp 0
+        - navigation "Profil pelanggan" [ref=f18e458]:
+          - button "Ringkasan" [ref=f18e459]
+          - button "Kontak" [ref=f18e460]
+          - button "Pesanan" [ref=f18e461]
+          - button "Keuangan" [ref=f18e462]
+        - generic [ref=f18e463]:
+          - generic [ref=f18e465]:
+            - heading "Informasi Pelanggan" [level=2] [ref=f18e466]
+            - generic [ref=f18e467]:
+              - generic [ref=f18e468]:
+                - term [ref=f18e469]: Nama Legal
+                - definition [ref=f18e470]: Customer QA Legal Edit 20260914_2114
+              - generic [ref=f18e471]:
+                - term [ref=f18e472]: Email
+                - definition [ref=f18e473]: customer.edited.20260914_2114@example.test
+              - generic [ref=f18e477]:
+                - term [ref=f18e478]: Telepon
+                - definition [ref=f18e479]: "081234562121"
+              - generic [ref=f18e482]:
+                - term [ref=f18e483]: NPWP / Tax ID
+                - definition [ref=f18e484]: QA-NPWP-20260914_2114
+              - generic [ref=f18e485]:
+                - term [ref=f18e486]: Alamat
+                - definition [ref=f18e487]: Jl. QA Edited No. 15, Blok Edited, Jakarta, DKI Jakarta, 10220, ID
+              - generic [ref=f18e491]:
+                - term [ref=f18e492]: Pelanggan sejak
+                - definition [ref=f18e493]: 14 Sep 2026
+          - generic [ref=f18e494]:
+            - generic [ref=f18e496]:
+              - heading "Kontak Utama" [level=2] [ref=f18e497]
+              - generic [ref=f18e498]:
+                - paragraph [ref=f18e499]: Contact A QA 20260914_2114
+                - paragraph [ref=f18e500]: PIC Utama Edit 20260914_2114
+                - paragraph [ref=f18e501]: contact.a.edit.20260914_2114@example.test
+            - generic [ref=f18e503]:
+              - heading "Kanal Penjualan" [level=2] [ref=f18e504]
+              - paragraph [ref=f18e505]: Belum ada riwayat kanal penjualan.
+        - generic [ref=f18e507]:
+          - generic [ref=f18e508]:
+            - paragraph [ref=f18e509]: Mitra Craft
+            - heading "Promosikan Jadi Mitra" [level=2] [ref=f18e510]
+            - paragraph [ref=f18e511]: Pelanggan tetap menggunakan Party dan kode yang sama.
+            - generic [ref=f18e512]:
+              - generic [ref=f18e513]:
+                - text: Mulai berlaku
+                - textbox "Mulai berlaku" [ref=f18e514]: 2026-09-14
+              - generic [ref=f18e515]:
+                - text: Berakhir
+                - textbox "Berakhir" [ref=f18e516]: 2026-09-13
+          - generic [ref=f18e518]:
+            - button "Batal" [ref=f18e519]
+            - button "Promosikan" [ref=f18e520]

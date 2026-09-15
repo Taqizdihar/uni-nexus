@@ -1,0 +1,107 @@
+- generic [ref=f33e3]:
+  - complementary [ref=f33e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f33e6]
+    - generic [ref=f33e7]:
+      - generic [ref=f33e8]:
+        - heading "GLOBAL" [level=3] [ref=f33e9]
+        - link "Dasbor Global" [ref=f33e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f33e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f33e18]
+        - generic [ref=f33e19]:
+          - button "Pesanan" [ref=f33e224]
+          - button "Produksi" [ref=f33e233]
+          - button "Produk & Desain" [ref=f33e242]
+          - generic [ref=f33e252]:
+            - button "Printer" [ref=f33e253]
+            - generic [ref=f33e261]:
+              - link "Daftar Printer" [ref=f33e262] [cursor=pointer]:
+                - /url: /app/craft/printers
+              - link "Aktivitas Saat Ini" [ref=f33e263] [cursor=pointer]:
+                - /url: /app/craft/printers/activity
+              - link "Riwayat Cetak" [active] [ref=f33e264] [cursor=pointer]:
+                - /url: /app/craft/printers/history
+              - link "Perawatan" [ref=f33e265] [cursor=pointer]:
+                - /url: /app/craft/printers/maintenance
+              - link "Masalah Printer" [ref=f33e266] [cursor=pointer]:
+                - /url: /app/craft/printers/issues
+          - button "Material" [ref=f33e268]
+      - generic [ref=f33e33]:
+        - heading "BISNIS" [level=3] [ref=f33e34]
+        - generic [ref=f33e35]:
+          - button "Pelanggan & Mitra" [ref=f33e276]
+          - button "Pengadaan" [ref=f33e286]
+          - button "Keuangan" [ref=f33e37]
+          - button "Laporan & Analitik" [ref=f33e297]
+      - generic [ref=f33e44]:
+        - heading "SISTEM" [level=3] [ref=f33e45]
+        - generic [ref=f33e306]:
+          - button "Marketplace & Kanal Penjualan" [ref=f33e308]
+          - button "Otomasi" [ref=f33e318]
+      - generic [ref=f33e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f33e47]
+        - generic [ref=f33e48]:
+          - link "Pusat Dokumen" [ref=f33e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f33e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f33e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f33e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f33e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f33e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f33e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f33e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f33e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f33e88]:
+    - banner [ref=f33e89]:
+      - combobox [ref=f33e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f33e95]
+        - generic [ref=f33e96]:
+          - generic [ref=f33e97]: ⌘
+          - generic [ref=f33e98]: K
+      - generic [ref=f33e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f33e101]'
+        - button [ref=f33e324]:
+          - generic [ref=f33e114]:
+            - text: "Workspace:"
+            - generic [ref=f33e115]:
+              - img "Craft Logo" [ref=f33e325]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f33e118]
+        - button [ref=f33e123]:
+          - generic [aria-hidden] [ref=f33e124]: QU
+    - main [ref=f33e125]:
+      - generic [ref=f33e548]:
+        - generic [ref=f33e549]:
+          - generic [ref=f33e550]:
+            - paragraph [ref=f33e551]: Uni-Inside Craft
+            - heading "Riwayat Cetak" [level=1] [ref=f33e552]
+            - paragraph [ref=f33e553]: Riwayat bersifat baca-saja; waktu aktual dan hasil dikelola modul Produksi.
+          - button "Muat Ulang" [ref=f33e555]
+        - generic [ref=f33e561]:
+          - textbox "Cari pekerjaan atau printer" [ref=f33e562]
+          - combobox [ref=f33e563]:
+            - option "Semua hasil" [selected]
+            - option "Selesai"
+            - option "Gagal"
+        - generic [ref=f33e564]:
+          - table [ref=f33e565]:
+            - rowgroup [ref=f33e566]:
+              - row [ref=f33e567]:
+                - columnheader "Pekerjaan" [ref=f33e568]
+                - columnheader "Printer" [ref=f33e569]
+                - columnheader "Operator" [ref=f33e570]
+                - columnheader "Waktu" [ref=f33e571]
+                - columnheader "Material" [ref=f33e572]
+                - columnheader "Hasil" [ref=f33e573]
+            - rowgroup
+          - generic [ref=f33e574]:
+            - paragraph [ref=f33e579]: Belum ada riwayat
+            - paragraph [ref=f33e580]: Pekerjaan selesai dan gagal dari Produksi akan muncul di sini.

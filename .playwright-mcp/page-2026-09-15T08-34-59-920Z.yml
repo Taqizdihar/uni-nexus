@@ -1,0 +1,166 @@
+- generic [ref=f27e6]:
+  - complementary [ref=f27e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f27e9]
+    - generic [ref=f27e10]:
+      - generic [ref=f27e11]:
+        - heading "GLOBAL" [level=3] [ref=f27e12]
+        - link "Dasbor Global" [ref=f27e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f27e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f27e21]
+        - generic [ref=f27e22]:
+          - generic [ref=f27e23]:
+            - button "Proyek" [ref=f27e24]
+            - generic [ref=f27e30]:
+              - link "Semua Proyek" [ref=f27e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f27e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f27e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f27e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f27e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f27e41]:
+        - heading "BISNIS" [level=3] [ref=f27e42]
+        - button "Keuangan" [ref=f27e45]
+      - heading "SISTEM" [level=3] [ref=f27e53]
+      - generic [ref=f27e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f27e55]
+        - generic [ref=f27e56]:
+          - link "Pusat Dokumen" [ref=f27e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f27e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f27e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f27e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f27e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f27e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f27e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f27e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f27e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f27e96]:
+    - banner [ref=f27e97]:
+      - combobox [ref=f27e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f27e103]
+        - generic [ref=f27e104]:
+          - generic [ref=f27e105]: ⌘
+          - generic [ref=f27e106]: K
+      - generic [ref=f27e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f27e109]'
+        - button [ref=f27e118]:
+          - generic [ref=f27e122]:
+            - text: "Workspace:"
+            - generic [ref=f27e123]:
+              - img "Studio Logo" [ref=f27e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f27e126]:
+          - generic [ref=f27e130]: "2"
+        - button [ref=f27e132]:
+          - generic [aria-hidden] [ref=f27e133]: QU
+    - main [ref=f27e134]:
+      - generic [ref=f27e267]:
+        - generic [ref=f27e268]:
+          - generic [ref=f27e269]:
+            - button "Kembali" [ref=f27e270]
+            - generic [ref=f27e273]:
+              - paragraph [ref=f27e274]: CUS-000026
+              - heading "QA Customer S09" [level=1] [ref=f27e275]
+              - paragraph [ref=f27e276]: qa.customer@example.com · 081234567890
+          - generic [ref=f27e277]:
+            - button "Proyek Baru" [ref=f27e278]
+            - button "Edit Klien" [ref=f27e280]
+            - button "Nonaktifkan" [ref=f27e284]
+        - generic [ref=f27e289]:
+          - generic [ref=f27e290]: Aktif
+          - generic [ref=f27e291]: Perorangan
+        - generic [ref=f27e292]:
+          - generic [ref=f27e293]:
+            - paragraph [ref=f27e294]: Total Proyek
+            - generic [ref=f27e295]: "0"
+            - paragraph [ref=f27e296]: 0 sedang aktif
+          - generic [ref=f27e297]:
+            - paragraph [ref=f27e298]: Nilai Kontrak Komitmen
+            - generic [ref=f27e299]: Rp 0
+            - paragraph [ref=f27e300]: Approved ke atas.
+          - generic [ref=f27e301]:
+            - paragraph [ref=f27e302]: Pipeline
+            - generic [ref=f27e303]: Rp 0
+            - paragraph [ref=f27e304]: Prospek & penawaran.
+          - generic [ref=f27e305]:
+            - paragraph [ref=f27e306]: Kontak
+            - generic [ref=f27e307]: 0 kontak
+            - paragraph [ref=f27e308]: Belum ada kontak utama
+        - generic [ref=f27e309]:
+          - button "Ringkasan" [pressed] [ref=f27e310]
+          - button "Kontak" [ref=f27e311]
+          - button "Proyek" [ref=f27e312]
+          - button "Komersial" [ref=f27e313]
+          - button "Aktivitas" [ref=f27e314]
+        - generic [ref=f27e315]:
+          - generic [ref=f27e317]:
+            - generic [ref=f27e318]:
+              - paragraph [ref=f27e319]: Jenis
+              - paragraph [ref=f27e320]: Perorangan
+            - generic [ref=f27e321]:
+              - paragraph [ref=f27e322]: Nama Legal
+              - paragraph [ref=f27e323]: "-"
+            - generic [ref=f27e324]:
+              - paragraph [ref=f27e325]: Email
+              - paragraph [ref=f27e326]: qa.customer@example.com
+            - generic [ref=f27e327]:
+              - paragraph [ref=f27e328]: Telepon
+              - paragraph [ref=f27e329]: "081234567890"
+            - generic [ref=f27e330]:
+              - paragraph [ref=f27e331]: Website
+              - paragraph [ref=f27e332]: "-"
+            - generic [ref=f27e333]:
+              - paragraph [ref=f27e334]: NPWP / Tax ID
+              - paragraph [ref=f27e335]: "-"
+            - generic [ref=f27e336]:
+              - paragraph [ref=f27e337]: Alamat
+              - paragraph [ref=f27e338]: Alamat belum diisi
+            - generic [ref=f27e339]:
+              - paragraph [ref=f27e340]: Klien sejak
+              - paragraph [ref=f27e341]: 15 Sep 2026
+            - generic [ref=f27e342]:
+              - paragraph [ref=f27e343]: Dibuat
+              - paragraph [ref=f27e344]: 15 Sep 2026, 13.10
+          - generic [ref=f27e346]:
+            - heading "Peran pada UNI-NEXUS" [level=2] [ref=f27e347]
+            - generic [ref=f27e348]:
+              - generic [ref=f27e349]: Pelanggan Craft
+              - generic [ref=f27e351]: Klien Studio
+          - generic [ref=f27e353]:
+            - generic [ref=f27e355]:
+              - heading "Kontak Utama" [level=2] [ref=f27e356]
+              - paragraph [ref=f27e357]: Belum ada kontak utama. Belum ada kontak sama sekali.
+            - generic [ref=f27e359]:
+              - heading "Ringkasan Bisnis" [level=2] [ref=f27e360]
+              - generic [ref=f27e361]:
+                - generic [ref=f27e362]:
+                  - term [ref=f27e363]: Total Proyek
+                  - definition [ref=f27e364]: "0"
+                - generic [ref=f27e365]:
+                  - term [ref=f27e366]: Proyek Aktif
+                  - definition [ref=f27e367]: "0"
+                - generic [ref=f27e368]:
+                  - term [ref=f27e369]: Proyek Selesai
+                  - definition [ref=f27e370]: "0"
+                - generic [ref=f27e371]:
+                  - term [ref=f27e372]: Proyek Dibatalkan
+                  - definition [ref=f27e373]: "0"
+                - generic [ref=f27e374]:
+                  - term [ref=f27e375]: Klien Berulang
+                  - definition [ref=f27e376]: Belum
+                - generic [ref=f27e377]:
+                  - term [ref=f27e378]: Proyek Terakhir
+                  - definition [ref=f27e379]: "-"

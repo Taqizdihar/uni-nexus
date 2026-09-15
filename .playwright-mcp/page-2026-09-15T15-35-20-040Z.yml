@@ -1,0 +1,175 @@
+- generic [ref=f6e6]:
+  - complementary [ref=f6e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f6e9]
+    - generic [ref=f6e10]:
+      - generic [ref=f6e11]:
+        - heading "GLOBAL" [level=3] [ref=f6e12]
+        - link "Dasbor Global" [ref=f6e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f6e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f6e21]
+        - generic [ref=f6e22]:
+          - button "Proyek" [ref=f6e24]
+          - link "Klien" [ref=f6e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f6e36]:
+        - heading "BISNIS" [level=3] [ref=f6e37]
+        - button "Keuangan" [ref=f6e40]
+      - heading "SISTEM" [level=3] [ref=f6e48]
+      - generic [ref=f6e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f6e50]
+        - generic [ref=f6e51]:
+          - link "Pusat Dokumen" [ref=f6e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f6e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f6e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f6e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f6e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f6e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f6e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f6e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f6e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f6e91]:
+    - banner [ref=f6e92]:
+      - combobox [ref=f6e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f6e98]
+        - generic [ref=f6e99]:
+          - generic [ref=f6e100]: ⌘
+          - generic [ref=f6e101]: K
+      - generic [ref=f6e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f6e104]'
+        - button [active] [ref=f6e113]:
+          - generic [ref=f6e117]:
+            - text: "Workspace:"
+            - generic [ref=f6e118]:
+              - img "Studio Logo" [ref=f6e119]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f6e121]:
+          - generic [ref=f6e125]: "3"
+        - button [ref=f6e127]:
+          - generic [aria-hidden] [ref=f6e128]: AR
+    - main [ref=f6e129]:
+      - generic [ref=f6e131]:
+        - generic [ref=f6e132]:
+          - generic [ref=f6e133]:
+            - heading "Dasbor Global" [level=1] [ref=f6e134]
+            - paragraph [ref=f6e135]: Ringkasan terpadu seluruh operasional Uni-Inside.
+            - paragraph [ref=f6e136]: Diperbarui 22.35.18
+          - generic [ref=f6e137]:
+            - button "Akses Cepat Uni-Inside Studio" [ref=f6e138]:
+              - generic [ref=f6e139]: Akses Cepat
+              - img "Uni-Inside Studio" [ref=f6e140]
+            - button "Akses Cepat Uni-Inside Craft" [ref=f6e143]:
+              - generic [ref=f6e144]: Akses Cepat
+              - img "Uni-Inside Craft" [ref=f6e145]
+          - generic [ref=f6e148]:
+            - combobox [ref=f6e149]:
+              - option "Hari Ini"
+              - option "Minggu Ini"
+              - option "Bulan Ini" [selected]
+              - option "Tahun Ini"
+              - option "Rentang Tanggal"
+            - combobox "Mata uang" [ref=f6e150]:
+              - option "IDR" [selected]
+            - button "Muat ulang dasbor" [ref=f6e151]
+        - generic [ref=f6e158]:
+          - generic [ref=f6e160]:
+            - generic [ref=f6e162]:
+              - paragraph [ref=f6e163]: Total Kas
+              - paragraph [ref=f6e164]: Rp 100
+            - generic [ref=f6e169]: Saldo saat ini
+          - generic [ref=f6e172]:
+            - generic [ref=f6e174]:
+              - paragraph [ref=f6e175]: Pendapatan Kotor
+              - paragraph [ref=f6e176]: Rp 0
+            - generic [ref=f6e181]: Tanpa persentase pembanding
+          - generic [ref=f6e187]:
+            - generic [ref=f6e189]:
+              - paragraph [ref=f6e190]: Total Pengeluaran
+              - paragraph [ref=f6e191]: Rp 0
+            - generic [ref=f6e195]: Tanpa persentase pembanding
+          - generic [ref=f6e201]:
+            - generic [ref=f6e203]:
+              - paragraph [ref=f6e204]: Pendapatan Bersih
+              - paragraph [ref=f6e205]: Rp 0
+            - generic [ref=f6e210]: Tanpa persentase pembanding
+        - generic [ref=f6e215]:
+          - generic [ref=f6e216]:
+            - heading "Rincian Pendapatan" [level=3] [ref=f6e218]
+            - generic [ref=f6e219]: Belum ada data pendapatan pada periode ini.
+          - generic [ref=f6e221]:
+            - heading "Ringkasan Arus Kas" [level=3] [ref=f6e223]
+            - generic [ref=f6e224]:
+              - generic [ref=f6e226]:
+                - generic [ref=f6e227]: Pemasukan (In)
+                - generic [ref=f6e228]: Rp 0
+              - generic [ref=f6e231]:
+                - generic [ref=f6e232]: Pengeluaran (Out)
+                - generic [ref=f6e233]: Rp 0
+              - generic [ref=f6e235]:
+                - generic [ref=f6e236]: Arus Bersih
+                - generic [ref=f6e237]: Rp 0
+        - generic [ref=f6e238]:
+          - generic [ref=f6e239]:
+            - heading "Ringkasan Craft" [level=3] [ref=f6e241]
+            - generic [ref=f6e242]:
+              - generic [ref=f6e243]:
+                - generic [ref=f6e244]: Pesanan Masuk
+                - generic [ref=f6e245]: "0"
+              - generic [ref=f6e246]:
+                - generic [ref=f6e247]: Menunggu Produksi
+                - generic [ref=f6e248]: "0"
+              - generic [ref=f6e249]:
+                - generic [ref=f6e250]: Sedang Dicetak
+                - generic [ref=f6e251]: "0"
+              - generic [ref=f6e252]:
+                - generic [ref=f6e253]: Terlambat
+                - generic [ref=f6e254]: "0"
+              - generic [ref=f6e255]:
+                - generic [ref=f6e256]: Stok Mat. Menipis
+                - generic [ref=f6e257]: "0"
+          - generic [ref=f6e258]:
+            - heading "Ringkasan Studio" [level=3] [ref=f6e260]
+            - generic [ref=f6e261]:
+              - generic [ref=f6e262]:
+                - generic [ref=f6e263]: Proyek Aktif
+                - generic [ref=f6e264]: "0"
+              - generic [ref=f6e265]:
+                - generic [ref=f6e266]: Tenggat Mendekat
+                - generic [ref=f6e267]: "0"
+              - generic [ref=f6e268]:
+                - generic [ref=f6e269]: Proyek Terlambat
+                - generic [ref=f6e270]: "0"
+              - generic [ref=f6e271]:
+                - generic [ref=f6e272]: Proyek Belum Lunas
+                - generic [ref=f6e273]: "0"
+              - generic [ref=f6e274]:
+                - generic [ref=f6e275]: Selesai (Periode)
+                - generic [ref=f6e276]: "0"
+          - generic [ref=f6e277]:
+            - heading "Ringkasan Produksi" [level=3] [ref=f6e279]
+            - generic [ref=f6e280]: Tidak ada pekerjaan cetak yang sedang berjalan.
+        - generic [ref=f6e282]:
+          - heading "Perlu Perhatian" [level=3] [ref=f6e284]
+          - paragraph [ref=f6e286]: Tidak ada perhatian operasional saat ini.
+        - generic [ref=f6e287]:
+          - generic [ref=f6e288]:
+            - generic [ref=f6e289]:
+              - heading "Pesanan Craft Terbaru" [level=3] [ref=f6e290]
+              - link "Lihat Semua" [ref=f6e291] [cursor=pointer]:
+                - /url: /app/craft/orders
+            - paragraph [ref=f6e294]: Belum ada pesanan.
+          - generic [ref=f6e295]:
+            - generic [ref=f6e296]:
+              - heading "Proyek Studio Aktif" [level=3] [ref=f6e297]
+              - link "Lihat Semua" [ref=f6e298] [cursor=pointer]:
+                - /url: /app/studio/projects
+            - paragraph [ref=f6e301]: Belum ada proyek aktif.

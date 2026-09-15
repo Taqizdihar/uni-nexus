@@ -1,0 +1,357 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [active] [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e1146]:
+        - generic [ref=f3e1148]:
+          - paragraph [ref=f3e1149]: Sistem Craft
+          - heading "Inbox Event" [level=1] [ref=f3e1150]
+          - paragraph [ref=f3e1151]: Event domain Craft yang tercatat pada automation outbox, termasuk status pemrosesan dan percobaan ulang.
+        - generic [ref=f3e1152]:
+          - textbox "Cari nama event, entitas, atau correlation ID..." [ref=f3e1153]
+          - combobox [ref=f3e1154]:
+            - option "Semua status" [selected]
+            - option "Menunggu"
+            - option "Diproses"
+            - option "Diproses"
+            - option "Gagal"
+        - generic [ref=f3e1155]:
+          - table [ref=f3e1157]:
+            - rowgroup [ref=f3e1158]:
+              - row [ref=f3e1159]:
+                - columnheader "Event" [ref=f3e1160]
+                - columnheader "Modul" [ref=f3e1161]
+                - columnheader "Entitas" [ref=f3e1162]
+                - columnheader "Status" [ref=f3e1163]
+                - columnheader "Percobaan" [ref=f3e1164]
+                - columnheader "Dibuat" [ref=f3e1165]
+                - columnheader "Diproses" [ref=f3e1166]
+                - columnheader "Error" [ref=f3e1167]
+            - rowgroup [ref=f3e1168]:
+              - row [ref=f3e1169]:
+                - cell "printer.issue_created" [ref=f3e1170]
+                - cell "craft_printers" [ref=f3e1171]
+                - cell "printer PRN-000008" [ref=f3e1172]
+                - cell "Diproses" [ref=f3e1173]
+                - cell "0" [ref=f3e1175]
+                - cell "15 Sep 2026, 08.13" [ref=f3e1176]
+                - cell "15 Sep 2026, 01.13" [ref=f3e1177]
+                - cell "—" [ref=f3e1178]
+              - row [ref=f3e1179]:
+                - cell "printer.issue_created" [ref=f3e1180]
+                - cell "craft_printers" [ref=f3e1181]
+                - cell "printer PRN-000008" [ref=f3e1182]
+                - cell "Diproses" [ref=f3e1183]
+                - cell "0" [ref=f3e1185]
+                - cell "15 Sep 2026, 08.13" [ref=f3e1186]
+                - cell "15 Sep 2026, 01.13" [ref=f3e1187]
+                - cell "—" [ref=f3e1188]
+              - row [ref=f3e1189]:
+                - cell "printer.maintenance_recorded" [ref=f3e1190]
+                - cell "craft_printers" [ref=f3e1191]
+                - cell "printer PRN-000008" [ref=f3e1192]
+                - cell "Diproses" [ref=f3e1193]
+                - cell "0" [ref=f3e1195]
+                - cell "15 Sep 2026, 08.12" [ref=f3e1196]
+                - cell "15 Sep 2026, 01.12" [ref=f3e1197]
+                - cell "—" [ref=f3e1198]
+              - row [ref=f3e1199]:
+                - cell "printer.status_changed" [ref=f3e1200]
+                - cell "craft_printers" [ref=f3e1201]
+                - cell "printer QA-PRN-001" [ref=f3e1202]
+                - cell "Diproses" [ref=f3e1203]
+                - cell "0" [ref=f3e1205]
+                - cell "15 Sep 2026, 08.09" [ref=f3e1206]
+                - cell "15 Sep 2026, 01.09" [ref=f3e1207]
+                - cell "—" [ref=f3e1208]
+              - row [ref=f3e1209]:
+                - cell "printer.status_changed" [ref=f3e1210]
+                - cell "craft_printers" [ref=f3e1211]
+                - cell "printer PRN-000008" [ref=f3e1212]
+                - cell "Diproses" [ref=f3e1213]
+                - cell "0" [ref=f3e1215]
+                - cell "15 Sep 2026, 08.08" [ref=f3e1216]
+                - cell "15 Sep 2026, 01.08" [ref=f3e1217]
+                - cell "—" [ref=f3e1218]
+              - row [ref=f3e1219]:
+                - cell "printer.status_changed" [ref=f3e1220]
+                - cell "craft_printers" [ref=f3e1221]
+                - cell "printer PRN-000008" [ref=f3e1222]
+                - cell "Diproses" [ref=f3e1223]
+                - cell "0" [ref=f3e1225]
+                - cell "15 Sep 2026, 08.08" [ref=f3e1226]
+                - cell "15 Sep 2026, 01.08" [ref=f3e1227]
+                - cell "—" [ref=f3e1228]
+              - row [ref=f3e1229]:
+                - cell "craft.finance.budget_approved" [ref=f3e1230]
+                - cell "craft_finance" [ref=f3e1231]
+                - cell "budget BDG-000006" [ref=f3e1232]
+                - cell "Diproses" [ref=f3e1233]
+                - cell "0" [ref=f3e1235]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1236]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1237]
+                - cell "—" [ref=f3e1238]
+              - row [ref=f3e1239]:
+                - cell "craft.finance.budget_created" [ref=f3e1240]
+                - cell "craft_finance" [ref=f3e1241]
+                - cell "budget BDG-000006" [ref=f3e1242]
+                - cell "Diproses" [ref=f3e1243]
+                - cell "0" [ref=f3e1245]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1246]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1247]
+                - cell "—" [ref=f3e1248]
+              - row [ref=f3e1249]:
+                - cell "craft.finance.expense_reversed" [ref=f3e1250]
+                - cell "craft_finance" [ref=f3e1251]
+                - cell "expense EXP-000012" [ref=f3e1252]
+                - cell "Diproses" [ref=f3e1253]
+                - cell "0" [ref=f3e1255]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1256]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1257]
+                - cell "—" [ref=f3e1258]
+              - row [ref=f3e1259]:
+                - cell "craft.finance.expense_paid" [ref=f3e1260]
+                - cell "craft_finance" [ref=f3e1261]
+                - cell "expense EXP-000012" [ref=f3e1262]
+                - cell "Diproses" [ref=f3e1263]
+                - cell "0" [ref=f3e1265]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1266]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1267]
+                - cell "—" [ref=f3e1268]
+              - row [ref=f3e1269]:
+                - cell "craft.finance.expense_approved" [ref=f3e1270]
+                - cell "craft_finance" [ref=f3e1271]
+                - cell "expense EXP-000012" [ref=f3e1272]
+                - cell "Diproses" [ref=f3e1273]
+                - cell "0" [ref=f3e1275]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1276]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1277]
+                - cell "—" [ref=f3e1278]
+              - row [ref=f3e1279]:
+                - cell "craft.finance.expense_created" [ref=f3e1280]
+                - cell "craft_finance" [ref=f3e1281]
+                - cell "expense EXP-000012" [ref=f3e1282]
+                - cell "Diproses" [ref=f3e1283]
+                - cell "0" [ref=f3e1285]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1286]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1287]
+                - cell "—" [ref=f3e1288]
+              - row [ref=f3e1289]:
+                - cell "craft.finance.manual_income_posted" [ref=f3e1290]
+                - cell "craft_finance" [ref=f3e1291]
+                - cell "financial_transaction FTX-000036" [ref=f3e1292]
+                - cell "Diproses" [ref=f3e1293]
+                - cell "0" [ref=f3e1295]
+                - cell "2 Sep 2026, 11.25" [ref=f3e1296]
+                - cell "2 Sep 2026, 04.25" [ref=f3e1297]
+                - cell "—" [ref=f3e1298]
+              - row [ref=f3e1299]:
+                - cell "craft.finance.budget_approved" [ref=f3e1300]
+                - cell "craft_finance" [ref=f3e1301]
+                - cell "budget BDG-000005" [ref=f3e1302]
+                - cell "Diproses" [ref=f3e1303]
+                - cell "0" [ref=f3e1305]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1306]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1307]
+                - cell "—" [ref=f3e1308]
+              - row [ref=f3e1309]:
+                - cell "craft.finance.budget_created" [ref=f3e1310]
+                - cell "craft_finance" [ref=f3e1311]
+                - cell "budget BDG-000005" [ref=f3e1312]
+                - cell "Diproses" [ref=f3e1313]
+                - cell "0" [ref=f3e1315]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1316]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1317]
+                - cell "—" [ref=f3e1318]
+              - row [ref=f3e1319]:
+                - cell "craft.finance.expense_reversed" [ref=f3e1320]
+                - cell "craft_finance" [ref=f3e1321]
+                - cell "expense EXP-000011" [ref=f3e1322]
+                - cell "Diproses" [ref=f3e1323]
+                - cell "0" [ref=f3e1325]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1326]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1327]
+                - cell "—" [ref=f3e1328]
+              - row [ref=f3e1329]:
+                - cell "craft.finance.expense_paid" [ref=f3e1330]
+                - cell "craft_finance" [ref=f3e1331]
+                - cell "expense EXP-000011" [ref=f3e1332]
+                - cell "Diproses" [ref=f3e1333]
+                - cell "0" [ref=f3e1335]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1336]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1337]
+                - cell "—" [ref=f3e1338]
+              - row [ref=f3e1339]:
+                - cell "craft.finance.expense_approved" [ref=f3e1340]
+                - cell "craft_finance" [ref=f3e1341]
+                - cell "expense EXP-000011" [ref=f3e1342]
+                - cell "Diproses" [ref=f3e1343]
+                - cell "0" [ref=f3e1345]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1346]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1347]
+                - cell "—" [ref=f3e1348]
+              - row [ref=f3e1349]:
+                - cell "craft.finance.expense_created" [ref=f3e1350]
+                - cell "craft_finance" [ref=f3e1351]
+                - cell "expense EXP-000011" [ref=f3e1352]
+                - cell "Diproses" [ref=f3e1353]
+                - cell "0" [ref=f3e1355]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1356]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1357]
+                - cell "—" [ref=f3e1358]
+              - row [ref=f3e1359]:
+                - cell "craft.finance.manual_income_posted" [ref=f3e1360]
+                - cell "craft_finance" [ref=f3e1361]
+                - cell "financial_transaction FTX-000033" [ref=f3e1362]
+                - cell "Diproses" [ref=f3e1363]
+                - cell "0" [ref=f3e1365]
+                - cell "2 Sep 2026, 11.21" [ref=f3e1366]
+                - cell "2 Sep 2026, 04.21" [ref=f3e1367]
+                - cell "—" [ref=f3e1368]
+              - row [ref=f3e1369]:
+                - cell "craft.finance.budget_approved" [ref=f3e1370]
+                - cell "craft_finance" [ref=f3e1371]
+                - cell "budget BDG-000004" [ref=f3e1372]
+                - cell "Diproses" [ref=f3e1373]
+                - cell "0" [ref=f3e1375]
+                - cell "2 Sep 2026, 11.17" [ref=f3e1376]
+                - cell "2 Sep 2026, 04.17" [ref=f3e1377]
+                - cell "—" [ref=f3e1378]
+              - row [ref=f3e1379]:
+                - cell "craft.finance.budget_created" [ref=f3e1380]
+                - cell "craft_finance" [ref=f3e1381]
+                - cell "budget BDG-000004" [ref=f3e1382]
+                - cell "Diproses" [ref=f3e1383]
+                - cell "0" [ref=f3e1385]
+                - cell "2 Sep 2026, 11.17" [ref=f3e1386]
+                - cell "2 Sep 2026, 04.17" [ref=f3e1387]
+                - cell "—" [ref=f3e1388]
+              - row [ref=f3e1389]:
+                - cell "craft.finance.expense_reversed" [ref=f3e1390]
+                - cell "craft_finance" [ref=f3e1391]
+                - cell "expense EXP-000010" [ref=f3e1392]
+                - cell "Diproses" [ref=f3e1393]
+                - cell "0" [ref=f3e1395]
+                - cell "2 Sep 2026, 11.17" [ref=f3e1396]
+                - cell "2 Sep 2026, 04.17" [ref=f3e1397]
+                - cell "—" [ref=f3e1398]
+              - row [ref=f3e1399]:
+                - cell "craft.finance.expense_paid" [ref=f3e1400]
+                - cell "craft_finance" [ref=f3e1401]
+                - cell "expense EXP-000010" [ref=f3e1402]
+                - cell "Diproses" [ref=f3e1403]
+                - cell "0" [ref=f3e1405]
+                - cell "2 Sep 2026, 11.17" [ref=f3e1406]
+                - cell "2 Sep 2026, 04.17" [ref=f3e1407]
+                - cell "—" [ref=f3e1408]
+              - row [ref=f3e1409]:
+                - cell "craft.finance.expense_approved" [ref=f3e1410]
+                - cell "craft_finance" [ref=f3e1411]
+                - cell "expense EXP-000010" [ref=f3e1412]
+                - cell "Diproses" [ref=f3e1413]
+                - cell "0" [ref=f3e1415]
+                - cell "2 Sep 2026, 11.17" [ref=f3e1416]
+                - cell "2 Sep 2026, 04.17" [ref=f3e1417]
+                - cell "—" [ref=f3e1418]
+          - generic [ref=f3e1419]:
+            - generic [ref=f3e1420]: Halaman 1 dari 2 · 42 event
+            - generic [ref=f3e1421]:
+              - button "Sebelumnya" [disabled]
+              - button "Berikutnya" [ref=f3e1422]

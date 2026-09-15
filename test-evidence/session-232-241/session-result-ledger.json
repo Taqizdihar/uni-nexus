@@ -1,0 +1,16 @@
+{
+  "session_start_row": 232,
+  "session_end_row": 241,
+  "selected": [
+    {"row": 232, "test_case_id": "UNX-S16-006", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-006/01-income-empty-category.png"},
+    {"row": 233, "test_case_id": "UNX-S16-007", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-007/01-receivables-empty.png"},
+    {"row": 234, "test_case_id": "UNX-S16-008", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-008/01-expense-form-empty-category.png"},
+    {"row": 235, "test_case_id": "UNX-S16-009", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-009/01-no-expense-approval-payment-fixture.png"},
+    {"row": 236, "test_case_id": "UNX-S16-010", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-010/01-no-expense-receipt-fixture.png"},
+    {"row": 237, "test_case_id": "UNX-S16-011", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-011/01-no-paid-expense-reversal-fixture.png"},
+    {"row": 238, "test_case_id": "UNX-S16-012", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-012/01-payables-empty.png"},
+    {"row": 239, "test_case_id": "UNX-S16-013", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-013/01-equipment-access-denied.png"},
+    {"row": 240, "test_case_id": "UNX-S16-014", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-014/01-profitability-empty.png; test-evidence/session-232-241/UNX-S16-014/02-cash-flow-zero.png"},
+    {"row": 241, "test_case_id": "UNX-S16-015", "status": "Bug/Failed", "evidence": "test-evidence/session-232-241/UNX-S16-015/01-budget-form-ui-gap.png; test-evidence/session-232-241/UNX-S16-015/02-accounting-no-journals-periods.png"}
+  ]
+}

@@ -1,0 +1,122 @@
+- generic [ref=f34e6]:
+  - complementary [ref=f34e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f34e9]
+    - generic [ref=f34e10]:
+      - generic [ref=f34e11]:
+        - heading "GLOBAL" [level=3] [ref=f34e12]
+        - link "Dasbor Global" [ref=f34e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f34e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f34e21]
+        - generic [ref=f34e22]:
+          - button "Pesanan" [ref=f34e377]
+          - button "Produksi" [ref=f34e386]
+          - button "Produk & Desain" [ref=f34e395]
+          - generic [ref=f34e405]:
+            - button "Printer" [ref=f34e406]
+            - generic [ref=f34e414]:
+              - link "Daftar Printer" [active] [ref=f34e415] [cursor=pointer]:
+                - /url: /app/craft/printers
+              - link "Aktivitas Saat Ini" [ref=f34e416] [cursor=pointer]:
+                - /url: /app/craft/printers/activity
+              - link "Riwayat Cetak" [ref=f34e417] [cursor=pointer]:
+                - /url: /app/craft/printers/history
+              - link "Perawatan" [ref=f34e418] [cursor=pointer]:
+                - /url: /app/craft/printers/maintenance
+              - link "Masalah Printer" [ref=f34e419] [cursor=pointer]:
+                - /url: /app/craft/printers/issues
+          - button "Material" [ref=f34e421]
+      - generic [ref=f34e36]:
+        - heading "BISNIS" [level=3] [ref=f34e37]
+        - generic [ref=f34e38]:
+          - button "Pelanggan & Mitra" [ref=f34e429]
+          - button "Pengadaan" [ref=f34e439]
+          - button "Keuangan" [ref=f34e40]
+          - button "Laporan & Analitik" [ref=f34e450]
+      - generic [ref=f34e47]:
+        - heading "SISTEM" [level=3] [ref=f34e48]
+        - generic [ref=f34e459]:
+          - button "Marketplace & Kanal Penjualan" [ref=f34e461]
+          - button "Otomasi" [ref=f34e471]
+      - generic [ref=f34e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f34e50]
+        - generic [ref=f34e51]:
+          - link "Pusat Dokumen" [ref=f34e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f34e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f34e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f34e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f34e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f34e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f34e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f34e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f34e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f34e91]:
+    - banner [ref=f34e92]:
+      - combobox [ref=f34e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f34e98]
+        - generic [ref=f34e99]:
+          - generic [ref=f34e100]: ⌘
+          - generic [ref=f34e101]: K
+      - generic [ref=f34e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f34e104]'
+        - button [ref=f34e477]:
+          - generic [ref=f34e117]:
+            - text: "Workspace:"
+            - generic [ref=f34e118]:
+              - img "Craft Logo" [ref=f34e478]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f34e121]
+        - button [ref=f34e126]:
+          - generic [aria-hidden] [ref=f34e127]: QU
+    - main [ref=f34e128]:
+      - generic [ref=f34e617]:
+        - generic [ref=f34e618]:
+          - generic [ref=f34e619]:
+            - paragraph [ref=f34e620]: Uni-Inside Craft
+            - heading "Daftar Printer" [level=1] [ref=f34e621]
+            - paragraph [ref=f34e622]: Master fleet printer 3D, status operasional, pekerjaan fisik, dan peringatan perawatan.
+          - generic [ref=f34e623]:
+            - link [ref=f34e624] [cursor=pointer]:
+              - /url: /app/craft/printers/activity
+              - button "Aktivitas" [ref=f34e625]
+            - link [ref=f34e629] [cursor=pointer]:
+              - /url: /app/craft/printers/new
+              - button "Tambah Printer" [ref=f34e630]
+        - generic [ref=f34e632]:
+          - textbox "Cari kode, nama, merek, atau model" [ref=f34e633]
+          - combobox [ref=f34e634]:
+            - option "Semua status" [selected]
+            - option "Tersedia"
+            - option "Sedang Digunakan"
+            - option "Perawatan"
+            - option "Bermasalah"
+            - option "Offline"
+          - button "Muat Ulang" [ref=f34e635]
+        - generic [ref=f34e643]:
+          - generic [ref=f34e645]:
+            - generic [ref=f34e652]:
+              - heading "QA FDM Primary" [level=3] [ref=f34e653]
+              - paragraph [ref=f34e654]: PRN-000008 · QA Brand Edited QA Model Edited
+            - generic [ref=f34e655]: Tersedia
+          - generic [ref=f34e656]:
+            - paragraph [ref=f34e657]: Siap menerima pekerjaan dari Produksi.
+            - generic [ref=f34e658]:
+              - generic [ref=f34e659]: 0 jam cetak
+              - generic [ref=f34e660]: · Lab QA Edited
+            - generic [ref=f34e661]:
+              - link [ref=f34e662] [cursor=pointer]:
+                - /url: /app/craft/printers/8
+                - button "Detail" [ref=f34e663]
+              - link [ref=f34e664] [cursor=pointer]:
+                - /url: /app/craft/printers/8/edit
+                - button "Edit printer" [ref=f34e665]
+              - button "Arsipkan printer" [ref=f34e668]

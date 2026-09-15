@@ -1,0 +1,16 @@
+{
+  "session_start_row": 252,
+  "session_end_row": 261,
+  "selected": [
+    {"row": 252, "test_case_id": "UNX-S17-011", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S17-011/01-analytics-receivables-access-denied.png"},
+    {"row": 253, "test_case_id": "UNX-S17-012", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S17-012/01-analytics-vendors-access-denied.png"},
+    {"row": 254, "test_case_id": "UNX-S17-013", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S17-013/01-analytics-equipment-access-denied.png"},
+    {"row": 255, "test_case_id": "UNX-S17-014", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S17-014/01-analytics-export-access-denied.png"},
+    {"row": 256, "test_case_id": "UNX-S17-015", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S17-015/01-report-center-empty.png"},
+    {"row": 257, "test_case_id": "UNX-S18-001", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S18-001/01-studio-automations-access-denied.png"},
+    {"row": 258, "test_case_id": "UNX-S18-002", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S18-002/01-global-automations-invalid-time-error.png"},
+    {"row": 259, "test_case_id": "UNX-S18-003", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S18-003/01-automation-catalog-access-denied.png"},
+    {"row": 260, "test_case_id": "UNX-S18-004", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S18-004/01-automation-templates-access-denied.png"},
+    {"row": 261, "test_case_id": "UNX-S18-005", "status": "Bug/Failed", "evidence": "test-evidence/session-252-261/UNX-S18-005/01-automation-rule-builder-access-denied.png"}
+  ]
+}

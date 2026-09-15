@@ -1,0 +1,176 @@
+- generic [ref=f11e6]:
+  - complementary [ref=f11e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f11e9]
+    - generic [ref=f11e10]:
+      - generic [ref=f11e11]:
+        - heading "GLOBAL" [level=3] [ref=f11e12]
+        - link "Dasbor Global" [ref=f11e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f11e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f11e21]
+        - generic [ref=f11e22]:
+          - button "Pesanan" [ref=f11e24]
+          - button "Produksi" [ref=f11e33]
+          - button "Produk & Desain" [ref=f11e42]
+          - button "Printer" [ref=f11e53]
+          - button "Material" [ref=f11e62]
+      - generic [ref=f11e69]:
+        - heading "BISNIS" [level=3] [ref=f11e70]
+        - generic [ref=f11e71]:
+          - button "Pelanggan & Mitra" [ref=f11e73]
+          - button "Pengadaan" [ref=f11e83]
+          - button "Keuangan" [ref=f11e94]
+          - button "Laporan & Analitik" [ref=f11e102]
+      - generic [ref=f11e111]:
+        - heading "SISTEM" [level=3] [ref=f11e112]
+        - generic [ref=f11e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f11e115]
+          - button "Otomasi" [ref=f11e125]
+      - generic [ref=f11e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f11e132]
+        - generic [ref=f11e133]:
+          - link "Pusat Dokumen" [ref=f11e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f11e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f11e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f11e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f11e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f11e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f11e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f11e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f11e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f11e173]:
+    - banner [ref=f11e174]:
+      - combobox [ref=f11e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f11e180]
+        - generic [ref=f11e181]:
+          - generic [ref=f11e182]: ⌘
+          - generic [ref=f11e183]: K
+      - generic [ref=f11e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f11e219]'
+        - button [ref=f11e195]:
+          - generic [ref=f11e199]:
+            - text: "Workspace:"
+            - generic [ref=f11e200]:
+              - img "Craft Logo" [ref=f11e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f11e202]:
+          - generic [ref=f11e221]: "3"
+        - button [ref=f11e207]:
+          - generic [aria-hidden] [ref=f11e208]: AR
+    - main [ref=f11e209]:
+      - generic [ref=f11e396]:
+        - generic [ref=f11e397]:
+          - generic [ref=f11e398]:
+            - heading "Pusat Dokumen" [level=1] [ref=f11e399]
+            - paragraph [ref=f11e404]: Perpustakaan operasional privat untuk dokumen Craft, Studio, dan internal.
+          - button "Unggah dokumen" [active] [ref=f11e405]
+        - generic [ref=f11e407]:
+          - generic [ref=f11e408]:
+            - paragraph [ref=f11e409]: Aktif
+            - paragraph [ref=f11e410]: "0"
+          - generic [ref=f11e411]:
+            - paragraph [ref=f11e412]: Diarsipkan
+            - paragraph [ref=f11e413]: "0"
+          - generic [ref=f11e414]:
+            - paragraph [ref=f11e415]: Total
+            - paragraph [ref=f11e416]: "0"
+        - generic [ref=f11e417]:
+          - generic [ref=f11e418]:
+            - generic [ref=f11e419]:
+              - generic [ref=f11e420]: Cari dokumen
+              - textbox "Cari dokumen" [ref=f11e424]:
+                - /placeholder: Cari judul, kode, atau nama file…
+                - text: DOC-TIDAK-ADA-272
+            - combobox "Workspace" [ref=f11e425]:
+              - option "Semua workspace"
+              - option "Global"
+              - option "Uni-Inside Craft"
+              - option "Uni-Inside Shared"
+              - option "Uni-Inside Studio" [selected]
+            - combobox "Jenis dokumen" [ref=f11e426]:
+              - option "Semua jenis"
+              - option "Invoice" [selected]
+              - option "Quotation"
+              - option "Receipt"
+              - option "Report"
+              - option "Purchase Order"
+              - option "Contract"
+              - option "Design"
+              - option "Deliverable"
+              - option "Attachment"
+              - option "Other"
+            - combobox "Sumber dokumen" [ref=f11e427]:
+              - option "Semua sumber"
+              - option "Craft Orders"
+              - option "Craft Production"
+              - option "Craft Products"
+              - option "Craft Printers"
+              - option "Craft Materials"
+              - option "Craft Customers"
+              - option "Craft Finance"
+              - option "Craft Procurement"
+              - option "Craft Marketplace"
+              - option "Craft Analytics"
+              - option "Craft Automations"
+              - option "Studio Projects" [selected]
+              - option "Studio Clients"
+              - option "Studio Finance"
+              - option "Documents"
+              - option "Reports"
+              - option "Dashboard"
+              - option "Master Data"
+              - option "Calendar"
+              - option "Tasks"
+              - option "Integrations"
+          - generic [ref=f11e428]:
+            - button "Lihat aktif" [ref=f11e438]
+            - button "Muat ulang" [ref=f11e430]
+        - generic [ref=f11e436]: Tidak ada dokumen sesuai filter.
+        - dialog [ref=f11e440]:
+          - generic [ref=f11e441]:
+            - generic [ref=f11e442]:
+              - heading "Unggah Dokumen" [level=2] [ref=f11e443]
+              - paragraph [ref=f11e444]: PDF, gambar, ZIP, DOCX, XLSX, atau PPTX hingga 25 MB.
+            - button "Tutup unggah" [ref=f11e445]
+          - generic [ref=f11e449]:
+            - generic [ref=f11e450]:
+              - text: File
+              - button "File" [ref=f11e451]
+            - generic [ref=f11e452]:
+              - text: Judul
+              - textbox "Judul" [ref=f11e453]
+            - generic [ref=f11e454]:
+              - text: Jenis
+              - combobox "Jenis" [ref=f11e455]:
+                - option "Invoice" [selected]
+                - option "Quotation"
+                - option "Receipt"
+                - option "Report"
+                - option "Purchase Order"
+                - option "Contract"
+                - option "Design"
+                - option "Deliverable"
+                - option "Attachment"
+                - option "Other"
+            - generic [ref=f11e456]:
+              - text: Workspace
+              - combobox "Workspace" [ref=f11e457]:
+                - option "Global (perlu izin kelola)" [selected]
+                - option "Uni-Inside Craft"
+                - option "Uni-Inside Shared"
+                - option "Uni-Inside Studio"
+            - generic [ref=f11e458]:
+              - text: Deskripsi
+              - textbox "Deskripsi" [ref=f11e459]
+          - generic [ref=f11e460]:
+            - button "Batal" [ref=f11e461]
+            - button "Unggah" [ref=f11e462]

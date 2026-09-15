@@ -1,0 +1,86 @@
+- generic [ref=f14e6]:
+  - complementary [ref=f14e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f14e9]
+    - generic [ref=f14e10]:
+      - generic [ref=f14e11]:
+        - heading "GLOBAL" [level=3] [ref=f14e12]
+        - link "Dasbor Global" [ref=f14e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f14e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f14e21]
+        - generic [ref=f14e22]:
+          - button "Pesanan" [ref=f14e24]
+          - button "Produksi" [ref=f14e33]
+          - button "Produk & Desain" [ref=f14e42]
+          - button "Printer" [ref=f14e53]
+          - button "Material" [ref=f14e62]
+      - generic [ref=f14e69]:
+        - heading "BISNIS" [level=3] [ref=f14e70]
+        - generic [ref=f14e71]:
+          - button "Pelanggan & Mitra" [ref=f14e73]
+          - button "Pengadaan" [ref=f14e83]
+          - button "Keuangan" [ref=f14e94]
+          - button "Laporan & Analitik" [ref=f14e102]
+      - generic [ref=f14e111]:
+        - heading "SISTEM" [level=3] [ref=f14e112]
+        - generic [ref=f14e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f14e115]
+          - button "Otomasi" [ref=f14e125]
+      - generic [ref=f14e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f14e132]
+        - generic [ref=f14e133]:
+          - link "Pusat Dokumen" [ref=f14e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f14e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f14e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f14e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f14e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f14e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f14e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f14e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f14e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f14e173]:
+    - banner [ref=f14e174]:
+      - combobox [ref=f14e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f14e180]
+        - generic [ref=f14e181]:
+          - generic [ref=f14e182]: ⌘
+          - generic [ref=f14e183]: K
+      - generic [ref=f14e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f14e186]'
+        - button [ref=f14e195]:
+          - generic [ref=f14e199]:
+            - text: "Workspace:"
+            - generic [ref=f14e200]:
+              - img "Craft Logo" [ref=f14e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f14e203]:
+          - generic [ref=f14e207]: "3"
+        - button [ref=f14e209]:
+          - generic [aria-hidden] [ref=f14e210]: AR
+    - main [ref=f14e211]:
+      - generic [ref=f14e213]:
+        - generic [ref=f14e215]:
+          - paragraph [ref=f14e216]: Fitur Global
+          - heading "Riwayat Integrasi" [level=1] [ref=f14e217]
+          - paragraph [ref=f14e218]: Riwayat uji koneksi dan sinkronisasi yang telah disanitasi.
+        - generic [ref=f14e220]:
+          - combobox [ref=f14e221]:
+            - option "Semua Status" [selected]
+            - option "Berhasil"
+            - option "Gagal"
+            - option "Berjalan"
+            - option "Sebagian"
+          - combobox [ref=f14e222]:
+            - option "Semua Tipe" [selected]
+            - option "Uji Koneksi"
+            - option "Sinkronisasi"
+        - heading "Belum Ada Riwayat" [level=2] [ref=f14e225]

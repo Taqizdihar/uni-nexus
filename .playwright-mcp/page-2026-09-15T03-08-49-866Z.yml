@@ -1,0 +1,153 @@
+- generic [ref=f9e6]:
+  - complementary [ref=f9e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f9e9]
+    - generic [ref=f9e10]:
+      - generic [ref=f9e11]:
+        - heading "GLOBAL" [level=3] [ref=f9e12]
+        - link "Dasbor Global" [ref=f9e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f9e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f9e21]
+        - generic [ref=f9e22]:
+          - button "Pesanan" [ref=f9e225]
+          - button "Produksi" [ref=f9e234]
+          - button "Produk & Desain" [ref=f9e243]
+          - button "Printer" [ref=f9e254]
+          - button "Material" [ref=f9e263]
+      - generic [ref=f9e36]:
+        - heading "BISNIS" [level=3] [ref=f9e37]
+        - generic [ref=f9e38]:
+          - generic [ref=f9e270]:
+            - button "Pelanggan & Mitra" [ref=f9e271]
+            - generic [ref=f9e280]:
+              - link "Pelanggan" [ref=f9e281] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f9e282] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f9e284]
+          - button "Keuangan" [ref=f9e40]
+          - button "Laporan & Analitik" [ref=f9e295]
+      - generic [ref=f9e47]:
+        - heading "SISTEM" [level=3] [ref=f9e48]
+        - generic [ref=f9e304]:
+          - button "Marketplace & Kanal Penjualan" [ref=f9e306]
+          - button "Otomasi" [ref=f9e316]
+      - generic [ref=f9e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f9e50]
+        - generic [ref=f9e51]:
+          - link "Pusat Dokumen" [ref=f9e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f9e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f9e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f9e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f9e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f9e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f9e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f9e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f9e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f9e91]:
+    - banner [ref=f9e92]:
+      - combobox [ref=f9e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f9e98]
+        - generic [ref=f9e99]:
+          - generic [ref=f9e100]: ⌘
+          - generic [ref=f9e101]: K
+      - generic [ref=f9e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f9e130]'
+        - button [ref=f9e322]:
+          - generic [ref=f9e117]:
+            - text: "Workspace:"
+            - generic [ref=f9e118]:
+              - img "Craft Logo" [ref=f9e323]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f9e120]:
+          - generic [ref=f9e132]: "2"
+        - button [ref=f9e125]:
+          - generic [aria-hidden] [ref=f9e126]: QU
+    - main [ref=f9e127]:
+      - generic [ref=f9e129]:
+        - button "Kembali" [ref=f9e133]
+        - generic [ref=f9e136]:
+          - generic [ref=f9e137]:
+            - generic [ref=f9e138]:
+              - generic [ref=f9e139]: CQ
+              - generic [ref=f9e140]:
+                - paragraph [ref=f9e141]: CUS-000023
+                - heading "Customer QA Edited 091507" [level=1] [ref=f9e142]
+                - generic [ref=f9e143]:
+                  - generic [ref=f9e144]: Perusahaan
+                  - generic [ref=f9e145]: Aktif
+            - generic [ref=f9e146]:
+              - button "Pesanan Baru" [ref=f9e147]
+              - button "Edit" [ref=f9e152]
+              - button "Promosikan Jadi Mitra" [ref=f9e155]
+              - button "Nonaktifkan" [ref=f9e158]
+          - generic [ref=f9e159]:
+            - generic [ref=f9e161]:
+              - paragraph [ref=f9e162]: Total Pesanan
+              - paragraph [ref=f9e163]: "0"
+            - generic [ref=f9e165]:
+              - paragraph [ref=f9e166]: Nilai Pesanan
+              - paragraph [ref=f9e167]: Rp 0
+            - generic [ref=f9e169]:
+              - paragraph [ref=f9e170]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f9e171]: Rp 0
+            - generic [ref=f9e173]:
+              - paragraph [ref=f9e174]: Saldo Invoice
+              - paragraph [ref=f9e175]: Rp 0
+        - navigation "Profil pelanggan" [ref=f9e176]:
+          - button "Ringkasan" [ref=f9e177]
+          - button "Kontak" [ref=f9e178]
+          - button "Pesanan" [ref=f9e179]
+          - button "Keuangan" [ref=f9e180]
+        - generic [ref=f9e324]:
+          - generic [ref=f9e325]:
+            - generic [ref=f9e326]:
+              - heading "Kontak" [level=2] [ref=f9e327]
+              - paragraph [ref=f9e328]: PIC dan kontak komunikasi pelanggan.
+            - button "Tambah Kontak" [ref=f9e329]
+          - generic [ref=f9e334]:
+            - generic [ref=f9e335]:
+              - generic [ref=f9e336]:
+                - paragraph [ref=f9e337]: PIC QA A 091507
+                - generic [ref=f9e338]: MITRA
+              - paragraph [ref=f9e339]: Penanggung Jawab QA · pic.a.091507@example.test
+            - generic [ref=f9e340]:
+              - button "Edit" [ref=f9e341]
+              - button [ref=f9e342]
+        - generic [ref=f9e347]:
+          - generic [ref=f9e348]:
+            - heading "Tambah Kontak" [level=2] [ref=f9e349]
+            - generic [ref=f9e350]:
+              - generic [ref=f9e351]:
+                - text: Nama *
+                - textbox "Nama *" [ref=f9e352]: PIC QA B 091507
+              - generic [ref=f9e353]:
+                - text: Jabatan
+                - textbox "Jabatan" [ref=f9e354]: Kontak Alternatif QA
+              - generic [ref=f9e355]:
+                - text: Email
+                - textbox "Email" [ref=f9e356]: pic.b.091507@example.test
+              - generic [ref=f9e357]:
+                - text: Telepon
+                - textbox "Telepon" [ref=f9e358]: "08123456091512"
+              - generic [ref=f9e359]:
+                - text: WhatsApp
+                - textbox "WhatsApp" [ref=f9e360]: "08123456091512"
+              - generic [ref=f9e361]:
+                - checkbox "Jadikan kontak utama" [checked] [active] [ref=f9e362]
+                - text: Jadikan kontak utama
+              - generic [ref=f9e363]:
+                - text: Catatan
+                - textbox "Catatan" [ref=f9e364]: Catatan B 091507
+          - generic [ref=f9e365]:
+            - button "Batal" [ref=f9e366]
+            - button "Simpan Kontak" [ref=f9e367]

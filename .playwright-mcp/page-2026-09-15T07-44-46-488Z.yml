@@ -1,0 +1,120 @@
+- generic [ref=f12e6]:
+  - complementary [ref=f12e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f12e9]
+    - generic [ref=f12e10]:
+      - generic [ref=f12e11]:
+        - heading "GLOBAL" [level=3] [ref=f12e12]
+        - link "Dasbor Global" [ref=f12e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f12e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f12e21]
+        - generic [ref=f12e22]:
+          - generic [ref=f12e23]:
+            - button "Proyek" [ref=f12e24]
+            - generic [ref=f12e193]:
+              - link "Semua Proyek" [ref=f12e194] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f12e195] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f12e196] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f12e197] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f12e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f12e41]:
+        - heading "BISNIS" [level=3] [ref=f12e42]
+        - button "Keuangan" [ref=f12e45]
+      - heading "SISTEM" [level=3] [ref=f12e53]
+      - generic [ref=f12e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f12e55]
+        - generic [ref=f12e56]:
+          - link "Pusat Dokumen" [ref=f12e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f12e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f12e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f12e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f12e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f12e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f12e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f12e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f12e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f12e96]:
+    - banner [ref=f12e97]:
+      - combobox [ref=f12e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f12e103]
+        - generic [ref=f12e104]:
+          - generic [ref=f12e105]: ⌘
+          - generic [ref=f12e106]: K
+      - generic [ref=f12e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f12e109]'
+        - button [ref=f12e118]:
+          - generic [ref=f12e122]:
+            - text: "Workspace:"
+            - generic [ref=f12e123]:
+              - img "Studio Logo" [ref=f12e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f12e126]:
+          - generic [ref=f12e130]: "2"
+        - button [ref=f12e132]:
+          - generic [aria-hidden] [ref=f12e133]: QU
+    - main [ref=f12e134]:
+      - generic [ref=f12e198]:
+        - generic [ref=f12e199]:
+          - generic [ref=f12e201]:
+            - paragraph [ref=f12e202]: Operasional Studio
+            - heading "Tahapan Proyek" [level=1] [ref=f12e203]
+            - paragraph [ref=f12e204]: "Pantau seluruh tahapan lintas proyek Studio: mana yang terlambat, jatuh tempo pekan ini, dan mana yang sedang berjalan."
+          - button "Muat Ulang" [active] [ref=f12e206]
+        - generic [ref=f12e212]:
+          - generic [ref=f12e213]:
+            - generic [ref=f12e214]:
+              - generic [ref=f12e215]: Proyek
+              - combobox "Proyek" [ref=f12e216]:
+                - option "Semua proyek" [selected]
+            - generic [ref=f12e217]:
+              - generic [ref=f12e218]: Klien
+              - combobox "Klien" [ref=f12e219]:
+                - option "Semua klien" [selected]
+                - option "QA Customer S09"
+            - generic [ref=f12e220]:
+              - generic [ref=f12e221]: Project Manager
+              - combobox "Project Manager" [ref=f12e222]:
+                - option "Semua PM" [selected]
+                - option "Ahmad Ropaldo"
+                - option "Amadea Salsabila"
+                - option "April Adzania"
+                - option "Cantika Anggi"
+                - option "Dian Daeli"
+                - option "Muhammad Taqi Izdiharr"
+                - option "Nadine Nathania Pelleng"
+                - option "Naura Ramadhani"
+                - option "QA User-1"
+                - option "Siti Amany Fakhirah Riby"
+            - generic [ref=f12e223]:
+              - generic [ref=f12e224]: Status
+              - combobox "Status" [ref=f12e225]:
+                - option "Semua status"
+                - option "Menunggu"
+                - option "Sedang Berjalan" [selected]
+                - option "Selesai"
+                - option "Dibatalkan"
+            - generic [ref=f12e226]:
+              - generic [ref=f12e227]: Jatuh tempo dari
+              - textbox "Jatuh tempo dari" [ref=f12e228]: 2026-01-01
+            - generic [ref=f12e229]:
+              - generic [ref=f12e230]: Jatuh tempo sampai
+              - textbox "Jatuh tempo sampai" [ref=f12e231]: 2026-12-31
+          - button "Reset filter" [ref=f12e239]
+        - generic [ref=f12e245]:
+          - generic [ref=f12e246]: ✦
+          - heading "Belum Ada Tahapan" [level=3] [ref=f12e248]
+          - paragraph [ref=f12e249]: Tidak ada tahapan yang cocok dengan filter saat ini.

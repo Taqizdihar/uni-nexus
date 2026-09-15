@@ -1,0 +1,181 @@
+- generic [ref=f12e6]:
+  - complementary [ref=f12e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f12e9]
+    - generic [ref=f12e10]:
+      - generic [ref=f12e11]:
+        - heading "GLOBAL" [level=3] [ref=f12e12]
+        - link "Dasbor Global" [ref=f12e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f12e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f12e21]
+        - generic [ref=f12e22]:
+          - button "Pesanan" [ref=f12e24]
+          - button "Produksi" [ref=f12e33]
+          - button "Produk & Desain" [ref=f12e42]
+          - button "Printer" [ref=f12e53]
+          - button "Material" [ref=f12e62]
+      - generic [ref=f12e69]:
+        - heading "BISNIS" [level=3] [ref=f12e70]
+        - generic [ref=f12e71]:
+          - button "Pelanggan & Mitra" [ref=f12e73]
+          - button "Pengadaan" [ref=f12e83]
+          - button "Keuangan" [ref=f12e94]
+          - button "Laporan & Analitik" [ref=f12e102]
+      - generic [ref=f12e111]:
+        - heading "SISTEM" [level=3] [ref=f12e112]
+        - generic [ref=f12e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f12e115]
+          - button "Otomasi" [ref=f12e125]
+      - generic [ref=f12e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f12e132]
+        - generic [ref=f12e133]:
+          - link "Pusat Dokumen" [ref=f12e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f12e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f12e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f12e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f12e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f12e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f12e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f12e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f12e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f12e173]:
+    - banner [ref=f12e174]:
+      - combobox [ref=f12e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f12e180]
+        - generic [ref=f12e181]:
+          - generic [ref=f12e182]: ⌘
+          - generic [ref=f12e183]: K
+      - generic [ref=f12e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f12e219]'
+        - button [ref=f12e195]:
+          - generic [ref=f12e199]:
+            - text: "Workspace:"
+            - generic [ref=f12e200]:
+              - img "Craft Logo" [ref=f12e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f12e202]:
+          - generic [ref=f12e221]: "3"
+        - button [ref=f12e207]:
+          - generic [aria-hidden] [ref=f12e208]: AR
+    - main [ref=f12e209]:
+      - generic [ref=f12e1658]:
+        - generic [ref=f12e1660]:
+          - paragraph [ref=f12e1661]: Fitur Global
+          - heading "Katalog Provider" [level=1] [ref=f12e1662]
+          - paragraph [ref=f12e1663]: Daftar layanan eksternal yang dikenali UNI-NEXUS, termasuk yang masih direncanakan.
+        - generic [ref=f12e1664]:
+          - heading "Tersedia (5)" [level=2] [ref=f12e1665]
+          - generic [ref=f12e1666]:
+            - generic [ref=f12e1668]:
+              - generic [ref=f12e1669]:
+                - heading "Google Drive" [level=3] [ref=f12e1670]
+                - generic [ref=f12e1671]: Tersedia
+              - paragraph [ref=f12e1672]: Verifikasi akses folder Google Drive menggunakan Service Account.
+              - generic [ref=f12e1673]:
+                - generic [ref=f12e1674]: Google Workspace
+                - generic [ref=f12e1675]: Test
+              - link [ref=f12e1677] [cursor=pointer]:
+                - /url: /app/integrations/connections/new?provider=GOOGLE_DRIVE
+                - button "Hubungkan" [ref=f12e1678]
+            - generic [ref=f12e1680]:
+              - generic [ref=f12e1681]:
+                - heading "Google Sheets" [level=3] [ref=f12e1682]
+                - generic [ref=f12e1683]: Tersedia
+              - paragraph [ref=f12e1684]: Verifikasi akses spreadsheet Google Sheets menggunakan Service Account.
+              - generic [ref=f12e1685]:
+                - generic [ref=f12e1686]: Google Workspace
+                - generic [ref=f12e1687]: Test
+              - link [ref=f12e1689] [cursor=pointer]:
+                - /url: /app/integrations/connections/new?provider=GOOGLE_SHEETS
+                - button "Hubungkan" [ref=f12e1690]
+            - generic [ref=f12e1692]:
+              - generic [ref=f12e1693]:
+                - heading "Google Calendar" [level=3] [ref=f12e1694]
+                - generic [ref=f12e1695]: Tersedia
+              - paragraph [ref=f12e1696]: Verifikasi akses kalender Google Calendar menggunakan Service Account.
+              - generic [ref=f12e1697]:
+                - generic [ref=f12e1698]: Google Workspace
+                - generic [ref=f12e1699]: Test
+              - link [ref=f12e1701] [cursor=pointer]:
+                - /url: /app/integrations/connections/new?provider=GOOGLE_CALENDAR
+                - button "Hubungkan" [ref=f12e1702]
+            - generic [ref=f12e1704]:
+              - generic [ref=f12e1705]:
+                - heading "WhatsApp Cloud API" [level=3] [ref=f12e1706]
+                - generic [ref=f12e1707]: Tersedia
+              - paragraph [ref=f12e1708]: Verifikasi nomor WhatsApp Business melalui Meta Graph API.
+              - generic [ref=f12e1709]:
+                - generic [ref=f12e1710]: Messaging
+                - generic [ref=f12e1711]: Test
+              - link [ref=f12e1713] [cursor=pointer]:
+                - /url: /app/integrations/connections/new?provider=WHATSAPP_CLOUD_API
+                - button "Hubungkan" [ref=f12e1714]
+            - generic [ref=f12e1716]:
+              - generic [ref=f12e1717]:
+                - heading "Mock Test Connector (Development Only)" [level=3] [ref=f12e1718]
+                - generic [ref=f12e1719]: Tersedia
+              - paragraph [ref=f12e1720]: Connector simulasi untuk smoke test dan browser acceptance test. Tidak pernah tersedia di production.
+              - generic [ref=f12e1721]:
+                - generic [ref=f12e1722]: Lainnya
+                - generic [ref=f12e1723]: Test
+                - generic [ref=f12e1724]: Sync
+              - link [ref=f12e1726] [cursor=pointer]:
+                - /url: /app/integrations/connections/new?provider=MOCK_TEST_CONNECTOR
+                - button "Hubungkan" [ref=f12e1727]
+        - generic [ref=f12e1728]:
+          - heading "Direncanakan (5)" [level=2] [ref=f12e1729]
+          - generic [ref=f12e1730]:
+            - generic [ref=f12e1732]:
+              - generic [ref=f12e1733]:
+                - heading "Shopee" [level=3] [ref=f12e1734]
+                - generic [ref=f12e1735]: Direncanakan
+              - paragraph [ref=f12e1736]: Integrasi API Shopee untuk sinkronisasi pesanan dan produk.
+              - generic [ref=f12e1737]: Marketplace
+              - paragraph [ref=f12e1739]: Adapter API belum tersedia / belum dikonfigurasi.
+              - generic [ref=f12e1740]:
+                - button "Belum Tersedia" [disabled]
+            - generic [ref=f12e1742]:
+              - generic [ref=f12e1743]:
+                - heading "TikTok Shop" [level=3] [ref=f12e1744]
+                - generic [ref=f12e1745]: Direncanakan
+              - paragraph [ref=f12e1746]: Integrasi API TikTok Shop untuk sinkronisasi pesanan dan produk.
+              - generic [ref=f12e1747]: Marketplace
+              - paragraph [ref=f12e1749]: Adapter API belum tersedia / belum dikonfigurasi.
+              - generic [ref=f12e1750]:
+                - button "Belum Tersedia" [disabled]
+            - generic [ref=f12e1752]:
+              - generic [ref=f12e1753]:
+                - heading "Tokopedia" [level=3] [ref=f12e1754]
+                - generic [ref=f12e1755]: Direncanakan
+              - paragraph [ref=f12e1756]: Integrasi API Tokopedia untuk sinkronisasi pesanan dan produk.
+              - generic [ref=f12e1757]: Marketplace
+              - paragraph [ref=f12e1759]: Adapter API belum tersedia / belum dikonfigurasi.
+              - generic [ref=f12e1760]:
+                - button "Belum Tersedia" [disabled]
+            - generic [ref=f12e1762]:
+              - generic [ref=f12e1763]:
+                - heading "Payment Gateway" [level=3] [ref=f12e1764]
+                - generic [ref=f12e1765]: Direncanakan
+              - paragraph [ref=f12e1766]: Kategori adapter payment gateway. Belum ada adapter terverifikasi pada rilis ini.
+              - generic [ref=f12e1767]: Payment
+              - paragraph [ref=f12e1769]: Adapter API belum tersedia / belum dikonfigurasi.
+              - generic [ref=f12e1770]:
+                - button "Belum Tersedia" [disabled]
+            - generic [ref=f12e1772]:
+              - generic [ref=f12e1773]:
+                - heading "Custom API / Generic Webhook" [level=3] [ref=f12e1774]
+                - generic [ref=f12e1775]: Direncanakan
+              - paragraph [ref=f12e1776]: Koneksi ke URL/API kustom. Ditahan sebagai "planned" karena hardening SSRF (blokir localhost/private network/metadata cloud, validasi DNS, batas redirect/timeout/ukuran) belum diimplementasikan secara menyeluruh pada rilis ini.
+              - generic [ref=f12e1777]: API / Webhook
+              - paragraph [ref=f12e1779]: Adapter API belum tersedia / belum dikonfigurasi.
+              - generic [ref=f12e1780]:
+                - button "Belum Tersedia" [disabled]

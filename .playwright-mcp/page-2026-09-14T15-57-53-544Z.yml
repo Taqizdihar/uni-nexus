@@ -1,0 +1,199 @@
+- generic [ref=f20e3]:
+  - complementary [ref=f20e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f20e6]
+    - generic [ref=f20e7]:
+      - generic [ref=f20e8]:
+        - heading "GLOBAL" [level=3] [ref=f20e9]
+        - link "Dasbor Global" [ref=f20e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f20e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f20e18]
+        - generic [ref=f20e19]:
+          - button "Pesanan" [ref=f20e308]
+          - button "Produksi" [ref=f20e317]
+          - generic [ref=f20e325]:
+            - button "Produk & Desain" [ref=f20e326]
+            - generic [ref=f20e410]:
+              - link "Katalog Produk" [ref=f20e411] [cursor=pointer]:
+                - /url: /app/craft/products
+              - link "Pustaka Desain 3D" [ref=f20e412] [cursor=pointer]:
+                - /url: /app/craft/products/design-library
+              - link "Profil Cetak" [ref=f20e413] [cursor=pointer]:
+                - /url: /app/craft/products/print-profiles
+              - link "Biaya & Penetapan Harga" [ref=f20e414] [cursor=pointer]:
+                - /url: /app/craft/products/cost-pricing
+          - button "Printer" [ref=f20e337]
+          - button "Material" [ref=f20e346]
+      - generic [ref=f20e33]:
+        - heading "BISNIS" [level=3] [ref=f20e34]
+        - generic [ref=f20e35]:
+          - generic [ref=f20e353]:
+            - button "Pelanggan & Mitra" [ref=f20e354]
+            - generic [ref=f20e363]:
+              - link "Pelanggan" [ref=f20e364] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f20e365] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f20e367]
+          - button "Keuangan" [ref=f20e37]
+          - button "Laporan & Analitik" [ref=f20e378]
+      - generic [ref=f20e44]:
+        - heading "SISTEM" [level=3] [ref=f20e45]
+        - generic [ref=f20e387]:
+          - button "Marketplace & Kanal Penjualan" [ref=f20e389]
+          - button "Otomasi" [ref=f20e399]
+      - generic [ref=f20e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f20e47]
+        - generic [ref=f20e48]:
+          - link "Pusat Dokumen" [ref=f20e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f20e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f20e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f20e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f20e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f20e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f20e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f20e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f20e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f20e88]:
+    - banner [ref=f20e89]:
+      - combobox [ref=f20e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f20e95]
+        - generic [ref=f20e96]:
+          - generic [ref=f20e97]: ⌘
+          - generic [ref=f20e98]: K
+      - generic [ref=f20e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f20e101]'
+        - button [ref=f20e405]:
+          - generic [ref=f20e114]:
+            - text: "Workspace:"
+            - generic [ref=f20e115]:
+              - img "Craft Logo" [ref=f20e406]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f20e118]
+        - button [ref=f20e123]:
+          - generic [aria-hidden] [ref=f20e124]: QU
+    - main [ref=f20e125]:
+      - generic [ref=f20e503]:
+        - generic [ref=f20e504]:
+          - generic [ref=f20e505]:
+            - paragraph [ref=f20e506]: Produk & Desain
+            - heading "Katalog Produk" [level=1] [ref=f20e507]
+            - paragraph [ref=f20e508]: Kelola produk, varian, harga, dan kesiapan produksi Uni-Inside Craft.
+          - generic [ref=f20e509]:
+            - button "Kelola Kategori" [ref=f20e510]
+            - link [ref=f20e516] [cursor=pointer]:
+              - /url: /app/craft/products/new
+              - button "Tambah Produk" [ref=f20e517]
+        - generic [ref=f20e520]:
+          - textbox [ref=f20e522]:
+            - /placeholder: Cari SKU, nama, deskripsi, atau varian...
+          - combobox [ref=f20e523]:
+            - option "Semua kategori" [selected]
+            - option "Kategori Root QA 20260914_2114"
+            - option "Kategori Child Edited QA 20260914_2256"
+            - option "Kategori Child QA 20260914_2114"
+            - option "Kategori Parent QA 20260914_2256"
+            - option "Kategori Duplicate Code QA 20260914_2256"
+          - combobox [ref=f20e524]:
+            - option "Semua tipe" [selected]
+            - option "Produk Jadi"
+            - option "Dapat Dikustomisasi"
+            - option "Layanan Custom"
+          - combobox [ref=f20e525]:
+            - option "Aktif" [selected]
+            - option "Nonaktif"
+            - option "Semua status"
+          - button "Muat Ulang" [ref=f20e526]
+        - generic [ref=f20e532]:
+          - heading "Belum Ada Produk" [level=2] [ref=f20e678]
+          - paragraph [ref=f20e679]: Tambahkan produk pertama agar dapat digunakan saat membuat Pesanan dan merencanakan Produksi.
+          - link [ref=f20e680] [cursor=pointer]:
+            - /url: /app/craft/products/new
+            - button "Tambah Produk" [ref=f20e681]
+        - dialog [ref=f20e542]:
+          - generic [ref=f20e543]:
+            - generic [ref=f20e544]:
+              - paragraph [ref=f20e545]: Master data
+              - heading "Kelola Kategori Produk" [level=2] [ref=f20e546]
+            - button "Tutup" [ref=f20e547]
+          - generic [ref=f20e551]:
+            - generic [ref=f20e552]:
+              - textbox "Nama kategori baru" [ref=f20e553]
+              - textbox "Kode otomatis" [ref=f20e554]
+              - combobox [ref=f20e555]:
+                - option "Kategori induk (opsional)" [selected]
+                - option "Kategori Root QA 20260914_2114"
+                - option "Kategori Child Edited QA 20260914_2256"
+                - option "Kategori Child QA 20260914_2114"
+                - option "Kategori Parent QA 20260914_2256"
+                - option "Kategori Duplicate Code QA 20260914_2256"
+              - button "Tambah" [ref=f20e556]
+            - table [ref=f20e559]:
+              - rowgroup [ref=f20e560]:
+                - row [ref=f20e561]:
+                  - columnheader "Kategori" [ref=f20e562]
+                  - columnheader "Kode" [ref=f20e563]
+                  - columnheader "Induk" [ref=f20e564]
+                  - columnheader "Produk" [ref=f20e565]
+                  - columnheader "Aksi" [ref=f20e566]
+              - rowgroup [ref=f20e567]:
+                - row [ref=f20e568]:
+                  - cell "Kategori Root QA 20260914_2114" [ref=f20e569]
+                  - cell "QA_PC_R_20260914_2114" [ref=f20e570]
+                  - cell "–" [ref=f20e571]
+                  - cell "0" [ref=f20e572]
+                  - cell [ref=f20e573]:
+                    - generic [ref=f20e574]:
+                      - button "Edit" [ref=f20e575]
+                      - button "Nonaktifkan" [ref=f20e579]
+                - row [ref=f20e693]:
+                  - cell [ref=f20e672]:
+                    - textbox [ref=f20e694]: Kategori Child Edited QA 20260914_2256
+                  - cell [ref=f20e673]:
+                    - textbox [ref=f20e695]: QA_SUBCAT_EDITED_20260914_2256
+                  - cell "Kategori Root QA 20260914_2114" [ref=f20e674]:
+                    - combobox [ref=f20e696]:
+                      - option "–"
+                      - option "Kategori Root QA 20260914_2114" [selected]
+                      - option "Kategori Child QA 20260914_2114"
+                      - option "Kategori Parent QA 20260914_2256"
+                      - option "Kategori Duplicate Code QA 20260914_2256"
+                  - cell "0" [ref=f20e631]
+                  - cell [ref=f20e697]:
+                    - button "Simpan" [ref=f20e698]
+                - row [ref=f20e582]:
+                  - cell "Kategori Child QA 20260914_2114" [ref=f20e583]
+                  - cell "QA_PC_C_20260914_2114" [ref=f20e584]
+                  - cell "Kategori Root QA 20260914_2114" [ref=f20e585]
+                  - cell "0" [ref=f20e586]
+                  - cell [ref=f20e587]:
+                    - generic [ref=f20e588]:
+                      - button "Edit" [ref=f20e589]
+                      - button "Nonaktifkan" [ref=f20e593]
+                - row [ref=f20e604]:
+                  - cell "Kategori Parent QA 20260914_2256" [ref=f20e605]
+                  - cell "KATEGORI_PARENT_QA_20260914_2256" [ref=f20e606]
+                  - cell "–" [ref=f20e607]
+                  - cell "0" [ref=f20e608]
+                  - cell [ref=f20e609]:
+                    - generic [ref=f20e610]:
+                      - button "Edit" [ref=f20e611]
+                      - button "Nonaktifkan" [ref=f20e615]
+                - row [ref=f20e649]:
+                  - cell "Kategori Duplicate Code QA 20260914_2256" [ref=f20e650]
+                  - cell "QA_SUBCAT_20260914_2256_2" [ref=f20e651]
+                  - cell "–" [ref=f20e652]
+                  - cell "0" [ref=f20e653]
+                  - cell [ref=f20e654]:
+                    - generic [ref=f20e655]:
+                      - button "Edit" [ref=f20e656]
+                      - button "Nonaktifkan" [ref=f20e660]

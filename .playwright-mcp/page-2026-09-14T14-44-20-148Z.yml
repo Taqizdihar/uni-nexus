@@ -1,0 +1,125 @@
+- generic [ref=f8e6]:
+  - complementary [ref=f8e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f8e9]
+    - generic [ref=f8e10]:
+      - generic [ref=f8e11]:
+        - heading "GLOBAL" [level=3] [ref=f8e12]
+        - link "Dasbor Global" [ref=f8e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f8e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f8e21]
+        - generic [ref=f8e22]:
+          - button "Proyek" [ref=f8e645]
+          - link "Klien" [ref=f8e651] [cursor=pointer]:
+            - /url: /app/studio/clients
+          - generic [ref=f8e657]:
+            - button "Layanan" [ref=f8e658]
+            - generic [ref=f8e692]:
+              - link "Katalog Layanan" [active] [ref=f8e693] [cursor=pointer]:
+                - /url: /app/studio/services
+              - link "Kategori Layanan" [ref=f8e694] [cursor=pointer]:
+                - /url: /app/studio/services/categories
+              - link "Paket Layanan" [ref=f8e695] [cursor=pointer]:
+                - /url: /app/studio/services/packages
+          - button "Peralatan & Aset" [ref=f8e666]
+      - generic [ref=f8e69]:
+        - heading "BISNIS" [level=3] [ref=f8e70]
+        - generic [ref=f8e71]:
+          - button "Penawaran & Penagihan" [ref=f8e673]
+          - button "Vendor / Freelancer / Mitra" [ref=f8e681]
+          - button "Keuangan" [ref=f8e94]
+          - button "Laporan & Analitik" [ref=f8e102]
+      - generic [ref=f8e111]:
+        - heading "SISTEM" [level=3] [ref=f8e112]
+        - button "Otomasi" [ref=f8e125]
+      - generic [ref=f8e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f8e132]
+        - generic [ref=f8e133]:
+          - link "Keuangan Terpadu" [ref=f8e134] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f8e138] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f8e143] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f8e146] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f8e150] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f8e156] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f8e159] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f8e165] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f8e168] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f8e174] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f8e179] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f8e183]:
+    - banner [ref=f8e184]:
+      - combobox [ref=f8e186]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f8e190]
+        - generic [ref=f8e191]:
+          - generic [ref=f8e192]: ⌘
+          - generic [ref=f8e193]: K
+      - generic [ref=f8e194]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f8e196]'
+        - button [ref=f8e690]:
+          - generic [ref=f8e209]:
+            - text: "Workspace:"
+            - generic [ref=f8e210]:
+              - img "Studio Logo" [ref=f8e691]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f8e213]
+        - button [ref=f8e218]
+    - main [ref=f8e219]:
+      - generic [ref=f8e696]:
+        - generic [ref=f8e697]:
+          - generic [ref=f8e699]:
+            - paragraph [ref=f8e700]: Operasional Studio
+            - heading "Layanan" [level=1] [ref=f8e701]
+            - paragraph [ref=f8e702]: Kelola katalog jasa, model harga, dan paket layanan Uni-Inside Studio.
+          - generic [ref=f8e703]:
+            - button "Kelola Kategori" [ref=f8e704]
+            - button "Tambah Layanan" [ref=f8e708]
+        - generic [ref=f8e710]:
+          - generic [ref=f8e711]:
+            - paragraph [ref=f8e712]: Layanan Aktif
+            - paragraph [ref=f8e713]: "0"
+          - generic [ref=f8e714]:
+            - paragraph [ref=f8e715]: Kategori Aktif
+            - paragraph [ref=f8e716]: "0"
+          - generic [ref=f8e717]:
+            - paragraph [ref=f8e718]: Paket Aktif
+            - paragraph [ref=f8e719]: "0"
+          - generic [ref=f8e720]:
+            - paragraph [ref=f8e721]: Digunakan di Proyek
+            - paragraph [ref=f8e722]: "0"
+        - generic [ref=f8e723]:
+          - generic [ref=f8e724]:
+            - textbox "Cari kode, nama, deskripsi, atau kategori..." [ref=f8e726]
+            - combobox [ref=f8e727]:
+              - option "Semua kategori" [selected]
+              - option "Layanan QA Edit 20260914_2114"
+            - combobox [ref=f8e728]:
+              - option "Semua model harga" [selected]
+              - option "Harga Tetap"
+              - option "Per Jam"
+              - option "Per Hari"
+              - option "Harga Paket"
+              - option "Harga Kustom"
+            - combobox [ref=f8e729]:
+              - option "Aktif" [selected]
+              - option "Nonaktif"
+              - option "Semua status"
+            - combobox [ref=f8e730]:
+              - option "Nama (A–Z)" [selected]
+              - option "Terbaru"
+              - option "Harga Dasar"
+              - option "Paling Sering Digunakan"
+          - generic [ref=f8e732]:
+            - heading "Belum Ada Layanan" [level=2] [ref=f8e738]
+            - paragraph [ref=f8e739]: Tambahkan layanan pertama untuk mulai membangun katalog jasa Uni-Inside Studio.
+            - button "Tambah Layanan" [ref=f8e741]

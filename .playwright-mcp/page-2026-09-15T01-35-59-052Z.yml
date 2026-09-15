@@ -1,0 +1,74 @@
+- generic [ref=f37e6]:
+  - complementary [ref=f37e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f37e9]
+    - generic [ref=f37e10]:
+      - generic [ref=f37e11]:
+        - heading "GLOBAL" [level=3] [ref=f37e12]
+        - link "Dasbor Global" [ref=f37e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f37e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f37e21]
+        - generic [ref=f37e22]:
+          - button "Proyek" [ref=f37e24]
+          - link "Klien" [ref=f37e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f37e36]:
+        - heading "BISNIS" [level=3] [ref=f37e37]
+        - button "Keuangan" [ref=f37e40]
+      - heading "SISTEM" [level=3] [ref=f37e48]
+      - generic [ref=f37e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f37e50]
+        - generic [ref=f37e51]:
+          - link "Pusat Dokumen" [ref=f37e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f37e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f37e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f37e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f37e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f37e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f37e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f37e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f37e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f37e91]:
+    - banner [ref=f37e92]:
+      - combobox [ref=f37e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f37e98]
+        - generic [ref=f37e99]:
+          - generic [ref=f37e100]: ⌘
+          - generic [ref=f37e101]: K
+      - generic [ref=f37e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f37e104]'
+        - button [ref=f37e113]:
+          - generic [ref=f37e117]:
+            - text: "Workspace:"
+            - generic [ref=f37e118]:
+              - img "Studio Logo" [ref=f37e119]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f37e121]:
+          - generic [ref=f37e125]: "2"
+        - button [ref=f37e127]:
+          - generic [aria-hidden] [ref=f37e128]: QU
+    - main [ref=f37e129]:
+      - generic [ref=f37e131]:
+        - generic [ref=f37e132]:
+          - generic [ref=f37e133]:
+            - paragraph [ref=f37e134]: PENGADAAN
+            - heading "Permintaan Pembelian" [level=1] [ref=f37e135]
+            - paragraph [ref=f37e136]: Dokumen internal untuk kebutuhan pembelian sebelum pemasok dan PO ditentukan.
+          - link [ref=f37e138] [cursor=pointer]:
+            - /url: /app/craft/procurement/requests/new
+            - button "Permintaan Baru" [ref=f37e139]
+        - generic [ref=f37e141]:
+          - heading "Belum Ada Permintaan Pembelian" [level=2] [ref=f37e142]
+          - paragraph [ref=f37e143]: Buat permintaan dari kebutuhan operasional atau material stok menipis.
+          - link [ref=f37e145] [cursor=pointer]:
+            - /url: /app/craft/procurement/requests/new
+            - button "Permintaan Baru" [ref=f37e146]

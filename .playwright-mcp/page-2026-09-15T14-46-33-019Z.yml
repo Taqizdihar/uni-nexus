@@ -1,0 +1,100 @@
+- generic [ref=f38e6]:
+  - complementary [ref=f38e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f38e9]
+    - generic [ref=f38e10]:
+      - generic [ref=f38e11]:
+        - heading "GLOBAL" [level=3] [ref=f38e12]
+        - link "Dasbor Global" [ref=f38e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f38e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f38e21]
+        - generic [ref=f38e22]:
+          - button "Proyek" [ref=f38e231]
+          - link "Klien" [ref=f38e237] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f38e69]:
+        - heading "BISNIS" [level=3] [ref=f38e70]
+        - generic [ref=f38e93]:
+          - button "Keuangan" [ref=f38e94]
+          - generic [ref=f38e243]:
+            - link "Ringkasan Keuangan" [ref=f38e244] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f38e245] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f38e246] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f38e247] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f38e248] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f38e249] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f38e250] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f38e251] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f38e252] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f38e253] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [ref=f38e254] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f38e112]
+      - generic [ref=f38e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f38e132]
+        - generic [ref=f38e133]:
+          - link "Pusat Dokumen" [ref=f38e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f38e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f38e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f38e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f38e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f38e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f38e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f38e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f38e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f38e173]:
+    - banner [ref=f38e174]:
+      - combobox [ref=f38e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f38e180]
+        - generic [ref=f38e181]:
+          - generic [ref=f38e182]: ⌘
+          - generic [ref=f38e183]: K
+      - generic [ref=f38e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f38e186]'
+        - button [active] [ref=f38e255]:
+          - generic [ref=f38e199]:
+            - text: "Workspace:"
+            - generic [ref=f38e200]:
+              - img "Studio Logo" [ref=f38e256]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f38e203]:
+          - generic [ref=f38e207]: "3"
+        - button [ref=f38e209]:
+          - generic [aria-hidden] [ref=f38e210]: AR
+    - main [ref=f38e211]:
+      - generic [ref=f38e213]:
+        - generic [ref=f38e215]:
+          - heading "Pendapatan" [level=1] [ref=f38e216]
+          - paragraph [ref=f38e217]: Catat kas masuk yang benar-benar diterima, bukan invoice yang baru diterbitkan.
+        - generic [ref=f38e218]:
+          - heading "Catat Pendapatan Manual" [level=3] [ref=f38e220]
+          - generic [ref=f38e222]:
+            - spinbutton "Jumlah diterima" [ref=f38e223]
+            - textbox [ref=f38e224]: 2026-09-15
+            - combobox [ref=f38e225]:
+              - option "Pilih kas / bank" [selected]
+              - option "QA Transfer Source S16-005"
+              - option "QA Treasury S16-004"
+            - combobox [ref=f38e226]
+            - textbox "Keterangan" [ref=f38e227]
+            - textbox "Nomor referensi (opsional)" [ref=f38e228]
+            - button "Posting kas masuk" [ref=f38e229]

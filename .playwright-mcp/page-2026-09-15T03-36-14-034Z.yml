@@ -1,0 +1,114 @@
+- generic [ref=f1e34]:
+  - complementary [ref=f1e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f1e37]
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]:
+        - heading "GLOBAL" [level=3] [ref=f1e40]
+        - link "Dasbor Global" [ref=f1e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f1e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f1e49]
+        - generic [ref=f1e50]:
+          - button "Pesanan" [ref=f1e331]
+          - generic [ref=f1e339]:
+            - button "Produksi" [ref=f1e340]
+            - generic [ref=f1e427]:
+              - link "Papan Produksi" [ref=f1e428] [cursor=pointer]:
+                - /url: /app/craft/production
+              - link "Produksi Aktif" [ref=f1e429] [cursor=pointer]:
+                - /url: /app/craft/production/active
+              - link "Antrean Cetak" [ref=f1e430] [cursor=pointer]:
+                - /url: /app/craft/production/queue
+              - link "Pekerjaan Cetak" [ref=f1e431] [cursor=pointer]:
+                - /url: /app/craft/production/jobs
+              - link "Cetak Gagal" [active] [ref=f1e432] [cursor=pointer]:
+                - /url: /app/craft/production/failures
+              - link "Kontrol Kualitas" [ref=f1e433] [cursor=pointer]:
+                - /url: /app/craft/production/qc
+              - link "Kalender Produksi" [ref=f1e434] [cursor=pointer]:
+                - /url: /app/craft/production/calendar
+          - button "Produk & Desain" [ref=f1e349]
+          - button "Printer" [ref=f1e360]
+          - button "Material" [ref=f1e369]
+      - generic [ref=f1e64]:
+        - heading "BISNIS" [level=3] [ref=f1e65]
+        - generic [ref=f1e66]:
+          - button "Pelanggan & Mitra" [ref=f1e377]
+          - button "Pengadaan" [ref=f1e387]
+          - button "Keuangan" [ref=f1e68]
+          - button "Laporan & Analitik" [ref=f1e398]
+      - generic [ref=f1e75]:
+        - heading "SISTEM" [level=3] [ref=f1e76]
+        - generic [ref=f1e407]:
+          - button "Marketplace & Kanal Penjualan" [ref=f1e409]
+          - button "Otomasi" [ref=f1e419]
+      - generic [ref=f1e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f1e78]
+        - generic [ref=f1e79]:
+          - link "Pusat Dokumen" [ref=f1e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f1e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f1e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f1e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f1e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f1e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f1e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f1e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f1e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f1e119]:
+    - banner [ref=f1e120]:
+      - combobox [ref=f1e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f1e126]
+        - generic [ref=f1e127]:
+          - generic [ref=f1e128]: ⌘
+          - generic [ref=f1e129]: K
+      - generic [ref=f1e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f1e132]'
+        - button [ref=f1e425]:
+          - generic [ref=f1e145]:
+            - text: "Workspace:"
+            - generic [ref=f1e146]:
+              - img "Craft Logo" [ref=f1e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f1e149]:
+          - generic [ref=f1e153]: "2"
+        - button [ref=f1e155]:
+          - generic [aria-hidden] [ref=f1e156]: QU
+    - main [ref=f1e157]:
+      - generic [ref=f1e623]:
+        - generic [ref=f1e626]:
+          - paragraph [ref=f1e627]: Craft Production
+          - heading "Cetak Gagal" [level=1] [ref=f1e628]
+          - paragraph [ref=f1e629]: Telusuri penyebab, material terbuang, kerugian, dan tindak lanjut reprint.
+        - generic [ref=f1e630]:
+          - generic [ref=f1e631]:
+            - combobox "Jenis kegagalan" [ref=f1e632]:
+              - option "Semua Jenis" [selected]
+              - option "Spaghetti"
+              - option "Layer bergeser"
+              - option "Warping"
+              - option "Adhesi bed"
+              - option "Filament"
+              - option "Daya listrik"
+              - option "Kesalahan operator"
+              - option "Lainnya"
+            - combobox "Printer" [ref=f1e633]:
+              - option "Semua Printer" [selected]
+              - option "QA FDM Primary"
+            - textbox "Tanggal mulai" [ref=f1e634]
+            - textbox "Tanggal akhir" [ref=f1e635]
+            - combobox "Status reprint" [ref=f1e636]:
+              - option "Semua Reprint" [selected]
+              - option "Memerlukan Reprint"
+              - option "Tidak Memerlukan"
+          - generic [ref=f1e637]:
+            - heading "Belum Ada Cetak Gagal" [level=3] [ref=f1e641]
+            - paragraph [ref=f1e642]: Kegagalan dari pekerjaan yang sedang mencetak atau QC akan tercatat di sini.

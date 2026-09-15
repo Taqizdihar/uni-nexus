@@ -1,0 +1,399 @@
+- generic [ref=e34]:
+  - complementary [ref=e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=e37]
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - heading "GLOBAL" [level=3] [ref=e40]
+        - link "Dasbor Global" [ref=e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=e48]:
+        - heading "OPERASIONAL" [level=3] [ref=e49]
+        - generic [ref=e50]:
+          - button "Pesanan" [ref=e327]
+          - button "Produksi" [ref=e336]
+          - button "Produk & Desain" [ref=e345]
+          - button "Printer" [ref=e356]
+          - button "Material" [ref=e365]
+      - generic [ref=e64]:
+        - heading "BISNIS" [level=3] [ref=e65]
+        - generic [ref=e66]:
+          - button "Pelanggan & Mitra" [ref=e373]
+          - button "Pengadaan" [ref=e383]
+          - button "Keuangan" [ref=e68]
+          - button "Laporan & Analitik" [ref=e394]
+      - generic [ref=e75]:
+        - heading "SISTEM" [level=3] [ref=e76]
+        - generic [ref=e403]:
+          - generic [ref=e404]:
+            - button "Marketplace & Kanal Penjualan" [ref=e405]
+            - generic [ref=e423]:
+              - link "Ringkasan Kanal" [ref=e424] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=e425] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=e426] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=e427] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=e428] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=e429] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=e430] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=e431] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - button "Otomasi" [ref=e415]
+      - generic [ref=e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=e78]
+        - generic [ref=e79]:
+          - link "Pusat Dokumen" [ref=e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=e119]:
+    - banner [ref=e120]:
+      - combobox [ref=e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=e126]
+        - generic [ref=e127]:
+          - generic [ref=e128]: ⌘
+          - generic [ref=e129]: K
+      - generic [ref=e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=e479]'
+        - button [ref=e421]:
+          - generic [ref=e141]:
+            - text: "Workspace:"
+            - generic [ref=e142]:
+              - img "Craft Logo" [ref=e422]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=e145]:
+          - generic [ref=e149]: "2"
+        - button [ref=e151]:
+          - generic [aria-hidden] [ref=e152]: QU
+    - main [ref=e153]:
+      - generic [ref=e792]:
+        - generic [ref=e793]:
+          - generic [ref=e794]:
+            - paragraph [ref=e795]: Sistem Craft
+            - heading "Impor Pesanan" [level=1] [ref=e796]
+            - paragraph [ref=e797]: Impor file CSV/XLSX secara aman; preview divalidasi server sebelum Craft Order dibuat.
+          - button "Unduh Template Impor" [ref=e799]
+        - generic [ref=e806]:
+          - generic [ref=e807]:
+            - generic [ref=e808]: 1. Pilih Kanal *
+            - combobox "1. Pilih Kanal *" [ref=e809]:
+              - option "Pilih kanal"
+              - option "Channel Edit 091504"
+              - option "Channel QA Edit 20260914_2114"
+              - option "QA Invalid Code Updated"
+              - option "QA Marketplace S09 20260915" [selected]
+          - generic [ref=e810]:
+            - generic [ref=e811]: 2. Upload File *
+            - button "2. Upload File *" [ref=e812]
+          - button "3. Preview & Validasi" [ref=e814]
+        - generic [ref=e927]:
+          - generic [ref=e928]:
+            - heading "4. Pemetaan Kolom" [level=3] [ref=e929]
+            - paragraph [ref=e930]: Header terdeteksi otomatis. Ubah bila perlu, lalu validasi ulang file yang sama.
+          - generic [ref=e931]:
+            - generic [ref=e932]:
+              - generic [ref=e933]: External Order ID *
+              - combobox "External Order ID *" [ref=e934]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id" [selected]
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e935]:
+              - generic [ref=e936]: Order Date *
+              - combobox "Order Date *" [ref=e937]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date" [selected]
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e938]:
+              - generic [ref=e939]: Customer Name
+              - combobox "Customer Name" [ref=e940]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name" [selected]
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e941]:
+              - generic [ref=e942]: Customer Email
+              - combobox "Customer Email" [ref=e943]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email" [selected]
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e944]:
+              - generic [ref=e945]: Customer Phone
+              - combobox "Customer Phone" [ref=e946]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone" [selected]
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e947]:
+              - generic [ref=e948]: External SKU
+              - combobox "External SKU" [ref=e949]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku" [selected]
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e950]:
+              - generic [ref=e951]: Item Name *
+              - combobox "Item Name *" [ref=e952]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name" [selected]
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e953]:
+              - generic [ref=e954]: Quantity *
+              - combobox "Quantity *" [ref=e955]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity" [selected]
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e956]:
+              - generic [ref=e957]: Unit Price *
+              - combobox "Unit Price *" [ref=e958]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price" [selected]
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee"
+                - option "tax"
+                - option "external_order_total"
+            - generic [ref=e959]:
+              - generic [ref=e960]: Marketplace Fee
+              - combobox "Marketplace Fee" [ref=e961]:
+                - option "— Tidak dipetakan —"
+                - option "external_order_id"
+                - option "order_date"
+                - option "customer_name"
+                - option "customer_email"
+                - option "customer_phone"
+                - option "recipient_name"
+                - option "recipient_phone"
+                - option "shipping_address"
+                - option "courier"
+                - option "deadline"
+                - option "external_product_id"
+                - option "external_sku"
+                - option "item_name"
+                - option "quantity"
+                - option "unit_price"
+                - option "item_discount"
+                - option "order_discount"
+                - option "shipping_amount"
+                - option "marketplace_fee" [selected]
+                - option "tax"
+                - option "external_order_total"
+            - button "Validasi Ulang" [ref=e963]
+        - generic [ref=e969]:
+          - generic [ref=e971]:
+            - paragraph [ref=e972]: "1"
+            - paragraph [ref=e973]: Orders
+          - generic [ref=e975]:
+            - paragraph [ref=e976]: "2"
+            - paragraph [ref=e977]: Baris
+          - generic [ref=e979]:
+            - paragraph [ref=e980]: "1"
+            - paragraph [ref=e981]: Valid
+          - generic [ref=e983]:
+            - paragraph [ref=e984]: "0"
+            - paragraph [ref=e985]: Duplikat
+          - generic [ref=e987]:
+            - paragraph [ref=e988]: "0"
+            - paragraph [ref=e989]: Produk Belum Dipetakan
+        - generic [ref=e990]:
+          - heading "5. Preview & Resolusi" [level=3] [ref=e992]
+          - generic [ref=e994]:
+            - generic [ref=e995]:
+              - generic [ref=e996]:
+                - heading "QA_DUP_S09_20260915" [level=3] [ref=e997]
+                - paragraph [ref=e998]: QA Customer S09 · 2 item
+              - generic [ref=e999]: Siap Diimpor
+            - generic [ref=e1000]:
+              - generic [ref=e1001]:
+                - generic [ref=e1002]:
+                  - paragraph [ref=e1003]: Baris 2 · Produk QA
+                  - paragraph [ref=e1004]: "SKU: SKU_S09_20260915 · 1 × Rp 100.000"
+                - generic [ref=e1005]: Produk Terpetakan
+              - generic [ref=e1006]:
+                - generic [ref=e1007]:
+                  - paragraph [ref=e1008]: Baris 3 · Produk QA
+                  - paragraph [ref=e1009]: "SKU: SKU_S09_20260915 · 1 × Rp 100.000"
+                - generic [ref=e1010]: Produk Terpetakan
+        - button "6. Konfirmasi Impor" [ref=e1012]

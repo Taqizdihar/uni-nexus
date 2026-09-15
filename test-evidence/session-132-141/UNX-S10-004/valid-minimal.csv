@@ -1,0 +1,2 @@
+external_order_id,order_date,customer_name,customer_email,customer_phone,recipient_name,recipient_phone,shipping_address,courier,deadline,external_product_id,external_sku,item_name,quantity,unit_price,item_discount,order_discount,shipping_amount,marketplace_fee,tax,external_order_total
+QA_ORD_S09_20260915,2026-09-15,QA Customer S09,qa.customer@example.com,081234567890,QA Recipient S09,081234567890,Jl. QA S09 No. 1,JNE,2026-09-20,EXT_PRD_S09_20260915,SKU_S09_20260915,Produk QA,2,100000,0,5000,10000,6000,0,211000

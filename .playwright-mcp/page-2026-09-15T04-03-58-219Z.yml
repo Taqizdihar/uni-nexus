@@ -1,0 +1,167 @@
+- generic [ref=f8e66]:
+  - complementary [ref=f8e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f8e69]
+    - generic [ref=f8e70]:
+      - generic [ref=f8e71]:
+        - heading "GLOBAL" [level=3] [ref=f8e72]
+        - link "Dasbor Global" [ref=f8e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f8e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f8e81]
+        - generic [ref=f8e82]:
+          - button "Pesanan" [ref=f8e363]
+          - button "Produksi" [ref=f8e372]
+          - button "Produk & Desain" [ref=f8e381]
+          - button "Printer" [ref=f8e392]
+          - button "Material" [ref=f8e401]
+      - generic [ref=f8e96]:
+        - heading "BISNIS" [level=3] [ref=f8e97]
+        - generic [ref=f8e98]:
+          - button "Pelanggan & Mitra" [ref=f8e409]
+          - button "Pengadaan" [ref=f8e419]
+          - generic [ref=f8e99]:
+            - button "Keuangan" [ref=f8e100]
+            - generic [ref=f8e459]:
+              - link "Ringkasan Keuangan" [ref=f8e460] [cursor=pointer]:
+                - /url: /app/craft/finance
+              - link "Transaksi" [ref=f8e461] [cursor=pointer]:
+                - /url: /app/craft/finance/transactions
+              - link "Kas & Bank" [ref=f8e462] [cursor=pointer]:
+                - /url: /app/craft/finance/treasury
+              - link "Pendapatan" [ref=f8e463] [cursor=pointer]:
+                - /url: /app/craft/finance/income
+              - link "Pengeluaran" [ref=f8e464] [cursor=pointer]:
+                - /url: /app/craft/finance/expenses
+              - link "Piutang Pelanggan" [ref=f8e465] [cursor=pointer]:
+                - /url: /app/craft/finance/receivables
+              - link "Hutang Pemasok" [ref=f8e466] [cursor=pointer]:
+                - /url: /app/craft/finance/payables
+              - link "HPP & Profitabilitas" [ref=f8e467] [cursor=pointer]:
+                - /url: /app/craft/finance/profitability
+              - link "Kalkulator Biaya Produk" [ref=f8e468] [cursor=pointer]:
+                - /url: /app/craft/finance/calculator
+              - link "Arus Kas" [ref=f8e469] [cursor=pointer]:
+                - /url: /app/craft/finance/cash-flow
+              - link "Anggaran" [ref=f8e470] [cursor=pointer]:
+                - /url: /app/craft/finance/budgets
+              - link "Jurnal & Periode" [ref=f8e471] [cursor=pointer]:
+                - /url: /app/craft/finance/accounting
+          - button "Laporan & Analitik" [ref=f8e430]
+      - generic [ref=f8e107]:
+        - heading "SISTEM" [level=3] [ref=f8e108]
+        - generic [ref=f8e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f8e441]
+          - button "Otomasi" [ref=f8e451]
+      - generic [ref=f8e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f8e110]
+        - generic [ref=f8e111]:
+          - link "Pusat Dokumen" [ref=f8e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f8e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f8e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f8e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f8e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f8e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f8e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f8e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f8e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f8e151]:
+    - banner [ref=f8e152]:
+      - combobox [ref=f8e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f8e158]
+        - generic [ref=f8e159]:
+          - generic [ref=f8e160]: ⌘
+          - generic [ref=f8e161]: K
+      - generic [ref=f8e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f8e164]'
+        - button [ref=f8e457]:
+          - generic [ref=f8e177]:
+            - text: "Workspace:"
+            - generic [ref=f8e178]:
+              - img "Craft Logo" [ref=f8e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f8e181]:
+          - generic [ref=f8e185]: "2"
+        - button [ref=f8e187]:
+          - generic [aria-hidden] [ref=f8e188]: QU
+    - main [ref=f8e189]:
+      - generic [ref=f8e684]:
+        - generic [ref=f8e685]:
+          - generic [ref=f8e686]:
+            - heading "Kalkulator Biaya Produk" [level=1] [ref=f8e687]
+            - paragraph [ref=f8e688]: Hitung HPP, biaya marketplace, dan rekomendasikan harga eceran.
+          - generic [ref=f8e689]:
+            - button "Reset" [ref=f8e690]
+            - button "Simpan Profil" [active] [ref=f8e696]
+        - generic [ref=f8e701]:
+          - generic [ref=f8e703]:
+            - heading "Input Produksi" [level=3] [ref=f8e705]
+            - generic [ref=f8e706]:
+              - generic [ref=f8e707]:
+                - generic [ref=f8e708]:
+                  - text: Biaya Material (Rp/g)
+                  - spinbutton [ref=f8e709]: "-1"
+                  - paragraph [ref=f8e710]: Isi biaya aktual atau gunakan tarif yang telah ditetapkan organisasi.
+                - generic [ref=f8e711]:
+                  - text: Penggunaan Material (g)
+                  - spinbutton [ref=f8e712]: "-1"
+                - generic [ref=f8e713]:
+                  - text: Waktu Cetak (Jam)
+                  - spinbutton [ref=f8e714]: "-1"
+                - generic [ref=f8e715]:
+                  - text: Listrik (Rp/jam)
+                  - spinbutton [ref=f8e716]: "-1"
+                - generic [ref=f8e717]:
+                  - text: Alokasi Tenaga Kerja (Rp/jam)
+                  - spinbutton [ref=f8e718]: "-1"
+                - generic [ref=f8e719]:
+                  - text: Pengemasan (Rp)
+                  - spinbutton [ref=f8e720]: "-1"
+              - separator [ref=f8e721]
+              - generic [ref=f8e722]:
+                - generic [ref=f8e723]:
+                  - text: Biaya Marketplace (%)
+                  - spinbutton [ref=f8e724]: "-1"
+                - generic [ref=f8e725]:
+                  - text: Margin yang Diinginkan (%)
+                  - spinbutton [ref=f8e726]: "-1"
+          - generic [ref=f8e728]:
+            - heading "Hasil Perhitungan" [level=3] [ref=f8e730]
+            - generic [ref=f8e733]:
+              - generic [ref=f8e734]:
+                - heading "Harga Pokok Produksi (HPP)" [level=4] [ref=f8e735]
+                - generic [ref=f8e736]:
+                  - generic [ref=f8e737]: Biaya Material
+                  - generic [ref=f8e738]: Rp 1
+                - generic [ref=f8e739]:
+                  - generic [ref=f8e740]: Listrik
+                  - generic [ref=f8e741]: Rp 1
+                - generic [ref=f8e742]:
+                  - generic [ref=f8e743]: Tenaga Kerja
+                  - generic [ref=f8e744]: Rp 1
+                - generic [ref=f8e745]:
+                  - generic [ref=f8e746]: Pengemasan
+                  - generic [ref=f8e747]: "-Rp 1"
+                - generic [ref=f8e748]:
+                  - generic [ref=f8e749]: Total Biaya Dasar
+                  - generic [ref=f8e750]: Rp 2
+              - generic [ref=f8e751]:
+                - heading "Proyeksi Penjualan" [level=4] [ref=f8e752]
+                - generic [ref=f8e753]:
+                  - generic [ref=f8e754]: Biaya Marketplace (-1%)
+                  - generic [ref=f8e755]: "--Rp 0"
+                - generic [ref=f8e756]:
+                  - generic [ref=f8e757]: Proyeksi Keuntungan
+                  - generic [ref=f8e758]: +-Rp 0
+                - generic [ref=f8e759]:
+                  - generic [ref=f8e760]: Rekomendasi Harga
+                  - generic [ref=f8e761]: Rp 2
+                - generic [ref=f8e762]: "Margin Efektif: -1.0%"

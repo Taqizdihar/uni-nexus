@@ -1,0 +1,202 @@
+- generic [ref=f9e34]:
+  - complementary [ref=f9e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f9e37]
+    - generic [ref=f9e38]:
+      - generic [ref=f9e39]:
+        - heading "GLOBAL" [level=3] [ref=f9e40]
+        - link "Dasbor Global" [ref=f9e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f9e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f9e49]
+        - generic [ref=f9e50]:
+          - button "Proyek" [ref=f9e52]
+          - link "Klien" [ref=f9e58] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f9e64]:
+        - heading "BISNIS" [level=3] [ref=f9e65]
+        - button "Keuangan" [ref=f9e68]
+      - heading "SISTEM" [level=3] [ref=f9e76]
+      - generic [ref=f9e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f9e78]
+        - generic [ref=f9e79]:
+          - link "Pusat Dokumen" [ref=f9e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f9e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f9e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f9e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f9e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f9e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f9e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f9e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f9e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f9e119]:
+    - banner [ref=f9e120]:
+      - combobox [ref=f9e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f9e126]
+        - generic [ref=f9e127]:
+          - generic [ref=f9e128]: ⌘
+          - generic [ref=f9e129]: K
+      - generic [ref=f9e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f9e132]'
+        - button [ref=f9e141]:
+          - generic [ref=f9e145]:
+            - text: "Workspace:"
+            - generic [ref=f9e146]:
+              - img "Studio Logo" [ref=f9e147]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f9e149]
+        - generic [ref=f9e153] [cursor=pointer]:
+          - button [active] [ref=f9e154]:
+            - generic [aria-hidden] [ref=f9e155]: QU
+          - generic [ref=f9e492]:
+            - generic [ref=f9e493]:
+              - paragraph [ref=f9e494]: QA User-1
+              - paragraph [ref=f9e495]: Insinyur 3D
+            - link "Profil Saya" [ref=f9e496]:
+              - /url: /app/profile
+            - link "Pengaturan Sistem" [ref=f9e497]:
+              - /url: /app/settings
+            - button "Keluar" [ref=f9e498]
+    - main [ref=f9e156]:
+      - main [ref=f9e329]:
+        - generic [ref=f9e330]:
+          - generic [ref=f9e331]:
+            - paragraph [ref=f9e332]: Global Control Center
+            - heading "Data Master" [level=1] [ref=f9e333]
+            - paragraph [ref=f9e334]: Kelola data referensi UNI-NEXUS dari satu pusat agar seluruh workspace tetap konsisten.
+          - generic [ref=f9e335]:
+            - button "Refresh" [ref=f9e336]
+            - generic [ref=f9e342]:
+              - button "Ekspor CSV" [ref=f9e343]: CSV
+              - button "Ekspor XLSX" [ref=f9e347]
+        - generic [ref=f9e351]:
+          - generic [ref=f9e352]:
+            - paragraph [ref=f9e354]: Dataset Tersedia
+            - paragraph [ref=f9e360]: "6"
+          - generic [ref=f9e361]:
+            - paragraph [ref=f9e363]: Data Aktif
+            - paragraph [ref=f9e368]: "6"
+          - generic [ref=f9e369]:
+            - paragraph [ref=f9e371]: Data Nonaktif
+            - paragraph [ref=f9e376]: "0"
+          - generic [ref=f9e377]:
+            - paragraph [ref=f9e379]: Referensi Tercatat
+            - paragraph [ref=f9e383]: "6"
+        - generic [ref=f9e384]:
+          - generic [ref=f9e385]:
+            - heading "Umum" [level=2] [ref=f9e386]
+            - generic [ref=f9e387]:
+              - button "Satuan Satuan ukur reusable untuk material, BOM, stok, dan pengadaan. Sistem 1 aktif 0 nonaktif" [ref=f9e388]:
+                - generic [ref=f9e389]:
+                  - generic [ref=f9e390]:
+                    - heading "Satuan" [level=3] [ref=f9e391]
+                    - paragraph [ref=f9e392]: Satuan ukur reusable untuk material, BOM, stok, dan pengadaan.
+                  - generic [ref=f9e393]: Sistem
+                - generic [ref=f9e394]:
+                  - generic [ref=f9e395]: 1 aktif
+                  - generic [ref=f9e396]: 0 nonaktif
+              - button "Metode Pembayaran Pilihan metode pembayaran global untuk transaksi dan tagihan. Sistem 1 aktif 0 nonaktif" [ref=f9e397]:
+                - generic [ref=f9e398]:
+                  - generic [ref=f9e399]:
+                    - heading "Metode Pembayaran" [level=3] [ref=f9e400]
+                    - paragraph [ref=f9e401]: Pilihan metode pembayaran global untuk transaksi dan tagihan.
+                  - generic [ref=f9e402]: Sistem
+                - generic [ref=f9e403]:
+                  - generic [ref=f9e404]: 1 aktif
+                  - generic [ref=f9e405]: 0 nonaktif
+          - generic [ref=f9e406]:
+            - heading "Craft" [level=2] [ref=f9e407]
+            - generic [ref=f9e408]:
+              - button "Kategori Produk Struktur kategori produk Uni-Inside Craft. Craft 2 aktif 0 nonaktif" [ref=f9e409]:
+                - generic [ref=f9e410]:
+                  - generic [ref=f9e411]:
+                    - heading "Kategori Produk" [level=3] [ref=f9e412]
+                    - paragraph [ref=f9e413]: Struktur kategori produk Uni-Inside Craft.
+                  - generic [ref=f9e414]: Craft
+                - generic [ref=f9e415]:
+                  - generic [ref=f9e416]: 2 aktif
+                  - generic [ref=f9e417]: 0 nonaktif
+              - button "Kategori Material Jenis material dan perlengkapan produksi Craft. Craft 1 aktif 0 nonaktif" [ref=f9e418]:
+                - generic [ref=f9e419]:
+                  - generic [ref=f9e420]:
+                    - heading "Kategori Material" [level=3] [ref=f9e421]
+                    - paragraph [ref=f9e422]: Jenis material dan perlengkapan produksi Craft.
+                  - generic [ref=f9e423]: Craft
+                - generic [ref=f9e424]:
+                  - generic [ref=f9e425]: 1 aktif
+                  - generic [ref=f9e426]: 0 nonaktif
+              - button "Sales Channel Kanal asal pesanan dan integrasi marketplace Craft. Craft 1 aktif 0 nonaktif" [ref=f9e427]:
+                - generic [ref=f9e428]:
+                  - generic [ref=f9e429]:
+                    - heading "Sales Channel" [level=3] [ref=f9e430]
+                    - paragraph [ref=f9e431]: Kanal asal pesanan dan integrasi marketplace Craft.
+                  - generic [ref=f9e432]: Craft
+                - generic [ref=f9e433]:
+                  - generic [ref=f9e434]: 1 aktif
+                  - generic [ref=f9e435]: 0 nonaktif
+          - generic [ref=f9e436]:
+            - heading "Keuangan" [level=2] [ref=f9e437]
+            - button "Kategori Transaksi Kategori pendapatan dan pengeluaran sesuai scope keuangan. Keuangan 0 aktif 0 nonaktif" [ref=f9e439]:
+              - generic [ref=f9e440]:
+                - generic [ref=f9e441]:
+                  - heading "Kategori Transaksi" [level=3] [ref=f9e442]
+                  - paragraph [ref=f9e443]: Kategori pendapatan dan pengeluaran sesuai scope keuangan.
+                - generic [ref=f9e444]: Keuangan
+              - generic [ref=f9e445]:
+                - generic [ref=f9e446]: 0 aktif
+                - generic [ref=f9e447]: 0 nonaktif
+        - generic [ref=f9e448]:
+          - generic [ref=f9e449]:
+            - generic [ref=f9e450]:
+              - heading "Satuan" [level=2] [ref=f9e451]
+              - paragraph [ref=f9e452]: Satuan ukur reusable untuk material, BOM, stok, dan pengadaan.
+            - generic [ref=f9e453]:
+              - textbox "Cari data referensi" [ref=f9e455]:
+                - /placeholder: Cari kode atau nama...
+              - combobox "Status data" [ref=f9e457]:
+                - option "Semua Status" [selected]
+                - option "Aktif"
+                - option "Nonaktif"
+              - combobox "Kelompok satuan" [ref=f9e458]:
+                - option "Semua Kelompok" [selected]
+                - option "weight"
+                - option "count"
+                - option "length"
+                - option "volume"
+                - option "time"
+                - option "other"
+          - table [ref=f9e461]:
+            - rowgroup [ref=f9e462]:
+              - row [ref=f9e463]:
+                - columnheader "Kode" [ref=f9e464]
+                - columnheader "Nama" [ref=f9e465]
+                - columnheader "Scope" [ref=f9e466]
+                - columnheader "Rincian" [ref=f9e467]
+                - columnheader "Status" [ref=f9e468]
+                - columnheader "Penggunaan" [ref=f9e469]
+                - columnheader "Aksi" [ref=f9e470]
+            - rowgroup [ref=f9e471]:
+              - row [ref=f9e472]:
+                - cell "QA_U_163552" [ref=f9e473]
+                - cell "Satuan QA Edit 163552" [ref=f9e474]
+                - cell "Sistem" [ref=f9e475]
+                - cell "qe · weight · 3 desimal" [ref=f9e477]
+                - cell "Aktif" [ref=f9e478]
+                - cell [ref=f9e480]:
+                  - button "0 record" [ref=f9e481]
+                - cell [ref=f9e482]:
+                  - button "Lihat penggunaan Satuan QA Edit 163552" [ref=f9e484]: Penggunaan
+          - generic [ref=f9e488]:
+            - generic [ref=f9e489]: 1 data · Halaman 1 dari 1
+            - generic [ref=f9e490]:
+              - button "Sebelumnya" [disabled]
+              - button "Berikutnya" [disabled]
+          - paragraph [ref=f9e491]: 1 referensi terlihat sesuai hak akses Anda. Kode referensi dikunci setelah dibuat untuk menjaga integritas sistem.

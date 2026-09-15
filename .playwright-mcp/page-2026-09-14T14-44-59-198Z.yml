@@ -1,0 +1,225 @@
+- generic [ref=f8e6]:
+  - complementary [ref=f8e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f8e9]
+    - generic [ref=f8e10]:
+      - generic [ref=f8e11]:
+        - heading "GLOBAL" [level=3] [ref=f8e12]
+        - link "Dasbor Global" [ref=f8e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f8e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f8e21]
+        - generic [ref=f8e22]:
+          - button "Proyek" [ref=f8e645]
+          - link "Klien" [ref=f8e651] [cursor=pointer]:
+            - /url: /app/studio/clients
+          - generic [ref=f8e657]:
+            - button "Layanan" [ref=f8e658]
+            - generic [ref=f8e692]:
+              - link "Katalog Layanan" [ref=f8e693] [cursor=pointer]:
+                - /url: /app/studio/services
+              - link "Kategori Layanan" [ref=f8e694] [cursor=pointer]:
+                - /url: /app/studio/services/categories
+              - link "Paket Layanan" [ref=f8e695] [cursor=pointer]:
+                - /url: /app/studio/services/packages
+          - button "Peralatan & Aset" [ref=f8e666]
+      - generic [ref=f8e69]:
+        - heading "BISNIS" [level=3] [ref=f8e70]
+        - generic [ref=f8e71]:
+          - button "Penawaran & Penagihan" [ref=f8e673]
+          - button "Vendor / Freelancer / Mitra" [ref=f8e681]
+          - button "Keuangan" [ref=f8e94]
+          - button "Laporan & Analitik" [ref=f8e102]
+      - generic [ref=f8e111]:
+        - heading "SISTEM" [level=3] [ref=f8e112]
+        - button "Otomasi" [ref=f8e125]
+      - generic [ref=f8e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f8e132]
+        - generic [ref=f8e133]:
+          - link "Keuangan Terpadu" [ref=f8e134] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f8e138] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f8e143] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f8e146] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f8e150] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f8e156] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f8e159] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f8e165] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f8e168] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f8e174] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f8e179] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f8e183]:
+    - banner [ref=f8e184]:
+      - combobox [ref=f8e186]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f8e190]
+        - generic [ref=f8e191]:
+          - generic [ref=f8e192]: ⌘
+          - generic [ref=f8e193]: K
+      - generic [ref=f8e194]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f8e196]'
+        - button [ref=f8e690]:
+          - generic [ref=f8e209]:
+            - text: "Workspace:"
+            - generic [ref=f8e210]:
+              - img "Studio Logo" [ref=f8e691]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f8e213]
+        - button [ref=f8e218]
+    - main [ref=f8e219]:
+      - main [ref=f8e782]:
+        - generic [ref=f8e783]:
+          - generic [ref=f8e784]:
+            - paragraph [ref=f8e785]: Global Control Center
+            - heading "Data Master" [level=1] [ref=f8e786]
+            - paragraph [ref=f8e787]: Kelola data referensi UNI-NEXUS dari satu pusat agar seluruh workspace tetap konsisten.
+          - generic [ref=f8e788]:
+            - button "Refresh" [ref=f8e789]
+            - button "Tambah Data" [ref=f8e795]
+            - generic [ref=f8e797]:
+              - button "Ekspor CSV" [ref=f8e798]: CSV
+              - button "Ekspor XLSX" [ref=f8e802]
+        - generic [ref=f8e806]:
+          - generic [ref=f8e807]:
+            - paragraph [ref=f8e809]: Dataset Tersedia
+            - paragraph [ref=f8e815]: "7"
+          - generic [ref=f8e816]:
+            - paragraph [ref=f8e818]: Data Aktif
+            - paragraph [ref=f8e823]: "6"
+          - generic [ref=f8e824]:
+            - paragraph [ref=f8e826]: Data Nonaktif
+            - paragraph [ref=f8e831]: "1"
+          - generic [ref=f8e832]:
+            - paragraph [ref=f8e834]: Referensi Tercatat
+            - paragraph [ref=f8e838]: "7"
+        - generic [ref=f8e839]:
+          - generic [ref=f8e840]:
+            - heading "Umum" [level=2] [ref=f8e841]
+            - generic [ref=f8e842]:
+              - button "Satuan Satuan ukur reusable untuk material, BOM, stok, dan pengadaan. Sistem 1 aktif 0 nonaktif Kelola" [ref=f8e843]:
+                - generic [ref=f8e844]:
+                  - generic [ref=f8e845]:
+                    - heading "Satuan" [level=3] [ref=f8e846]
+                    - paragraph [ref=f8e847]: Satuan ukur reusable untuk material, BOM, stok, dan pengadaan.
+                  - generic [ref=f8e848]: Sistem
+                - generic [ref=f8e849]:
+                  - generic [ref=f8e850]: 1 aktif
+                  - generic [ref=f8e851]: 0 nonaktif
+                  - generic [ref=f8e852]: Kelola
+              - button "Metode Pembayaran Pilihan metode pembayaran global untuk transaksi dan tagihan. Sistem 1 aktif 0 nonaktif Kelola" [ref=f8e853]:
+                - generic [ref=f8e854]:
+                  - generic [ref=f8e855]:
+                    - heading "Metode Pembayaran" [level=3] [ref=f8e856]
+                    - paragraph [ref=f8e857]: Pilihan metode pembayaran global untuk transaksi dan tagihan.
+                  - generic [ref=f8e858]: Sistem
+                - generic [ref=f8e859]:
+                  - generic [ref=f8e860]: 1 aktif
+                  - generic [ref=f8e861]: 0 nonaktif
+                  - generic [ref=f8e862]: Kelola
+          - generic [ref=f8e863]:
+            - heading "Craft" [level=2] [ref=f8e864]
+            - generic [ref=f8e865]:
+              - button "Kategori Produk Struktur kategori produk Uni-Inside Craft. Craft 2 aktif 0 nonaktif Kelola" [ref=f8e866]:
+                - generic [ref=f8e867]:
+                  - generic [ref=f8e868]:
+                    - heading "Kategori Produk" [level=3] [ref=f8e869]
+                    - paragraph [ref=f8e870]: Struktur kategori produk Uni-Inside Craft.
+                  - generic [ref=f8e871]: Craft
+                - generic [ref=f8e872]:
+                  - generic [ref=f8e873]: 2 aktif
+                  - generic [ref=f8e874]: 0 nonaktif
+                  - generic [ref=f8e875]: Kelola
+              - button "Kategori Material Jenis material dan perlengkapan produksi Craft. Craft 1 aktif 0 nonaktif Kelola" [ref=f8e876]:
+                - generic [ref=f8e877]:
+                  - generic [ref=f8e878]:
+                    - heading "Kategori Material" [level=3] [ref=f8e879]
+                    - paragraph [ref=f8e880]: Jenis material dan perlengkapan produksi Craft.
+                  - generic [ref=f8e881]: Craft
+                - generic [ref=f8e882]:
+                  - generic [ref=f8e883]: 1 aktif
+                  - generic [ref=f8e884]: 0 nonaktif
+                  - generic [ref=f8e885]: Kelola
+              - button "Sales Channel Kanal asal pesanan dan integrasi marketplace Craft. Craft 1 aktif 0 nonaktif Kelola" [ref=f8e886]:
+                - generic [ref=f8e887]:
+                  - generic [ref=f8e888]:
+                    - heading "Sales Channel" [level=3] [ref=f8e889]
+                    - paragraph [ref=f8e890]: Kanal asal pesanan dan integrasi marketplace Craft.
+                  - generic [ref=f8e891]: Craft
+                - generic [ref=f8e892]:
+                  - generic [ref=f8e893]: 1 aktif
+                  - generic [ref=f8e894]: 0 nonaktif
+                  - generic [ref=f8e895]: Kelola
+          - generic [ref=f8e896]:
+            - heading "Studio" [level=2] [ref=f8e897]
+            - button "Kategori Layanan Kategori referensi untuk katalog layanan Studio. Studio 0 aktif 1 nonaktif Kelola" [active] [ref=f8e899]:
+              - generic [ref=f8e900]:
+                - generic [ref=f8e901]:
+                  - heading "Kategori Layanan" [level=3] [ref=f8e902]
+                  - paragraph [ref=f8e903]: Kategori referensi untuk katalog layanan Studio.
+                - generic [ref=f8e904]: Studio
+              - generic [ref=f8e905]:
+                - generic [ref=f8e906]: 0 aktif
+                - generic [ref=f8e907]: 1 nonaktif
+                - generic [ref=f8e908]: Kelola
+          - generic [ref=f8e909]:
+            - heading "Keuangan" [level=2] [ref=f8e910]
+            - button "Kategori Transaksi Kategori pendapatan dan pengeluaran sesuai scope keuangan. Keuangan 0 aktif 0 nonaktif Kelola" [ref=f8e912]:
+              - generic [ref=f8e913]:
+                - generic [ref=f8e914]:
+                  - heading "Kategori Transaksi" [level=3] [ref=f8e915]
+                  - paragraph [ref=f8e916]: Kategori pendapatan dan pengeluaran sesuai scope keuangan.
+                - generic [ref=f8e917]: Keuangan
+              - generic [ref=f8e918]:
+                - generic [ref=f8e919]: 0 aktif
+                - generic [ref=f8e920]: 0 nonaktif
+                - generic [ref=f8e921]: Kelola
+        - generic [ref=f8e922]:
+          - generic [ref=f8e923]:
+            - generic [ref=f8e924]:
+              - heading "Kategori Layanan" [level=2] [ref=f8e973]
+              - paragraph [ref=f8e926]: Kategori referensi untuk katalog layanan Studio.
+            - generic [ref=f8e927]:
+              - textbox "Cari data referensi" [ref=f8e929]:
+                - /placeholder: Cari kode atau nama...
+              - combobox "Status data" [ref=f8e931]:
+                - option "Semua Status" [selected]
+                - option "Aktif"
+                - option "Nonaktif"
+          - table [ref=f8e975]:
+            - rowgroup [ref=f8e976]:
+              - row [ref=f8e977]:
+                - columnheader "Kode" [ref=f8e978]
+                - columnheader "Nama" [ref=f8e979]
+                - columnheader "Scope" [ref=f8e980]
+                - columnheader "Rincian" [ref=f8e981]
+                - columnheader "Status" [ref=f8e982]
+                - columnheader "Penggunaan" [ref=f8e983]
+                - columnheader "Aksi" [ref=f8e984]
+            - rowgroup [ref=f8e985]:
+              - row [ref=f8e986]:
+                - cell "QA_SVC_20260914_2114" [ref=f8e987]
+                - cell "Layanan QA Edit 20260914_2114" [ref=f8e988]
+                - cell "Studio" [ref=f8e989]
+                - cell "Katalog layanan Studio" [ref=f8e991]
+                - cell "Nonaktif" [ref=f8e992]
+                - cell [ref=f8e994]:
+                  - button "0 record" [ref=f8e995]
+                - cell [ref=f8e996]:
+                  - generic [ref=f8e997]:
+                    - button "Lihat penggunaan Layanan QA Edit 20260914_2114" [ref=f8e998]: Penggunaan
+                    - button "Edit" [ref=f8e1002]
+                    - button "Aktifkan" [ref=f8e1005]
+          - generic [ref=f8e969]:
+            - generic [ref=f8e970]: 1 data · Halaman 1 dari 1
+            - generic [ref=f8e971]:
+              - button "Sebelumnya" [disabled]
+              - button "Berikutnya" [disabled]
+          - paragraph [ref=f8e972]: 1 referensi terlihat sesuai hak akses Anda. Kode referensi dikunci setelah dibuat untuk menjaga integritas sistem.

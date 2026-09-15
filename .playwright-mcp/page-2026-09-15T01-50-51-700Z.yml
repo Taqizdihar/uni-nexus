@@ -1,0 +1,302 @@
+- generic [ref=f39e66]:
+  - complementary [ref=f39e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f39e69]
+    - generic [ref=f39e70]:
+      - generic [ref=f39e71]:
+        - heading "GLOBAL" [level=3] [ref=f39e72]
+        - link "Dasbor Global" [ref=f39e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f39e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f39e81]
+        - generic [ref=f39e82]:
+          - generic [ref=f39e362]:
+            - button "Pesanan" [ref=f39e363]
+            - generic [ref=f39e459]:
+              - link "Semua Pesanan" [ref=f39e460] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f39e461] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f39e462] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f39e463] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f39e464] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [ref=f39e465] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f39e466] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f39e467] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f39e468] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f39e372]
+          - button "Produk & Desain" [ref=f39e381]
+          - button "Printer" [ref=f39e392]
+          - button "Material" [ref=f39e401]
+      - generic [ref=f39e96]:
+        - heading "BISNIS" [level=3] [ref=f39e97]
+        - generic [ref=f39e98]:
+          - button "Pelanggan & Mitra" [ref=f39e409]
+          - button "Pengadaan" [ref=f39e419]
+          - button "Keuangan" [ref=f39e100]
+          - button "Laporan & Analitik" [ref=f39e430]
+      - generic [ref=f39e107]:
+        - heading "SISTEM" [level=3] [ref=f39e108]
+        - generic [ref=f39e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f39e441]
+          - button "Otomasi" [ref=f39e451]
+      - generic [ref=f39e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f39e110]
+        - generic [ref=f39e111]:
+          - link "Pusat Dokumen" [ref=f39e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f39e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f39e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f39e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f39e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f39e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f39e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f39e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f39e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f39e151]:
+    - banner [ref=f39e152]:
+      - combobox [ref=f39e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f39e158]
+        - generic [ref=f39e159]:
+          - generic [ref=f39e160]: ⌘
+          - generic [ref=f39e161]: K
+      - generic [ref=f39e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f39e164]'
+        - button [ref=f39e457]:
+          - generic [ref=f39e177]:
+            - text: "Workspace:"
+            - generic [ref=f39e178]:
+              - img "Craft Logo" [ref=f39e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f39e181]:
+          - generic [ref=f39e185]: "2"
+        - button [ref=f39e187]:
+          - generic [aria-hidden] [ref=f39e188]: QU
+    - main [ref=f39e189]:
+      - generic [ref=f39e2784]:
+        - generic [ref=f39e2786]:
+          - button "Kembali" [ref=f39e2787]
+          - generic [ref=f39e2790]:
+            - paragraph [ref=f39e2791]: Draf Pesanan / DRF-000001
+            - heading "DRF-000001" [level=1] [ref=f39e2792]
+            - paragraph [ref=f39e2793]: Buat pesanan Craft dari katalog atau spesifikasi custom.
+        - generic [ref=f39e3014]: Terjadi kesalahan pada server.
+        - generic [ref=f39e2794]:
+          - generic [ref=f39e2795]:
+            - generic [ref=f39e2797]:
+              - generic [ref=f39e2799]:
+                - generic [ref=f39e2800]: "01"
+                - generic [ref=f39e2805]:
+                  - heading "Pelanggan & Pesanan" [level=2] [ref=f39e2806]
+                  - paragraph [ref=f39e2807]: Informasi sumber dan kebutuhan pesanan.
+              - generic [ref=f39e2808]:
+                - generic [ref=f39e2809]:
+                  - generic [ref=f39e2810]: Cari pelanggan
+                  - searchbox "Cari pelanggan" [ref=f39e2812]
+                - generic [ref=f39e2813]:
+                  - generic [ref=f39e2814]: Pilih pelanggan *
+                  - generic [ref=f39e2815]:
+                    - combobox "Pilih pelanggan * Pelanggan" [ref=f39e2816]:
+                      - option "Pilih pelanggan"
+                      - option "Customer QA Edited 20260914_2114 — 081234562121"
+                      - option "QA Customer S07 — 081200000701" [selected]
+                      - option "QA Customer S07 Optional — 081200000702"
+                    - button "Pelanggan" [ref=f39e2817]
+                - generic [ref=f39e2822]:
+                  - generic [ref=f39e2823]: Kanal penjualan *
+                  - 'combobox "Kanal penjualan * Tipe kanal: direct" [ref=f39e2824]':
+                    - option "Pilih kanal"
+                    - option "Channel QA Edit 20260914_2114" [selected]
+                  - generic [ref=f39e2825]: "Tipe kanal: direct"
+                - generic [ref=f39e2826]:
+                  - generic [ref=f39e2827]: ID pesanan marketplace
+                  - textbox "ID pesanan marketplace Opsional untuk kanal non-marketplace." [ref=f39e2828]:
+                    - /placeholder: "Contoh: SP-12345"
+                  - generic [ref=f39e2829]: Opsional untuk kanal non-marketplace.
+                - generic [ref=f39e2830]:
+                  - generic [ref=f39e2831]: Tipe pesanan
+                  - combobox "Tipe pesanan" [ref=f39e2832]:
+                    - option "Standar" [selected]
+                    - option "Custom"
+                    - option "Mitra"
+                    - option "Internal"
+                - generic [ref=f39e2833]:
+                  - generic [ref=f39e2834]: Tenggat waktu
+                  - textbox "Tenggat waktu" [ref=f39e2835]
+              - generic [ref=f39e2836]:
+                - generic [ref=f39e2837]:
+                  - generic [ref=f39e2838]: Mode prioritas
+                  - group "Mode prioritas" [ref=f39e2840]:
+                    - button "Otomatis" [pressed] [ref=f39e2841]
+                    - button "Manual" [ref=f39e2844]
+                - paragraph [ref=f39e2845]: Sistem menentukan prioritas berdasarkan tenggat dan estimasi produksi.
+            - generic [ref=f39e2847]:
+              - generic [ref=f39e2848]:
+                - generic [ref=f39e2849]:
+                  - generic [ref=f39e2850]: "02"
+                  - generic [ref=f39e2856]:
+                    - heading "Item Pesanan" [level=2] [ref=f39e2857]
+                    - paragraph [ref=f39e2858]: Pisahkan setiap item agar detail produksi dan biaya mudah dilacak.
+                - button "Tambah Item" [ref=f39e2859]
+              - generic [ref=f39e2861]:
+                - generic [ref=f39e2863]:
+                  - generic [ref=f39e2864]:
+                    - generic [ref=f39e2865]: "Item #1"
+                    - generic [ref=f39e2866]: Custom
+                  - paragraph [ref=f39e2867]: Draft S07 Primary
+                - group [ref=f39e2870]:
+                  - button "Katalog" [ref=f39e2871]
+                  - button "Custom" [pressed] [ref=f39e2872]
+                - generic [ref=f39e2875]:
+                  - generic [ref=f39e2876]:
+                    - generic [ref=f39e2877]: Nama item *
+                    - textbox "Nama item *" [ref=f39e2878]: Draft S07 Primary
+                  - generic [ref=f39e2879]:
+                    - generic [ref=f39e2880]: Deskripsi
+                    - textbox "Deskripsi" [ref=f39e2881]: Resume draft S07
+                  - generic [ref=f39e2882]:
+                    - generic [ref=f39e2883]: Material
+                    - textbox "Material" [ref=f39e2884]
+                  - generic [ref=f39e2885]:
+                    - generic [ref=f39e2886]:
+                      - generic [ref=f39e2887]: Warna
+                      - textbox "Warna" [ref=f39e2888]
+                    - generic [ref=f39e2889]:
+                      - generic [ref=f39e2890]: Ukuran
+                      - textbox "Ukuran" [ref=f39e2891]
+                  - generic [ref=f39e2892]:
+                    - generic [ref=f39e2893]: Spesifikasi custom
+                    - textbox "Spesifikasi custom" [ref=f39e2894]
+                - generic [ref=f39e2895]:
+                  - generic [ref=f39e2896]:
+                    - generic [ref=f39e2897]: Jumlah *
+                    - generic [ref=f39e2898]:
+                      - button "Kurangi jumlah" [ref=f39e2899]
+                      - textbox "1" [ref=f39e2901]
+                      - button "Tambah jumlah" [ref=f39e2902]
+                  - generic [ref=f39e2904]:
+                    - generic [ref=f39e2905]: Harga satuan *
+                    - generic [ref=f39e2906]:
+                      - generic: Rp
+                      - textbox "Harga satuan * Rp" [ref=f39e2907]:
+                        - /placeholder: "0"
+                        - text: "100.000"
+                  - generic [ref=f39e2908]:
+                    - generic [ref=f39e2909]: Diskon item
+                    - generic [ref=f39e2910]:
+                      - generic: Rp
+                      - textbox "Diskon item Rp" [ref=f39e2911]:
+                        - /placeholder: "0"
+                  - generic [ref=f39e2912]:
+                    - generic [ref=f39e2913]: Est. material
+                    - generic [ref=f39e2914]:
+                      - textbox "Est. material g" [ref=f39e2915]:
+                        - /placeholder: "0"
+                      - generic: g
+                  - generic [ref=f39e2916]:
+                    - generic [ref=f39e2917]: Est. cetak
+                    - generic [ref=f39e2918]:
+                      - textbox "Est. cetak menit" [ref=f39e2919]:
+                        - /placeholder: "0"
+                      - generic: menit
+                - generic [ref=f39e2920]:
+                  - generic [ref=f39e2921]: Qty 1 × Rp 100.000
+                  - generic [ref=f39e2922]: "Total item: Rp 100.000"
+            - generic [ref=f39e2924]:
+              - generic [ref=f39e2926]:
+                - generic [ref=f39e2927]: "03"
+                - generic [ref=f39e2934]:
+                  - heading "Pengiriman & Catatan" [level=2] [ref=f39e2935]
+                  - paragraph [ref=f39e2936]: Simpan informasi penerima, instruksi, dan biaya tambahan.
+              - generic [ref=f39e2937]:
+                - generic [ref=f39e2938]:
+                  - generic [ref=f39e2939]: Diskon pesanan
+                  - generic [ref=f39e2940]:
+                    - generic: Rp
+                    - textbox "Diskon pesanan Rp" [ref=f39e2941]:
+                      - /placeholder: "0"
+                - generic [ref=f39e2942]:
+                  - generic [ref=f39e2943]: Ongkos kirim
+                  - generic [ref=f39e2944]:
+                    - generic: Rp
+                    - textbox "Ongkos kirim Rp" [ref=f39e2945]:
+                      - /placeholder: "0"
+                - generic [ref=f39e2946]:
+                  - generic [ref=f39e2947]: Biaya marketplace
+                  - generic [ref=f39e2948]:
+                    - generic: Rp
+                    - textbox "Biaya marketplace Rp Biaya internal, tidak ditagihkan." [ref=f39e2949]:
+                      - /placeholder: "0"
+                  - generic [ref=f39e2950]: Biaya internal, tidak ditagihkan.
+                - generic [ref=f39e2951]:
+                  - generic [ref=f39e2952]: Pajak
+                  - generic [ref=f39e2953]:
+                    - generic: Rp
+                    - textbox "Pajak Rp" [ref=f39e2954]:
+                      - /placeholder: "0"
+              - generic [ref=f39e2955]:
+                - generic [ref=f39e2956]:
+                  - generic [ref=f39e2957]: Catatan pelanggan
+                  - textbox "Catatan pelanggan" [ref=f39e2958]:
+                    - /placeholder: Instruksi yang terlihat pelanggan...
+                - generic [ref=f39e2959]:
+                  - generic [ref=f39e2960]: Catatan internal
+                  - textbox "Catatan internal" [ref=f39e2961]:
+                    - /placeholder: Catatan untuk tim internal...
+                - generic [ref=f39e2962]:
+                  - generic [ref=f39e2963]: Nama penerima
+                  - textbox "Nama penerima" [ref=f39e2964]
+                - generic [ref=f39e2965]:
+                  - generic [ref=f39e2966]: Telepon penerima
+                  - textbox "Telepon penerima" [ref=f39e2967]
+                - generic [ref=f39e2968]:
+                  - generic [ref=f39e2969]: Kurir
+                  - textbox "Kurir" [ref=f39e2970]
+                - generic [ref=f39e2971]:
+                  - generic [ref=f39e2972]: Alamat pengiriman
+                  - textbox "Alamat pengiriman" [ref=f39e2973]
+          - complementary [ref=f39e2974]:
+            - generic [ref=f39e2975]:
+              - generic [ref=f39e2976]:
+                - paragraph [ref=f39e2977]: Ringkasan pesanan
+                - generic [ref=f39e2978]:
+                  - generic [ref=f39e2979]: 1 item
+                  - generic [ref=f39e2980]: Rp 100.000
+              - generic [ref=f39e2981]:
+                - generic [ref=f39e2982]:
+                  - generic [ref=f39e2983]: Subtotal
+                  - generic [ref=f39e2984]: Rp 100.000
+                - generic [ref=f39e2985]:
+                  - generic [ref=f39e2986]: Diskon
+                  - generic [ref=f39e2987]: "-Rp 0"
+                - generic [ref=f39e2988]:
+                  - generic [ref=f39e2989]: Ongkos kirim
+                  - generic [ref=f39e2990]: Rp 0
+                - generic [ref=f39e2991]:
+                  - generic [ref=f39e2992]: Pajak
+                  - generic [ref=f39e2993]: Rp 0
+                - generic [ref=f39e2995]:
+                  - generic [ref=f39e2996]: Total pelanggan
+                  - generic [ref=f39e2997]: Rp 100.000
+                - generic [ref=f39e2998]:
+                  - generic [ref=f39e2999]:
+                    - generic [ref=f39e3000]: Biaya marketplace
+                    - generic [ref=f39e3001]: Rp 0
+                  - paragraph [ref=f39e3002]: Biaya internal — tidak ditagihkan ke pelanggan.
+                - generic [ref=f39e3003]:
+                  - button "Simpan Perubahan Draf" [ref=f39e3004]
+                  - button "Simpan Pesanan" [ref=f39e3009]

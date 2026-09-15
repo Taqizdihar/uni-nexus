@@ -1,0 +1,693 @@
+- generic [ref=f12e6]:
+  - complementary [ref=f12e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f12e9]
+    - generic [ref=f12e10]:
+      - generic [ref=f12e11]:
+        - heading "GLOBAL" [level=3] [ref=f12e12]
+        - link "Dasbor Global" [ref=f12e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f12e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f12e21]
+        - generic [ref=f12e22]:
+          - button "Pesanan" [ref=f12e24]
+          - button "Produksi" [ref=f12e33]
+          - button "Produk & Desain" [ref=f12e42]
+          - button "Printer" [ref=f12e53]
+          - button "Material" [ref=f12e62]
+      - generic [ref=f12e69]:
+        - heading "BISNIS" [level=3] [ref=f12e70]
+        - generic [ref=f12e71]:
+          - button "Pelanggan & Mitra" [ref=f12e73]
+          - button "Pengadaan" [ref=f12e83]
+          - button "Keuangan" [ref=f12e94]
+          - button "Laporan & Analitik" [ref=f12e102]
+      - generic [ref=f12e111]:
+        - heading "SISTEM" [level=3] [ref=f12e112]
+        - generic [ref=f12e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f12e115]
+          - button "Otomasi" [ref=f12e125]
+      - generic [ref=f12e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f12e132]
+        - generic [ref=f12e133]:
+          - link "Pusat Dokumen" [ref=f12e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f12e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f12e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f12e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f12e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f12e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f12e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f12e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f12e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f12e173]:
+    - banner [ref=f12e174]:
+      - combobox [ref=f12e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f12e180]
+        - generic [ref=f12e181]:
+          - generic [ref=f12e182]: ⌘
+          - generic [ref=f12e183]: K
+      - generic [ref=f12e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f12e219]'
+        - button [ref=f12e195]:
+          - generic [ref=f12e199]:
+            - text: "Workspace:"
+            - generic [ref=f12e200]:
+              - img "Craft Logo" [ref=f12e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f12e202]:
+          - generic [ref=f12e221]: "3"
+        - button [ref=f12e207]:
+          - generic [aria-hidden] [ref=f12e208]: AR
+    - main [ref=f12e209]:
+      - generic [ref=f12e222]:
+        - generic [ref=f12e223]:
+          - generic [ref=f12e224]:
+            - heading "Log Audit" [level=1] [ref=f12e225]
+            - paragraph [ref=f12e228]: Riwayat aktivitas keamanan dan perubahan penting di UNI-NEXUS.
+          - generic [ref=f12e229]:
+            - button "Muat ulang" [ref=f12e230]
+            - button "CSV" [ref=f12e236]
+            - button "Excel" [ref=f12e240]
+        - generic [ref=f12e244]:
+          - generic [ref=f12e245]:
+            - paragraph [ref=f12e246]: Total
+            - paragraph [ref=f12e247]: "517"
+          - generic [ref=f12e248]:
+            - paragraph [ref=f12e249]: Hari ini
+            - paragraph [ref=f12e250]: "180"
+          - generic [ref=f12e251]:
+            - paragraph [ref=f12e252]: Login & Logout
+            - paragraph [ref=f12e253]: "53"
+          - generic [ref=f12e254]:
+            - paragraph [ref=f12e255]: Perubahan hari ini
+            - paragraph [ref=f12e256]: "90"
+          - generic [ref=f12e257]:
+            - paragraph [ref=f12e258]: Aktor unik
+            - paragraph [ref=f12e259]: "7"
+        - generic [ref=f12e260]:
+          - generic [ref=f12e261]:
+            - generic [ref=f12e262]:
+              - generic [ref=f12e263]: Cari Log Audit
+              - textbox "Cari Log Audit" [ref=f12e267]:
+                - /placeholder: Cari deskripsi, aktor, atau kode…
+            - combobox "Workspace" [ref=f12e268]:
+              - option "Semua workspace" [selected]
+              - option "Global"
+              - option "Craft"
+              - option "Studio"
+            - combobox "Grup tindakan" [ref=f12e269]:
+              - option "Semua kategori" [selected]
+              - option "Autentikasi"
+              - option "Akun & Profil"
+              - option "Pembuatan"
+              - option "Perubahan"
+              - option "Penghapusan"
+              - option "Persetujuan"
+              - option "Keuangan"
+              - option "Otomasi"
+              - option "Ekspor"
+              - option "Lainnya"
+            - combobox "Modul" [ref=f12e270]:
+              - option "Semua modul" [selected]
+              - option "Auth"
+              - option "Calendar"
+              - option "Craft Automations"
+              - option "Craft Customers"
+              - option "Craft Finance"
+              - option "Craft Marketplace"
+              - option "Craft Materials"
+              - option "Craft Orders"
+              - option "Craft Printers"
+              - option "Craft Procurement"
+              - option "Craft Products"
+              - option "Master Data"
+              - option "Settings"
+              - option "Studio Clients"
+              - option "Studio Finance"
+              - option "Tasks"
+              - option "Users"
+            - combobox "Tindakan" [ref=f12e271]:
+              - option "Semua tindakan" [selected]
+              - option "Account Delete"
+              - option "Account Deletion Request"
+              - option "Account Deletion Request Revoke"
+              - option "Setujui Akun"
+              - option "Archive"
+              - option "Automation Rule Active"
+              - option "Automation Rule Create"
+              - option "Automation Rule Disabled"
+              - option "Automation Rule Paused"
+              - option "Automation Rule Update"
+              - option "Calendar Event Create"
+              - option "Calendar Event Update"
+              - option "Category Create"
+              - option "Category Deactivate"
+              - option "Category Update"
+              - option "Craft Finance Budget Approve"
+              - option "Craft Finance Budget Create"
+              - option "Craft Finance Expense Approve"
+              - option "Craft Finance Expense Create"
+              - option "Craft Finance Expense Pay"
+              - option "Craft Finance Expense Reversal"
+              - option "Craft Finance Expense Void"
+              - option "Craft Finance Manual Income"
+              - option "Create"
+              - option "Customer Contact Create"
+              - option "Customer Contact Delete"
+              - option "Customer Contact Primary"
+              - option "Customer Create"
+              - option "Customer Deactivate"
+              - option "Customer Reactivate"
+              - option "Customer Update"
+              - option "Design Delete"
+              - option "Design Upload"
+              - option "Draft Create"
+              - option "Draft Discard"
+              - option "Draft Update"
+              - option "Issue Create"
+              - option "Issue Update"
+              - option "Login"
+              - option "Logout"
+              - option "Maintenance Complete"
+              - option "Maintenance Schedule Create"
+              - option "Maintenance Schedule Delete"
+              - option "Maintenance Schedule Update"
+              - option "Maintenance Start"
+              - option "Marketplace Channel Activate"
+              - option "Marketplace Channel Create"
+              - option "Marketplace Channel Deactivate"
+              - option "Marketplace Channel Update"
+              - option "Marketplace Fee Rule Create"
+              - option "Marketplace Fee Rule Deactivate"
+              - option "Marketplace Import Orders"
+              - option "Marketplace Integration Create"
+              - option "Marketplace Integration Update"
+              - option "Marketplace Product Mapping Create"
+              - option "Marketplace Product Mapping Delete"
+              - option "Master Data Activate"
+              - option "Master Data Create"
+              - option "Master Data Deactivate"
+              - option "Master Data Update"
+              - option "Material Category Create"
+              - option "Material Category Update"
+              - option "Partner Pricing Create"
+              - option "Partner Pricing Deactivate"
+              - option "Partner Pricing Update"
+              - option "Partner End"
+              - option "Partner Promote"
+              - option "Partner Update"
+              - option "Product Archive"
+              - option "Product Create"
+              - option "Product Image Upload"
+              - option "Product Reactivate"
+              - option "Product Update"
+              - option "Profile Avatar Delete"
+              - option "Profile Avatar Update"
+              - option "Profile Banner Update"
+              - option "Profile Password Change"
+              - option "Profile Status Change"
+              - option "Profile Update"
+              - option "Tolak Akun"
+              - option "Restore Available"
+              - option "Set Offline"
+              - option "Settings Group Update"
+              - option "Settings Organization Logo Upload"
+              - option "Settings Organization Update"
+              - option "Signup Request"
+              - option "Studio Client Role Grant"
+              - option "Studio Finance Transfer"
+              - option "Studio Finance Treasury Create"
+              - option "Studio Finance Treasury Opening"
+              - option "Supplier Contact Create"
+              - option "Supplier Create"
+              - option "Supplier Role Add"
+              - option "Supplier Update"
+              - option "Tasks Create"
+              - option "Update"
+              - option "Variant Create"
+              - option "Variant Deactivate"
+              - option "Variant Reactivate"
+          - generic [ref=f12e272]:
+            - combobox "Aktor" [ref=f12e273]:
+              - option "Semua aktor" [selected]
+              - option "Ahmad Ropaldo (ahmadropaldo)"
+              - option "April Adzania (apriladzania)"
+              - option "Dian Daeli (diandaeli)"
+              - option "Muhammad Taqi Izdiharr (taqizdihar)"
+              - option "Naura Ramadhani (nauraramadhani)"
+              - option "QA User 2 (qa2)"
+              - option "QA User-1 (qauser1)"
+            - combobox "Jenis entitas" [ref=f12e274]:
+              - option "Semua entitas" [selected]
+              - option "Automation Rule"
+              - option "Budget"
+              - option "Calendar Event"
+              - option "Channel Product Mapping"
+              - option "Design File"
+              - option "Expense"
+              - option "Financial Transaction"
+              - option "Integration"
+              - option "Internal Transfer"
+              - option "Maintenance Record"
+              - option "Maintenance Schedule"
+              - option "Marketplace Fee Rule"
+              - option "Marketplace Import"
+              - option "Master Data:Craft Material Categories"
+              - option "Master Data:Craft Product Categories"
+              - option "Master Data:Craft Sales Channels"
+              - option "Master Data:Finance Transaction Categories"
+              - option "Master Data:Payment Methods"
+              - option "Master Data:Studio Service Categories"
+              - option "Master Data:Units"
+              - option "Material Category"
+              - option "Organization"
+              - option "Party"
+              - option "Printer"
+              - option "Printer Issue"
+              - option "Product"
+              - option "Product Category"
+              - option "Product Variant"
+              - option "Sales Channel"
+              - option "Supplier"
+              - option "System Setting Group"
+              - option "Task"
+              - option "Treasury Account"
+              - option "User"
+              - option "User Deletion Request"
+            - generic [ref=f12e275]:
+              - text: Dari
+              - textbox "Tanggal dari" [ref=f12e276]
+            - generic [ref=f12e277]:
+              - text: Sampai
+              - textbox "Tanggal sampai" [ref=f12e278]
+            - button "Reset filter" [ref=f12e279]
+        - generic [ref=f12e282]:
+          - table [ref=f12e723]:
+            - rowgroup [ref=f12e724]:
+              - row [ref=f12e725]:
+                - columnheader "Waktu" [ref=f12e726]
+                - columnheader "Aktor" [ref=f12e727]
+                - columnheader "Aktivitas" [ref=f12e728]
+                - columnheader "Workspace" [ref=f12e729]
+                - columnheader "Entitas" [ref=f12e730]
+                - columnheader "Detail" [ref=f12e731]
+            - rowgroup [ref=f12e733]:
+              - row [ref=f12e734]:
+                - cell "15 Sep 2026, 15.50.45" [ref=f12e735]
+                - cell [ref=f12e736]:
+                  - paragraph [ref=f12e737]: Ahmad Ropaldo
+                  - paragraph [ref=f12e738]: "@ahmadropaldo"
+                - cell [ref=f12e739]:
+                  - paragraph [ref=f12e740]: Tasks Create
+                  - paragraph [ref=f12e741]: Membuat tugas manual.
+                - cell "Uni-Inside Craft" [ref=f12e742]
+                - cell [ref=f12e743]:
+                  - text: TSK-000001
+                  - paragraph [ref=f12e744]: Task
+                - cell [ref=f12e745]:
+                  - button "Lihat detail Audit 517" [active] [ref=f12e746]
+              - row [ref=f12e750]:
+                - cell "15 Sep 2026, 15.49.11" [ref=f12e751]
+                - cell [ref=f12e752]:
+                  - paragraph [ref=f12e753]: Ahmad Ropaldo
+                  - paragraph [ref=f12e754]: "@ahmadropaldo"
+                - cell [ref=f12e755]:
+                  - paragraph [ref=f12e756]: Calendar Event Update
+                  - paragraph [ref=f12e757]: Memperbarui acara manual.
+                - cell "Uni-Inside Craft" [ref=f12e758]
+                - cell [ref=f12e759]:
+                  - text: EVT-000635
+                  - paragraph [ref=f12e760]: Calendar Event
+                - cell [ref=f12e761]:
+                  - button "Lihat detail Audit 516" [ref=f12e762]
+              - row [ref=f12e766]:
+                - cell "15 Sep 2026, 15.48.00" [ref=f12e767]
+                - cell [ref=f12e768]:
+                  - paragraph [ref=f12e769]: Ahmad Ropaldo
+                  - paragraph [ref=f12e770]: "@ahmadropaldo"
+                - cell [ref=f12e771]:
+                  - paragraph [ref=f12e772]: Calendar Event Create
+                  - paragraph [ref=f12e773]: Membuat acara manual.
+                - cell "Uni-Inside Craft" [ref=f12e774]
+                - cell [ref=f12e775]:
+                  - text: EVT-000635
+                  - paragraph [ref=f12e776]: Calendar Event
+                - cell [ref=f12e777]:
+                  - button "Lihat detail Audit 515" [ref=f12e778]
+              - row [ref=f12e782]:
+                - cell "15 Sep 2026, 15.32.49" [ref=f12e783]
+                - cell [ref=f12e784]:
+                  - paragraph [ref=f12e785]: Ahmad Ropaldo
+                  - paragraph [ref=f12e786]: "@ahmadropaldo"
+                - cell [ref=f12e787]:
+                  - paragraph [ref=f12e788]: Login
+                  - paragraph [ref=f12e789]: User logged in successfully
+                - cell "Global" [ref=f12e790]
+                - cell [ref=f12e791]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e792]: User
+                - cell [ref=f12e793]:
+                  - button "Lihat detail Audit 514" [ref=f12e794]
+              - row [ref=f12e798]:
+                - cell "15 Sep 2026, 15.17.26" [ref=f12e799]
+                - cell [ref=f12e800]:
+                  - paragraph [ref=f12e801]: Ahmad Ropaldo
+                  - paragraph [ref=f12e802]: "@ahmadropaldo"
+                - cell [ref=f12e803]:
+                  - paragraph [ref=f12e804]: Login
+                  - paragraph [ref=f12e805]: User logged in successfully
+                - cell "Global" [ref=f12e806]
+                - cell [ref=f12e807]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e808]: User
+                - cell [ref=f12e809]:
+                  - button "Lihat detail Audit 513" [ref=f12e810]
+              - row [ref=f12e814]:
+                - cell "15 Sep 2026, 15.04.15" [ref=f12e815]
+                - cell [ref=f12e816]:
+                  - paragraph [ref=f12e817]: Ahmad Ropaldo
+                  - paragraph [ref=f12e818]: "@ahmadropaldo"
+                - cell [ref=f12e819]:
+                  - paragraph [ref=f12e820]: Login
+                  - paragraph [ref=f12e821]: User logged in successfully
+                - cell "Global" [ref=f12e822]
+                - cell [ref=f12e823]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e824]: User
+                - cell [ref=f12e825]:
+                  - button "Lihat detail Audit 512" [ref=f12e826]
+              - row [ref=f12e830]:
+                - cell "15 Sep 2026, 14.45.20" [ref=f12e831]
+                - cell [ref=f12e832]:
+                  - paragraph [ref=f12e833]: Ahmad Ropaldo
+                  - paragraph [ref=f12e834]: "@ahmadropaldo"
+                - cell [ref=f12e835]:
+                  - paragraph [ref=f12e836]: Login
+                  - paragraph [ref=f12e837]: User logged in successfully
+                - cell "Global" [ref=f12e838]
+                - cell [ref=f12e839]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e840]: User
+                - cell [ref=f12e841]:
+                  - button "Lihat detail Audit 511" [ref=f12e842]
+              - row [ref=f12e846]:
+                - cell "15 Sep 2026, 14.30.25" [ref=f12e847]
+                - cell [ref=f12e848]:
+                  - paragraph [ref=f12e849]: Ahmad Ropaldo
+                  - paragraph [ref=f12e850]: "@ahmadropaldo"
+                - cell [ref=f12e851]:
+                  - paragraph [ref=f12e852]: Studio Finance Transfer
+                  - paragraph [ref=f12e853]: Transfer TRF-000001 antar kas Studio.
+                - cell "Uni-Inside Studio" [ref=f12e854]
+                - cell [ref=f12e855]:
+                  - text: TRF-000001
+                  - paragraph [ref=f12e856]: Internal Transfer
+                - cell [ref=f12e857]:
+                  - button "Lihat detail Audit 510" [ref=f12e858]
+              - row [ref=f12e862]:
+                - cell "15 Sep 2026, 14.30.09" [ref=f12e863]
+                - cell [ref=f12e864]:
+                  - paragraph [ref=f12e865]: Ahmad Ropaldo
+                  - paragraph [ref=f12e866]: "@ahmadropaldo"
+                - cell [ref=f12e867]:
+                  - paragraph [ref=f12e868]: Studio Finance Treasury Create
+                  - paragraph [ref=f12e869]: Membuat akun kas Studio TRS-000016.
+                - cell "Uni-Inside Studio" [ref=f12e870]
+                - cell [ref=f12e871]:
+                  - text: TRS-000016
+                  - paragraph [ref=f12e872]: Treasury Account
+                - cell [ref=f12e873]:
+                  - button "Lihat detail Audit 509" [ref=f12e874]
+              - row [ref=f12e878]:
+                - cell "15 Sep 2026, 14.30.09" [ref=f12e879]
+                - cell [ref=f12e880]:
+                  - paragraph [ref=f12e881]: Ahmad Ropaldo
+                  - paragraph [ref=f12e882]: "@ahmadropaldo"
+                - cell [ref=f12e883]:
+                  - paragraph [ref=f12e884]: Studio Finance Treasury Opening
+                  - paragraph [ref=f12e885]: Saldo awal QA Transfer Source S16-005
+                - cell "Uni-Inside Studio" [ref=f12e886]
+                - cell [ref=f12e887]:
+                  - text: TRS-000016
+                  - paragraph [ref=f12e888]: Treasury Account
+                - cell [ref=f12e889]:
+                  - button "Lihat detail Audit 508" [ref=f12e890]
+              - row [ref=f12e894]:
+                - cell "15 Sep 2026, 14.29.38" [ref=f12e895]
+                - cell [ref=f12e896]:
+                  - paragraph [ref=f12e897]: Ahmad Ropaldo
+                  - paragraph [ref=f12e898]: "@ahmadropaldo"
+                - cell [ref=f12e899]:
+                  - paragraph [ref=f12e900]: Studio Finance Treasury Create
+                  - paragraph [ref=f12e901]: Membuat akun kas Studio TRS-000015.
+                - cell "Uni-Inside Studio" [ref=f12e902]
+                - cell [ref=f12e903]:
+                  - text: TRS-000015
+                  - paragraph [ref=f12e904]: Treasury Account
+                - cell [ref=f12e905]:
+                  - button "Lihat detail Audit 507" [ref=f12e906]
+              - row [ref=f12e910]:
+                - cell "15 Sep 2026, 14.29.27" [ref=f12e911]
+                - cell [ref=f12e912]:
+                  - paragraph [ref=f12e913]: Ahmad Ropaldo
+                  - paragraph [ref=f12e914]: "@ahmadropaldo"
+                - cell [ref=f12e915]:
+                  - paragraph [ref=f12e916]: Login
+                  - paragraph [ref=f12e917]: User logged in successfully
+                - cell "Global" [ref=f12e918]
+                - cell [ref=f12e919]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e920]: User
+                - cell [ref=f12e921]:
+                  - button "Lihat detail Audit 506" [ref=f12e922]
+              - row [ref=f12e926]:
+                - cell "15 Sep 2026, 14.26.28" [ref=f12e927]
+                - cell [ref=f12e928]:
+                  - paragraph [ref=f12e929]: Ahmad Ropaldo
+                  - paragraph [ref=f12e930]: "@ahmadropaldo"
+                - cell [ref=f12e931]:
+                  - paragraph [ref=f12e932]: Login
+                  - paragraph [ref=f12e933]: User logged in successfully
+                - cell "Global" [ref=f12e934]
+                - cell [ref=f12e935]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e936]: User
+                - cell [ref=f12e937]:
+                  - button "Lihat detail Audit 505" [ref=f12e938]
+              - row [ref=f12e942]:
+                - cell "15 Sep 2026, 14.17.28" [ref=f12e943]
+                - cell [ref=f12e944]:
+                  - paragraph [ref=f12e945]: Ahmad Ropaldo
+                  - paragraph [ref=f12e946]: "@ahmadropaldo"
+                - cell [ref=f12e947]:
+                  - paragraph [ref=f12e948]: Login
+                  - paragraph [ref=f12e949]: User logged in successfully
+                - cell "Global" [ref=f12e950]
+                - cell [ref=f12e951]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e952]: User
+                - cell [ref=f12e953]:
+                  - button "Lihat detail Audit 504" [ref=f12e954]
+              - row [ref=f12e958]:
+                - cell "15 Sep 2026, 13.59.10" [ref=f12e959]
+                - cell [ref=f12e960]:
+                  - paragraph [ref=f12e961]: Ahmad Ropaldo
+                  - paragraph [ref=f12e962]: "@ahmadropaldo"
+                - cell [ref=f12e963]:
+                  - paragraph [ref=f12e964]: Login
+                  - paragraph [ref=f12e965]: User logged in successfully
+                - cell "Global" [ref=f12e966]
+                - cell [ref=f12e967]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e968]: User
+                - cell [ref=f12e969]:
+                  - button "Lihat detail Audit 503" [ref=f12e970]
+              - row [ref=f12e974]:
+                - cell "15 Sep 2026, 09.04.34" [ref=f12e975]
+                - cell [ref=f12e976]:
+                  - paragraph [ref=f12e977]: Ahmad Ropaldo
+                  - paragraph [ref=f12e978]: "@ahmadropaldo"
+                - cell [ref=f12e979]:
+                  - paragraph [ref=f12e980]: Login
+                  - paragraph [ref=f12e981]: User logged in successfully
+                - cell "Global" [ref=f12e982]
+                - cell [ref=f12e983]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e984]: User
+                - cell [ref=f12e985]:
+                  - button "Lihat detail Audit 502" [ref=f12e986]
+              - row [ref=f12e990]:
+                - cell "15 Sep 2026, 08.05.53" [ref=f12e991]
+                - cell [ref=f12e992]:
+                  - paragraph [ref=f12e993]: Ahmad Ropaldo
+                  - paragraph [ref=f12e994]: "@ahmadropaldo"
+                - cell [ref=f12e995]:
+                  - paragraph [ref=f12e996]: Login
+                  - paragraph [ref=f12e997]: User logged in successfully
+                - cell "Global" [ref=f12e998]
+                - cell [ref=f12e999]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e1000]: User
+                - cell [ref=f12e1001]:
+                  - button "Lihat detail Audit 501" [ref=f12e1002]
+              - row [ref=f12e1006]:
+                - cell "15 Sep 2026, 08.02.23" [ref=f12e1007]
+                - cell [ref=f12e1008]:
+                  - paragraph [ref=f12e1009]: Ahmad Ropaldo
+                  - paragraph [ref=f12e1010]: "@ahmadropaldo"
+                - cell [ref=f12e1011]:
+                  - paragraph [ref=f12e1012]: Login
+                  - paragraph [ref=f12e1013]: User logged in successfully
+                - cell "Global" [ref=f12e1014]
+                - cell [ref=f12e1015]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e1016]: User
+                - cell [ref=f12e1017]:
+                  - button "Lihat detail Audit 500" [ref=f12e1018]
+              - row [ref=f12e1022]:
+                - cell "15 Sep 2026, 07.54.15" [ref=f12e1023]
+                - cell [ref=f12e1024]:
+                  - paragraph [ref=f12e1025]: QA User-1
+                  - paragraph [ref=f12e1026]: "@qauser1"
+                - cell [ref=f12e1027]:
+                  - paragraph [ref=f12e1028]: Settings Group Update
+                  - paragraph [ref=f12e1029]: Memperbarui grup pengaturan studio.
+                - cell "Uni-Inside Studio" [ref=f12e1030]
+                - cell [ref=f12e1031]:
+                  - text: studio:studio
+                  - paragraph [ref=f12e1032]: System Setting Group
+                - cell [ref=f12e1033]:
+                  - button "Lihat detail Audit 499" [ref=f12e1034]
+              - row [ref=f12e1038]:
+                - cell "15 Sep 2026, 07.53.09" [ref=f12e1039]
+                - cell [ref=f12e1040]:
+                  - paragraph [ref=f12e1041]: QA User-1
+                  - paragraph [ref=f12e1042]: "@qauser1"
+                - cell [ref=f12e1043]:
+                  - paragraph [ref=f12e1044]: Settings Group Update
+                  - paragraph [ref=f12e1045]: Memperbarui grup pengaturan studio.
+                - cell "Uni-Inside Studio" [ref=f12e1046]
+                - cell [ref=f12e1047]:
+                  - text: studio:studio
+                  - paragraph [ref=f12e1048]: System Setting Group
+                - cell [ref=f12e1049]:
+                  - button "Lihat detail Audit 498" [ref=f12e1050]
+              - row [ref=f12e1054]:
+                - cell "15 Sep 2026, 07.52.49" [ref=f12e1055]
+                - cell [ref=f12e1056]:
+                  - paragraph [ref=f12e1057]: Ahmad Ropaldo
+                  - paragraph [ref=f12e1058]: "@ahmadropaldo"
+                - cell [ref=f12e1059]:
+                  - paragraph [ref=f12e1060]: Login
+                  - paragraph [ref=f12e1061]: User logged in successfully
+                - cell "Global" [ref=f12e1062]
+                - cell [ref=f12e1063]:
+                  - text: ahmadropaldo
+                  - paragraph [ref=f12e1064]: User
+                - cell [ref=f12e1065]:
+                  - button "Lihat detail Audit 497" [ref=f12e1066]
+              - row [ref=f12e1070]:
+                - cell "15 Sep 2026, 07.10.16" [ref=f12e1071]
+                - cell [ref=f12e1072]:
+                  - paragraph [ref=f12e1073]: QA User-1
+                  - paragraph [ref=f12e1074]: "@qauser1"
+                - cell [ref=f12e1075]:
+                  - paragraph [ref=f12e1076]: Studio Client Role Grant
+                  - paragraph [ref=f12e1077]: Mengaktifkan peran Klien Studio untuk QA Customer S09.
+                - cell "Uni-Inside Studio" [ref=f12e1078]
+                - cell [ref=f12e1079]:
+                  - text: CUS-000026
+                  - paragraph [ref=f12e1080]: Party
+                - cell [ref=f12e1081]:
+                  - button "Lihat detail Audit 496" [ref=f12e1082]
+              - row [ref=f12e1086]:
+                - cell "15 Sep 2026, 07.09.19" [ref=f12e1087]
+                - cell [ref=f12e1088]:
+                  - paragraph [ref=f12e1089]: QA User-1
+                  - paragraph [ref=f12e1090]: "@qauser1"
+                - cell [ref=f12e1091]:
+                  - paragraph [ref=f12e1092]: Studio Client Role Grant
+                  - paragraph [ref=f12e1093]: Mengaktifkan peran Klien Studio untuk QA Customer S09.
+                - cell "Uni-Inside Studio" [ref=f12e1094]
+                - cell [ref=f12e1095]:
+                  - text: CUS-000026
+                  - paragraph [ref=f12e1096]: Party
+                - cell [ref=f12e1097]:
+                  - button "Lihat detail Audit 495" [ref=f12e1098]
+              - row [ref=f12e1102]:
+                - cell "15 Sep 2026, 06.44.18" [ref=f12e1103]
+                - cell [ref=f12e1104]:
+                  - paragraph [ref=f12e1105]: QA User-1
+                  - paragraph [ref=f12e1106]: "@qauser1"
+                - cell [ref=f12e1107]:
+                  - paragraph [ref=f12e1108]: Automation Rule Active
+                  - paragraph [ref=f12e1109]: Status aturan AUT-000006 menjadi active.
+                - cell "Uni-Inside Craft" [ref=f12e1110]
+                - cell [ref=f12e1111]:
+                  - text: AUT-000006
+                  - paragraph [ref=f12e1112]: Automation Rule
+                - cell [ref=f12e1113]:
+                  - button "Lihat detail Audit 494" [ref=f12e1114]
+              - row [ref=f12e1118]:
+                - cell "15 Sep 2026, 06.43.44" [ref=f12e1119]
+                - cell [ref=f12e1120]:
+                  - paragraph [ref=f12e1121]: QA User-1
+                  - paragraph [ref=f12e1122]: "@qauser1"
+                - cell [ref=f12e1123]:
+                  - paragraph [ref=f12e1124]: Automation Rule Update
+                  - paragraph [ref=f12e1125]: Memperbarui aturan otomasi AUT-000006.
+                - cell "Uni-Inside Craft" [ref=f12e1126]
+                - cell [ref=f12e1127]:
+                  - text: AUT-000006
+                  - paragraph [ref=f12e1128]: Automation Rule
+                - cell [ref=f12e1129]:
+                  - button "Lihat detail Audit 493" [ref=f12e1130]
+          - generic [ref=f12e1134]:
+            - generic [ref=f12e1135]: Menampilkan 1–25 dari 517
+            - generic [ref=f12e1136]:
+              - button "Halaman sebelumnya" [disabled] [ref=f12e1137]
+              - button "Halaman berikutnya" [ref=f12e1140]
+        - dialog [ref=f12e1144]:
+          - generic [ref=f12e1145]:
+            - generic [ref=f12e1146]:
+              - heading "Detail Log Audit" [level=2] [ref=f12e1147]
+              - paragraph [ref=f12e1148]: 15 Sep 2026, 15.50.45 · Uni-Inside Craft
+            - button "Tutup detail Log Audit" [ref=f12e1149]
+          - generic [ref=f12e1153]:
+            - generic [ref=f12e1154]:
+              - generic [ref=f12e1155]:
+                - paragraph [ref=f12e1156]: Aktor
+                - paragraph [ref=f12e1157]: Ahmad Ropaldo (@ahmadropaldo)
+              - generic [ref=f12e1158]:
+                - paragraph [ref=f12e1159]: Role saat ini
+                - paragraph [ref=f12e1160]: Insinyur 3D
+              - generic [ref=f12e1161]:
+                - paragraph [ref=f12e1162]: Modul
+                - paragraph [ref=f12e1163]: Tasks
+              - generic [ref=f12e1164]:
+                - paragraph [ref=f12e1165]: Tindakan
+                - paragraph [ref=f12e1166]: Tasks Create
+              - generic [ref=f12e1167]:
+                - paragraph [ref=f12e1168]: Entitas
+                - paragraph [ref=f12e1169]: Task · TSK-000001
+              - generic [ref=f12e1170]:
+                - paragraph [ref=f12e1171]: Alamat IP
+                - paragraph [ref=f12e1172]: —
+            - generic [ref=f12e1173]:
+              - heading "Deskripsi" [level=3] [ref=f12e1174]
+              - paragraph [ref=f12e1175]: Membuat tugas manual.
+            - generic [ref=f12e1176]:
+              - generic [ref=f12e1177]:
+                - heading "Nilai sebelumnya" [level=3] [ref=f12e1178]
+                - generic [ref=f12e1179]: Tidak ada data perubahan.
+              - generic [ref=f12e1180]:
+                - heading "Nilai setelah perubahan" [level=3] [ref=f12e1181]
+                - generic [ref=f12e1182]: "{ \"title\": \"QA S19-009 Manual Task\", \"assignee_ids\": [], \"priority_code\": \"high\" }"

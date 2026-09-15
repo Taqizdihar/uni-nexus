@@ -1,0 +1,154 @@
+- generic [ref=f11e6]:
+  - complementary [ref=f11e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f11e9]
+    - generic [ref=f11e10]:
+      - generic [ref=f11e11]:
+        - heading "GLOBAL" [level=3] [ref=f11e12]
+        - link "Dasbor Global" [ref=f11e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f11e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f11e21]
+        - generic [ref=f11e22]:
+          - button "Pesanan" [ref=f11e24]
+          - button "Produksi" [ref=f11e33]
+          - button "Produk & Desain" [ref=f11e42]
+          - button "Printer" [ref=f11e53]
+          - button "Material" [ref=f11e62]
+      - generic [ref=f11e69]:
+        - heading "BISNIS" [level=3] [ref=f11e70]
+        - generic [ref=f11e71]:
+          - button "Pelanggan & Mitra" [ref=f11e73]
+          - button "Pengadaan" [ref=f11e83]
+          - button "Keuangan" [ref=f11e94]
+          - button "Laporan & Analitik" [ref=f11e102]
+      - generic [ref=f11e111]:
+        - heading "SISTEM" [level=3] [ref=f11e112]
+        - generic [ref=f11e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f11e115]
+          - button "Otomasi" [ref=f11e125]
+      - generic [ref=f11e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f11e132]
+        - generic [ref=f11e133]:
+          - link "Pusat Dokumen" [ref=f11e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f11e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f11e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f11e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f11e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f11e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f11e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f11e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f11e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f11e173]:
+    - banner [ref=f11e174]:
+      - combobox [ref=f11e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f11e180]
+        - generic [ref=f11e181]:
+          - generic [ref=f11e182]: ⌘
+          - generic [ref=f11e183]: K
+      - generic [ref=f11e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f11e219]'
+        - button [ref=f11e195]:
+          - generic [ref=f11e199]:
+            - text: "Workspace:"
+            - generic [ref=f11e200]:
+              - img "Craft Logo" [ref=f11e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f11e202]:
+          - generic [ref=f11e221]: "3"
+        - button [ref=f11e207]:
+          - generic [aria-hidden] [ref=f11e208]: AR
+    - main [ref=f11e209]:
+      - generic [ref=f11e467]:
+        - generic [ref=f11e468]:
+          - generic [ref=f11e469]:
+            - heading "Kalender & Tugas" [level=1] [ref=f11e470]
+            - paragraph [ref=f11e471]: Jadwal, tenggat, dan pekerjaan tim Uni-Inside dalam satu tempat.
+          - generic [ref=f11e472]:
+            - button "Hari Ini" [ref=f11e473]
+            - button "Refresh" [ref=f11e474]
+            - button "Tambah Acara" [ref=f11e480]
+            - button "Tambah Tugas" [ref=f11e483]
+        - generic [ref=f11e960]: Izin tasks.manage diperlukan untuk tugas global.
+        - generic [ref=f11e487]:
+          - button "Kalender" [ref=f11e488]
+          - button "Tugas" [ref=f11e489]
+        - generic [ref=f11e875]:
+          - generic [ref=f11e876]:
+            - paragraph [ref=f11e877]: Tugas Saya Aktif
+            - paragraph [ref=f11e878]: "0"
+          - generic [ref=f11e879]:
+            - paragraph [ref=f11e880]: Jatuh Tempo Hari Ini
+            - paragraph [ref=f11e881]: "0"
+          - generic [ref=f11e882]:
+            - paragraph [ref=f11e883]: Terlambat
+            - paragraph [ref=f11e884]: "0"
+          - generic [ref=f11e885]:
+            - paragraph [ref=f11e886]: Selesai Minggu Ini
+            - paragraph [ref=f11e887]: "0"
+        - generic [ref=f11e889]:
+          - button "Tugas Saya" [ref=f11e890]
+          - combobox "Status tugas" [ref=f11e891]:
+            - option "Semua status" [selected]
+            - option "todo"
+            - option "in_progress"
+            - option "blocked"
+            - option "done"
+            - option "cancelled"
+          - combobox "Prioritas tugas" [ref=f11e892]:
+            - option "Semua prioritas" [selected]
+            - option "low"
+            - option "normal"
+            - option "high"
+            - option "critical"
+          - combobox "Jatuh tempo tugas" [ref=f11e893]:
+            - option "Semua tanggal" [selected]
+            - option "Terlambat"
+            - option "Hari ini"
+            - option "7 hari"
+          - textbox "Cari tugas" [ref=f11e894]
+        - paragraph [ref=f11e897]: Belum ada tugas yang sesuai.
+        - dialog [ref=f11e930]:
+          - generic [ref=f11e931]:
+            - heading "Tambah Tugas" [level=2] [ref=f11e932]
+            - button "Tutup" [ref=f11e933]
+          - generic [ref=f11e937]:
+            - textbox "Judul tugas" [ref=f11e938]: QA global task guard
+            - textbox "Deskripsi" [ref=f11e939]
+            - generic [ref=f11e940]:
+              - combobox [ref=f11e941]:
+                - option "low"
+                - option "normal" [selected]
+                - option "high"
+                - option "critical"
+              - combobox [ref=f11e942]:
+                - option "Global (perlu tasks.manage)" [selected]
+                - option "Uni-Inside Craft"
+                - option "Uni-Inside Shared"
+                - option "Uni-Inside Studio"
+              - textbox [ref=f11e943]: 2026-09-24T09:00
+              - textbox [ref=f11e944]: 2026-09-24T10:00
+            - generic [ref=f11e945]:
+              - text: Assignee
+              - listbox "Assignee" [ref=f11e946]:
+                - option "Ahmad Ropaldo (@ahmadropaldo)" [ref=f11e947]
+                - option "Amadea Salsabila (@amadeasalsabila)" [ref=f11e948]
+                - option "April Adzania (@apriladzania)" [ref=f11e949]
+                - option "Cantika Anggi (@cantikaanggi)" [ref=f11e950]
+                - option "Dian Daeli (@diandaeli)" [ref=f11e951]
+                - option "Muhammad Taqi Izdiharr (@taqizdihar)" [ref=f11e952]
+                - option "Nadine Nathania Pelleng (@nadinenathaniapelleng)" [ref=f11e953]
+                - option "Naura Ramadhani (@nauraramadhani)" [ref=f11e954]
+                - option "QA User-1 (@qauser1)" [ref=f11e955]
+                - option "Siti Amany Fakhirah Riby (@sitiamanyfakhirahriby)" [ref=f11e956]
+            - generic [ref=f11e957]:
+              - button "Batal" [ref=f11e958]
+              - button "Simpan Tugas" [ref=f11e959]

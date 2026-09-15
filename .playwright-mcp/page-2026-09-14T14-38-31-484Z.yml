@@ -1,0 +1,133 @@
+- generic [ref=f7e6]:
+  - complementary [ref=f7e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f7e9]
+    - generic [ref=f7e10]:
+      - generic [ref=f7e11]:
+        - heading "GLOBAL" [level=3] [ref=f7e12]
+        - link "Dasbor Global" [ref=f7e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f7e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f7e21]
+        - generic [ref=f7e22]:
+          - button "Pesanan" [ref=f7e24]
+          - button "Produksi" [ref=f7e33]
+          - button "Produk & Desain" [ref=f7e42]
+          - button "Printer" [ref=f7e53]
+          - button "Material" [ref=f7e62]
+      - generic [ref=f7e69]:
+        - heading "BISNIS" [level=3] [ref=f7e70]
+        - generic [ref=f7e71]:
+          - button "Pelanggan & Mitra" [ref=f7e73]
+          - button "Pengadaan" [ref=f7e83]
+          - button "Keuangan" [ref=f7e94]
+          - button "Laporan & Analitik" [ref=f7e102]
+      - generic [ref=f7e111]:
+        - heading "SISTEM" [level=3] [ref=f7e112]
+        - generic [ref=f7e113]:
+          - generic [ref=f7e114]:
+            - button "Marketplace & Kanal Penjualan" [ref=f7e115]
+            - generic [ref=f7e642]:
+              - link "Ringkasan Kanal" [ref=f7e643] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f7e644] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f7e645] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f7e646] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f7e647] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f7e648] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f7e649] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f7e650] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - button "Otomasi" [ref=f7e125]
+      - generic [ref=f7e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f7e132]
+        - generic [ref=f7e133]:
+          - link "Keuangan Terpadu" [ref=f7e134] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f7e138] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f7e143] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f7e146] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f7e150] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f7e156] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f7e159] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f7e165] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f7e168] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f7e174] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f7e179] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f7e183]:
+    - banner [ref=f7e184]:
+      - combobox [ref=f7e186]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f7e190]
+        - generic [ref=f7e191]:
+          - generic [ref=f7e192]: ⌘
+          - generic [ref=f7e193]: K
+      - generic [ref=f7e194]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f7e196]'
+        - button [ref=f7e205]:
+          - generic [ref=f7e209]:
+            - text: "Workspace:"
+            - generic [ref=f7e210]:
+              - img "Craft Logo" [ref=f7e211]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f7e213]
+        - button [ref=f7e218]
+    - main [ref=f7e219]:
+      - generic [ref=f7e733]:
+        - generic [ref=f7e734]:
+          - generic [ref=f7e735]:
+            - paragraph [ref=f7e736]: Sistem Craft
+            - heading "Aturan Biaya Marketplace" [level=1] [ref=f7e737]
+            - paragraph [ref=f7e738]: Simpan estimasi biaya platform tanpa mengubah snapshot biaya pesanan historis.
+          - button "Tambah Aturan" [active] [ref=f7e740]
+        - heading "Belum Ada Aturan Biaya" [level=2] [ref=f7e748]
+        - generic [ref=f7e750]:
+          - generic [ref=f7e751]:
+            - heading "Tambah Aturan Biaya" [level=2] [ref=f7e752]
+            - button "Tutup" [ref=f7e753]: ×
+          - generic [ref=f7e754]:
+            - generic [ref=f7e755]:
+              - generic [ref=f7e756]: Kanal Marketplace *
+              - combobox "Kanal Marketplace *" [ref=f7e757]:
+                - option "Pilih kanal" [selected]
+            - generic [ref=f7e758]:
+              - generic [ref=f7e759]: Nama Aturan *
+              - textbox "Nama Aturan *" [ref=f7e760]:
+                - /placeholder: Komisi penjualan
+            - generic [ref=f7e761]:
+              - generic [ref=f7e762]:
+                - generic [ref=f7e763]: Tipe
+                - combobox "Tipe" [ref=f7e764]:
+                  - option "Persentase" [selected]
+                  - option "Tetap"
+                  - option "Campuran"
+              - generic [ref=f7e765]:
+                - generic [ref=f7e766]: Tarif (%)
+                - spinbutton "Tarif (%)" [ref=f7e767]: "0"
+              - generic [ref=f7e768]:
+                - generic [ref=f7e769]: Biaya Tetap
+                - spinbutton "Biaya Tetap" [ref=f7e770]: "0"
+            - generic [ref=f7e771]:
+              - generic [ref=f7e772]:
+                - generic [ref=f7e773]: Mulai Berlaku
+                - textbox "Mulai Berlaku" [ref=f7e774]: 2026-09-14
+              - generic [ref=f7e775]:
+                - generic [ref=f7e776]: Berakhir
+                - textbox "Berakhir" [ref=f7e777]
+            - generic [ref=f7e778]:
+              - button "Batal" [ref=f7e779]
+              - button "Simpan Aturan" [ref=f7e780]

@@ -1,0 +1,134 @@
+- generic [ref=f34e6]:
+  - complementary [ref=f34e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f34e9]
+    - generic [ref=f34e10]:
+      - generic [ref=f34e11]:
+        - heading "GLOBAL" [level=3] [ref=f34e12]
+        - link "Dasbor Global" [ref=f34e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f34e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f34e21]
+        - generic [ref=f34e22]:
+          - button "Pesanan" [ref=f34e377]
+          - button "Produksi" [ref=f34e386]
+          - button "Produk & Desain" [ref=f34e395]
+          - generic [ref=f34e405]:
+            - button "Printer" [ref=f34e406]
+            - generic [ref=f34e414]:
+              - link "Daftar Printer" [ref=f34e415] [cursor=pointer]:
+                - /url: /app/craft/printers
+              - link "Aktivitas Saat Ini" [ref=f34e416] [cursor=pointer]:
+                - /url: /app/craft/printers/activity
+              - link "Riwayat Cetak" [ref=f34e417] [cursor=pointer]:
+                - /url: /app/craft/printers/history
+              - link "Perawatan" [ref=f34e418] [cursor=pointer]:
+                - /url: /app/craft/printers/maintenance
+              - link "Masalah Printer" [ref=f34e419] [cursor=pointer]:
+                - /url: /app/craft/printers/issues
+          - button "Material" [ref=f34e421]
+      - generic [ref=f34e36]:
+        - heading "BISNIS" [level=3] [ref=f34e37]
+        - generic [ref=f34e38]:
+          - button "Pelanggan & Mitra" [ref=f34e429]
+          - button "Pengadaan" [ref=f34e439]
+          - button "Keuangan" [ref=f34e40]
+          - button "Laporan & Analitik" [ref=f34e450]
+      - generic [ref=f34e47]:
+        - heading "SISTEM" [level=3] [ref=f34e48]
+        - generic [ref=f34e459]:
+          - button "Marketplace & Kanal Penjualan" [ref=f34e461]
+          - button "Otomasi" [ref=f34e471]
+      - generic [ref=f34e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f34e50]
+        - generic [ref=f34e51]:
+          - link "Pusat Dokumen" [ref=f34e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f34e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f34e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f34e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f34e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f34e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f34e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f34e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f34e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f34e91]:
+    - banner [ref=f34e92]:
+      - combobox [ref=f34e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f34e98]
+        - generic [ref=f34e99]:
+          - generic [ref=f34e100]: ⌘
+          - generic [ref=f34e101]: K
+      - generic [ref=f34e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f34e104]'
+        - button [ref=f34e477]:
+          - generic [ref=f34e117]:
+            - text: "Workspace:"
+            - generic [ref=f34e118]:
+              - img "Craft Logo" [ref=f34e478]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f34e121]
+        - button [ref=f34e126]:
+          - generic [aria-hidden] [ref=f34e127]: QU
+    - main [ref=f34e128]:
+      - generic [ref=f34e900]:
+        - generic [ref=f34e901]:
+          - generic [ref=f34e902]:
+            - paragraph [ref=f34e903]: Uni-Inside Craft
+            - heading "Perawatan Printer" [level=1] [ref=f34e904]
+            - paragraph [ref=f34e905]: Jadwal berbasis tanggal disinkronkan sebagai kalender; jam cetak dan jumlah pekerjaan dihitung dari data Produksi.
+          - button "Jadwal Perawatan" [ref=f34e907]
+        - generic [ref=f34e909]:
+          - generic [ref=f34e914]:
+            - heading "Jadwal Aktif" [level=2] [ref=f34e915]
+            - paragraph [ref=f34e916]: Buat pekerjaan perawatan, bukan perubahan jam cetak manual.
+          - generic [ref=f34e917]:
+            - article [ref=f34e918]:
+              - generic [ref=f34e919]:
+                - generic [ref=f34e920]:
+                  - paragraph [ref=f34e921]: QA Preventive
+                  - generic [ref=f34e922]: Terjadwal
+                - paragraph [ref=f34e923]: "QA FDM Primary · Tanggal: 15 Okt 2026, 08.12"
+              - generic [ref=f34e924]:
+                - button "Edit" [ref=f34e925]
+                - button "Hapus" [ref=f34e926]
+            - article [ref=f34e927]:
+              - generic [ref=f34e928]:
+                - generic [ref=f34e929]:
+                  - paragraph [ref=f34e930]: QA Print Hours
+                  - generic [ref=f34e931]: Terjadwal
+                - paragraph [ref=f34e932]: QA FDM Primary · Target 100 jam (sekarang 0 jam)
+              - generic [ref=f34e933]:
+                - button "Edit" [ref=f34e934]
+                - button "Hapus" [ref=f34e935]
+        - generic [ref=f34e936]:
+          - heading "Kalender Perawatan" [level=2] [ref=f34e937]
+          - paragraph [ref=f34e938]: Hanya jadwal berbasis tanggal yang memiliki event kalender.
+          - generic [ref=f34e940]:
+            - paragraph [ref=f34e941]: 15 Okt 2026
+            - paragraph [ref=f34e942]: QA Preventive
+            - paragraph [ref=f34e943]: QA FDM Primary
+        - generic [ref=f34e944]:
+          - heading "Riwayat Perawatan" [level=2] [ref=f34e946]
+          - table [ref=f34e947]:
+            - rowgroup [ref=f34e948]:
+              - row [ref=f34e949]:
+                - columnheader "Waktu" [ref=f34e950]
+                - columnheader "Printer" [ref=f34e951]
+                - columnheader "Pekerjaan" [ref=f34e952]
+                - columnheader "Teknisi" [ref=f34e953]
+                - columnheader "Biaya" [ref=f34e954]
+            - rowgroup [ref=f34e955]:
+              - row [ref=f34e956]:
+                - cell "15 Sep 2026, 08.12" [ref=f34e957]
+                - cell "QA FDM Primary" [ref=f34e958]
+                - cell "QA Preventive" [ref=f34e959]
+                - cell "QA User-1" [ref=f34e960]
+                - cell "Rp50.000" [ref=f34e961]

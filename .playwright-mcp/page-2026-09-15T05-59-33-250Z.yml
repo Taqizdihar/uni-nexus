@@ -1,0 +1,145 @@
+- generic [ref=f5e6]:
+  - complementary [ref=f5e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f5e9]
+    - generic [ref=f5e10]:
+      - generic [ref=f5e11]:
+        - heading "GLOBAL" [level=3] [ref=f5e12]
+        - link "Dasbor Global" [ref=f5e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f5e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f5e21]
+        - generic [ref=f5e22]:
+          - button "Proyek" [ref=f5e24]
+          - link "Klien" [ref=f5e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f5e36]:
+        - heading "BISNIS" [level=3] [ref=f5e37]
+        - button "Keuangan" [ref=f5e40]
+      - heading "SISTEM" [level=3] [ref=f5e48]
+      - generic [ref=f5e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f5e50]
+        - generic [ref=f5e51]:
+          - link "Pusat Dokumen" [ref=f5e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f5e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f5e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f5e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f5e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f5e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f5e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f5e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f5e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f5e91]:
+    - banner [ref=f5e92]:
+      - combobox [ref=f5e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f5e98]
+        - generic [ref=f5e99]:
+          - generic [ref=f5e100]: ⌘
+          - generic [ref=f5e101]: K
+      - generic [ref=f5e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f5e104]'
+        - button [ref=f5e113]:
+          - generic [ref=f5e117]:
+            - text: "Workspace:"
+            - generic [ref=f5e118]:
+              - img "Studio Logo" [ref=f5e119]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f5e121]:
+          - generic [ref=f5e125]: "2"
+        - button [ref=f5e127]:
+          - generic [aria-hidden] [ref=f5e128]: QU
+    - main [ref=f5e129]:
+      - generic [ref=f5e131]:
+        - generic [ref=f5e132]:
+          - generic [ref=f5e133]:
+            - paragraph [ref=f5e134]: Sistem Craft
+            - heading "Kanal Penjualan" [level=1] [ref=f5e135]
+            - paragraph [ref=f5e136]: Kelola kanal sumber pesanan Craft dan tautan Seller Center yang aman.
+          - button "Tambah Kanal" [ref=f5e138]
+        - table [ref=f5e142]:
+          - rowgroup [ref=f5e143]:
+            - row [ref=f5e144]:
+              - columnheader "Kanal" [ref=f5e145]
+              - columnheader "Tipe" [ref=f5e146]
+              - columnheader "Status" [ref=f5e147]
+              - columnheader "Pesanan" [ref=f5e148]
+              - columnheader "Nilai Bulan Ini" [ref=f5e149]
+              - columnheader "API" [ref=f5e150]
+              - columnheader "Aksi" [ref=f5e151]
+          - rowgroup [ref=f5e152]:
+            - row [ref=f5e153]:
+              - cell [ref=f5e154]:
+                - link "Channel Edit 091504" [ref=f5e155] [cursor=pointer]:
+                  - /url: /app/craft/marketplace/channels/17
+                - paragraph [ref=f5e156]: QA_SC_091504
+              - cell "Langsung" [ref=f5e157]
+              - cell "Aktif" [ref=f5e158]
+              - cell "0" [ref=f5e160]
+              - cell "Rp 0" [ref=f5e161]
+              - cell "Belum Dikonfigurasi" [ref=f5e162]
+              - cell [ref=f5e164]:
+                - generic [ref=f5e165]:
+                  - link [ref=f5e166] [cursor=pointer]:
+                    - /url: /app/craft/marketplace/channels/17
+                    - button "Detail" [ref=f5e167]
+                  - button "Edit" [ref=f5e168]
+                  - button "Nonaktifkan" [ref=f5e169]
+            - row [ref=f5e170]:
+              - cell [ref=f5e171]:
+                - link "Channel QA Edit 20260914_2114" [ref=f5e172] [cursor=pointer]:
+                  - /url: /app/craft/marketplace/channels/15
+                - paragraph [ref=f5e173]: QA_SC_20260914_2114
+              - cell "Langsung" [ref=f5e174]
+              - cell "Aktif" [ref=f5e175]
+              - cell "0" [ref=f5e177]
+              - cell "Rp 0" [ref=f5e178]
+              - cell "Belum Dikonfigurasi" [ref=f5e179]
+              - cell [ref=f5e181]:
+                - generic [ref=f5e182]:
+                  - link [ref=f5e183] [cursor=pointer]:
+                    - /url: /app/craft/marketplace/channels/15
+                    - button "Detail" [ref=f5e184]
+                  - button "Edit" [ref=f5e185]
+                  - button "Nonaktifkan" [ref=f5e186]
+            - row [ref=f5e187]:
+              - cell [ref=f5e188]:
+                - link "QA Invalid Code Updated" [ref=f5e189] [cursor=pointer]:
+                  - /url: /app/craft/marketplace/channels/20
+                - paragraph [ref=f5e190]: QA_BAD
+              - cell "Marketplace" [ref=f5e191]
+              - cell "Aktif" [ref=f5e192]
+              - cell "0" [ref=f5e194]
+              - cell "Rp 0" [ref=f5e195]
+              - cell "Belum Dikonfigurasi" [ref=f5e196]
+              - cell [ref=f5e198]:
+                - generic [ref=f5e199]:
+                  - link [ref=f5e200] [cursor=pointer]:
+                    - /url: /app/craft/marketplace/channels/20
+                    - button "Detail" [ref=f5e201]
+                  - button "Edit" [ref=f5e202]
+                  - button "Nonaktifkan" [ref=f5e203]
+            - row [ref=f5e204]:
+              - cell [ref=f5e205]:
+                - link "QA Marketplace S09 20260915" [ref=f5e206] [cursor=pointer]:
+                  - /url: /app/craft/marketplace/channels/19
+                - paragraph [ref=f5e207]: QA_MP_S09_20260915
+              - cell "Marketplace" [ref=f5e208]
+              - cell "Aktif" [ref=f5e209]
+              - cell "0" [ref=f5e211]
+              - cell "Rp 0" [ref=f5e212]
+              - cell "Belum Dikonfigurasi" [ref=f5e213]
+              - cell [ref=f5e215]:
+                - generic [ref=f5e216]:
+                  - link [ref=f5e217] [cursor=pointer]:
+                    - /url: /app/craft/marketplace/channels/19
+                    - button "Detail" [ref=f5e218]
+                  - button "Edit" [ref=f5e219]
+                  - button "Nonaktifkan" [ref=f5e220]

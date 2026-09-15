@@ -1,0 +1,143 @@
+- generic [ref=f34e6]:
+  - complementary [ref=f34e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f34e9]
+    - generic [ref=f34e10]:
+      - generic [ref=f34e11]:
+        - heading "GLOBAL" [level=3] [ref=f34e12]
+        - link "Dasbor Global" [ref=f34e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f34e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f34e21]
+        - generic [ref=f34e22]:
+          - button "Pesanan" [ref=f34e377]
+          - button "Produksi" [ref=f34e386]
+          - button "Produk & Desain" [ref=f34e395]
+          - generic [ref=f34e405]:
+            - button "Printer" [ref=f34e406]
+            - generic [ref=f34e414]:
+              - link "Daftar Printer" [ref=f34e415] [cursor=pointer]:
+                - /url: /app/craft/printers
+              - link "Aktivitas Saat Ini" [ref=f34e416] [cursor=pointer]:
+                - /url: /app/craft/printers/activity
+              - link "Riwayat Cetak" [ref=f34e417] [cursor=pointer]:
+                - /url: /app/craft/printers/history
+              - link "Perawatan" [ref=f34e418] [cursor=pointer]:
+                - /url: /app/craft/printers/maintenance
+              - link "Masalah Printer" [ref=f34e419] [cursor=pointer]:
+                - /url: /app/craft/printers/issues
+          - generic [ref=f34e420]:
+            - button "Material" [ref=f34e421]
+            - generic [ref=f34e1524]:
+              - link "Inventaris Filament" [ref=f34e1525] [cursor=pointer]:
+                - /url: /app/craft/materials/filament
+              - link "Spool Filament" [ref=f34e1526] [cursor=pointer]:
+                - /url: /app/craft/materials/spools
+              - link "Pergerakan Stok" [ref=f34e1527] [cursor=pointer]:
+                - /url: /app/craft/materials/movements
+              - link "Stok Menipis" [ref=f34e1528] [cursor=pointer]:
+                - /url: /app/craft/materials/low-stock
+              - link "Limbah Filament" [ref=f34e1529] [cursor=pointer]:
+                - /url: /app/craft/materials/waste
+      - generic [ref=f34e36]:
+        - heading "BISNIS" [level=3] [ref=f34e37]
+        - generic [ref=f34e38]:
+          - button "Pelanggan & Mitra" [ref=f34e429]
+          - generic [ref=f34e438]:
+            - button "Pengadaan" [ref=f34e439]
+            - generic [ref=f34e1438]:
+              - link "Ringkasan Pengadaan" [ref=f34e1439] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f34e1440] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f34e1441] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f34e1442] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f34e1443] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [ref=f34e1444] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [ref=f34e1445] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f34e40]
+          - button "Laporan & Analitik" [ref=f34e450]
+      - generic [ref=f34e47]:
+        - heading "SISTEM" [level=3] [ref=f34e48]
+        - generic [ref=f34e459]:
+          - button "Marketplace & Kanal Penjualan" [ref=f34e461]
+          - button "Otomasi" [ref=f34e471]
+      - generic [ref=f34e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f34e50]
+        - generic [ref=f34e51]:
+          - link "Pusat Dokumen" [ref=f34e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f34e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f34e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f34e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f34e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f34e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f34e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f34e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f34e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f34e91]:
+    - banner [ref=f34e92]:
+      - combobox [ref=f34e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f34e98]
+        - generic [ref=f34e99]:
+          - generic [ref=f34e100]: ⌘
+          - generic [ref=f34e101]: K
+      - generic [ref=f34e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f34e104]'
+        - button [ref=f34e477]:
+          - generic [ref=f34e117]:
+            - text: "Workspace:"
+            - generic [ref=f34e118]:
+              - img "Craft Logo" [ref=f34e478]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f34e121]:
+          - generic [ref=f34e1063]: "2"
+        - button [ref=f34e126]:
+          - generic [aria-hidden] [ref=f34e127]: QU
+    - main [ref=f34e128]:
+      - generic [ref=f34e2290]:
+        - generic [ref=f34e2291]:
+          - generic [ref=f34e2292]:
+            - paragraph [ref=f34e2293]: PENGADAAN
+            - heading "Pemasok" [level=1] [ref=f34e2294]
+            - paragraph [ref=f34e2295]: Pemasok adalah Party kanonis yang memiliki peran supplier untuk bisnis Craft.
+          - link [ref=f34e2297] [cursor=pointer]:
+            - /url: /app/craft/procurement/suppliers/new
+            - button "Tambah Pemasok" [ref=f34e2298]
+        - generic [ref=f34e2300]:
+          - textbox "Cari kode, nama, email, atau telepon" [ref=f34e2301]
+          - button "Cari" [ref=f34e2302]
+        - table [ref=f34e2307]:
+          - rowgroup [ref=f34e2308]:
+            - row [ref=f34e2309]:
+              - columnheader "Kode / Pemasok" [ref=f34e2310]
+              - columnheader "Kontak utama" [ref=f34e2311]
+              - columnheader "PO" [ref=f34e2312]
+              - columnheader "Nilai pembelian" [ref=f34e2313]
+              - columnheader "Pembelian terakhir" [ref=f34e2314]
+              - columnheader "Status" [ref=f34e2315]
+          - rowgroup [ref=f34e2316]:
+            - row [ref=f34e2317]:
+              - cell [ref=f34e2318]:
+                - link "QA Supplier Primary" [ref=f34e2319] [cursor=pointer]:
+                  - /url: /app/craft/procurement/suppliers/20
+                - paragraph [ref=f34e2320]: SUP-000020 · company
+              - cell [ref=f34e2321]:
+                - paragraph [ref=f34e2322]: qa-supplier-primary@example.test
+                - paragraph [ref=f34e2323]: "081200000601"
+              - cell "0 terbuka / 0" [ref=f34e2324]
+              - cell "Rp 0" [ref=f34e2325]
+              - cell "—" [ref=f34e2326]
+              - cell "Disetujui" [ref=f34e2327]

@@ -1,0 +1,156 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e658]:
+        - generic [ref=f3e659]:
+          - generic [ref=f3e660]:
+            - paragraph [ref=f3e661]: Sistem Craft
+            - heading "Settlement Marketplace" [level=1] [ref=f3e662]
+            - paragraph [ref=f3e663]: Cocokkan payout platform dengan Craft Order lalu post nilai kas bersih ke keuangan.
+          - button "Tambah Settlement" [ref=f3e665]
+        - heading "Belum Ada Settlement" [level=2] [ref=f3e673]
+        - generic [ref=f3e675]:
+          - generic [ref=f3e676]:
+            - heading "Tambah Settlement" [level=2] [ref=f3e677]
+            - button "Tutup" [ref=f3e678]: ×
+          - generic [ref=f3e679]:
+            - generic [ref=f3e680]:
+              - generic [ref=f3e681]:
+                - generic [ref=f3e682]: Kanal Marketplace *
+                - combobox "Kanal Marketplace *" [ref=f3e683]:
+                  - option "Pilih kanal"
+                  - option "QA Invalid Code Updated"
+                  - option "QA Marketplace S09 20260915" [selected]
+              - generic [ref=f3e684]:
+                - generic [ref=f3e685]: Kode Settlement
+                - textbox "Kode Settlement" [ref=f3e686]:
+                  - /placeholder: Otomatis jika kosong
+              - generic [ref=f3e687]:
+                - generic [ref=f3e688]: Periode Mulai
+                - textbox "Periode Mulai" [ref=f3e689]: 2026-09-01
+              - generic [ref=f3e690]:
+                - generic [ref=f3e691]: Periode Akhir
+                - textbox "Periode Akhir" [ref=f3e692]: 2026-09-30
+            - generic [ref=f3e693]:
+              - generic [ref=f3e694]:
+                - generic [ref=f3e695]: Gross Sales *
+                - spinbutton "Gross Sales *" [ref=f3e696]: "100"
+              - generic [ref=f3e697]:
+                - generic [ref=f3e698]: Platform Fees *
+                - spinbutton "Platform Fees *" [ref=f3e699]: "10"
+              - generic [ref=f3e700]:
+                - generic [ref=f3e701]: Voucher/Subsidi
+                - spinbutton "Voucher/Subsidi" [ref=f3e702]: "0"
+              - generic [ref=f3e703]:
+                - generic [ref=f3e704]: Penyesuaian Pengiriman
+                - spinbutton "Penyesuaian Pengiriman" [ref=f3e705]: "0"
+              - generic [ref=f3e706]:
+                - generic [ref=f3e707]: Penyesuaian Lain
+                - spinbutton "Penyesuaian Lain" [ref=f3e708]: "0"
+              - generic [ref=f3e709]:
+                - generic [ref=f3e710]: Net Settlement *
+                - spinbutton "Net Settlement *" [ref=f3e711]: "95"
+            - group [ref=f3e712]:
+              - generic "Tambahkan satu item settlement untuk pencocokan" [ref=f3e713] [cursor=pointer]
+            - paragraph [ref=f3e717]: Data marketplace tidak valid.
+            - generic [ref=f3e714]:
+              - button "Batal" [ref=f3e715]
+              - button "Simpan Settlement" [active] [ref=f3e716]

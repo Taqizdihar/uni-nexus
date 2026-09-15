@@ -1,0 +1,157 @@
+- generic [ref=f8e6]:
+  - complementary [ref=f8e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f8e9]
+    - generic [ref=f8e10]:
+      - generic [ref=f8e11]:
+        - heading "GLOBAL" [level=3] [ref=f8e12]
+        - link "Dasbor Global" [ref=f8e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f8e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f8e21]
+        - generic [ref=f8e22]:
+          - generic [ref=f8e220]:
+            - button "Pesanan" [ref=f8e221]
+            - generic [ref=f8e2062]:
+              - link "Semua Pesanan" [ref=f8e2063] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f8e2064] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f8e2065] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f8e2066] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f8e2067] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [ref=f8e2068] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f8e2069] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f8e2070] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f8e2071] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f8e230]
+          - button "Produk & Desain" [ref=f8e239]
+          - button "Printer" [ref=f8e250]
+          - button "Material" [ref=f8e259]
+      - generic [ref=f8e36]:
+        - heading "BISNIS" [level=3] [ref=f8e37]
+        - generic [ref=f8e38]:
+          - generic [ref=f8e266]:
+            - button "Pelanggan & Mitra" [ref=f8e267]
+            - generic [ref=f8e1604]:
+              - link "Pelanggan" [ref=f8e1605] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f8e1606] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f8e280]
+          - button "Keuangan" [ref=f8e40]
+          - button "Laporan & Analitik" [ref=f8e291]
+      - generic [ref=f8e47]:
+        - heading "SISTEM" [level=3] [ref=f8e48]
+        - generic [ref=f8e300]:
+          - button "Marketplace & Kanal Penjualan" [ref=f8e302]
+          - button "Otomasi" [ref=f8e312]
+      - generic [ref=f8e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f8e50]
+        - generic [ref=f8e51]:
+          - link "Pusat Dokumen" [ref=f8e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f8e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f8e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f8e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f8e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f8e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f8e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f8e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f8e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f8e91]:
+    - banner [ref=f8e92]:
+      - combobox [ref=f8e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f8e98]
+        - generic [ref=f8e99]:
+          - generic [ref=f8e100]: ⌘
+          - generic [ref=f8e101]: K
+      - generic [ref=f8e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f8e104]'
+        - button [ref=f8e318]:
+          - generic [ref=f8e117]:
+            - text: "Workspace:"
+            - generic [ref=f8e118]:
+              - img "Craft Logo" [ref=f8e319]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f8e121]:
+          - generic [ref=f8e125]: "2"
+        - button [ref=f8e127]:
+          - generic [aria-hidden] [ref=f8e128]: QU
+    - main [ref=f8e129]:
+      - generic [ref=f8e2903]:
+        - button "Kembali" [ref=f8e2904]
+        - generic [ref=f8e2907]:
+          - generic [ref=f8e2908]:
+            - generic [ref=f8e2909]:
+              - generic [ref=f8e2910]: CQ
+              - generic [ref=f8e2911]:
+                - paragraph [ref=f8e2912]: CUS-000023
+                - heading "Customer QA Edited 091507" [level=1] [ref=f8e2913]
+                - generic [ref=f8e2914]:
+                  - generic [ref=f8e2915]: Perusahaan
+                  - generic [ref=f8e2916]: Tidak Aktif
+            - generic [ref=f8e2917]:
+              - button "Edit" [ref=f8e2923]
+              - button "Aktifkan" [ref=f8e3028]
+          - generic [ref=f8e2930]:
+            - generic [ref=f8e2932]:
+              - paragraph [ref=f8e2933]: Total Pesanan
+              - paragraph [ref=f8e2934]: "0"
+            - generic [ref=f8e2936]:
+              - paragraph [ref=f8e2937]: Nilai Pesanan
+              - paragraph [ref=f8e2938]: Rp 0
+            - generic [ref=f8e2940]:
+              - paragraph [ref=f8e2941]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f8e2942]: Rp 0
+            - generic [ref=f8e2944]:
+              - paragraph [ref=f8e2945]: Saldo Invoice
+              - paragraph [ref=f8e2946]: Rp 0
+        - navigation "Profil pelanggan" [ref=f8e2947]:
+          - button "Ringkasan" [ref=f8e2948]
+          - button "Kontak" [ref=f8e2949]
+          - button "Pesanan" [ref=f8e2950]
+          - button "Keuangan" [ref=f8e2951]
+        - generic [ref=f8e2952]:
+          - generic [ref=f8e2954]:
+            - heading "Informasi Pelanggan" [level=2] [ref=f8e2955]
+            - generic [ref=f8e2956]:
+              - generic [ref=f8e2957]:
+                - term [ref=f8e2958]: Nama Legal
+                - definition [ref=f8e2959]: Customer QA Legal 091507
+              - generic [ref=f8e2960]:
+                - term [ref=f8e2961]: Email
+                - definition [ref=f8e2962]: customer.edited.091507@example.test
+              - generic [ref=f8e2966]:
+                - term [ref=f8e2967]: Telepon
+                - definition [ref=f8e2968]: "08123456091510"
+              - generic [ref=f8e2971]:
+                - term [ref=f8e2972]: NPWP / Tax ID
+                - definition [ref=f8e2973]: QA-NPWP-091507
+              - generic [ref=f8e2974]:
+                - term [ref=f8e2975]: Alamat
+                - definition [ref=f8e2976]: Jl. QA Edited 091507, Gedung Edited QA, Jakarta, DKI Jakarta, 40123, ID
+              - generic [ref=f8e2980]:
+                - term [ref=f8e2981]: Pelanggan sejak
+                - definition [ref=f8e2982]: 15 Sep 2026
+          - generic [ref=f8e2983]:
+            - generic [ref=f8e2985]:
+              - heading "Kontak Utama" [level=2] [ref=f8e2986]
+              - paragraph [ref=f8e2987]: Belum ada kontak.
+            - generic [ref=f8e2989]:
+              - heading "Kanal Penjualan" [level=2] [ref=f8e2990]
+              - paragraph [ref=f8e2991]: Belum ada riwayat kanal penjualan.

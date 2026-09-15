@@ -1,0 +1,14 @@
+# Ledger QA Sesi 292–301
+
+| Worksheet row | Test Case ID | Status | Evidence | Catatan |
+|---:|---|---|---|---|
+| 292 | UNX-S20-006 | Bug/Failed | `UNX-S20-006/01-finance-access-denied.png`, `UNX-S20-006/02-shared-transaction-unavailable.png` | Route Unified Finance ditolak dan subroute Transaksi hanya Mode Pratinjau; Shared transaction/reversal canonical tidak tersedia. |
+| 293 | UNX-S20-007 | Bug/Failed | `UNX-S20-007/01-receivables-preview-unavailable.png`, `UNX-S20-007/02-payables-preview-unavailable.png`, `UNX-S20-007/03-budgets-preview-unavailable.png` | Seluruh tab Piutang, Hutang, dan Anggaran menampilkan Mode Pratinjau; data, relasi sumber, dan rekonsiliasi tidak dapat diuji. |
+| 294 | UNX-S20-008 | Bug/Failed | `UNX-S20-008/01-cashflow-preview-unavailable.png`, `UNX-S20-008/02-journals-preview-unavailable.png` | Arus kas dan jurnal hanya Mode Pratinjau; normalisasi WIB, saldo, jurnal berimbang, serta lifecycle periode tidak dapat dijalankan. |
+| 295 | UNX-S20-009 | Bug/Failed | `UNX-S20-009/01-finance-export-access-denied.png` | Halaman Unified Finance ditolak untuk akun yang diwajibkan; kontrol dan hasil ekspor CSV/XLSX berfilter tidak tersedia dari UI. |
+| 296 | UNX-S20-010 | Bug/Failed | `UNX-S20-010/01-reports-catalog-empty.png` | Pusat Laporan berhasil dibuka dan di-refresh, tetapi katalog/overview menunjukkan 0 laporan pada semua kategori sehingga registry aktif dan metadata yang diharapkan tidak tersedia. |
+| 297 | UNX-S20-011 | Bug/Failed | `UNX-S20-011/01-required-reports-unavailable.png` | Pencarian UI untuk Global Executive Summary tidak menemukan laporan; katalog juga kosong, sehingga 10 laporan Unified Finance dan validasi rekonsiliasi/otorisasi tidak dapat dijalankan. |
+| 298 | UNX-S20-012 | Bug/Failed | `UNX-S20-012/01-report-preview-unavailable.png` | Katalog Pusat Laporan kosong; tidak ada kartu laporan untuk membuka Preview Period maupun menjalankan pemeriksaan normalisasi tanggal, rentang, KPI, tabel, grafik, atau sumber data. |
+| 299 | UNX-S20-013 | Bug/Failed | `UNX-S20-013/01-report-export-controls-unavailable.png` | Katalog laporan kosong sehingga tidak ada kontrol ekspor CSV/XLSX/PDF yang dapat digunakan untuk memeriksa format, filter izin, pembatasan data, dan riwayat/audit ekspor. |
+| 300 | UNX-S20-014 | Bug/Failed | `UNX-S20-014/01-export-history-empty.png` | UI Riwayat Ekspor menyatakan belum ada ekspor yang dapat diakses dan tidak menyediakan baris detail/unduhan untuk menguji evaluasi izin, pagination, batas, atau penanganan berkas hilang. |
+| 301 | UNX-S20-015 | Bug/Failed | `UNX-S20-015/01-search-minimum-character-guard.png`, `UNX-S20-015/02-search-no-results.png` | Header Search dapat dibuka; satu karakter memunculkan guard minimal 2 karakter dan kueri dua karakter menampilkan tanpa hasil. Tidak ada hasil/route untuk menguji kategori, batas 8, wildcard literal, atau navigasi keyboard ke fixture yang disyaratkan. |

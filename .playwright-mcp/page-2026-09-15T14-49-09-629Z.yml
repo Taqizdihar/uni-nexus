@@ -1,0 +1,98 @@
+- generic [ref=f40e6]:
+  - complementary [ref=f40e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f40e9]
+    - generic [ref=f40e10]:
+      - generic [ref=f40e11]:
+        - heading "GLOBAL" [level=3] [ref=f40e12]
+        - link "Dasbor Global" [ref=f40e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f40e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f40e21]
+        - generic [ref=f40e22]:
+          - button "Proyek" [ref=f40e231]
+          - link "Klien" [ref=f40e237] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f40e69]:
+        - heading "BISNIS" [level=3] [ref=f40e70]
+        - generic [ref=f40e93]:
+          - button "Keuangan" [ref=f40e94]
+          - generic [ref=f40e243]:
+            - link "Ringkasan Keuangan" [ref=f40e244] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f40e245] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f40e246] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f40e247] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f40e248] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f40e249] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f40e250] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f40e251] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f40e252] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f40e253] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [ref=f40e254] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f40e112]
+      - generic [ref=f40e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f40e132]
+        - generic [ref=f40e133]:
+          - link "Pusat Dokumen" [ref=f40e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f40e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f40e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f40e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f40e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f40e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f40e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f40e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f40e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f40e173]:
+    - banner [ref=f40e174]:
+      - combobox [ref=f40e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f40e180]
+        - generic [ref=f40e181]:
+          - generic [ref=f40e182]: ⌘
+          - generic [ref=f40e183]: K
+      - generic [ref=f40e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f40e186]'
+        - button [active] [ref=f40e255]:
+          - generic [ref=f40e199]:
+            - text: "Workspace:"
+            - generic [ref=f40e200]:
+              - img "Studio Logo" [ref=f40e256]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f40e203]:
+          - generic [ref=f40e207]: "3"
+        - button [ref=f40e209]:
+          - generic [aria-hidden] [ref=f40e210]: AR
+    - main [ref=f40e211]:
+      - generic [ref=f40e213]:
+        - generic [ref=f40e215]:
+          - heading "Profitabilitas Proyek" [level=1] [ref=f40e216]
+          - paragraph [ref=f40e217]: Cash margin menggunakan kas terkumpul dan biaya Finance aktual; fee disepakati tidak dihitung sebagai biaya aktual.
+        - table [ref=f40e220]:
+          - rowgroup [ref=f40e221]:
+            - row [ref=f40e222]:
+              - columnheader "Proyek" [ref=f40e223]
+              - columnheader "Kontrak" [ref=f40e224]
+              - columnheader "Ditagihkan" [ref=f40e225]
+              - columnheader "Terkumpul" [ref=f40e226]
+              - columnheader "Biaya Aktual" [ref=f40e227]
+              - columnheader "Cash Margin" [ref=f40e228]
+              - columnheader "Margin Kontrak" [ref=f40e229]
+          - rowgroup

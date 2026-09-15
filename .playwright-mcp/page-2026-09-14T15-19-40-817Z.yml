@@ -1,0 +1,136 @@
+- generic [ref=f14e3]:
+  - complementary [ref=f14e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f14e6]
+    - generic [ref=f14e7]:
+      - generic [ref=f14e8]:
+        - heading "GLOBAL" [level=3] [ref=f14e9]
+        - link "Dasbor Global" [ref=f14e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f14e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f14e18]
+        - generic [ref=f14e19]:
+          - button "Pesanan" [ref=f14e333]
+          - button "Produksi" [ref=f14e342]
+          - button "Produk & Desain" [ref=f14e351]
+          - button "Printer" [ref=f14e362]
+          - button "Material" [ref=f14e371]
+      - generic [ref=f14e33]:
+        - heading "BISNIS" [level=3] [ref=f14e34]
+        - generic [ref=f14e35]:
+          - generic [ref=f14e378]:
+            - button "Pelanggan & Mitra" [ref=f14e379]
+            - generic [ref=f14e388]:
+              - link "Pelanggan" [ref=f14e389] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f14e390] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f14e392]
+          - button "Keuangan" [ref=f14e37]
+          - button "Laporan & Analitik" [ref=f14e403]
+      - generic [ref=f14e44]:
+        - heading "SISTEM" [level=3] [ref=f14e45]
+        - generic [ref=f14e412]:
+          - button "Marketplace & Kanal Penjualan" [ref=f14e414]
+          - button "Otomasi" [ref=f14e424]
+      - generic [ref=f14e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f14e47]
+        - generic [ref=f14e48]:
+          - link "Pusat Dokumen" [ref=f14e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f14e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f14e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f14e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f14e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f14e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f14e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f14e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f14e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f14e88]:
+    - banner [ref=f14e89]:
+      - combobox [ref=f14e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f14e95]
+        - generic [ref=f14e96]:
+          - generic [ref=f14e97]: ⌘
+          - generic [ref=f14e98]: K
+      - generic [ref=f14e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f14e101]'
+        - button [ref=f14e430]:
+          - generic [ref=f14e114]:
+            - text: "Workspace:"
+            - generic [ref=f14e115]:
+              - img "Craft Logo" [ref=f14e431]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f14e118]
+        - button [ref=f14e123]:
+          - generic [aria-hidden] [ref=f14e124]: QU
+    - main [ref=f14e125]:
+      - generic [ref=f14e479]:
+        - button "Kembali" [ref=f14e480]
+        - generic [ref=f14e483]:
+          - generic [ref=f14e484]:
+            - generic [ref=f14e485]:
+              - generic [ref=f14e486]: "N"
+              - generic [ref=f14e487]:
+                - paragraph [ref=f14e488]: CUS-000017
+                - heading "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN" [level=1] [ref=f14e489]
+                - generic [ref=f14e490]:
+                  - generic [ref=f14e491]: Individu
+                  - generic [ref=f14e492]: Tidak Aktif
+            - generic [ref=f14e493]:
+              - button "Edit" [ref=f14e499]
+              - button "Aktifkan" [ref=f14e586]
+          - generic [ref=f14e506]:
+            - generic [ref=f14e508]:
+              - paragraph [ref=f14e509]: Total Pesanan
+              - paragraph [ref=f14e510]: "0"
+            - generic [ref=f14e512]:
+              - paragraph [ref=f14e513]: Nilai Pesanan
+              - paragraph [ref=f14e514]: Rp 0
+            - generic [ref=f14e516]:
+              - paragraph [ref=f14e517]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f14e518]: Rp 0
+            - generic [ref=f14e520]:
+              - paragraph [ref=f14e521]: Saldo Invoice
+              - paragraph [ref=f14e522]: Rp 0
+        - navigation "Profil pelanggan" [ref=f14e523]:
+          - button "Ringkasan" [ref=f14e524]
+          - button "Kontak" [ref=f14e525]
+          - button "Pesanan" [ref=f14e526]
+          - button "Keuangan" [ref=f14e527]
+        - generic [ref=f14e528]:
+          - generic [ref=f14e530]:
+            - heading "Informasi Pelanggan" [level=2] [ref=f14e531]
+            - generic [ref=f14e532]:
+              - generic [ref=f14e533]:
+                - term [ref=f14e534]: Nama Legal
+                - definition [ref=f14e535]: "-"
+              - generic [ref=f14e536]:
+                - term [ref=f14e537]: Email
+                - definition [ref=f14e538]: "-"
+              - generic [ref=f14e542]:
+                - term [ref=f14e543]: Telepon
+                - definition [ref=f14e544]: "-"
+              - generic [ref=f14e547]:
+                - term [ref=f14e548]: NPWP / Tax ID
+                - definition [ref=f14e549]: "-"
+              - generic [ref=f14e550]:
+                - term [ref=f14e551]: Alamat
+                - definition [ref=f14e552]: ID
+              - generic [ref=f14e556]:
+                - term [ref=f14e557]: Pelanggan sejak
+                - definition [ref=f14e558]: 14 Sep 2026
+          - generic [ref=f14e559]:
+            - generic [ref=f14e561]:
+              - heading "Kontak Utama" [level=2] [ref=f14e562]
+              - paragraph [ref=f14e563]: Belum ada kontak.
+            - generic [ref=f14e565]:
+              - heading "Kanal Penjualan" [level=2] [ref=f14e566]
+              - paragraph [ref=f14e567]: Belum ada riwayat kanal penjualan.

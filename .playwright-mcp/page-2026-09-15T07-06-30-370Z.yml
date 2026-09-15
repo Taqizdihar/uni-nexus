@@ -1,0 +1,83 @@
+- generic [ref=f5e6]:
+  - complementary [ref=f5e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f5e9]
+    - generic [ref=f5e10]:
+      - generic [ref=f5e11]:
+        - heading "GLOBAL" [level=3] [ref=f5e12]
+        - link "Dasbor Global" [ref=f5e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f5e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f5e21]
+        - generic [ref=f5e22]:
+          - generic [ref=f5e23]:
+            - button "Proyek" [ref=f5e24]
+            - generic [ref=f5e30]:
+              - link "Semua Proyek" [ref=f5e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [active] [ref=f5e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f5e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f5e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f5e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f5e41]:
+        - heading "BISNIS" [level=3] [ref=f5e42]
+        - button "Keuangan" [ref=f5e45]
+      - heading "SISTEM" [level=3] [ref=f5e53]
+      - generic [ref=f5e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f5e55]
+        - generic [ref=f5e56]:
+          - link "Pusat Dokumen" [ref=f5e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f5e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f5e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f5e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f5e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f5e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f5e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f5e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f5e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f5e96]:
+    - banner [ref=f5e97]:
+      - combobox [ref=f5e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f5e103]
+        - generic [ref=f5e104]:
+          - generic [ref=f5e105]: ⌘
+          - generic [ref=f5e106]: K
+      - generic [ref=f5e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f5e109]'
+        - button [ref=f5e118]:
+          - generic [ref=f5e122]:
+            - text: "Workspace:"
+            - generic [ref=f5e123]:
+              - img "Studio Logo" [ref=f5e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f5e126]:
+          - generic [ref=f5e130]: "2"
+        - button [ref=f5e132]:
+          - generic [aria-hidden] [ref=f5e133]: QU
+    - main [ref=f5e134]:
+      - generic [ref=f5e186]:
+        - generic [ref=f5e187]:
+          - generic [ref=f5e189]:
+            - paragraph [ref=f5e190]: Operasional Studio
+            - heading "Proyek Aktif" [level=1] [ref=f5e191]
+            - paragraph [ref=f5e192]: "Pekerjaan yang sedang berjalan: disetujui, sedang dikerjakan, dan menunggu tinjauan klien. Prospek dan penawaran tetap ada di Semua Proyek."
+          - generic [ref=f5e193]:
+            - button "Muat Ulang" [ref=f5e194]
+            - button "Proyek Baru" [ref=f5e200]
+        - generic [ref=f5e203]:
+          - generic [ref=f5e204]: ✦
+          - heading "Belum Ada Proyek Aktif" [level=3] [ref=f5e206]
+          - paragraph [ref=f5e207]: Proyek akan muncul di sini setelah statusnya menjadi Disetujui, Sedang Dikerjakan, atau Tinjauan.
+          - button "Lihat Semua Proyek" [ref=f5e209]

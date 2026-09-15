@@ -1,0 +1,176 @@
+- generic [ref=f12e6]:
+  - complementary [ref=f12e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f12e9]
+    - generic [ref=f12e10]:
+      - generic [ref=f12e11]:
+        - heading "GLOBAL" [level=3] [ref=f12e12]
+        - link "Dasbor Global" [ref=f12e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f12e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f12e21]
+        - generic [ref=f12e22]:
+          - button "Pesanan" [ref=f12e24]
+          - button "Produksi" [ref=f12e33]
+          - button "Produk & Desain" [ref=f12e42]
+          - button "Printer" [ref=f12e53]
+          - button "Material" [ref=f12e62]
+      - generic [ref=f12e69]:
+        - heading "BISNIS" [level=3] [ref=f12e70]
+        - generic [ref=f12e71]:
+          - button "Pelanggan & Mitra" [ref=f12e73]
+          - button "Pengadaan" [ref=f12e83]
+          - button "Keuangan" [ref=f12e94]
+          - button "Laporan & Analitik" [ref=f12e102]
+      - generic [ref=f12e111]:
+        - heading "SISTEM" [level=3] [ref=f12e112]
+        - generic [ref=f12e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f12e115]
+          - button "Otomasi" [ref=f12e125]
+      - generic [ref=f12e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f12e132]
+        - generic [ref=f12e133]:
+          - link "Pusat Dokumen" [ref=f12e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f12e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f12e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f12e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f12e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f12e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f12e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f12e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f12e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f12e173]:
+    - banner [ref=f12e174]:
+      - combobox [ref=f12e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f12e180]
+        - generic [ref=f12e181]:
+          - generic [ref=f12e182]: ⌘
+          - generic [ref=f12e183]: K
+      - generic [ref=f12e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f12e219]'
+        - button [ref=f12e195]:
+          - generic [ref=f12e199]:
+            - text: "Workspace:"
+            - generic [ref=f12e200]:
+              - img "Craft Logo" [ref=f12e220]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f12e202]:
+          - generic [ref=f12e221]: "3"
+        - button [ref=f12e207]:
+          - generic [aria-hidden] [ref=f12e208]: AR
+    - main [ref=f12e209]:
+      - generic [ref=f12e222]:
+        - generic [ref=f12e223]:
+          - generic [ref=f12e224]:
+            - heading "Log Audit" [level=1] [ref=f12e225]
+            - paragraph [ref=f12e228]: Riwayat aktivitas keamanan dan perubahan penting di UNI-NEXUS.
+          - generic [ref=f12e229]:
+            - button "Muat ulang" [disabled] [ref=f12e230]
+            - button "CSV" [ref=f12e236]
+            - button "Excel" [ref=f12e240]
+        - generic [ref=f12e244]:
+          - generic [ref=f12e245]:
+            - paragraph [ref=f12e246]: Total
+            - paragraph [ref=f12e247]: "199"
+          - generic [ref=f12e248]:
+            - paragraph [ref=f12e249]: Hari ini
+            - paragraph [ref=f12e250]: "59"
+          - generic [ref=f12e251]:
+            - paragraph [ref=f12e252]: Login & Logout
+            - paragraph [ref=f12e253]: "53"
+          - generic [ref=f12e254]:
+            - paragraph [ref=f12e255]: Perubahan hari ini
+            - paragraph [ref=f12e256]: "2"
+          - generic [ref=f12e257]:
+            - paragraph [ref=f12e258]: Aktor unik
+            - paragraph [ref=f12e259]: "7"
+        - generic [ref=f12e260]:
+          - generic [ref=f12e261]:
+            - generic [ref=f12e262]:
+              - generic [ref=f12e263]: Cari Log Audit
+              - textbox "Cari Log Audit" [active] [ref=f12e267]:
+                - /placeholder: Cari deskripsi, aktor, atau kode…
+                - text: Login
+            - combobox "Workspace" [ref=f12e268]:
+              - option "Semua workspace"
+              - option "Global" [selected]
+              - option "Craft"
+              - option "Studio"
+            - combobox "Grup tindakan" [ref=f12e269]:
+              - option "Semua kategori" [selected]
+              - option "Autentikasi"
+              - option "Akun & Profil"
+              - option "Pembuatan"
+              - option "Perubahan"
+              - option "Penghapusan"
+              - option "Persetujuan"
+              - option "Keuangan"
+              - option "Otomasi"
+              - option "Ekspor"
+              - option "Lainnya"
+            - combobox "Modul" [ref=f12e270]:
+              - option "Semua modul" [selected]
+              - option "Audit"
+              - option "Auth"
+              - option "Master Data"
+              - option "Settings"
+              - option "Users"
+            - combobox "Tindakan" [ref=f12e271]:
+              - option "Semua tindakan"
+              - option "Account Delete"
+              - option "Account Deletion Request"
+              - option "Account Deletion Request Revoke"
+              - option "Setujui Akun"
+              - option "Audit Export"
+              - option "Login" [selected]
+              - option "Logout"
+              - option "Master Data Activate"
+              - option "Master Data Create"
+              - option "Master Data Deactivate"
+              - option "Master Data Update"
+              - option "Profile Avatar Delete"
+              - option "Profile Avatar Update"
+              - option "Profile Banner Update"
+              - option "Profile Password Change"
+              - option "Profile Status Change"
+              - option "Profile Update"
+              - option "Tolak Akun"
+              - option "Settings Group Update"
+              - option "Settings Organization Logo Upload"
+              - option "Settings Organization Update"
+              - option "Signup Request"
+          - generic [ref=f12e272]:
+            - combobox "Aktor" [ref=f12e273]:
+              - option "Semua aktor" [selected]
+              - option "Ahmad Ropaldo (ahmadropaldo)"
+              - option "April Adzania (apriladzania)"
+              - option "Dian Daeli (diandaeli)"
+              - option "Muhammad Taqi Izdiharr (taqizdihar)"
+              - option "Naura Ramadhani (nauraramadhani)"
+              - option "QA User 2 (qa2)"
+              - option "QA User-1 (qauser1)"
+            - combobox "Jenis entitas" [ref=f12e274]:
+              - option "Semua entitas" [selected]
+              - option "Audit Export"
+              - option "Master Data:Payment Methods"
+              - option "Master Data:Units"
+              - option "Organization"
+              - option "System Setting Group"
+              - option "User"
+              - option "User Deletion Request"
+            - generic [ref=f12e275]:
+              - text: Dari
+              - textbox "Tanggal dari" [ref=f12e276]
+            - generic [ref=f12e277]:
+              - text: Sampai
+              - textbox "Tanggal sampai" [ref=f12e278]
+            - button "Reset filter" [ref=f12e279]
+        - generic [ref=f12e282]: Memuat Log Audit…

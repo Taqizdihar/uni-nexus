@@ -1,0 +1,204 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e2654]:
+        - generic [ref=f3e2655]:
+          - generic [ref=f3e2656]:
+            - paragraph [ref=f3e2657]: Sistem Craft
+            - heading "Aturan Otomasi" [level=1] [ref=f3e2658]
+            - paragraph [ref=f3e2659]: Atur kapan Craft bereaksi dan tindakan aman yang dapat dijalankan worker.
+          - link [ref=f3e2661] [cursor=pointer]:
+            - /url: /app/craft/automations/rules/new
+            - button "Buat Aturan" [ref=f3e2662]
+        - generic [ref=f3e2665]:
+          - textbox "Cari kode, nama, atau deskripsi" [ref=f3e2666]
+          - combobox [ref=f3e2667]:
+            - option "Semua status" [selected]
+            - option "Draf"
+            - option "Aktif"
+            - option "Dijeda"
+            - option "Dinonaktifkan"
+        - table [ref=f3e2670]:
+          - rowgroup [ref=f3e2671]:
+            - row [ref=f3e2672]:
+              - columnheader "Aturan" [ref=f3e2673]
+              - columnheader "Pemicu" [ref=f3e2674]
+              - columnheader "Status" [ref=f3e2675]
+              - columnheader "Prioritas" [ref=f3e2676]
+              - columnheader "Run Terakhir" [ref=f3e2677]
+              - columnheader "Run Berikutnya" [ref=f3e2678]
+              - columnheader "Aksi" [ref=f3e2679]
+          - rowgroup [ref=f3e2680]:
+            - row [ref=f3e2681]:
+              - cell [ref=f3e2682]:
+                - link "QA Rule Builder S10" [ref=f3e2683] [cursor=pointer]:
+                  - /url: /app/craft/automations/rules/5
+                - paragraph [ref=f3e2684]: AUT-000005 · craft_orders
+              - cell "Event order.status_changed" [ref=f3e2685]:
+                - generic [ref=f3e2686]: Event
+                - paragraph [ref=f3e2687]: order.status_changed
+              - cell "Dinonaktifkan" [ref=f3e2688]
+              - cell "100" [ref=f3e2690]
+              - cell "—" [ref=f3e2691]
+              - cell "—" [ref=f3e2692]
+              - cell [ref=f3e2693]:
+                - generic [ref=f3e2694]:
+                  - link [ref=f3e2695] [cursor=pointer]:
+                    - /url: /app/craft/automations/rules/5
+                    - button "Detail" [ref=f3e2696]
+                  - button [ref=f3e2697]
+            - row [ref=f3e2701]:
+              - cell [ref=f3e2702]:
+                - link "Sinkronisasi Marketplace Berkala" [ref=f3e2703] [cursor=pointer]:
+                  - /url: /app/craft/automations/rules/4
+                - paragraph [ref=f3e2704]: AUT-000004 · craft_marketplace
+              - cell "Jadwal schedule" [ref=f3e2705]:
+                - generic [ref=f3e2706]: Jadwal
+                - paragraph [ref=f3e2707]: schedule
+              - cell "Draf" [ref=f3e2708]
+              - cell "100" [ref=f3e2710]
+              - cell "—" [ref=f3e2711]
+              - cell "—" [ref=f3e2712]
+              - cell [ref=f3e2713]:
+                - generic [ref=f3e2714]:
+                  - link [ref=f3e2715] [cursor=pointer]:
+                    - /url: /app/craft/automations/rules/4
+                    - button "Detail" [ref=f3e2716]
+                  - button "Aktifkan" [ref=f3e2717]
+                  - button [ref=f3e2718]
+            - row [ref=f3e2722]:
+              - cell [ref=f3e2723]:
+                - link "Stok Material Menipis" [ref=f3e2724] [cursor=pointer]:
+                  - /url: /app/craft/automations/rules/3
+                - paragraph [ref=f3e2725]: AUT-000003 · craft_materials
+              - cell "Event material.low_stock" [ref=f3e2726]:
+                - generic [ref=f3e2727]: Event
+                - paragraph [ref=f3e2728]: material.low_stock
+              - cell "Draf" [ref=f3e2729]
+              - cell "100" [ref=f3e2731]
+              - cell "—" [ref=f3e2732]
+              - cell "—" [ref=f3e2733]
+              - cell [ref=f3e2734]:
+                - generic [ref=f3e2735]:
+                  - link [ref=f3e2736] [cursor=pointer]:
+                    - /url: /app/craft/automations/rules/3
+                    - button "Detail" [ref=f3e2737]
+                  - button "Aktifkan" [ref=f3e2738]
+                  - button [ref=f3e2739]
+            - row [ref=f3e2743]:
+              - cell [ref=f3e2744]:
+                - link "Stok Material Menipis" [ref=f3e2745] [cursor=pointer]:
+                  - /url: /app/craft/automations/rules/2
+                - paragraph [ref=f3e2746]: AUT-000002 · craft_materials
+              - cell "Event material.low_stock" [ref=f3e2747]:
+                - generic [ref=f3e2748]: Event
+                - paragraph [ref=f3e2749]: material.low_stock
+              - cell "Draf" [ref=f3e2750]
+              - cell "100" [ref=f3e2752]
+              - cell "—" [ref=f3e2753]
+              - cell "—" [ref=f3e2754]
+              - cell [ref=f3e2755]:
+                - generic [ref=f3e2756]:
+                  - link [ref=f3e2757] [cursor=pointer]:
+                    - /url: /app/craft/automations/rules/2
+                    - button "Detail" [ref=f3e2758]
+                  - button "Aktifkan" [ref=f3e2759]
+                  - button [ref=f3e2760]

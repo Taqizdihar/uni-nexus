@@ -1,0 +1,115 @@
+{
+  "session": "142-151",
+  "started": "2026-09-15",
+  "selected_rows": [142, 143, 144, 145, 146, 147, 148, 149, 150, 151],
+  "cases": [
+    {
+      "row": 142,
+      "id": "UNX-S10-006",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-006/01-marketplace-integrations.png",
+        "test-evidence/session-142-151/UNX-S10-006/02-integration-disabled.png"
+      ]
+    },
+    {
+      "row": 143,
+      "id": "UNX-S10-007",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-007/01-sync-history-empty.png",
+        "test-evidence/session-142-151/UNX-S10-007/02-automation-empty.png"
+      ]
+    },
+    {
+      "row": 144,
+      "id": "UNX-S10-008",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-008/01-settlement-empty.png",
+        "test-evidence/session-142-151/UNX-S10-008/02-settlement-formula-rejected.png"
+      ]
+    },
+    {
+      "row": 145,
+      "id": "UNX-S10-009",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-009/01-catalog.png",
+        "test-evidence/session-142-151/UNX-S10-009/02-events.png",
+        "test-evidence/session-142-151/UNX-S10-009/03-templates.png",
+        "test-evidence/session-142-151/UNX-S10-009/04-runs-empty.png",
+        "test-evidence/session-142-151/UNX-S10-009/05-rules-empty.png"
+      ]
+    },
+    {
+      "row": 146,
+      "id": "UNX-S10-010",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-010/01-template-draft.png",
+        "test-evidence/session-142-151/UNX-S10-010/02-second-independent-draft.png",
+        "test-evidence/session-142-151/UNX-S10-010/03-marketplace-placeholder-draft.png",
+        "test-evidence/session-142-151/UNX-S10-010/04-marketplace-activation-rejected.png",
+        "test-evidence/session-142-151/UNX-S10-010/05-weekly-report-rejected.png"
+      ]
+    },
+    {
+      "row": 147,
+      "id": "UNX-S10-011",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-011/01-rule-builder-invalid-priority.png",
+        "test-evidence/session-142-151/UNX-S10-011/02-valid-draft.png"
+      ]
+    },
+    {
+      "row": 148,
+      "id": "UNX-S10-012",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-012/01-active.png",
+        "test-evidence/session-142-151/UNX-S10-012/02-lifecycle-disabled-duplicate.png",
+        "test-evidence/session-142-151/UNX-S10-012/03-duplicate-edited.png"
+      ]
+    },
+    {
+      "row": 149,
+      "id": "UNX-S10-013",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-013/01-stale-update-conflict.png",
+        "test-evidence/session-142-151/UNX-S10-013/02-latest-version.png"
+      ]
+    },
+    {
+      "row": 150,
+      "id": "UNX-S10-014",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-014/01-dry-run.png",
+        "test-evidence/session-142-151/UNX-S10-014/02-manual-run-queued.png",
+        "test-evidence/session-142-151/UNX-S10-014/03-run-detail-skipped.png"
+      ]
+    },
+    {
+      "row": 151,
+      "id": "UNX-S10-015",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-142-151/UNX-S10-015/01-overview-reconciled.png",
+        "test-evidence/session-142-151/UNX-S10-015/02-worker-run-history.png"
+      ]
+    }
+  ]
+}

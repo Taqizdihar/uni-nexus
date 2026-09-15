@@ -1,0 +1,102 @@
+- generic [ref=f42e6]:
+  - complementary [ref=f42e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f42e9]
+    - generic [ref=f42e10]:
+      - generic [ref=f42e11]:
+        - heading "GLOBAL" [level=3] [ref=f42e12]
+        - link "Dasbor Global" [ref=f42e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f42e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f42e21]
+        - generic [ref=f42e22]:
+          - button "Proyek" [ref=f42e233]
+          - link "Klien" [ref=f42e239] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f42e69]:
+        - heading "BISNIS" [level=3] [ref=f42e70]
+        - generic [ref=f42e93]:
+          - button "Keuangan" [ref=f42e94]
+          - generic [ref=f42e245]:
+            - link "Ringkasan Keuangan" [ref=f42e246] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f42e247] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f42e248] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f42e249] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f42e250] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f42e251] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f42e252] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f42e253] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f42e254] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f42e255] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [active] [ref=f42e256] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f42e112]
+      - generic [ref=f42e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f42e132]
+        - generic [ref=f42e133]:
+          - link "Pusat Dokumen" [ref=f42e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f42e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f42e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f42e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f42e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f42e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f42e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f42e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f42e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f42e173]:
+    - banner [ref=f42e174]:
+      - combobox [ref=f42e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f42e180]
+        - generic [ref=f42e181]:
+          - generic [ref=f42e182]: ⌘
+          - generic [ref=f42e183]: K
+      - generic [ref=f42e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f42e186]'
+        - button [ref=f42e257]:
+          - generic [ref=f42e199]:
+            - text: "Workspace:"
+            - generic [ref=f42e200]:
+              - img "Studio Logo" [ref=f42e258]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f42e203]:
+          - generic [ref=f42e207]: "3"
+        - button [ref=f42e209]:
+          - generic [aria-hidden] [ref=f42e210]: AR
+    - main [ref=f42e211]:
+      - generic [ref=f42e270]:
+        - generic [ref=f42e272]:
+          - heading "Jurnal & Periode" [level=1] [ref=f42e273]
+          - paragraph [ref=f42e274]: Jurnal Finance bersifat baca-saja dan setiap posting memeriksa periode keuangan tertutup.
+        - generic [ref=f42e275]:
+          - generic [ref=f42e276]:
+            - heading "Jurnal Posted" [level=3] [ref=f42e278]
+            - table [ref=f42e280]:
+              - rowgroup [ref=f42e281]:
+                - row [ref=f42e282]:
+                  - columnheader "Nomor" [ref=f42e283]
+                  - columnheader "Tanggal" [ref=f42e284]
+                  - columnheader "Deskripsi" [ref=f42e285]
+                  - columnheader "Debit" [ref=f42e286]
+                  - columnheader "Kredit" [ref=f42e287]
+              - rowgroup
+          - generic [ref=f42e288]:
+            - heading "Periode Keuangan" [level=3] [ref=f42e290]
+            - paragraph [ref=f42e292]: Belum ada periode yang dikonfigurasi.

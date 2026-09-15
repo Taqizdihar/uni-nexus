@@ -1,0 +1,62 @@
+- generic [ref=f67e6]:
+  - complementary [ref=f67e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f67e9]
+    - generic [ref=f67e10]:
+      - generic [ref=f67e11]:
+        - heading "GLOBAL" [level=3] [ref=f67e12]
+        - link "Dasbor Global" [ref=f67e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f67e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f67e21]
+        - generic [ref=f67e22]:
+          - button "Proyek" [ref=f67e220]
+          - link "Klien" [ref=f67e226] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f67e69]:
+        - heading "BISNIS" [level=3] [ref=f67e70]
+        - button "Keuangan" [ref=f67e94]
+      - heading "SISTEM" [level=3] [ref=f67e112]
+      - generic [ref=f67e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f67e132]
+        - generic [ref=f67e133]:
+          - link "Pusat Dokumen" [ref=f67e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f67e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f67e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f67e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f67e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f67e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f67e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f67e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f67e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f67e173]:
+    - banner [ref=f67e174]:
+      - combobox [ref=f67e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f67e180]
+        - generic [ref=f67e181]:
+          - generic [ref=f67e182]: ⌘
+          - generic [ref=f67e183]: K
+      - generic [ref=f67e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f67e186]'
+        - button [active] [ref=f67e232]:
+          - generic [ref=f67e199]:
+            - text: "Workspace:"
+            - generic [ref=f67e200]:
+              - img "Studio Logo" [ref=f67e233]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f67e203]:
+          - generic [ref=f67e207]: "3"
+        - button [ref=f67e209]:
+          - generic [aria-hidden] [ref=f67e210]: AR
+    - main [ref=f67e211]:
+      - generic [ref=f67e213]:
+        - heading "Akses Ditolak" [level=2] [ref=f67e217]
+        - paragraph [ref=f67e218]: Anda tidak memiliki izin yang diperlukan untuk melihat halaman ini. Hubungi administrator sistem jika Anda yakin ini adalah kesalahan.

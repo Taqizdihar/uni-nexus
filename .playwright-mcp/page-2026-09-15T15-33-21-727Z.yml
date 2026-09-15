@@ -1,0 +1,11 @@
+- generic [ref=e2]:
+  - heading "Unexpected Application Error!" [level=2] [ref=e459]
+  - heading "Invalid time value" [level=3] [ref=e460]
+  - generic [ref=e461]: "RangeError: Invalid time value at when (http://localhost:5173/src/pages/global/automations/components.tsx:71:118) at http://localhost:5173/src/pages/global/automations/components.tsx:467:48 at Array.map (<anonymous>) at MiniRunTable (http://localhost:5173/src/pages/global/automations/components.tsx:443:54) at Object.react_stack_bottom_frame (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:18509:20) at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:5654:24) at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:7475:21) at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:8525:20) at runWithFiberInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:997:72) at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=df331c7a:12561:98)"
+  - paragraph [ref=e462]: 💿 Hey developer 👋
+  - paragraph [ref=e463]:
+    - text: You can provide a way better UX than this when your app throws errors by providing your own
+    - code [ref=e464]: ErrorBoundary
+    - text: or
+    - code [ref=e465]: errorElement
+    - text: prop on your route.

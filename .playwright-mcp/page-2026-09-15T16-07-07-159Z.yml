@@ -1,0 +1,93 @@
+- generic [ref=f16e6]:
+  - complementary [ref=f16e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f16e9]
+    - generic [ref=f16e10]:
+      - generic [ref=f16e11]:
+        - heading "GLOBAL" [level=3] [ref=f16e12]
+        - link "Dasbor Global" [ref=f16e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f16e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f16e21]
+        - generic [ref=f16e22]:
+          - button "Pesanan" [ref=f16e24]
+          - button "Produksi" [ref=f16e33]
+          - button "Produk & Desain" [ref=f16e42]
+          - button "Printer" [ref=f16e53]
+          - button "Material" [ref=f16e62]
+      - generic [ref=f16e69]:
+        - heading "BISNIS" [level=3] [ref=f16e70]
+        - generic [ref=f16e71]:
+          - button "Pelanggan & Mitra" [ref=f16e73]
+          - button "Pengadaan" [ref=f16e83]
+          - button "Keuangan" [ref=f16e94]
+          - button "Laporan & Analitik" [ref=f16e102]
+      - generic [ref=f16e111]:
+        - heading "SISTEM" [level=3] [ref=f16e112]
+        - generic [ref=f16e113]:
+          - button "Marketplace & Kanal Penjualan" [ref=f16e115]
+          - button "Otomasi" [ref=f16e125]
+      - generic [ref=f16e131]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f16e132]
+        - generic [ref=f16e133]:
+          - link "Pusat Dokumen" [ref=f16e134] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f16e139] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f16e142] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f16e146] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f16e149] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f16e155] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f16e158] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f16e164] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f16e169] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f16e173]:
+    - banner [ref=f16e174]:
+      - combobox [ref=f16e176]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f16e180]
+        - generic [ref=f16e181]:
+          - generic [ref=f16e182]: ⌘
+          - generic [ref=f16e183]: K
+      - generic [ref=f16e184]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f16e186]'
+        - button [ref=f16e195]:
+          - generic [ref=f16e199]:
+            - text: "Workspace:"
+            - generic [ref=f16e200]:
+              - img "Craft Logo" [ref=f16e201]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f16e203]:
+          - generic [ref=f16e207]: "3"
+        - button [ref=f16e209]:
+          - generic [aria-hidden] [ref=f16e210]: AR
+    - main [ref=f16e211]:
+      - generic [ref=f16e261]:
+        - generic [ref=f16e262]:
+          - generic [ref=f16e263]:
+            - paragraph [ref=f16e264]: Fitur Global
+            - heading "Koneksi Baru" [level=1] [ref=f16e265]
+            - paragraph [ref=f16e266]: Ikuti langkah berikut untuk menghubungkan layanan eksternal.
+          - link [ref=f16e268] [cursor=pointer]:
+            - /url: /app/integrations/connections
+            - button "Kembali" [ref=f16e269]
+        - generic [ref=f16e272]:
+          - generic [ref=f16e273]: 1. Pilih Provider
+          - generic [ref=f16e274]: 2. Pilih Scope
+          - generic [ref=f16e275]: 3. Konfigurasi
+          - generic [ref=f16e276]: 4. Kredensial
+          - generic [ref=f16e277]: 5. Review
+          - generic [ref=f16e278]: 6. Simpan & Uji Koneksi
+        - generic [ref=f16e280]:
+          - generic [ref=f16e315]:
+            - generic [ref=f16e316]: Service Account JSON *
+            - textbox "Service Account JSON *" [ref=f16e317]:
+              - /placeholder: Kredensial service account Google Cloud (JSON), disimpan terenkripsi.
+          - generic [ref=f16e297]:
+            - button "Sebelumnya" [ref=f16e306]
+            - button "Selanjutnya" [active] [ref=f16e298]

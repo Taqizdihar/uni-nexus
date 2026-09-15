@@ -1,0 +1,102 @@
+- generic [ref=f2e3]:
+  - complementary [ref=f2e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f2e6]
+    - generic [ref=f2e7]:
+      - generic [ref=f2e8]:
+        - heading "GLOBAL" [level=3] [ref=f2e9]
+        - link "Dasbor Global" [ref=f2e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f2e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f2e18]
+        - generic [ref=f2e19]:
+          - button "Pesanan" [ref=f2e21]
+          - button "Produksi" [ref=f2e30]
+          - button "Produk & Desain" [ref=f2e39]
+          - button "Printer" [ref=f2e50]
+          - button "Material" [ref=f2e59]
+      - generic [ref=f2e66]:
+        - heading "BISNIS" [level=3] [ref=f2e67]
+        - generic [ref=f2e68]:
+          - button "Pelanggan & Mitra" [ref=f2e70]
+          - button "Pengadaan" [ref=f2e80]
+          - button "Keuangan" [ref=f2e91]
+          - button "Laporan & Analitik" [ref=f2e99]
+      - generic [ref=f2e108]:
+        - heading "SISTEM" [level=3] [ref=f2e109]
+        - generic [ref=f2e110]:
+          - button "Marketplace & Kanal Penjualan" [ref=f2e112]
+          - button "Otomasi" [ref=f2e122]
+      - generic [ref=f2e128]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f2e129]
+        - generic [ref=f2e130]:
+          - link "Pusat Dokumen" [ref=f2e131] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f2e136] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f2e139] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f2e143] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f2e146] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f2e152] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f2e155] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f2e161] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f2e166] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f2e170]:
+    - banner [ref=f2e171]:
+      - combobox [ref=f2e173]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f2e177]
+        - generic [ref=f2e178]:
+          - generic [ref=f2e179]: ⌘
+          - generic [ref=f2e180]: K
+      - generic [ref=f2e181]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f2e248]'
+        - button [ref=f2e192]:
+          - generic [ref=f2e196]:
+            - text: "Workspace:"
+            - generic [ref=f2e197]:
+              - img "Craft Logo" [ref=f2e198]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f2e200]:
+          - generic [ref=f2e249]: "3"
+        - button [ref=f2e205]:
+          - generic [aria-hidden] [ref=f2e206]: NR
+    - main [ref=f2e207]:
+      - main [ref=f2e209]:
+        - generic [ref=f2e210]:
+          - generic [ref=f2e211]:
+            - paragraph [ref=f2e212]: GLOBAL
+            - heading "Pusat Laporan" [level=1] [ref=f2e213]
+            - paragraph [ref=f2e214]: Hasilkan, tinjau, dan unduh laporan UNI-NEXUS dari Craft, Studio, serta Keuangan Terpadu dalam satu pusat.
+          - button "Refresh" [ref=f2e250]
+        - generic [ref=f2e215]:
+          - generic [ref=f2e217]:
+            - paragraph [ref=f2e218]: Laporan Tersedia
+            - paragraph [ref=f2e219]: "0"
+          - generic [ref=f2e221]:
+            - paragraph [ref=f2e222]: Craft
+            - paragraph [ref=f2e223]: "0"
+          - generic [ref=f2e225]:
+            - paragraph [ref=f2e226]: Studio
+            - paragraph [ref=f2e227]: "0"
+          - generic [ref=f2e229]:
+            - paragraph [ref=f2e230]: Keuangan
+            - paragraph [ref=f2e231]: "0"
+          - generic [ref=f2e233]:
+            - paragraph [ref=f2e234]: Ekspor Terbaru
+            - paragraph [ref=f2e235]: "0"
+        - generic [ref=f2e237]:
+          - generic [ref=f2e238]:
+            - generic "Kategori laporan" [ref=f2e239]:
+              - button "Semua Laporan" [ref=f2e240]
+            - textbox "Cari laporan" [ref=f2e242]:
+              - /placeholder: Cari laporan...
+          - paragraph [ref=f2e256]: Tidak ada laporan yang sesuai atau dapat diakses.
+        - generic [ref=f2e243]:
+          - heading "Riwayat Ekspor" [level=3] [ref=f2e245]
+          - paragraph [ref=f2e247]: Belum ada ekspor yang dapat diakses.

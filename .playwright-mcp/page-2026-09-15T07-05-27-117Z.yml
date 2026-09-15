@@ -1,0 +1,184 @@
+- generic [ref=f4e6]:
+  - complementary [ref=f4e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f4e9]
+    - generic [ref=f4e10]:
+      - generic [ref=f4e11]:
+        - heading "GLOBAL" [level=3] [ref=f4e12]
+        - link "Dasbor Global" [ref=f4e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f4e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f4e21]
+        - generic [ref=f4e22]:
+          - generic [ref=f4e23]:
+            - button "Proyek" [ref=f4e24]
+            - generic [ref=f4e30]:
+              - link "Semua Proyek" [ref=f4e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f4e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f4e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f4e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f4e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f4e41]:
+        - heading "BISNIS" [level=3] [ref=f4e42]
+        - button "Keuangan" [ref=f4e45]
+      - heading "SISTEM" [level=3] [ref=f4e53]
+      - generic [ref=f4e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f4e55]
+        - generic [ref=f4e56]:
+          - link "Pusat Dokumen" [ref=f4e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f4e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f4e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f4e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f4e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f4e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f4e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f4e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f4e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f4e96]:
+    - banner [ref=f4e97]:
+      - combobox [ref=f4e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f4e103]
+        - generic [ref=f4e104]:
+          - generic [ref=f4e105]: ⌘
+          - generic [ref=f4e106]: K
+      - generic [ref=f4e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f4e109]'
+        - button [ref=f4e118]:
+          - generic [ref=f4e122]:
+            - text: "Workspace:"
+            - generic [ref=f4e123]:
+              - img "Studio Logo" [ref=f4e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f4e126]:
+          - generic [ref=f4e130]: "2"
+        - button [ref=f4e132]:
+          - generic [aria-hidden] [ref=f4e133]: QU
+    - main [ref=f4e134]:
+      - generic [ref=f4e136]:
+        - generic [ref=f4e137]:
+          - generic [ref=f4e139]:
+            - paragraph [ref=f4e140]: Operasional Studio
+            - heading "Proyek" [level=1] [ref=f4e141]
+            - paragraph [ref=f4e142]: Kelola pekerjaan kreatif, deadline, tahapan, tim, dan hasil proyek Uni-Inside Studio.
+          - generic [ref=f4e143]:
+            - button "Filter (9)" [ref=f4e305]
+            - button "Proyek Baru" [ref=f4e147]
+        - generic [ref=f4e149]:
+          - generic [ref=f4e150]:
+            - paragraph [ref=f4e151]: Proyek Aktif
+            - generic [ref=f4e152]: "0"
+            - paragraph [ref=f4e153]: Disetujui, dikerjakan, dan tinjauan.
+          - generic [ref=f4e154]:
+            - paragraph [ref=f4e155]: Deadline 7 Hari
+            - generic [ref=f4e156]: "0"
+            - paragraph [ref=f4e157]: Jatuh tempo dalam sepekan.
+          - generic [ref=f4e158]:
+            - paragraph [ref=f4e159]: Terlambat
+            - generic [ref=f4e160]: "0"
+            - paragraph [ref=f4e161]: Melewati deadline dan belum ditutup.
+          - generic [ref=f4e162]:
+            - paragraph [ref=f4e163]: Dalam Tinjauan
+            - generic [ref=f4e164]: "0"
+            - paragraph [ref=f4e165]: Menunggu persetujuan klien.
+          - generic [ref=f4e166]:
+            - paragraph [ref=f4e167]: Selesai Bulan Ini
+            - generic [ref=f4e168]: "0"
+            - paragraph [ref=f4e169]: Berdasarkan tanggal penyelesaian.
+        - generic [ref=f4e170]:
+          - generic [ref=f4e171]:
+            - textbox "Cari kode, nama proyek, klien, tipe, atau brief..." [ref=f4e173]: __QA_BRIEF_NO_MATCH__
+            - generic [ref=f4e174]:
+              - generic [ref=f4e175]: Urutkan
+              - combobox "Urutkan" [ref=f4e176]:
+                - option "Deadline Terdekat"
+                - option "Terbaru"
+                - option "Nama (A-Z)"
+                - option "Nilai Kontrak Tertinggi" [selected]
+                - option "Prioritas Tertinggi"
+                - option "Klien (A-Z)"
+          - generic [ref=f4e186]:
+            - generic [ref=f4e187]:
+              - generic [ref=f4e188]: Status
+              - combobox "Status" [ref=f4e189]:
+                - option "Semua status"
+                - option "Prospek"
+                - option "Penawaran"
+                - option "Disetujui"
+                - option "Sedang Dikerjakan" [selected]
+                - option "Tinjauan"
+                - option "Selesai"
+                - option "Lunas"
+                - option "Dibatalkan"
+            - generic [ref=f4e190]:
+              - generic [ref=f4e191]: Prioritas
+              - combobox "Prioritas" [ref=f4e192]:
+                - option "Semua prioritas"
+                - option "Rendah"
+                - option "Normal"
+                - option "Tinggi" [selected]
+                - option "Kritis"
+            - generic [ref=f4e193]:
+              - generic [ref=f4e194]: Tipe proyek
+              - combobox "Tipe proyek" [ref=f4e195]:
+                - option "Semua tipe" [selected]
+            - generic [ref=f4e196]:
+              - generic [ref=f4e197]: Klien
+              - combobox "Klien" [ref=f4e198]:
+                - option "Semua klien" [selected]
+            - generic [ref=f4e199]:
+              - generic [ref=f4e200]: Project Manager
+              - combobox "Project Manager" [ref=f4e201]:
+                - option "Semua PM"
+                - option "Ahmad Ropaldo"
+                - option "Amadea Salsabila"
+                - option "April Adzania"
+                - option "Cantika Anggi"
+                - option "Dian Daeli"
+                - option "Muhammad Taqi Izdiharr"
+                - option "Nadine Nathania Pelleng"
+                - option "Naura Ramadhani"
+                - option "QA User-1" [selected]
+                - option "Siti Amany Fakhirah Riby"
+            - generic [ref=f4e202]:
+              - generic [ref=f4e203]: Layanan
+              - combobox "Layanan Katalog layanan masih kosong." [disabled] [ref=f4e204]:
+                - option "Semua layanan" [selected]
+              - generic [ref=f4e205]: Katalog layanan masih kosong.
+            - generic [ref=f4e206]:
+              - generic [ref=f4e207]: Status pembayaran
+              - combobox "Status pembayaran" [ref=f4e208]:
+                - option "Semua"
+                - option "Belum Dibayar"
+                - option "Dibayar Sebagian" [selected]
+                - option "Lunas"
+            - generic [ref=f4e209]:
+              - generic [ref=f4e210]: Mulai dari
+              - textbox "Mulai dari" [ref=f4e211]: 2026-01-01
+            - generic [ref=f4e212]:
+              - generic [ref=f4e213]: Mulai sampai
+              - textbox "Mulai sampai" [ref=f4e214]: 2026-12-31
+            - generic [ref=f4e215]:
+              - generic [ref=f4e216]: Deadline dari
+              - textbox "Deadline dari" [ref=f4e217]: 2026-01-01
+            - generic [ref=f4e218]:
+              - generic [ref=f4e219]: Deadline sampai
+              - textbox "Deadline sampai" [ref=f4e220]: 2026-12-31
+            - generic [ref=f4e221]:
+              - generic [ref=f4e222]:
+                - checkbox "Hanya yang terlambat" [checked] [active] [ref=f4e223]
+                - text: Hanya yang terlambat
+              - button "Reset" [ref=f4e250]
+          - generic [ref=f4e177]: Memuat data proyek...

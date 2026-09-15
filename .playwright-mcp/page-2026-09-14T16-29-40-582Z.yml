@@ -1,0 +1,163 @@
+- generic [ref=f24e3]:
+  - complementary [ref=f24e4]:
+    - heading "UNI-NEXUS" [level=1] [ref=f24e6]
+    - generic [ref=f24e7]:
+      - generic [ref=f24e8]:
+        - heading "GLOBAL" [level=3] [ref=f24e9]
+        - link "Dasbor Global" [ref=f24e11] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f24e17]:
+        - heading "OPERASIONAL" [level=3] [ref=f24e18]
+        - generic [ref=f24e19]:
+          - generic [ref=f24e221]:
+            - button "Pesanan" [ref=f24e222]
+            - generic [ref=f24e372]:
+              - link "Semua Pesanan" [ref=f24e373] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f24e374] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f24e375] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f24e376] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f24e377] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [ref=f24e378] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f24e379] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f24e380] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f24e381] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f24e231]
+          - button "Produk & Desain" [ref=f24e240]
+          - button "Printer" [ref=f24e251]
+          - button "Material" [ref=f24e260]
+      - generic [ref=f24e33]:
+        - heading "BISNIS" [level=3] [ref=f24e34]
+        - generic [ref=f24e35]:
+          - generic [ref=f24e267]:
+            - button "Pelanggan & Mitra" [ref=f24e268]
+            - generic [ref=f24e682]:
+              - link "Pelanggan" [ref=f24e683] [cursor=pointer]:
+                - /url: /app/craft/customers
+              - link "Mitra" [ref=f24e684] [cursor=pointer]:
+                - /url: /app/craft/customers/partners
+          - button "Pengadaan" [ref=f24e281]
+          - button "Keuangan" [ref=f24e37]
+          - button "Laporan & Analitik" [ref=f24e292]
+      - generic [ref=f24e44]:
+        - heading "SISTEM" [level=3] [ref=f24e45]
+        - generic [ref=f24e301]:
+          - button "Marketplace & Kanal Penjualan" [ref=f24e303]
+          - button "Otomasi" [ref=f24e313]
+      - generic [ref=f24e46]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f24e47]
+        - generic [ref=f24e48]:
+          - link "Pusat Dokumen" [ref=f24e49] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f24e54] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f24e57] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f24e61] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f24e64] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f24e70] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f24e73] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f24e79] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f24e84] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f24e88]:
+    - banner [ref=f24e89]:
+      - combobox [ref=f24e91]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f24e95]
+        - generic [ref=f24e96]:
+          - generic [ref=f24e97]: ⌘
+          - generic [ref=f24e98]: K
+      - generic [ref=f24e99]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f24e101]'
+        - button [ref=f24e319]:
+          - generic [ref=f24e114]:
+            - text: "Workspace:"
+            - generic [ref=f24e115]:
+              - img "Craft Logo" [ref=f24e320]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f24e118]
+        - button [ref=f24e123]:
+          - generic [aria-hidden] [ref=f24e124]: QU
+    - main [ref=f24e125]:
+      - generic [ref=f24e865]:
+        - button "Kembali" [ref=f24e866]
+        - generic [ref=f24e869]:
+          - generic [ref=f24e870]:
+            - generic [ref=f24e871]:
+              - generic [ref=f24e872]: CQ
+              - generic [ref=f24e873]:
+                - paragraph [ref=f24e874]: CUS-000015
+                - heading "Customer QA Edited 20260914_2114" [level=1] [ref=f24e875]
+                - generic [ref=f24e876]:
+                  - generic [ref=f24e877]: Perusahaan
+                  - generic [ref=f24e878]: MITRA
+                  - generic [ref=f24e879]: Aktif
+            - generic [ref=f24e880]:
+              - button "Pesanan Baru" [ref=f24e881]
+              - button "Edit" [ref=f24e886]
+              - button "Kelola Kemitraan" [ref=f24e889]
+              - button "Nonaktifkan" [ref=f24e892]
+          - generic [ref=f24e893]:
+            - generic [ref=f24e895]:
+              - paragraph [ref=f24e896]: Total Pesanan
+              - paragraph [ref=f24e897]: "0"
+            - generic [ref=f24e899]:
+              - paragraph [ref=f24e900]: Nilai Pesanan
+              - paragraph [ref=f24e901]: Rp 0
+            - generic [ref=f24e903]:
+              - paragraph [ref=f24e904]: Pembayaran Terkonfirmasi
+              - paragraph [ref=f24e905]: Rp 0
+            - generic [ref=f24e907]:
+              - paragraph [ref=f24e908]: Saldo Invoice
+              - paragraph [ref=f24e909]: Rp 0
+        - navigation "Profil pelanggan" [ref=f24e910]:
+          - button "Ringkasan" [ref=f24e911]
+          - button "Kontak" [ref=f24e912]
+          - button "Pesanan" [ref=f24e913]
+          - button "Keuangan" [ref=f24e914]
+          - button "Harga Mitra" [ref=f24e915]
+        - generic [ref=f24e916]:
+          - generic [ref=f24e918]:
+            - heading "Informasi Pelanggan" [level=2] [ref=f24e919]
+            - generic [ref=f24e920]:
+              - generic [ref=f24e921]:
+                - term [ref=f24e922]: Nama Legal
+                - definition [ref=f24e923]: Customer QA Legal Edit 20260914_2114
+              - generic [ref=f24e924]:
+                - term [ref=f24e925]: Email
+                - definition [ref=f24e926]: customer.edited.20260914_2114@example.test
+              - generic [ref=f24e930]:
+                - term [ref=f24e931]: Telepon
+                - definition [ref=f24e932]: "081234562121"
+              - generic [ref=f24e935]:
+                - term [ref=f24e936]: NPWP / Tax ID
+                - definition [ref=f24e937]: QA-NPWP-20260914_2114
+              - generic [ref=f24e938]:
+                - term [ref=f24e939]: Alamat
+                - definition [ref=f24e940]: Jl. QA Edited No. 15, Blok Edited, Jakarta, DKI Jakarta, 10220, ID
+              - generic [ref=f24e944]:
+                - term [ref=f24e945]: Pelanggan sejak
+                - definition [ref=f24e946]: 14 Sep 2026
+          - generic [ref=f24e947]:
+            - generic [ref=f24e949]:
+              - heading "Kontak Utama" [level=2] [ref=f24e950]
+              - generic [ref=f24e951]:
+                - paragraph [ref=f24e952]: Contact A QA 20260914_2114
+                - paragraph [ref=f24e953]: PIC Utama Edit 20260914_2114
+                - paragraph [ref=f24e954]: contact.a.edit.20260914_2114@example.test
+            - generic [ref=f24e956]:
+              - heading "Kanal Penjualan" [level=2] [ref=f24e957]
+              - paragraph [ref=f24e958]: Belum ada riwayat kanal penjualan.

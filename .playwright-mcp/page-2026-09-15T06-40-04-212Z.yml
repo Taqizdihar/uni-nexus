@@ -1,0 +1,256 @@
+- generic [ref=f3e34]:
+  - complementary [ref=f3e35]:
+    - heading "UNI-NEXUS" [level=1] [ref=f3e37]
+    - generic [ref=f3e38]:
+      - generic [ref=f3e39]:
+        - heading "GLOBAL" [level=3] [ref=f3e40]
+        - link "Dasbor Global" [ref=f3e42] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f3e48]:
+        - heading "OPERASIONAL" [level=3] [ref=f3e49]
+        - generic [ref=f3e50]:
+          - button "Pesanan" [ref=f3e331]
+          - button "Produksi" [ref=f3e340]
+          - button "Produk & Desain" [ref=f3e349]
+          - button "Printer" [ref=f3e360]
+          - button "Material" [ref=f3e369]
+      - generic [ref=f3e64]:
+        - heading "BISNIS" [level=3] [ref=f3e65]
+        - generic [ref=f3e66]:
+          - button "Pelanggan & Mitra" [ref=f3e377]
+          - button "Pengadaan" [ref=f3e387]
+          - button "Keuangan" [ref=f3e68]
+          - button "Laporan & Analitik" [ref=f3e398]
+      - generic [ref=f3e75]:
+        - heading "SISTEM" [level=3] [ref=f3e76]
+        - generic [ref=f3e407]:
+          - generic [ref=f3e408]:
+            - button "Marketplace & Kanal Penjualan" [ref=f3e409]
+            - generic [ref=f3e434]:
+              - link "Ringkasan Kanal" [ref=f3e435] [cursor=pointer]:
+                - /url: /app/craft/marketplace
+              - link "Kanal Penjualan" [ref=f3e436] [cursor=pointer]:
+                - /url: /app/craft/marketplace/channels
+              - link "Impor Pesanan" [ref=f3e437] [cursor=pointer]:
+                - /url: /app/craft/marketplace/import
+              - link "Pemetaan Produk" [ref=f3e438] [cursor=pointer]:
+                - /url: /app/craft/marketplace/products
+              - link "Aturan Biaya" [ref=f3e439] [cursor=pointer]:
+                - /url: /app/craft/marketplace/fees
+              - link "Settlement Marketplace" [ref=f3e440] [cursor=pointer]:
+                - /url: /app/craft/marketplace/settlements
+              - link "Integrasi Marketplace" [ref=f3e441] [cursor=pointer]:
+                - /url: /app/craft/marketplace/integrations
+              - link "Riwayat Sinkronisasi" [ref=f3e442] [cursor=pointer]:
+                - /url: /app/craft/marketplace/sync-history
+          - generic [ref=f3e418]:
+            - button "Otomasi" [ref=f3e419]
+            - generic [ref=f3e427]:
+              - link "Ringkasan Otomasi" [ref=f3e428] [cursor=pointer]:
+                - /url: /app/craft/automations
+              - link "Aturan Otomasi" [ref=f3e429] [cursor=pointer]:
+                - /url: /app/craft/automations/rules
+              - link "Template Otomasi" [ref=f3e430] [cursor=pointer]:
+                - /url: /app/craft/automations/templates
+              - link "Riwayat Eksekusi" [ref=f3e431] [cursor=pointer]:
+                - /url: /app/craft/automations/runs
+              - link "Pemicu & Aksi" [ref=f3e432] [cursor=pointer]:
+                - /url: /app/craft/automations/catalog
+              - link "Inbox Event" [ref=f3e433] [cursor=pointer]:
+                - /url: /app/craft/automations/events
+      - generic [ref=f3e77]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f3e78]
+        - generic [ref=f3e79]:
+          - link "Pusat Dokumen" [ref=f3e80] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f3e85] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f3e88] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f3e92] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f3e95] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f3e101] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f3e104] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f3e110] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f3e115] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f3e119]:
+    - banner [ref=f3e120]:
+      - combobox [ref=f3e122]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f3e126]
+        - generic [ref=f3e127]:
+          - generic [ref=f3e128]: ⌘
+          - generic [ref=f3e129]: K
+      - generic [ref=f3e130]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f3e132]'
+        - button [ref=f3e425]:
+          - generic [ref=f3e145]:
+            - text: "Workspace:"
+            - generic [ref=f3e146]:
+              - img "Craft Logo" [ref=f3e426]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f3e149]:
+          - generic [ref=f3e153]: "2"
+        - button [ref=f3e155]:
+          - generic [aria-hidden] [ref=f3e156]: QU
+    - main [ref=f3e157]:
+      - generic [ref=f3e2493]:
+        - generic [ref=f3e2494]:
+          - generic [ref=f3e2495]:
+            - paragraph [ref=f3e2496]: Sistem Craft
+            - heading "Edit AUT-000005" [level=1] [ref=f3e2497]
+            - paragraph [ref=f3e2498]: Tentukan pemicu, syarat, aksi, dan reliabilitas. Aturan baru selalu draf.
+          - link [ref=f3e2500] [cursor=pointer]:
+            - /url: /app/craft/automations/rules/5
+            - button "Kembali" [ref=f3e2501]
+        - generic [ref=f3e2504]:
+          - generic [ref=f3e2505]:
+            - heading "1. WHEN — Pemicu" [level=3] [ref=f3e2507]
+            - generic [ref=f3e2508]:
+              - generic [ref=f3e2509]:
+                - generic [ref=f3e2510]: Nama aturan *
+                - textbox "Nama aturan *" [ref=f3e2511]:
+                  - /placeholder: "Contoh: Order Ready ke antrean"
+                  - text: QA Rule Builder S10
+              - generic [ref=f3e2512]:
+                - generic [ref=f3e2513]: Tipe pemicu
+                - combobox "Tipe pemicu" [ref=f3e2514]:
+                  - option "Event domain" [selected]
+                  - option "Sensor kanonik"
+                  - option "Jadwal"
+                  - option "Manual"
+              - generic [ref=f3e2515]:
+                - generic [ref=f3e2516]: Event atau sensor
+                - combobox "Event atau sensor" [ref=f3e2517]:
+                  - 'option "Pesanan: created — Peristiwa pesanan Craft."'
+                  - 'option "Pesanan: status_changed — Peristiwa pesanan Craft." [selected]'
+                  - 'option "Pesanan: priority_changed — Peristiwa pesanan Craft."'
+                  - 'option "Pesanan: completed — Peristiwa pesanan Craft."'
+                  - 'option "Pesanan: cancelled — Peristiwa pesanan Craft."'
+                  - 'option "Pesanan: returned — Peristiwa pesanan Craft."'
+                  - 'option "Produksi: job_created — Peristiwa pekerjaan produksi."'
+                  - 'option "Produksi: job_started — Peristiwa pekerjaan produksi."'
+                  - 'option "Produksi: job_completed — Peristiwa pekerjaan produksi."'
+                  - 'option "Produksi: job_failed — Peristiwa pekerjaan produksi."'
+                  - 'option "Produksi: qc_passed — Peristiwa pekerjaan produksi."'
+                  - 'option "Produksi: qc_failed — Peristiwa pekerjaan produksi."'
+                  - 'option "Printer: status_changed — Peristiwa printer atau perawatan."'
+                  - 'option "Printer: issue_created — Peristiwa printer atau perawatan."'
+                  - 'option "Printer: maintenance_recorded — Peristiwa printer atau perawatan."'
+                  - 'option "Material: stock_changed — Peristiwa persediaan material."'
+                  - 'option "Material: low_stock — Peristiwa persediaan material."'
+                  - 'option "Material: out_of_stock — Peristiwa persediaan material."'
+                  - 'option "Material: waste_recorded — Peristiwa persediaan material."'
+                  - 'option "Material: stock_received — Peristiwa persediaan material."'
+                  - 'option "Pengadaan: request_created — Peristiwa pengadaan."'
+                  - 'option "Pengadaan: request_submitted — Peristiwa pengadaan."'
+                  - 'option "Pengadaan: request_approved — Peristiwa pengadaan."'
+                  - 'option "Pengadaan: po_created — Peristiwa pengadaan."'
+                  - 'option "Pengadaan: goods_received — Peristiwa pengadaan."'
+                  - 'option "Pengadaan: supplier_invoice_created — Peristiwa pengadaan."'
+                  - 'option "Keuangan: customer_payment_confirmed — Peristiwa keuangan yang telah diposting."'
+                  - 'option "Keuangan: supplier_payment_confirmed — Peristiwa keuangan yang telah diposting."'
+                  - 'option "Keuangan: expense_paid — Peristiwa keuangan yang telah diposting."'
+                  - 'option "Marketplace: order_imported — Peristiwa kanal penjualan."'
+                  - 'option "Marketplace: sync_completed — Peristiwa kanal penjualan."'
+                  - 'option "Marketplace: sync_failed — Peristiwa kanal penjualan."'
+                  - 'option "Marketplace: settlement_received — Peristiwa kanal penjualan."'
+                  - 'option "Marketplace: settlement_reconciled — Peristiwa kanal penjualan."'
+          - generic [ref=f3e2518]:
+            - heading "2. IF — Syarat (opsional)" [level=3] [ref=f3e2520]
+            - generic [ref=f3e2521]:
+              - generic [ref=f3e2522]:
+                - generic [ref=f3e2523]: Field
+                - combobox "Field" [ref=f3e2524]:
+                  - option "Tanpa syarat"
+                  - option "Kode pesanan"
+                  - option "Status pesanan"
+                  - option "Status sebelumnya"
+                  - option "Status baru" [selected]
+                  - option "Tipe pesanan"
+                  - option "Prioritas"
+                  - option "Tenggat waktu"
+                  - option "Total pesanan"
+              - generic [ref=f3e2525]:
+                - generic [ref=f3e2526]: Operator
+                - combobox "Operator" [ref=f3e2527]:
+                  - option "eq" [selected]
+                  - option "neq"
+                  - option "in"
+                  - option "not_in"
+                  - option "gt"
+                  - option "gte"
+                  - option "lt"
+                  - option "lte"
+                  - option "contains"
+                  - option "not_contains"
+                  - option "is_null"
+                  - option "not_null"
+                  - option "before"
+                  - option "after"
+                  - option "within_hours"
+                  - option "changed_from"
+                  - option "changed_to"
+              - generic [ref=f3e2528]:
+                - generic [ref=f3e2529]: Nilai
+                - textbox "Nilai" [ref=f3e2530]:
+                  - /placeholder: ready
+                  - text: ready
+          - generic [ref=f3e2531]:
+            - heading "3. THEN — Aksi" [level=3] [ref=f3e2533]
+            - generic [ref=f3e2534]:
+              - generic [ref=f3e2535]:
+                - generic [ref=f3e2536]: Aksi yang diizinkan
+                - combobox "Aksi yang diizinkan" [ref=f3e2537]:
+                  - option "Buat Notifikasi · Informasi" [selected]
+                  - option "Buat Tugas Tindak Lanjut · Perubahan Data"
+                  - option "Atur Prioritas Pesanan · Perubahan Data"
+                  - option "Hitung Ulang Prioritas · Operasional"
+                  - option "Masukkan ke Antrean Produksi · Perubahan Data"
+                  - option "Sinkronkan Marketplace · Operasional"
+                  - option "Generate Laporan · Operasional"
+              - generic [ref=f3e2538]:
+                - generic [ref=f3e2539]:
+                  - generic [ref=f3e2540]: Severity
+                  - combobox "Severity" [ref=f3e2541]:
+                    - option "info"
+                    - option "success"
+                    - option "warning" [selected]
+                    - option "error"
+                    - option "critical"
+                - generic [ref=f3e2542]:
+                  - generic [ref=f3e2543]: Judul
+                  - textbox "Judul" [ref=f3e2544]:
+                    - /placeholder: "Stok rendah: {{material.name}}"
+                    - text: QA notification S10
+                - generic [ref=f3e2545]:
+                  - generic [ref=f3e2546]: Pesan
+                  - textbox "Pesan" [ref=f3e2547]:
+                    - /placeholder: Tinjau stok material.
+                    - text: QA message S10
+              - paragraph [ref=f3e2548]: Aksi finansial, inventaris inti, keamanan, SQL, shell, HTTP umum, dan eksekusi kode tidak tersedia di Automation.
+          - generic [ref=f3e2549]:
+            - heading "4. Reliabilitas" [level=3] [ref=f3e2551]
+            - generic [ref=f3e2552]:
+              - generic [ref=f3e2553]:
+                - generic [ref=f3e2554]: Prioritas aturan (lebih kecil lebih dulu)
+                - spinbutton "Prioritas aturan (lebih kecil lebih dulu)" [ref=f3e2555]: "100"
+              - generic [ref=f3e2556]:
+                - generic [ref=f3e2557]: Cooldown (detik)
+                - spinbutton "Cooldown (detik)" [ref=f3e2558]: "0"
+              - generic [ref=f3e2559]:
+                - generic [ref=f3e2560]: Retry maksimum
+                - spinbutton "Retry maksimum" [ref=f3e2561]: "0"
+              - generic [ref=f3e2562]:
+                - generic [ref=f3e2563]: Deskripsi
+                - textbox "Deskripsi" [ref=f3e2564]
+          - generic [ref=f3e2565]:
+            - link [ref=f3e2566] [cursor=pointer]:
+              - /url: /app/craft/automations/rules/5
+              - button "Batal" [ref=f3e2567]
+            - button "Simpan sebagai Draf" [ref=f3e2568]

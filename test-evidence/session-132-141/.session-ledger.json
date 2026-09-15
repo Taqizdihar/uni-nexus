@@ -1,0 +1,85 @@
+{
+  "session": "132-141",
+  "started": "2026-09-15",
+  "cases": [
+    {
+      "row": 132,
+      "id": "UNX-S09-011",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S09-011/01-printer-empty.png"]
+    },
+    {
+      "row": 133,
+      "id": "UNX-S09-012",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S09-012/01-material-empty.png"]
+    },
+    {
+      "row": 134,
+      "id": "UNX-S09-013",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S09-013/01-procurement-empty.png"]
+    },
+    {
+      "row": 135,
+      "id": "UNX-S09-014",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S09-014/01-profitability-empty.png"]
+    },
+    {
+      "row": 136,
+      "id": "UNX-S09-015",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D; ACCOUNT #5 - Staf Spesialis",
+      "evidence": [
+        "test-evidence/session-132-141/UNX-S09-015/01-reports-empty-main-account.png",
+        "test-evidence/session-132-141/UNX-S09-015/02-reports-empty-comparison.png"
+      ]
+    },
+    {
+      "row": 137,
+      "id": "UNX-S10-001",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D; ACCOUNT #5 - Staf Spesialis",
+      "evidence": [
+        "test-evidence/session-132-141/UNX-S10-001/01-marketplace-readonly-write-controls-visible.png",
+        "test-evidence/session-132-141/UNX-S10-001/02-marketplace-main-table.png"
+      ]
+    },
+    {
+      "row": 138,
+      "id": "UNX-S10-002",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S10-002/01-product-mapping-result.png"]
+    },
+    {
+      "row": 139,
+      "id": "UNX-S10-003",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S10-003/01-fee-rules-final.png"]
+    },
+    {
+      "row": 140,
+      "id": "UNX-S10-004",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": [
+        "test-evidence/session-132-141/UNX-S10-004/01-import-template-preview-error.png",
+        "test-evidence/session-132-141/UNX-S10-004/02-import-valid-preview.png"
+      ]
+    },
+    {
+      "row": 141,
+      "id": "UNX-S10-005",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 - Insinyur 3D",
+      "evidence": ["test-evidence/session-132-141/UNX-S10-005/01-import-commit-result.png"]
+    }
+  ]
+}

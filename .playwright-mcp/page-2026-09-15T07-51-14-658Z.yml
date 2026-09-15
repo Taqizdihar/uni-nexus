@@ -1,0 +1,134 @@
+- generic [ref=f14e6]:
+  - complementary [ref=f14e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f14e9]
+    - generic [ref=f14e10]:
+      - generic [ref=f14e11]:
+        - heading "GLOBAL" [level=3] [ref=f14e12]
+        - link "Dasbor Global" [ref=f14e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f14e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f14e21]
+        - generic [ref=f14e22]:
+          - generic [ref=f14e23]:
+            - button "Proyek" [ref=f14e24]
+            - generic [ref=f14e30]:
+              - link "Semua Proyek" [ref=f14e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f14e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f14e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f14e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f14e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f14e41]:
+        - heading "BISNIS" [level=3] [ref=f14e42]
+        - generic [ref=f14e44]:
+          - button "Keuangan" [ref=f14e45]
+          - generic [ref=f14e186]:
+            - link "Ringkasan Keuangan" [active] [ref=f14e187] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f14e188] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f14e189] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f14e190] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f14e191] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f14e192] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f14e193] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f14e194] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f14e195] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f14e196] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [ref=f14e197] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f14e53]
+      - generic [ref=f14e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f14e55]
+        - generic [ref=f14e56]:
+          - link "Pusat Dokumen" [ref=f14e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f14e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f14e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f14e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f14e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f14e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f14e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f14e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f14e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f14e96]:
+    - banner [ref=f14e97]:
+      - combobox [ref=f14e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f14e103]
+        - generic [ref=f14e104]:
+          - generic [ref=f14e105]: ⌘
+          - generic [ref=f14e106]: K
+      - generic [ref=f14e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f14e109]'
+        - button [ref=f14e118]:
+          - generic [ref=f14e122]:
+            - text: "Workspace:"
+            - generic [ref=f14e123]:
+              - img "Studio Logo" [ref=f14e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f14e126]:
+          - generic [ref=f14e130]: "2"
+        - button [ref=f14e132]:
+          - generic [aria-hidden] [ref=f14e133]: QU
+    - main [ref=f14e134]:
+      - generic [ref=f14e198]:
+        - generic [ref=f14e199]:
+          - generic [ref=f14e200]:
+            - heading "Keuangan" [level=1] [ref=f14e201]
+            - paragraph [ref=f14e202]: Pantau kas, pembayaran, pengeluaran, piutang, dan profitabilitas Uni-Inside Studio.
+          - link [ref=f14e203] [cursor=pointer]:
+            - /url: /app/studio/finance/treasury
+            - button "Kas & Bank" [ref=f14e204]
+        - generic [ref=f14e206]:
+          - generic [ref=f14e208]:
+            - paragraph [ref=f14e210]: Total Kas Studio
+            - paragraph [ref=f14e214]: Rp 0
+          - generic [ref=f14e216]:
+            - paragraph [ref=f14e218]: Cash In Bulan Ini
+            - paragraph [ref=f14e222]: Rp 0
+          - generic [ref=f14e224]:
+            - paragraph [ref=f14e226]: Cash Out Bulan Ini
+            - paragraph [ref=f14e230]: Rp 0
+          - generic [ref=f14e232]:
+            - paragraph [ref=f14e234]: Net Cash Flow
+            - paragraph [ref=f14e237]: Rp 0
+          - generic [ref=f14e239]:
+            - paragraph [ref=f14e241]: Piutang Klien
+            - paragraph [ref=f14e245]: Rp 0
+          - generic [ref=f14e247]:
+            - paragraph [ref=f14e249]: Pengeluaran Belum Dibayar
+            - paragraph [ref=f14e253]: Rp 0
+          - generic [ref=f14e255]:
+            - paragraph [ref=f14e257]: Profit Proyek Tercatat
+            - paragraph [ref=f14e261]: Rp 0
+        - generic [ref=f14e262]:
+          - generic [ref=f14e263]:
+            - heading "Perlu Perhatian" [level=3] [ref=f14e265]
+            - generic [ref=f14e266]:
+              - paragraph [ref=f14e267]: Invoice terlambat 0
+              - paragraph [ref=f14e268]: Jatuh tempo 7 hari 0
+              - paragraph [ref=f14e269]: Pengeluaran disetujui belum dibayar 0
+              - paragraph [ref=f14e270]: Fee eksternal tersisa Rp 0
+          - generic [ref=f14e271]:
+            - heading "Aktivitas Finansial Terkini" [level=3] [ref=f14e273]
+            - paragraph [ref=f14e275]: Belum ada transaksi tercatat.

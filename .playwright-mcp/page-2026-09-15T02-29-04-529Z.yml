@@ -1,0 +1,163 @@
+- generic [ref=f2e6]:
+  - complementary [ref=f2e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f2e9]
+    - generic [ref=f2e10]:
+      - generic [ref=f2e11]:
+        - heading "GLOBAL" [level=3] [ref=f2e12]
+        - link "Dasbor Global" [ref=f2e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f2e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f2e21]
+        - generic [ref=f2e22]:
+          - button "Pesanan" [ref=f2e24]
+          - button "Produksi" [ref=f2e33]
+          - button "Produk & Desain" [ref=f2e42]
+          - button "Printer" [ref=f2e53]
+          - generic [ref=f2e61]:
+            - button "Material" [ref=f2e62]
+            - generic [ref=f2e69]:
+              - link "Inventaris Filament" [ref=f2e70] [cursor=pointer]:
+                - /url: /app/craft/materials/filament
+              - link "Spool Filament" [ref=f2e71] [cursor=pointer]:
+                - /url: /app/craft/materials/spools
+              - link "Pergerakan Stok" [ref=f2e72] [cursor=pointer]:
+                - /url: /app/craft/materials/movements
+              - link "Stok Menipis" [ref=f2e73] [cursor=pointer]:
+                - /url: /app/craft/materials/low-stock
+              - link "Limbah Filament" [ref=f2e74] [cursor=pointer]:
+                - /url: /app/craft/materials/waste
+      - generic [ref=f2e75]:
+        - heading "BISNIS" [level=3] [ref=f2e76]
+        - generic [ref=f2e77]:
+          - button "Pelanggan & Mitra" [ref=f2e79]
+          - button "Pengadaan" [ref=f2e89]
+          - button "Keuangan" [ref=f2e100]
+          - button "Laporan & Analitik" [ref=f2e108]
+      - generic [ref=f2e117]:
+        - heading "SISTEM" [level=3] [ref=f2e118]
+        - generic [ref=f2e119]:
+          - button "Marketplace & Kanal Penjualan" [ref=f2e121]
+          - button "Otomasi" [ref=f2e131]
+      - generic [ref=f2e137]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f2e138]
+        - generic [ref=f2e139]:
+          - link "Keuangan Terpadu" [ref=f2e140] [cursor=pointer]:
+            - /url: /app/finance
+          - link "Pusat Dokumen" [ref=f2e144] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f2e149] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f2e152] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Manajemen Pengguna" [ref=f2e156] [cursor=pointer]:
+            - /url: /app/users
+          - link "Log Audit" [ref=f2e162] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f2e165] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f2e171] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f2e174] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f2e180] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f2e185] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f2e189]:
+    - banner [ref=f2e190]:
+      - combobox [ref=f2e192]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f2e196]
+        - generic [ref=f2e197]:
+          - generic [ref=f2e198]: ⌘
+          - generic [ref=f2e199]: K
+      - generic [ref=f2e200]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f2e202]'
+        - button [ref=f2e211]:
+          - generic [ref=f2e215]:
+            - text: "Workspace:"
+            - generic [ref=f2e216]:
+              - img "Craft Logo" [ref=f2e217]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f2e219]:
+          - generic [ref=f2e223]: "2"
+        - button [ref=f2e225]
+    - main [ref=f2e226]:
+      - generic [ref=f2e266]:
+        - generic [ref=f2e267]:
+          - generic [ref=f2e268]:
+            - paragraph [ref=f2e269]: MATERIAL
+            - heading "Tambah Material" [level=1] [ref=f2e270]
+            - paragraph [ref=f2e271]: Daftarkan material produksi baru ke inventaris CRAFT.
+          - link [ref=f2e272] [cursor=pointer]:
+            - /url: /app/craft/materials/filament
+            - button "Kembali" [ref=f2e273]
+        - generic [ref=f2e276]:
+          - generic [ref=f2e278]:
+            - generic [ref=f2e279]:
+              - generic [ref=f2e280]: Nama Material *
+              - textbox "Nama Material *" [active] [ref=f2e281]:
+                - /placeholder: "Contoh: PLA+ Matte"
+            - generic [ref=f2e282]:
+              - generic [ref=f2e283]: SKU
+              - textbox "SKU" [ref=f2e284]:
+                - /placeholder: "Otomatis: MAT-000001"
+            - generic [ref=f2e285]:
+              - generic [ref=f2e286]: Kategori *
+              - combobox "Kategori *" [ref=f2e287]:
+                - option "QA Filament Utama" [selected]
+                - option "Material QA Edit 20260914_2114"
+            - generic [ref=f2e288]:
+              - generic [ref=f2e289]: Satuan Dasar *
+              - combobox "Satuan Dasar * Filament disarankan menggunakan Gram (g)." [ref=f2e290]:
+                - option "Satuan QA Edit 163552 (qe)" [selected]
+              - generic [ref=f2e291]: Filament disarankan menggunakan Gram (g).
+            - generic [ref=f2e292]:
+              - generic [ref=f2e293]: Brand
+              - textbox "Brand" [ref=f2e294]:
+                - /placeholder: "Contoh: eSUN"
+            - generic [ref=f2e295]:
+              - generic [ref=f2e296]: Jenis Material
+              - combobox "Jenis Material" [ref=f2e297]
+            - generic [ref=f2e298]:
+              - generic [ref=f2e299]: Biaya Default per Satuan (Rp)
+              - textbox "Biaya Default per Satuan (Rp)" [ref=f2e300]:
+                - /placeholder: "0"
+            - generic [ref=f2e301]:
+              - generic [ref=f2e302]: Ambang Stok Menipis
+              - textbox "Ambang Stok Menipis" [ref=f2e303]:
+                - /placeholder: "0"
+            - generic [ref=f2e304]:
+              - generic [ref=f2e305]: Jumlah Reorder
+              - textbox "Jumlah Reorder" [ref=f2e306]:
+                - /placeholder: "0"
+            - generic [ref=f2e307]:
+              - generic [ref=f2e308]: Pemasok Pilihan
+              - combobox "Pemasok Pilihan" [ref=f2e309]:
+                - option "Belum dipilih" [selected]
+                - option "QA Supplier Primary"
+            - generic [ref=f2e310]:
+              - generic [ref=f2e311]: Catatan
+              - textbox "Catatan" [ref=f2e312]:
+                - /placeholder: Catatan penyimpanan atau spesifikasi material…
+          - generic [ref=f2e313]:
+            - heading "Warna Filament" [level=2] [ref=f2e314]
+            - generic [ref=f2e315]:
+              - generic [ref=f2e316]:
+                - generic [ref=f2e317]:
+                  - generic [ref=f2e318]: Nama Warna
+                  - textbox "Nama Warna" [ref=f2e319]:
+                    - /placeholder: "Contoh: Matte Black"
+                - code [ref=f2e322]: "#9CA3AF"
+              - generic [ref=f2e323]:
+                - button "Color Picker" [ref=f2e324]
+                - button "HEX" [ref=f2e325]
+                - button "RGB" [ref=f2e326]
+                - button "CMYK" [ref=f2e327]
+              - generic [ref=f2e329]:
+                - textbox "Pilih warna material" [ref=f2e330] [cursor=pointer]: "#9ca3af"
+                - paragraph [ref=f2e331]: Preview browser menggunakan sRGB. CMYK di bawah ini merupakan perkiraan layar, bukan output cetak yang dikelola warna.
+          - generic [ref=f2e332]:
+            - generic [ref=f2e333]:
+              - checkbox "Material aktif" [checked] [ref=f2e334]
+              - text: Material aktif
+            - button "Simpan Material" [ref=f2e335]

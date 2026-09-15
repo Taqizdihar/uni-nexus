@@ -1,0 +1,81 @@
+- generic [ref=f2e6]:
+  - complementary [ref=f2e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f2e9]
+    - generic [ref=f2e10]:
+      - generic [ref=f2e11]:
+        - heading "GLOBAL" [level=3] [ref=f2e12]
+        - link "Dasbor Global" [ref=f2e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f2e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f2e21]
+        - generic [ref=f2e22]:
+          - button "Proyek" [ref=f2e24]
+          - link "Klien" [ref=f2e30] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f2e36]:
+        - heading "BISNIS" [level=3] [ref=f2e37]
+        - button "Keuangan" [ref=f2e40]
+      - heading "SISTEM" [level=3] [ref=f2e48]
+      - generic [ref=f2e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f2e50]
+        - generic [ref=f2e51]:
+          - link "Pusat Dokumen" [ref=f2e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f2e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f2e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f2e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f2e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f2e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f2e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f2e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f2e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f2e91]:
+    - banner [ref=f2e92]:
+      - combobox [ref=f2e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f2e98]
+        - generic [ref=f2e99]:
+          - generic [ref=f2e100]: ⌘
+          - generic [ref=f2e101]: K
+      - generic [ref=f2e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f2e130]'
+        - button [ref=f2e113]:
+          - generic [ref=f2e117]:
+            - text: "Workspace:"
+            - generic [ref=f2e118]:
+              - img "Studio Logo" [ref=f2e131]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f2e120]:
+          - generic [ref=f2e132]: "2"
+        - button [ref=f2e125]:
+          - generic [aria-hidden] [ref=f2e126]: QU
+    - main [ref=f2e127]:
+      - generic [ref=f2e133]:
+        - generic [ref=f2e134]:
+          - heading "HPP & Profitabilitas" [level=1] [ref=f2e135]
+          - paragraph [ref=f2e136]: Margin per pesanan dari pendapatan, biaya produksi aktual job cetak, dan fee marketplace yang tercatat.
+        - generic [ref=f2e138]:
+          - textbox [ref=f2e139]
+          - textbox [ref=f2e140]
+          - paragraph [ref=f2e141]: Biaya langsung diambil dari biaya aktual job cetak (fallback estimasi bila belum selesai). Overhead, listrik, dan kemasan tidak disertakan karena belum ada sumber data tercatat — bukan diasumsikan nol.
+        - generic [ref=f2e142]:
+          - generic [ref=f2e144]:
+            - paragraph [ref=f2e146]: Total Pendapatan
+            - paragraph [ref=f2e150]: Rp 0
+          - generic [ref=f2e152]:
+            - paragraph [ref=f2e154]: Total Biaya Langsung
+            - paragraph [ref=f2e158]: Rp 0
+          - generic [ref=f2e160]:
+            - paragraph [ref=f2e162]: Total Fee Marketplace
+            - paragraph [ref=f2e166]: Rp 0
+          - generic [ref=f2e168]:
+            - paragraph [ref=f2e170]: Laba Kotor
+            - paragraph [ref=f2e173]: Rp 0
+        - generic [ref=f2e174]: Belum ada pesanan terealisasi pada periode ini.

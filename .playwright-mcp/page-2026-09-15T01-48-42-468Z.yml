@@ -1,0 +1,634 @@
+- generic [ref=f39e66]:
+  - complementary [ref=f39e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f39e69]
+    - generic [ref=f39e70]:
+      - generic [ref=f39e71]:
+        - heading "GLOBAL" [level=3] [ref=f39e72]
+        - link "Dasbor Global" [ref=f39e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f39e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f39e81]
+        - generic [ref=f39e82]:
+          - generic [ref=f39e362]:
+            - button "Pesanan" [ref=f39e363]
+            - generic [ref=f39e459]:
+              - link "Semua Pesanan" [ref=f39e460] [cursor=pointer]:
+                - /url: /app/craft/orders
+              - link "Pesanan Baru" [ref=f39e461] [cursor=pointer]:
+                - /url: /app/craft/orders/new
+              - link "Draf Pesanan" [ref=f39e462] [cursor=pointer]:
+                - /url: /app/craft/orders/drafts
+              - link "Prioritas Produksi" [ref=f39e463] [cursor=pointer]:
+                - /url: /app/craft/orders/priority
+              - link "Antrean Produksi" [ref=f39e464] [cursor=pointer]:
+                - /url: /app/craft/orders/queue
+              - link "Pesanan Custom" [ref=f39e465] [cursor=pointer]:
+                - /url: /app/craft/orders/custom
+              - link "Pesanan Mitra" [ref=f39e466] [cursor=pointer]:
+                - /url: /app/craft/orders/partners
+              - link "Pesanan Selesai" [ref=f39e467] [cursor=pointer]:
+                - /url: /app/craft/orders/completed
+              - link "Dibatalkan / Dikembalikan" [ref=f39e468] [cursor=pointer]:
+                - /url: /app/craft/orders/cancelled
+          - button "Produksi" [ref=f39e372]
+          - button "Produk & Desain" [ref=f39e381]
+          - button "Printer" [ref=f39e392]
+          - button "Material" [ref=f39e401]
+      - generic [ref=f39e96]:
+        - heading "BISNIS" [level=3] [ref=f39e97]
+        - generic [ref=f39e98]:
+          - button "Pelanggan & Mitra" [ref=f39e409]
+          - button "Pengadaan" [ref=f39e419]
+          - button "Keuangan" [ref=f39e100]
+          - button "Laporan & Analitik" [ref=f39e430]
+      - generic [ref=f39e107]:
+        - heading "SISTEM" [level=3] [ref=f39e108]
+        - generic [ref=f39e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f39e441]
+          - button "Otomasi" [ref=f39e451]
+      - generic [ref=f39e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f39e110]
+        - generic [ref=f39e111]:
+          - link "Pusat Dokumen" [ref=f39e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f39e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f39e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [active] [ref=f39e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f39e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f39e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f39e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f39e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f39e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f39e151]:
+    - banner [ref=f39e152]:
+      - combobox [ref=f39e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f39e158]
+        - generic [ref=f39e159]:
+          - generic [ref=f39e160]: ⌘
+          - generic [ref=f39e161]: K
+      - generic [ref=f39e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f39e164]'
+        - button [ref=f39e457]:
+          - generic [ref=f39e177]:
+            - text: "Workspace:"
+            - generic [ref=f39e178]:
+              - img "Craft Logo" [ref=f39e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f39e181]:
+          - generic [ref=f39e185]: "2"
+        - button [ref=f39e187]:
+          - generic [aria-hidden] [ref=f39e188]: QU
+    - main [ref=f39e189]:
+      - generic [ref=f39e1346]:
+        - generic [ref=f39e1347]:
+          - generic [ref=f39e1348]:
+            - heading "Log Audit" [level=1] [ref=f39e1349]
+            - paragraph [ref=f39e1352]: Riwayat aktivitas keamanan dan perubahan penting di UNI-NEXUS.
+          - generic [ref=f39e1353]:
+            - button "Muat ulang" [ref=f39e1354]
+            - button "CSV" [ref=f39e1360]
+            - button "Excel" [ref=f39e1364]
+        - generic [ref=f39e1368]:
+          - generic [ref=f39e1369]:
+            - paragraph [ref=f39e1370]: Total
+            - paragraph [ref=f39e1371]: "367"
+          - generic [ref=f39e1372]:
+            - paragraph [ref=f39e1373]: Hari ini
+            - paragraph [ref=f39e1374]: "30"
+          - generic [ref=f39e1375]:
+            - paragraph [ref=f39e1376]: Login & Logout
+            - paragraph [ref=f39e1377]: "3"
+          - generic [ref=f39e1378]:
+            - paragraph [ref=f39e1379]: Perubahan hari ini
+            - paragraph [ref=f39e1380]: "22"
+          - generic [ref=f39e1381]:
+            - paragraph [ref=f39e1382]: Aktor unik
+            - paragraph [ref=f39e1383]: "7"
+        - generic [ref=f39e1384]:
+          - generic [ref=f39e1385]:
+            - generic [ref=f39e1386]:
+              - generic [ref=f39e1387]: Cari Log Audit
+              - textbox "Cari Log Audit" [ref=f39e1391]:
+                - /placeholder: Cari deskripsi, aktor, atau kode…
+            - combobox "Workspace" [ref=f39e1392]:
+              - option "Semua workspace" [selected]
+              - option "Global"
+              - option "Craft"
+              - option "Studio"
+            - combobox "Grup tindakan" [ref=f39e1393]:
+              - option "Semua kategori" [selected]
+              - option "Autentikasi"
+              - option "Akun & Profil"
+              - option "Pembuatan"
+              - option "Perubahan"
+              - option "Penghapusan"
+              - option "Persetujuan"
+              - option "Keuangan"
+              - option "Otomasi"
+              - option "Ekspor"
+              - option "Lainnya"
+            - combobox "Modul" [ref=f39e1394]:
+              - option "Semua modul" [selected]
+              - option "Auth"
+              - option "Craft Customers"
+              - option "Craft Finance"
+              - option "Craft Materials"
+              - option "Craft Printers"
+              - option "Craft Procurement"
+              - option "Craft Products"
+              - option "Master Data"
+              - option "Settings"
+              - option "Users"
+            - combobox "Tindakan" [ref=f39e1395]:
+              - option "Semua tindakan" [selected]
+              - option "Account Delete"
+              - option "Account Deletion Request"
+              - option "Account Deletion Request Revoke"
+              - option "Setujui Akun"
+              - option "Archive"
+              - option "Category Create"
+              - option "Category Deactivate"
+              - option "Category Update"
+              - option "Craft Finance Budget Approve"
+              - option "Craft Finance Budget Create"
+              - option "Craft Finance Expense Approve"
+              - option "Craft Finance Expense Create"
+              - option "Craft Finance Expense Pay"
+              - option "Craft Finance Expense Reversal"
+              - option "Craft Finance Expense Void"
+              - option "Craft Finance Manual Income"
+              - option "Create"
+              - option "Customer Contact Create"
+              - option "Customer Contact Delete"
+              - option "Customer Contact Primary"
+              - option "Customer Create"
+              - option "Customer Deactivate"
+              - option "Customer Reactivate"
+              - option "Customer Update"
+              - option "Design Delete"
+              - option "Design Upload"
+              - option "Issue Create"
+              - option "Issue Update"
+              - option "Login"
+              - option "Logout"
+              - option "Maintenance Complete"
+              - option "Maintenance Schedule Create"
+              - option "Maintenance Schedule Delete"
+              - option "Maintenance Schedule Update"
+              - option "Maintenance Start"
+              - option "Master Data Activate"
+              - option "Master Data Create"
+              - option "Master Data Deactivate"
+              - option "Master Data Update"
+              - option "Material Category Create"
+              - option "Material Category Update"
+              - option "Partner Pricing Create"
+              - option "Partner Pricing Deactivate"
+              - option "Partner Pricing Update"
+              - option "Partner End"
+              - option "Partner Promote"
+              - option "Partner Update"
+              - option "Product Archive"
+              - option "Product Create"
+              - option "Product Image Upload"
+              - option "Product Reactivate"
+              - option "Product Update"
+              - option "Profile Avatar Delete"
+              - option "Profile Avatar Update"
+              - option "Profile Banner Update"
+              - option "Profile Password Change"
+              - option "Profile Status Change"
+              - option "Profile Update"
+              - option "Tolak Akun"
+              - option "Restore Available"
+              - option "Set Offline"
+              - option "Settings Group Update"
+              - option "Settings Organization Logo Upload"
+              - option "Settings Organization Update"
+              - option "Signup Request"
+              - option "Supplier Contact Create"
+              - option "Supplier Create"
+              - option "Supplier Role Add"
+              - option "Supplier Update"
+              - option "Update"
+              - option "Variant Create"
+              - option "Variant Deactivate"
+              - option "Variant Reactivate"
+          - generic [ref=f39e1396]:
+            - combobox "Aktor" [ref=f39e1397]:
+              - option "Semua aktor" [selected]
+              - option "Ahmad Ropaldo (ahmadropaldo)"
+              - option "April Adzania (apriladzania)"
+              - option "Dian Daeli (diandaeli)"
+              - option "Muhammad Taqi Izdiharr (taqizdihar)"
+              - option "Naura Ramadhani (nauraramadhani)"
+              - option "QA User 2 (qa2)"
+              - option "QA User-1 (qauser1)"
+            - combobox "Jenis entitas" [ref=f39e1398]:
+              - option "Semua entitas" [selected]
+              - option "Budget"
+              - option "Design File"
+              - option "Expense"
+              - option "Financial Transaction"
+              - option "Maintenance Record"
+              - option "Maintenance Schedule"
+              - option "Master Data:Craft Material Categories"
+              - option "Master Data:Craft Product Categories"
+              - option "Master Data:Craft Sales Channels"
+              - option "Master Data:Finance Transaction Categories"
+              - option "Master Data:Payment Methods"
+              - option "Master Data:Studio Service Categories"
+              - option "Master Data:Units"
+              - option "Material Category"
+              - option "Organization"
+              - option "Party"
+              - option "Printer"
+              - option "Printer Issue"
+              - option "Product"
+              - option "Product Category"
+              - option "Product Variant"
+              - option "Supplier"
+              - option "System Setting Group"
+              - option "User"
+              - option "User Deletion Request"
+            - generic [ref=f39e1399]:
+              - text: Dari
+              - textbox "Tanggal dari" [ref=f39e1400]
+            - generic [ref=f39e1401]:
+              - text: Sampai
+              - textbox "Tanggal sampai" [ref=f39e1402]
+            - button "Reset filter" [ref=f39e1403]
+        - generic [ref=f39e1406]:
+          - table [ref=f39e1408]:
+            - rowgroup [ref=f39e1409]:
+              - row [ref=f39e1410]:
+                - columnheader "Waktu" [ref=f39e1411]
+                - columnheader "Aktor" [ref=f39e1412]
+                - columnheader "Aktivitas" [ref=f39e1413]
+                - columnheader "Workspace" [ref=f39e1414]
+                - columnheader "Entitas" [ref=f39e1415]
+                - columnheader "Detail" [ref=f39e1416]
+            - rowgroup [ref=f39e1418]:
+              - row [ref=f39e1419]:
+                - cell "15 Sep 2026, 01.48.14" [ref=f39e1420]
+                - cell [ref=f39e1421]:
+                  - paragraph [ref=f39e1422]: QA User-1
+                  - paragraph [ref=f39e1423]: "@qauser1"
+                - cell [ref=f39e1424]:
+                  - paragraph [ref=f39e1425]: Customer Create
+                  - paragraph [ref=f39e1426]: Membuat pelanggan Craft CUS-000022 dari Pesanan Baru.
+                - cell "Uni-Inside Craft" [ref=f39e1427]
+                - cell [ref=f39e1428]:
+                  - text: CUS-000022
+                  - paragraph [ref=f39e1429]: Party
+                - cell [ref=f39e1430]:
+                  - button "Lihat detail Audit 367" [ref=f39e1431]
+              - row [ref=f39e1435]:
+                - cell "15 Sep 2026, 01.45.55" [ref=f39e1436]
+                - cell [ref=f39e1437]:
+                  - paragraph [ref=f39e1438]: QA User-1
+                  - paragraph [ref=f39e1439]: "@qauser1"
+                - cell [ref=f39e1440]:
+                  - paragraph [ref=f39e1441]: Customer Create
+                  - paragraph [ref=f39e1442]: Membuat pelanggan Craft CUS-000021 dari Pesanan Baru.
+                - cell "Uni-Inside Craft" [ref=f39e1443]
+                - cell [ref=f39e1444]:
+                  - text: CUS-000021
+                  - paragraph [ref=f39e1445]: Party
+                - cell [ref=f39e1446]:
+                  - button "Lihat detail Audit 366" [ref=f39e1447]
+              - row [ref=f39e1451]:
+                - cell "15 Sep 2026, 01.43.10" [ref=f39e1452]
+                - cell [ref=f39e1453]:
+                  - paragraph [ref=f39e1454]: QA User-1
+                  - paragraph [ref=f39e1455]: "@qauser1"
+                - cell [ref=f39e1456]:
+                  - paragraph [ref=f39e1457]: Login
+                  - paragraph [ref=f39e1458]: User logged in successfully
+                - cell "Global" [ref=f39e1459]
+                - cell [ref=f39e1460]:
+                  - text: qauser1
+                  - paragraph [ref=f39e1461]: User
+                - cell [ref=f39e1462]:
+                  - button "Lihat detail Audit 365" [ref=f39e1463]
+              - row [ref=f39e1467]:
+                - cell "15 Sep 2026, 01.32.16" [ref=f39e1468]
+                - cell [ref=f39e1469]:
+                  - paragraph [ref=f39e1470]: QA User-1
+                  - paragraph [ref=f39e1471]: "@qauser1"
+                - cell [ref=f39e1472]:
+                  - paragraph [ref=f39e1473]: Login
+                  - paragraph [ref=f39e1474]: User logged in successfully
+                - cell "Global" [ref=f39e1475]
+                - cell [ref=f39e1476]:
+                  - text: qauser1
+                  - paragraph [ref=f39e1477]: User
+                - cell [ref=f39e1478]:
+                  - button "Lihat detail Audit 364" [ref=f39e1479]
+              - row [ref=f39e1483]:
+                - cell "15 Sep 2026, 01.24.06" [ref=f39e1484]
+                - cell [ref=f39e1485]:
+                  - paragraph [ref=f39e1486]: QA User-1
+                  - paragraph [ref=f39e1487]: "@qauser1"
+                - cell [ref=f39e1488]:
+                  - paragraph [ref=f39e1489]: Supplier Contact Create
+                  - paragraph [ref=f39e1490]: Menambahkan kontak pemasok SUP-000020.
+                - cell "Uni-Inside Craft" [ref=f39e1491]
+                - cell [ref=f39e1492]:
+                  - text: SUP-000020
+                  - paragraph [ref=f39e1493]: Supplier
+                - cell [ref=f39e1494]:
+                  - button "Lihat detail Audit 363" [ref=f39e1495]
+              - row [ref=f39e1499]:
+                - cell "15 Sep 2026, 01.23.51" [ref=f39e1500]
+                - cell [ref=f39e1501]:
+                  - paragraph [ref=f39e1502]: QA User-1
+                  - paragraph [ref=f39e1503]: "@qauser1"
+                - cell [ref=f39e1504]:
+                  - paragraph [ref=f39e1505]: Supplier Contact Create
+                  - paragraph [ref=f39e1506]: Menambahkan kontak pemasok SUP-000020.
+                - cell "Uni-Inside Craft" [ref=f39e1507]
+                - cell [ref=f39e1508]:
+                  - text: SUP-000020
+                  - paragraph [ref=f39e1509]: Supplier
+                - cell [ref=f39e1510]:
+                  - button "Lihat detail Audit 362" [ref=f39e1511]
+              - row [ref=f39e1515]:
+                - cell "15 Sep 2026, 01.21.21" [ref=f39e1516]
+                - cell [ref=f39e1517]:
+                  - paragraph [ref=f39e1518]: QA User-1
+                  - paragraph [ref=f39e1519]: "@qauser1"
+                - cell [ref=f39e1520]:
+                  - paragraph [ref=f39e1521]: Supplier Update
+                  - paragraph [ref=f39e1522]: Memperbarui pemasok SUP-000020.
+                - cell "Uni-Inside Craft" [ref=f39e1523]
+                - cell [ref=f39e1524]:
+                  - text: SUP-000020
+                  - paragraph [ref=f39e1525]: Supplier
+                - cell [ref=f39e1526]:
+                  - button "Lihat detail Audit 361" [ref=f39e1527]
+              - row [ref=f39e1531]:
+                - cell "15 Sep 2026, 01.19.56" [ref=f39e1532]
+                - cell [ref=f39e1533]:
+                  - paragraph [ref=f39e1534]: QA User-1
+                  - paragraph [ref=f39e1535]: "@qauser1"
+                - cell [ref=f39e1536]:
+                  - paragraph [ref=f39e1537]: Supplier Role Add
+                  - paragraph [ref=f39e1538]: Menambahkan peran pemasok Craft pada SUP-000020.
+                - cell "Uni-Inside Craft" [ref=f39e1539]
+                - cell [ref=f39e1540]:
+                  - text: SUP-000020
+                  - paragraph [ref=f39e1541]: Supplier
+                - cell [ref=f39e1542]:
+                  - button "Lihat detail Audit 360" [ref=f39e1543]
+              - row [ref=f39e1547]:
+                - cell "15 Sep 2026, 01.19.14" [ref=f39e1548]
+                - cell [ref=f39e1549]:
+                  - paragraph [ref=f39e1550]: QA User-1
+                  - paragraph [ref=f39e1551]: "@qauser1"
+                - cell [ref=f39e1552]:
+                  - paragraph [ref=f39e1553]: Supplier Create
+                  - paragraph [ref=f39e1554]: Membuat pemasok Craft SUP-000020.
+                - cell "Uni-Inside Craft" [ref=f39e1555]
+                - cell [ref=f39e1556]:
+                  - text: SUP-000020
+                  - paragraph [ref=f39e1557]: Supplier
+                - cell [ref=f39e1558]:
+                  - button "Lihat detail Audit 359" [ref=f39e1559]
+              - row [ref=f39e1563]:
+                - cell "15 Sep 2026, 01.17.05" [ref=f39e1564]
+                - cell [ref=f39e1565]:
+                  - paragraph [ref=f39e1566]: QA User-1
+                  - paragraph [ref=f39e1567]: "@qauser1"
+                - cell [ref=f39e1568]:
+                  - paragraph [ref=f39e1569]: Issue Update
+                  - paragraph [ref=f39e1570]: Memperbarui masalah ISS-000001.
+                - cell "Uni-Inside Craft" [ref=f39e1571]
+                - cell [ref=f39e1572]:
+                  - text: ISS-000001
+                  - paragraph [ref=f39e1573]: Printer Issue
+                - cell [ref=f39e1574]:
+                  - button "Lihat detail Audit 358" [ref=f39e1575]
+              - row [ref=f39e1579]:
+                - cell "15 Sep 2026, 01.16.34" [ref=f39e1580]
+                - cell [ref=f39e1581]:
+                  - paragraph [ref=f39e1582]: QA User-1
+                  - paragraph [ref=f39e1583]: "@qauser1"
+                - cell [ref=f39e1584]:
+                  - paragraph [ref=f39e1585]: Issue Update
+                  - paragraph [ref=f39e1586]: Memperbarui masalah ISS-000002.
+                - cell "Uni-Inside Craft" [ref=f39e1587]
+                - cell [ref=f39e1588]:
+                  - text: ISS-000002
+                  - paragraph [ref=f39e1589]: Printer Issue
+                - cell [ref=f39e1590]:
+                  - button "Lihat detail Audit 357" [ref=f39e1591]
+              - row [ref=f39e1595]:
+                - cell "15 Sep 2026, 01.16.12" [ref=f39e1596]
+                - cell [ref=f39e1597]:
+                  - paragraph [ref=f39e1598]: QA User-1
+                  - paragraph [ref=f39e1599]: "@qauser1"
+                - cell [ref=f39e1600]:
+                  - paragraph [ref=f39e1601]: Issue Update
+                  - paragraph [ref=f39e1602]: Memperbarui masalah ISS-000002.
+                - cell "Uni-Inside Craft" [ref=f39e1603]
+                - cell [ref=f39e1604]:
+                  - text: ISS-000002
+                  - paragraph [ref=f39e1605]: Printer Issue
+                - cell [ref=f39e1606]:
+                  - button "Lihat detail Audit 356" [ref=f39e1607]
+              - row [ref=f39e1611]:
+                - cell "15 Sep 2026, 01.16.07" [ref=f39e1612]
+                - cell [ref=f39e1613]:
+                  - paragraph [ref=f39e1614]: QA User-1
+                  - paragraph [ref=f39e1615]: "@qauser1"
+                - cell [ref=f39e1616]:
+                  - paragraph [ref=f39e1617]: Issue Update
+                  - paragraph [ref=f39e1618]: Memperbarui masalah ISS-000001.
+                - cell "Uni-Inside Craft" [ref=f39e1619]
+                - cell [ref=f39e1620]:
+                  - text: ISS-000001
+                  - paragraph [ref=f39e1621]: Printer Issue
+                - cell [ref=f39e1622]:
+                  - button "Lihat detail Audit 355" [ref=f39e1623]
+              - row [ref=f39e1627]:
+                - cell "15 Sep 2026, 01.13.55" [ref=f39e1628]
+                - cell [ref=f39e1629]:
+                  - paragraph [ref=f39e1630]: QA User-1
+                  - paragraph [ref=f39e1631]: "@qauser1"
+                - cell [ref=f39e1632]:
+                  - paragraph [ref=f39e1633]: Issue Create
+                  - paragraph [ref=f39e1634]: Mencatat masalah ISS-000002 pada PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1635]
+                - cell [ref=f39e1636]:
+                  - text: ISS-000002
+                  - paragraph [ref=f39e1637]: Printer Issue
+                - cell [ref=f39e1638]:
+                  - button "Lihat detail Audit 354" [ref=f39e1639]
+              - row [ref=f39e1643]:
+                - cell "15 Sep 2026, 01.13.42" [ref=f39e1644]
+                - cell [ref=f39e1645]:
+                  - paragraph [ref=f39e1646]: QA User-1
+                  - paragraph [ref=f39e1647]: "@qauser1"
+                - cell [ref=f39e1648]:
+                  - paragraph [ref=f39e1649]: Issue Create
+                  - paragraph [ref=f39e1650]: Mencatat masalah ISS-000001 pada PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1651]
+                - cell [ref=f39e1652]:
+                  - text: ISS-000001
+                  - paragraph [ref=f39e1653]: Printer Issue
+                - cell [ref=f39e1654]:
+                  - button "Lihat detail Audit 353" [ref=f39e1655]
+              - row [ref=f39e1659]:
+                - cell "15 Sep 2026, 01.13.15" [ref=f39e1660]
+                - cell [ref=f39e1661]:
+                  - paragraph [ref=f39e1662]: QA User-1
+                  - paragraph [ref=f39e1663]: "@qauser1"
+                - cell [ref=f39e1664]:
+                  - paragraph [ref=f39e1665]: Maintenance Schedule Delete
+                  - paragraph [ref=f39e1666]: Menghapus jadwal perawatan QA Print Hours.
+                - cell "Uni-Inside Craft" [ref=f39e1667]
+                - cell [ref=f39e1668]:
+                  - text: "#2"
+                  - paragraph [ref=f39e1669]: Maintenance Schedule
+                - cell [ref=f39e1670]:
+                  - button "Lihat detail Audit 352" [ref=f39e1671]
+              - row [ref=f39e1675]:
+                - cell "15 Sep 2026, 01.12.52" [ref=f39e1676]
+                - cell [ref=f39e1677]:
+                  - paragraph [ref=f39e1678]: QA User-1
+                  - paragraph [ref=f39e1679]: "@qauser1"
+                - cell [ref=f39e1680]:
+                  - paragraph [ref=f39e1681]: Maintenance Complete
+                  - paragraph [ref=f39e1682]: Menyelesaikan perawatan QA Preventive pada PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1683]
+                - cell [ref=f39e1684]:
+                  - text: PRN-000008
+                  - paragraph [ref=f39e1685]: Maintenance Record
+                - cell [ref=f39e1686]:
+                  - button "Lihat detail Audit 351" [ref=f39e1687]
+              - row [ref=f39e1691]:
+                - cell "15 Sep 2026, 01.12.38" [ref=f39e1692]
+                - cell [ref=f39e1693]:
+                  - paragraph [ref=f39e1694]: QA User-1
+                  - paragraph [ref=f39e1695]: "@qauser1"
+                - cell [ref=f39e1696]:
+                  - paragraph [ref=f39e1697]: Maintenance Start
+                  - paragraph [ref=f39e1698]: Memulai perawatan printer PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1699]
+                - cell [ref=f39e1700]:
+                  - text: PRN-000008
+                  - paragraph [ref=f39e1701]: Printer
+                - cell [ref=f39e1702]:
+                  - button "Lihat detail Audit 350" [ref=f39e1703]
+              - row [ref=f39e1707]:
+                - cell "15 Sep 2026, 01.12.20" [ref=f39e1708]
+                - cell [ref=f39e1709]:
+                  - paragraph [ref=f39e1710]: QA User-1
+                  - paragraph [ref=f39e1711]: "@qauser1"
+                - cell [ref=f39e1712]:
+                  - paragraph [ref=f39e1713]: Maintenance Schedule Create
+                  - paragraph [ref=f39e1714]: Membuat jadwal perawatan QA Print Hours untuk PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1715]
+                - cell [ref=f39e1716]:
+                  - text: "#2"
+                  - paragraph [ref=f39e1717]: Maintenance Schedule
+                - cell [ref=f39e1718]:
+                  - button "Lihat detail Audit 349" [ref=f39e1719]
+              - row [ref=f39e1723]:
+                - cell "15 Sep 2026, 01.11.27" [ref=f39e1724]
+                - cell [ref=f39e1725]:
+                  - paragraph [ref=f39e1726]: QA User-1
+                  - paragraph [ref=f39e1727]: "@qauser1"
+                - cell [ref=f39e1728]:
+                  - paragraph [ref=f39e1729]: Maintenance Schedule Update
+                  - paragraph [ref=f39e1730]: Memperbarui jadwal perawatan QA Preventive pada PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1731]
+                - cell [ref=f39e1732]:
+                  - text: "#1"
+                  - paragraph [ref=f39e1733]: Maintenance Schedule
+                - cell [ref=f39e1734]:
+                  - button "Lihat detail Audit 348" [ref=f39e1735]
+              - row [ref=f39e1739]:
+                - cell "15 Sep 2026, 01.11.10" [ref=f39e1740]
+                - cell [ref=f39e1741]:
+                  - paragraph [ref=f39e1742]: QA User-1
+                  - paragraph [ref=f39e1743]: "@qauser1"
+                - cell [ref=f39e1744]:
+                  - paragraph [ref=f39e1745]: Maintenance Schedule Update
+                  - paragraph [ref=f39e1746]: Memperbarui jadwal perawatan QA Preventive pada PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1747]
+                - cell [ref=f39e1748]:
+                  - text: "#1"
+                  - paragraph [ref=f39e1749]: Maintenance Schedule
+                - cell [ref=f39e1750]:
+                  - button "Lihat detail Audit 347" [ref=f39e1751]
+              - row [ref=f39e1755]:
+                - cell "15 Sep 2026, 01.10.50" [ref=f39e1756]
+                - cell [ref=f39e1757]:
+                  - paragraph [ref=f39e1758]: QA User-1
+                  - paragraph [ref=f39e1759]: "@qauser1"
+                - cell [ref=f39e1760]:
+                  - paragraph [ref=f39e1761]: Maintenance Schedule Create
+                  - paragraph [ref=f39e1762]: Membuat jadwal perawatan QA Preventive untuk PRN-000008.
+                - cell "Uni-Inside Craft" [ref=f39e1763]
+                - cell [ref=f39e1764]:
+                  - text: "#1"
+                  - paragraph [ref=f39e1765]: Maintenance Schedule
+                - cell [ref=f39e1766]:
+                  - button "Lihat detail Audit 346" [ref=f39e1767]
+              - row [ref=f39e1771]:
+                - cell "15 Sep 2026, 01.09.11" [ref=f39e1772]
+                - cell [ref=f39e1773]:
+                  - paragraph [ref=f39e1774]: QA User-1
+                  - paragraph [ref=f39e1775]: "@qauser1"
+                - cell [ref=f39e1776]:
+                  - paragraph [ref=f39e1777]: Restore Available
+                  - paragraph [ref=f39e1778]: QA-PRN-001 diubah menjadi available.
+                - cell "Uni-Inside Craft" [ref=f39e1779]
+                - cell [ref=f39e1780]:
+                  - text: QA-PRN-001
+                  - paragraph [ref=f39e1781]: Printer
+                - cell [ref=f39e1782]:
+                  - button "Lihat detail Audit 345" [ref=f39e1783]
+              - row [ref=f39e1787]:
+                - cell "15 Sep 2026, 01.08.59" [ref=f39e1788]
+                - cell [ref=f39e1789]:
+                  - paragraph [ref=f39e1790]: QA User-1
+                  - paragraph [ref=f39e1791]: "@qauser1"
+                - cell [ref=f39e1792]:
+                  - paragraph [ref=f39e1793]: Archive
+                  - paragraph [ref=f39e1794]: Mengarsipkan printer QA-PRN-001.
+                - cell "Uni-Inside Craft" [ref=f39e1795]
+                - cell [ref=f39e1796]:
+                  - text: QA-PRN-001
+                  - paragraph [ref=f39e1797]: Printer
+                - cell [ref=f39e1798]:
+                  - button "Lihat detail Audit 344" [ref=f39e1799]
+              - row [ref=f39e1803]:
+                - cell "15 Sep 2026, 01.08.27" [ref=f39e1804]
+                - cell [ref=f39e1805]:
+                  - paragraph [ref=f39e1806]: QA User-1
+                  - paragraph [ref=f39e1807]: "@qauser1"
+                - cell [ref=f39e1808]:
+                  - paragraph [ref=f39e1809]: Restore Available
+                  - paragraph [ref=f39e1810]: PRN-000008 diubah menjadi available.
+                - cell "Uni-Inside Craft" [ref=f39e1811]
+                - cell [ref=f39e1812]:
+                  - text: PRN-000008
+                  - paragraph [ref=f39e1813]: Printer
+                - cell [ref=f39e1814]:
+                  - button "Lihat detail Audit 343" [ref=f39e1815]
+          - generic [ref=f39e1819]:
+            - generic [ref=f39e1820]: Menampilkan 1–25 dari 367
+            - generic [ref=f39e1821]:
+              - button "Halaman sebelumnya" [disabled] [ref=f39e1822]
+              - button "Halaman berikutnya" [ref=f39e1825]

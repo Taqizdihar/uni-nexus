@@ -1,0 +1,110 @@
+- generic [ref=f13e6]:
+  - complementary [ref=f13e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f13e9]
+    - generic [ref=f13e10]:
+      - generic [ref=f13e11]:
+        - heading "GLOBAL" [level=3] [ref=f13e12]
+        - link "Dasbor Global" [ref=f13e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f13e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f13e21]
+        - generic [ref=f13e22]:
+          - button "Pesanan" [ref=f13e167]
+          - button "Produksi" [ref=f13e176]
+          - button "Produk & Desain" [ref=f13e185]
+          - button "Printer" [ref=f13e196]
+          - button "Material" [ref=f13e205]
+      - generic [ref=f13e36]:
+        - heading "BISNIS" [level=3] [ref=f13e37]
+        - generic [ref=f13e38]:
+          - button "Pelanggan & Mitra" [ref=f13e213]
+          - button "Pengadaan" [ref=f13e223]
+          - button "Keuangan" [ref=f13e40]
+          - generic [ref=f13e233]:
+            - button "Laporan & Analitik" [ref=f13e234]
+            - generic [ref=f13e243]:
+              - link "Ringkasan Analitik" [ref=f13e244] [cursor=pointer]:
+                - /url: /app/craft/analytics
+              - link "Penjualan" [active] [ref=f13e245] [cursor=pointer]:
+                - /url: /app/craft/analytics/sales
+              - link "Pesanan" [ref=f13e246] [cursor=pointer]:
+                - /url: /app/craft/analytics/orders
+              - link "Produk" [ref=f13e247] [cursor=pointer]:
+                - /url: /app/craft/analytics/products
+              - link "Kanal Penjualan" [ref=f13e248] [cursor=pointer]:
+                - /url: /app/craft/analytics/channels
+              - link "Pelanggan & Mitra" [ref=f13e249] [cursor=pointer]:
+                - /url: /app/craft/analytics/customers
+              - link "Produksi" [ref=f13e250] [cursor=pointer]:
+                - /url: /app/craft/analytics/production
+              - link "Printer" [ref=f13e251] [cursor=pointer]:
+                - /url: /app/craft/analytics/printers
+              - link "Material" [ref=f13e252] [cursor=pointer]:
+                - /url: /app/craft/analytics/materials
+              - link "Pengadaan" [ref=f13e253] [cursor=pointer]:
+                - /url: /app/craft/analytics/procurement
+              - link "Profitabilitas" [ref=f13e254] [cursor=pointer]:
+                - /url: /app/craft/analytics/profitability
+      - generic [ref=f13e47]:
+        - heading "SISTEM" [level=3] [ref=f13e48]
+        - generic [ref=f13e255]:
+          - button "Marketplace & Kanal Penjualan" [ref=f13e257]
+          - button "Otomasi" [ref=f13e267]
+      - generic [ref=f13e49]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f13e50]
+        - generic [ref=f13e51]:
+          - link "Pusat Dokumen" [ref=f13e52] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f13e57] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f13e60] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f13e64] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f13e67] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f13e73] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f13e76] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f13e82] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f13e87] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f13e91]:
+    - banner [ref=f13e92]:
+      - combobox [ref=f13e94]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f13e98]
+        - generic [ref=f13e99]:
+          - generic [ref=f13e100]: ⌘
+          - generic [ref=f13e101]: K
+      - generic [ref=f13e102]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f13e104]'
+        - button [ref=f13e273]:
+          - generic [ref=f13e117]:
+            - text: "Workspace:"
+            - generic [ref=f13e118]:
+              - img "Craft Logo" [ref=f13e274]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f13e121]:
+          - generic [ref=f13e125]: "2"
+        - button [ref=f13e127]:
+          - generic [aria-hidden] [ref=f13e128]: QU
+    - main [ref=f13e129]:
+      - generic [ref=f13e275]:
+        - generic [ref=f13e276]:
+          - heading "Penjualan" [level=1] [ref=f13e277]
+          - paragraph [ref=f13e278]: Data aktual Craft, tanpa nilai contoh.
+        - generic [ref=f13e280]:
+          - generic [ref=f13e281]:
+            - paragraph [ref=f13e282]: order count
+            - paragraph [ref=f13e283]: Rp 0
+          - generic [ref=f13e284]:
+            - paragraph [ref=f13e285]: order value
+            - paragraph [ref=f13e286]: "0.00"
+          - generic [ref=f13e287]:
+            - paragraph [ref=f13e288]: aov
+            - paragraph [ref=f13e289]: "0.000000"
+        - generic [ref=f13e290]:
+          - heading "Rincian Penjualan" [level=3] [ref=f13e292]
+          - paragraph [ref=f13e294]: Belum ada data untuk periode ini.

@@ -1,0 +1,315 @@
+- generic [ref=f5e6]:
+  - complementary [ref=f5e7]:
+    - heading "UNI-NEXUS" [level=1] [ref=f5e9]
+    - generic [ref=f5e10]:
+      - generic [ref=f5e11]:
+        - heading "GLOBAL" [level=3] [ref=f5e12]
+        - link "Dasbor Global" [ref=f5e14] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f5e20]:
+        - heading "OPERASIONAL" [level=3] [ref=f5e21]
+        - generic [ref=f5e22]:
+          - generic [ref=f5e23]:
+            - button "Proyek" [ref=f5e24]
+            - generic [ref=f5e30]:
+              - link "Semua Proyek" [active] [ref=f5e31] [cursor=pointer]:
+                - /url: /app/studio/projects
+              - link "Proyek Aktif" [ref=f5e32] [cursor=pointer]:
+                - /url: /app/studio/projects/active
+              - link "Proyek Baru" [ref=f5e33] [cursor=pointer]:
+                - /url: /app/studio/projects/new
+              - link "Tahapan Proyek" [ref=f5e34] [cursor=pointer]:
+                - /url: /app/studio/projects/milestones
+          - link "Klien" [ref=f5e35] [cursor=pointer]:
+            - /url: /app/studio/clients
+      - generic [ref=f5e41]:
+        - heading "BISNIS" [level=3] [ref=f5e42]
+        - generic [ref=f5e44]:
+          - button "Keuangan" [ref=f5e45]
+          - generic [ref=f5e679]:
+            - link "Ringkasan Keuangan" [ref=f5e680] [cursor=pointer]:
+              - /url: /app/studio/finance
+            - link "Transaksi" [ref=f5e681] [cursor=pointer]:
+              - /url: /app/studio/finance/transactions
+            - link "Kas & Bank" [ref=f5e682] [cursor=pointer]:
+              - /url: /app/studio/finance/treasury
+            - link "Pendapatan" [ref=f5e683] [cursor=pointer]:
+              - /url: /app/studio/finance/income
+            - link "Pengeluaran" [ref=f5e684] [cursor=pointer]:
+              - /url: /app/studio/finance/expenses
+            - link "Piutang Klien" [ref=f5e685] [cursor=pointer]:
+              - /url: /app/studio/finance/receivables
+            - link "Kewajiban Vendor/Freelancer" [ref=f5e686] [cursor=pointer]:
+              - /url: /app/studio/finance/payables
+            - link "Profitabilitas Proyek" [ref=f5e687] [cursor=pointer]:
+              - /url: /app/studio/finance/profitability
+            - link "Arus Kas" [ref=f5e688] [cursor=pointer]:
+              - /url: /app/studio/finance/cash-flow
+            - link "Anggaran" [ref=f5e689] [cursor=pointer]:
+              - /url: /app/studio/finance/budgets
+            - link "Jurnal & Periode" [ref=f5e690] [cursor=pointer]:
+              - /url: /app/studio/finance/accounting
+      - heading "SISTEM" [level=3] [ref=f5e53]
+      - generic [ref=f5e54]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f5e55]
+        - generic [ref=f5e56]:
+          - link "Pusat Dokumen" [ref=f5e57] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f5e62] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f5e65] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f5e69] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f5e72] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f5e78] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f5e81] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f5e87] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f5e92] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f5e96]:
+    - banner [ref=f5e97]:
+      - combobox [ref=f5e99]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f5e103]
+        - generic [ref=f5e104]:
+          - generic [ref=f5e105]: ⌘
+          - generic [ref=f5e106]: K
+      - generic [ref=f5e107]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f5e109]'
+        - button [ref=f5e118]:
+          - generic [ref=f5e122]:
+            - text: "Workspace:"
+            - generic [ref=f5e123]:
+              - img "Studio Logo" [ref=f5e124]
+              - text: Uni-Inside Studio
+        - button "Buka notifikasi" [ref=f5e126]:
+          - generic [ref=f5e130]: "2"
+        - button [ref=f5e132]:
+          - generic [aria-hidden] [ref=f5e133]: QU
+    - main [ref=f5e134]:
+      - generic [ref=f5e691]:
+        - generic [ref=f5e693]:
+          - button "Kembali" [ref=f5e694]
+          - generic [ref=f5e697]:
+            - paragraph [ref=f5e698]: Operasional Studio
+            - heading "Proyek Baru" [level=1] [ref=f5e699]
+            - paragraph [ref=f5e700]: Catat pekerjaan kreatif baru. Hanya klien dan nama proyek yang wajib diisi — sisanya dapat dilengkapi kemudian.
+        - generic [ref=f5e701]:
+          - generic [ref=f5e702]:
+            - generic [ref=f5e704]:
+              - generic [ref=f5e706]:
+                - generic [ref=f5e707]: "01"
+                - generic [ref=f5e712]:
+                  - heading "Identitas Proyek" [level=2] [ref=f5e713]
+                  - paragraph [ref=f5e714]: Nama dan jenis pekerjaan yang akan dikerjakan.
+              - generic [ref=f5e715]:
+                - generic [ref=f5e716]:
+                  - generic [ref=f5e717]: Nama proyek *
+                  - textbox "Nama proyek *" [ref=f5e718]:
+                    - /placeholder: "Contoh: Company Profile Video PT Nusantara"
+                    - text: QA Unsaved Guard 20260915
+                - generic [ref=f5e719]:
+                  - generic [ref=f5e720]: Tipe proyek
+                  - combobox "Tipe proyek Bebas diisi — daftar di bawah hanya saran." [ref=f5e721]
+                  - generic [ref=f5e722]: Bebas diisi — daftar di bawah hanya saran.
+            - generic [ref=f5e724]:
+              - generic [ref=f5e726]:
+                - generic [ref=f5e727]: "02"
+                - generic [ref=f5e734]:
+                  - heading "Klien" [level=2] [ref=f5e735]
+                  - paragraph [ref=f5e736]: Pemilik proyek. Klien adalah data Party dengan peran Klien Studio.
+              - generic [ref=f5e737]:
+                - generic [ref=f5e738]:
+                  - generic [ref=f5e739]: Cari klien
+                  - textbox "Cari klien Cari berdasarkan kode, nama, email, atau nomor telepon." [ref=f5e741]:
+                    - /placeholder: Nama klien, email, atau telepon...
+                  - generic [ref=f5e742]: Cari berdasarkan kode, nama, email, atau nomor telepon.
+                - generic [ref=f5e743]:
+                  - generic [ref=f5e744]: Klien *
+                  - generic [ref=f5e745]:
+                    - combobox "Klien * Klien Baru 1 klien tersedia." [ref=f5e746]:
+                      - option "Pilih klien" [selected]
+                      - option "QA Customer S09 — CUS-000026"
+                    - button "Klien Baru" [ref=f5e747]
+                  - generic [ref=f5e752]: 1 klien tersedia.
+            - generic [ref=f5e754]:
+              - generic [ref=f5e756]:
+                - generic [ref=f5e757]: "03"
+                - generic [ref=f5e763]:
+                  - heading "Jadwal & Prioritas" [level=2] [ref=f5e764]
+                  - paragraph [ref=f5e765]: Rencana mulai dan tenggat penyerahan.
+              - generic [ref=f5e766]:
+                - generic [ref=f5e767]:
+                  - generic [ref=f5e768]: Tanggal mulai
+                  - textbox "Tanggal mulai Terisi otomatis saat proyek mulai dikerjakan jika dikosongkan." [ref=f5e769]
+                  - generic [ref=f5e770]: Terisi otomatis saat proyek mulai dikerjakan jika dikosongkan.
+                - generic [ref=f5e771]:
+                  - generic [ref=f5e772]: Deadline
+                  - textbox "Deadline" [ref=f5e773]
+                - generic [ref=f5e774]:
+                  - generic [ref=f5e775]: Prioritas
+                  - combobox "Prioritas" [ref=f5e776]:
+                    - option "Rendah"
+                    - option "Normal" [selected]
+                    - option "Tinggi"
+                    - option "Kritis"
+            - generic [ref=f5e778]:
+              - generic [ref=f5e780]:
+                - generic [ref=f5e781]: "04"
+                - generic [ref=f5e786]:
+                  - heading "Brief Proyek" [level=2] [ref=f5e787]
+                  - paragraph [ref=f5e788]: Ringkasan kebutuhan klien dan hasil yang diharapkan.
+              - generic [ref=f5e789]:
+                - generic [ref=f5e790]: Brief
+                - textbox "Brief" [ref=f5e791]:
+                  - /placeholder: Tujuan, gaya visual, referensi, dan batasan proyek...
+            - generic [ref=f5e793]:
+              - generic [ref=f5e795]:
+                - generic [ref=f5e796]: "05"
+                - generic [ref=f5e802]:
+                  - heading "Layanan & Scope" [level=2] [ref=f5e803]
+                  - paragraph [ref=f5e804]: Rincian pekerjaan yang disepakati. Harga tersimpan sebagai snapshot komersial.
+              - generic [ref=f5e805]:
+                - paragraph [ref=f5e806]: Katalog Layanan Studio masih kosong. Anda tetap dapat menuliskan scope kustom pada setiap baris di bawah.
+                - generic [ref=f5e807]:
+                  - generic [ref=f5e808]: Layanan 1
+                  - generic [ref=f5e810]:
+                    - generic [ref=f5e811]:
+                      - generic [ref=f5e812]: Layanan katalog
+                      - combobox "Layanan katalog Belum ada layanan pada katalog." [disabled] [ref=f5e813]:
+                        - option "Scope kustom" [selected]
+                      - generic [ref=f5e814]: Belum ada layanan pada katalog.
+                    - generic [ref=f5e815]:
+                      - generic [ref=f5e816]: Paket layanan
+                      - combobox "Paket layanan Belum ada paket layanan." [disabled] [ref=f5e817]:
+                        - option "Tanpa paket" [selected]
+                      - generic [ref=f5e818]: Belum ada paket layanan.
+                  - generic [ref=f5e819]:
+                    - generic [ref=f5e820]:
+                      - generic [ref=f5e821]: Deskripsi scope *
+                      - textbox "Deskripsi scope *" [ref=f5e822]:
+                        - /placeholder: "Contoh: Shooting 2 hari di lokasi klien"
+                    - generic [ref=f5e823]:
+                      - generic [ref=f5e824]: Jumlah *
+                      - textbox "Jumlah * Boleh desimal." [ref=f5e825]:
+                        - /placeholder: "1"
+                        - text: "1"
+                      - generic [ref=f5e826]: Boleh desimal.
+                    - generic [ref=f5e827]:
+                      - generic [ref=f5e828]: Harga satuan *
+                      - generic [ref=f5e829]:
+                        - generic: Rp
+                        - textbox "Harga satuan * Rp" [ref=f5e830]:
+                          - /placeholder: "0"
+                  - paragraph [ref=f5e831]: "Subtotal baris: Rp 0"
+                - button "Tambah Layanan" [ref=f5e832]
+            - generic [ref=f5e835]:
+              - generic [ref=f5e837]:
+                - generic [ref=f5e838]: "06"
+                - generic [ref=f5e843]:
+                  - heading "Nilai Proyek" [level=2] [ref=f5e844]
+                  - paragraph [ref=f5e845]: Nilai kontrak dan estimasi biaya untuk perencanaan.
+              - generic [ref=f5e846]:
+                - generic [ref=f5e847]:
+                  - generic [ref=f5e848]: Nilai kontrak
+                  - generic [ref=f5e849]:
+                    - generic: Rp
+                    - textbox "Nilai kontrak Rp Nilai yang disepakati dengan klien." [ref=f5e850]:
+                      - /placeholder: "0"
+                  - generic [ref=f5e851]: Nilai yang disepakati dengan klien.
+                - generic [ref=f5e852]:
+                  - generic [ref=f5e853]: Estimasi biaya
+                  - generic [ref=f5e854]:
+                    - generic: Rp
+                    - textbox "Estimasi biaya Rp Perkiraan biaya produksi. Biaya aktual dikelola oleh Keuangan Studio." [ref=f5e855]:
+                      - /placeholder: "0"
+                  - generic [ref=f5e856]: Perkiraan biaya produksi. Biaya aktual dikelola oleh Keuangan Studio.
+            - generic [ref=f5e858]:
+              - generic [ref=f5e860]:
+                - generic [ref=f5e861]: "07"
+                - generic [ref=f5e867]:
+                  - heading "Project Manager & Tim" [level=2] [ref=f5e868]
+                  - paragraph [ref=f5e869]: Penanggung jawab dan anggota tim internal.
+              - generic [ref=f5e870]:
+                - generic [ref=f5e871]: Project Manager
+                - combobox "Project Manager PM otomatis tercatat sebagai anggota tim proyek." [ref=f5e872]:
+                  - option "Belum ditugaskan" [selected]
+                  - option "Ahmad Ropaldo — Insinyur 3D"
+                  - option "Amadea Salsabila — Staf Spesialis"
+                  - option "April Adzania — Chief Executive Officer"
+                  - option "Cantika Anggi — Staf Spesialis"
+                  - option "Dian Daeli — Chief Operating Officer"
+                  - option "Muhammad Taqi Izdiharr — Chief Technology Officer"
+                  - option "Nadine Nathania Pelleng — Staf Spesialis"
+                  - option "Naura Ramadhani — Staf Spesialis"
+                  - option "QA User-1 — Insinyur 3D"
+                  - option "Siti Amany Fakhirah Riby — Staf Spesialis"
+                - generic [ref=f5e873]: PM otomatis tercatat sebagai anggota tim proyek.
+              - generic [ref=f5e874]:
+                - paragraph [ref=f5e875]: Belum ada anggota tim tambahan. Project Manager otomatis tercatat sebagai anggota tim.
+                - button "Tambah Anggota" [ref=f5e876]
+            - generic [ref=f5e879]:
+              - generic [ref=f5e881]:
+                - generic [ref=f5e882]: "08"
+                - generic [ref=f5e888]:
+                  - heading "Tahapan Awal" [level=2] [ref=f5e889]
+                  - paragraph [ref=f5e890]: Opsional. Tahapan dapat ditambahkan kapan saja dari Detail Proyek.
+              - button "Tambah Tahapan" [ref=f5e892]
+            - generic [ref=f5e895]:
+              - generic [ref=f5e897]:
+                - generic [ref=f5e898]: "09"
+                - generic [ref=f5e903]:
+                  - heading "Deliverable Awal" [level=2] [ref=f5e904]
+                  - paragraph [ref=f5e905]: Opsional. Unggahan file dilakukan dari Detail Proyek.
+              - button "Tambah Deliverable" [ref=f5e907]
+            - generic [ref=f5e910]:
+              - generic [ref=f5e912]:
+                - generic [ref=f5e913]: "10"
+                - generic [ref=f5e918]:
+                  - heading "Catatan" [level=2] [ref=f5e919]
+                  - paragraph [ref=f5e920]: Catatan internal yang tidak dibagikan ke klien.
+              - generic [ref=f5e921]:
+                - generic [ref=f5e922]: Catatan internal
+                - textbox "Catatan internal" [ref=f5e923]
+          - complementary [ref=f5e924]:
+            - generic [ref=f5e925]:
+              - generic [ref=f5e926]:
+                - paragraph [ref=f5e927]: Ringkasan proyek
+                - generic [ref=f5e928]:
+                  - generic [ref=f5e929]: Nilai Kontrak
+                  - generic [ref=f5e930]: Rp 0
+              - generic [ref=f5e931]:
+                - generic [ref=f5e932]:
+                  - generic [ref=f5e933]: Subtotal Layanan
+                  - generic [ref=f5e934]: Rp 0
+                - generic [ref=f5e935]:
+                  - generic [ref=f5e936]: Estimasi Biaya
+                  - generic [ref=f5e937]: Rp 0
+                - generic [ref=f5e939]:
+                  - generic [ref=f5e940]: Baris layanan
+                  - generic [ref=f5e941]: "0"
+                - generic [ref=f5e942]:
+                  - generic [ref=f5e943]: Anggota tim
+                  - generic [ref=f5e944]: "0"
+                - generic [ref=f5e945]:
+                  - generic [ref=f5e946]: Tahapan
+                  - generic [ref=f5e947]: "0"
+                - generic [ref=f5e948]:
+                  - generic [ref=f5e949]: Deliverable
+                  - generic [ref=f5e950]: "0"
+                - paragraph [ref=f5e951]:
+                  - text: Proyek baru dimulai pada status
+                  - strong [ref=f5e952]: Prospek
+                  - text: . Ubah status dari halaman Detail Proyek setelah pekerjaan disepakati.
+                - button "Simpan Proyek" [ref=f5e953]
+        - dialog [ref=f5e970]:
+          - generic [ref=f5e971]:
+            - heading "Perubahan Belum Disimpan" [level=2] [ref=f5e975]
+            - paragraph [ref=f5e976]: Data proyek yang Anda isi belum disimpan dan akan hilang jika Anda meninggalkan halaman ini.
+          - generic [ref=f5e977]:
+            - button "Keluar Tanpa Menyimpan" [ref=f5e978]
+            - button "Lanjut Mengedit" [ref=f5e979]

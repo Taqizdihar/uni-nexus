@@ -1,0 +1,148 @@
+- generic [ref=f36e66]:
+  - complementary [ref=f36e67]:
+    - heading "UNI-NEXUS" [level=1] [ref=f36e69]
+    - generic [ref=f36e70]:
+      - generic [ref=f36e71]:
+        - heading "GLOBAL" [level=3] [ref=f36e72]
+        - link "Dasbor Global" [ref=f36e74] [cursor=pointer]:
+          - /url: /app/dashboard
+      - generic [ref=f36e80]:
+        - heading "OPERASIONAL" [level=3] [ref=f36e81]
+        - generic [ref=f36e82]:
+          - button "Pesanan" [ref=f36e363]
+          - button "Produksi" [ref=f36e372]
+          - button "Produk & Desain" [ref=f36e381]
+          - button "Printer" [ref=f36e392]
+          - button "Material" [ref=f36e401]
+      - generic [ref=f36e96]:
+        - heading "BISNIS" [level=3] [ref=f36e97]
+        - generic [ref=f36e98]:
+          - button "Pelanggan & Mitra" [ref=f36e409]
+          - generic [ref=f36e418]:
+            - button "Pengadaan" [ref=f36e419]
+            - generic [ref=f36e459]:
+              - link "Ringkasan Pengadaan" [ref=f36e460] [cursor=pointer]:
+                - /url: /app/craft/procurement
+              - link "Pemasok" [ref=f36e461] [cursor=pointer]:
+                - /url: /app/craft/procurement/suppliers
+              - link "Permintaan Pembelian" [ref=f36e462] [cursor=pointer]:
+                - /url: /app/craft/procurement/requests
+              - link "Pesanan Pembelian" [ref=f36e463] [cursor=pointer]:
+                - /url: /app/craft/procurement/orders
+              - link "Penerimaan Barang" [ref=f36e464] [cursor=pointer]:
+                - /url: /app/craft/procurement/receipts
+              - link "Tagihan Pemasok" [ref=f36e465] [cursor=pointer]:
+                - /url: /app/craft/procurement/invoices
+              - link "Riwayat Pengadaan" [ref=f36e466] [cursor=pointer]:
+                - /url: /app/craft/procurement/history
+          - button "Keuangan" [ref=f36e100]
+          - button "Laporan & Analitik" [ref=f36e430]
+      - generic [ref=f36e107]:
+        - heading "SISTEM" [level=3] [ref=f36e108]
+        - generic [ref=f36e439]:
+          - button "Marketplace & Kanal Penjualan" [ref=f36e441]
+          - button "Otomasi" [ref=f36e451]
+      - generic [ref=f36e109]:
+        - heading "FITUR GLOBAL" [level=3] [ref=f36e110]
+        - generic [ref=f36e111]:
+          - link "Pusat Dokumen" [ref=f36e112] [cursor=pointer]:
+            - /url: /app/documents
+          - link "Kalender & Tugas" [ref=f36e117] [cursor=pointer]:
+            - /url: /app/calendar
+          - link "Notifikasi" [ref=f36e120] [cursor=pointer]:
+            - /url: /app/notifications
+          - link "Log Audit" [ref=f36e124] [cursor=pointer]:
+            - /url: /app/audit-log
+          - link "Integrasi" [ref=f36e127] [cursor=pointer]:
+            - /url: /app/integrations
+          - link "Pusat Otomasi" [ref=f36e133] [cursor=pointer]:
+            - /url: /app/automations
+          - link "Pusat Laporan" [ref=f36e136] [cursor=pointer]:
+            - /url: /app/reports
+          - link "Data Master" [ref=f36e142] [cursor=pointer]:
+            - /url: /app/master-data
+          - link "Pengaturan" [ref=f36e147] [cursor=pointer]:
+            - /url: /app/settings
+  - generic [ref=f36e151]:
+    - banner [ref=f36e152]:
+      - combobox [ref=f36e154]:
+        - searchbox "Cari pesanan, proyek, klien..." [ref=f36e158]
+        - generic [ref=f36e159]:
+          - generic [ref=f36e160]: ⌘
+          - generic [ref=f36e161]: K
+      - generic [ref=f36e162]:
+        - 'button "Pengguna aktif: 1 pengguna aktif" [ref=f36e164]'
+        - button [ref=f36e457]:
+          - generic [ref=f36e177]:
+            - text: "Workspace:"
+            - generic [ref=f36e178]:
+              - img "Craft Logo" [ref=f36e458]
+              - text: Uni-Inside Craft
+        - button "Buka notifikasi" [ref=f36e181]:
+          - generic [ref=f36e185]: "2"
+        - button [ref=f36e187]:
+          - generic [aria-hidden] [ref=f36e188]: QU
+    - main [ref=f36e189]:
+      - generic [ref=f36e522]:
+        - generic [ref=f36e523]:
+          - generic [ref=f36e524]:
+            - link "Kembali" [ref=f36e525] [cursor=pointer]:
+              - /url: /app/craft/procurement/orders
+            - paragraph [ref=f36e528]: PENGADAAN
+            - heading "Buat Pesanan Pembelian" [level=1] [ref=f36e529]
+            - paragraph [ref=f36e530]: PO langsung tetap memerlukan pemasok aktif dan tidak menandai pembayaran.
+          - generic [ref=f36e531]:
+            - button "Batal" [ref=f36e532]
+            - button "Simpan PO Draf" [ref=f36e533]
+        - generic [ref=f36e535]:
+          - generic [ref=f36e536]:
+            - text: Pemasok *
+            - combobox "Pemasok *" [ref=f36e537]:
+              - option "Pilih pemasok aktif" [selected]
+              - option "SUP-000020 — QA Supplier Primary"
+          - generic [ref=f36e538]:
+            - text: Tanggal PO *
+            - textbox "Tanggal PO *" [ref=f36e539]: 2026-09-15
+          - generic [ref=f36e540]:
+            - text: Estimasi tiba
+            - textbox "Estimasi tiba" [ref=f36e541]
+          - generic [ref=f36e542]:
+            - text: Pajak
+            - spinbutton "Pajak" [ref=f36e543]
+          - generic [ref=f36e544]:
+            - text: Ongkir
+            - spinbutton "Ongkir" [ref=f36e545]
+          - generic [ref=f36e546]:
+            - text: Catatan
+            - textbox "Catatan" [ref=f36e547]
+        - generic [ref=f36e548]:
+          - generic [ref=f36e549]:
+            - heading "Item PO" [level=2] [ref=f36e550]
+            - button "Item" [ref=f36e551]
+          - generic [ref=f36e554]:
+            - generic [ref=f36e556]:
+              - text: Material
+              - combobox "Material" [ref=f36e557]:
+                - option "Non-material" [selected]
+            - generic [ref=f36e559]:
+              - text: Deskripsi *
+              - textbox "Deskripsi *" [ref=f36e560]
+            - generic [ref=f36e562]:
+              - text: Jumlah *
+              - spinbutton "Jumlah *" [ref=f36e563]: "1"
+            - generic [ref=f36e565]:
+              - text: Satuan
+              - combobox "Satuan" [ref=f36e566]:
+                - option "Pilih" [selected]
+                - option "qe"
+            - generic [ref=f36e568]:
+              - text: Harga
+              - spinbutton "Harga" [ref=f36e569]: "0"
+            - generic [ref=f36e570]:
+              - button [disabled]
+          - generic [ref=f36e571]:
+            - text: Subtotal
+            - strong [ref=f36e572]: Rp 0
+            - generic [ref=f36e573]: ·
+            - text: Total
+            - strong [ref=f36e574]: Rp 0

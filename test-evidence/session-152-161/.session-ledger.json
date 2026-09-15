@@ -1,0 +1,123 @@
+{
+  "session": "152-161",
+  "start_row": 152,
+  "end_row": 161,
+  "selected_rows": [152, 153, 154, 155, 156, 157, 158, 159, 160, 161],
+  "cases": [
+    {
+      "row": 152,
+      "id": "UNX-S11-001",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-001/01-project-list.png",
+        "UNX-S11-001/02-search-no-match.png",
+        "UNX-S11-001/03-filter-combination.png",
+        "UNX-S11-001/04-sorting-empty-result.png",
+        "UNX-S11-001/05-reset-empty-result.png"
+      ],
+      "note": "Pada langkah 1–8, halaman Proyek dapat dimuat dan kontrol search/filter/sort tersedia; namun daftar menampilkan Belum Ada Proyek, katalog layanan kosong (filter Layanan disabled), sehingga pencarian berbasis data, intersection filter, pagination page size 24/meta, dan urutan sort tidak dapat diverifikasi. Pada langkah reset, filter kembali ke semua, tetapi kata kunci pencarian tetap tersisa sehingga kondisi awal daftar tidak sepenuhnya pulih. Langkah 9 tidak dapat dilakukan karena tidak ada card proyek. Langkah 10–11 belum dapat diverifikasi melalui UI karena diperlukan akun pembanding dan data proyek lintas unit. Expected Result tidak seluruhnya terpenuhi. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-001/01-project-list.png sampai 05-reset-empty-result.png."
+    },
+    {
+      "row": 153,
+      "id": "UNX-S11-002",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-002/01-overview-kpi-empty.png",
+        "UNX-S11-002/02-active-projects-empty.png"
+      ],
+      "note": "Langkah 1–6 dijalankan pada daftar Proyek dan halaman Proyek Aktif. KPI yang terlihat seluruhnya 0 dan halaman Proyek Aktif menampilkan Belum Ada Proyek Aktif. Karena tidak ada proyek/milestone/deliverable, langkah boundary deadline hari ini/+7, completed_at bulan berjalan, derived progress milestone→deliverable→status, progress 100% untuk completed/paid, null tanpa rencana, serta konsistensi badge list/active/detail tidak dapat direkonsiliasi. Expected Result tidak seluruhnya dapat dibuktikan. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-002/01-overview-kpi-empty.png dan 02-active-projects-empty.png."
+    },
+    {
+      "row": 154,
+      "id": "UNX-S11-003",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-003/01-project-form-empty.png",
+        "UNX-S11-003/02-project-validation-no-client.png",
+        "UNX-S11-003/03-nested-fields-no-client.png"
+      ],
+      "note": "Langkah 1–3 dan validasi submit dijalankan melalui Proyek Baru. Form memuat field identitas, scope kustom, tim, tahapan, deliverable, dan nilai proyek; submit tanpa client menampilkan 'Klien wajib dipilih.'. Namun prasyarat client Studio valid tidak tersedia karena UI menyatakan 0 klien tersedia, katalog layanan/paket kosong dan combobox layanan disabled. Karena client valid tidak ada, create valid, kode PRJ, transaksi atomic, rollback child, subtotal/contract seed, duplicate PM membership, history, audit, dan domain event tidak dapat diuji melalui frontend. Nilai negatif yang diisi pada field angka tidak dipertahankan sebagai nilai negatif pada UI dan tampak ter-normalisasi menjadi 1, sedangkan currency 3 karakter tidak memiliki field pada form. Expected Result tidak terpenuhi sepenuhnya karena prasyarat dan bagian workflow utama tidak tersedia. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-003/01-project-form-empty.png, 02-project-validation-no-client.png, dan 03-nested-fields-no-client.png."
+    },
+    {
+      "row": 155,
+      "id": "UNX-S11-004",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-004/01-quick-client-modal.png",
+        "UNX-S11-004/02-invalid-email-rejected.png",
+        "UNX-S11-004/03-valid-quick-client-attempt.png",
+        "UNX-S11-004/04-existing-party-candidate.png",
+        "UNX-S11-004/05-valid-quick-create-failed.png",
+        "UNX-S11-004/06-duplicate-repeat-candidate.png"
+      ],
+      "note": "Langkah 1–2 dijalankan dari selector Client → Klien Baru. UI menampilkan kandidat duplicate berdasarkan nomor telepon dan menyediakan tombol Gunakan Party Ini; hal ini membuktikan kandidat relevan dapat ditampilkan. Langkah 3 dicoba dengan data client valid, tetapi klik Simpan Klien memicu dialog beforeunload dan modal tetap terbuka sehingga client baru tidak berhasil dibuat/ditampilkan sebagai client baru. Langkah 4 diisi dengan nama valid dan email 'bukan-email'; tombol simpan tetap aktif dan tidak ada pesan validasi email yang terlihat, lalu alur tidak selesai. Langkah 5 memilih Gunakan Party Ini dan selector sempat memilih QA Customer S09 — CUS-000026, tetapi flag reused tidak terlihat. Setelah pengulangan duplicate, UI kembali hanya menunjukkan 1 klien tersedia dan detail selector ter-render kosong sehingga identitas terpilih tidak dapat diverifikasi. Langkah 8–9 tentang kombinasi permission dan party organisasi lain tidak dapat diverifikasi dengan account pembanding melalui UI pada sesi ini. Langkah 10 tidak dapat diselesaikan karena alur quick-create baru gagal dan selector setelah reuse kehilangan tampilan client. Expected Result tidak terpenuhi: quick-create valid tidak selesai, email invalid tidak ditolak secara terlihat, flag reused tidak ditampilkan, dan selector tidak stabil setelah reuse. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-004/01-quick-client-modal.png sampai 06-duplicate-repeat-candidate.png."
+    },
+    {
+      "row": 156,
+      "id": "UNX-S11-005",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-005/01-no-project-for-service-scope.png"
+      ],
+      "note": "Langkah 1–11 tidak dapat dilakukan pada Detail Proyek karena daftar Proyek melalui UI menampilkan Belum Ada Proyek dan tidak ada project ID/card yang dapat dibuka. Prasyarat project non-cancelled serta katalog service/package aktif, inactive, dan foreign unit tidak tersedia; form Proyek Baru juga menyatakan katalog layanan Studio masih kosong. Akibatnya CRUD scope, validasi line, server line_total/subtotal, snapshot harga, custom line, cancelled guard, foreign line ID, dan audit tidak dapat dipenuhi atau diverifikasi melalui frontend. Dialog Perubahan Belum Disimpan yang muncul saat meninggalkan form sebelumnya ditutup dengan pilihan Keluar Tanpa Menyimpan; tidak ada data proyek tersimpan. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-005/01-no-project-for-service-scope.png."
+    },
+    {
+      "row": 157,
+      "id": "UNX-S11-006",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 — Insinyur 3D",
+      "evidence": [
+        "UNX-S11-006/01-no-project-billing-lock.png",
+        "UNX-S11-006/02-finance-menu-no-project.png"
+      ],
+      "note": "Langkah 1–11 tidak dapat direkonsiliasi karena UI daftar Proyek menampilkan Belum Ada Proyek; tidak ada project dengan service line, quotation, invoice, atau lock source yang bisa dibuka. Menu Keuangan terlihat tersedia, tetapi tanpa project komersial dan dokumen Billing/Finance, contract_value versus subtotal, sync eksplisit, commercial lock quotation/invoice, field operasional saat locked, UI alasan lock, dan unlock workflow tidak dapat diuji melalui frontend. Expected Result tidak terpenuhi karena seluruh prasyarat data komersial tidak tersedia. Akun yang digunakan: ACCOUNT #1 — Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-006/01-no-project-billing-lock.png dan 02-finance-menu-no-project.png."
+    },
+    {
+      "row": 158,
+      "id": "UNX-S11-007",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 â€” Insinyur 3D",
+      "evidence": [
+        "UNX-S11-007/01-unsaved-changes-guard.png",
+        "UNX-S11-007/02-unsaved-continue.png",
+        "UNX-S11-007/03-unsaved-leave-empty.png"
+      ],
+      "note": "Pada Proyek Baru, nama proyek diisi lalu navigasi ke Semua Proyek memunculkan dialog Perubahan Belum Disimpan dengan pilihan Lanjut Mengedit dan Keluar Tanpa Menyimpan. Lanjut Mengedit mempertahankan form, sedangkan Keluar Tanpa Menyimpan membawa kembali ke daftar yang menampilkan Belum Ada Proyek. Guard perubahan yang belum disimpan terlihat berfungsi, tetapi tidak ada proyek tersimpan untuk langkah edit master, validasi client/PM, field finansial read-only, atau guard proyek Selesai/Dibatalkan. Expected Result tidak seluruhnya terpenuhi karena workflow Detail Proyek dan lock finansial tidak dapat dilakukan. Akun yang digunakan: ACCOUNT #1 â€” Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-007/01-unsaved-changes-guard.png, 02-unsaved-continue.png, dan 03-unsaved-leave-empty.png."
+    },
+    {
+      "row": 159,
+      "id": "UNX-S11-008",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 â€” Insinyur 3D",
+      "evidence": [
+        "UNX-S11-008/01-no-project-lifecycle.png"
+      ],
+      "note": "Halaman Proyek Aktif dibuka melalui frontend dan menampilkan Belum Ada Proyek Aktif; tidak ada card atau project ID yang dapat dibuka. Karena tidak ada proyek, transisi Prospek ke Disetujui/Sedang Dikerjakan/Tinjauan/Selesai/Dibatalkan, validasi alasan pembatalan, guard sebelum pembatalan, timestamp, history, audit, dan domain event tidak dapat dilakukan atau diverifikasi. Expected Result tidak terpenuhi karena data proyek lifecycle yang diperlukan tidak tersedia. Akun yang digunakan: ACCOUNT #1 â€” Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-008/01-no-project-lifecycle.png."
+    },
+    {
+      "row": 160,
+      "id": "UNX-S11-009",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 â€” Insinyur 3D",
+      "evidence": [
+        "UNX-S11-009/01-no-project-payment-guard.png"
+      ],
+      "note": "Daftar Proyek tidak memiliki proyek yang dapat dibuka ke tab Komersial atau aksi pembayaran. Ringkasan Keuangan yang dibuka melalui frontend menampilkan seluruh nilai Rp 0 dan pesan Belum ada transaksi tercatat. Tanpa proyek Selesai, invoice canonical, payment record, expense, external fee, dan asset, langkah guard Selesai ke Dibayar, pembayaran parsial/berlebih, konsistensi invoice-payment, serta ringkasan komersial tidak dapat diuji. Expected Result tidak terpenuhi karena prasyarat workflow pembayaran tidak tersedia. Akun yang digunakan: ACCOUNT #1 â€” Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-009/01-no-project-payment-guard.png."
+    },
+    {
+      "row": 161,
+      "id": "UNX-S11-010",
+      "status": "Bug/Failed",
+      "account": "ACCOUNT #1 â€” Insinyur 3D",
+      "evidence": [
+        "UNX-S11-010/01-no-project-team.png"
+      ],
+      "note": "Tidak ada card atau project ID pada daftar Proyek sehingga Detail Proyek dan tab Tim tidak dapat dibuka. Form Proyek Baru hanya memperlihatkan kontrol awal Project Manager dan Tambah Anggota; kontrol detail untuk assignment, allocation, upsert, rejoin, leave, serta guard akses tidak dapat dijalankan tanpa proyek tersimpan. Expected Result tidak terpenuhi karena prasyarat proyek untuk pengujian internal team tidak tersedia. Akun yang digunakan: ACCOUNT #1 â€” Insinyur 3D, workspace Uni-Inside Studio. Bukti: test-evidence/session-152-161/UNX-S11-010/01-no-project-team.png."
+    }
+  ]
+}

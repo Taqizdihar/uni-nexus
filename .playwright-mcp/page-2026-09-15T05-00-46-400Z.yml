@@ -1,0 +1,26 @@
+- generic [ref=f28e3]:
+  - banner [ref=f28e7]:
+    - generic [ref=f28e8]:
+      - img "Uni-Inside Studio Logo"
+      - img "Uni-Inside Craft Logo"
+    - link "Daftar" [ref=f28e10] [cursor=pointer]:
+      - /url: /register
+  - main [ref=f28e11]:
+    - generic [ref=f28e12]:
+      - paragraph [ref=f28e13]: "\"From nexus, cometh order, and thus, opus.\""
+      - heading "U N I - N E X U S" [level=1] [ref=f28e14]:
+        - generic [ref=f28e15]:
+          - generic [ref=f28e16]: U
+          - generic [ref=f28e17]: "N"
+          - generic [ref=f28e18]: I
+          - generic [ref=f28e19]: "-"
+          - generic [ref=f28e20]: "N"
+          - generic [ref=f28e21]: E
+          - generic [ref=f28e22]: X
+          - generic [ref=f28e23]: U
+          - generic [ref=f28e24]: S
+      - generic [ref=f28e25]: Nexus.Ordo.Opus.
+      - paragraph [ref=f28e26]: Sistem terpusat untuk pengelolaan operasional dan keuangan Uni-Inside Studio. Menghubungkan proses produksi 3D dan layanan kreatif dalam satu ekosistem terpadu.
+      - link "Tekan Enter untuk Masuk" [ref=f28e28] [cursor=pointer]:
+        - /url: /login
+  - contentinfo [ref=f28e32]: © 2026 UNI-INSIDE STUDIO. HAK CIPTA DILINDUNGI.
