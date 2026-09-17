@@ -1,0 +1,83 @@
+import { useEffect } from 'react';
+import { CornerDownLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import studioDarkLogo from '../assets/branding/logos/uni-inside-studio/Uni-Inside Studio Dark Mode.png';
+import craftDarkLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Dark Mode 2.png';
+import { AnimatedBrandText } from '../components/public/animated-brand-text';
+import FloatingLines from '../components/public/floating-lines';
+
+export function Landing() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') navigate('/login');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
+  return (
+    <div className="nexus-public min-h-screen dark-theme flex flex-col relative overflow-hidden">
+      <div className="absolute inset-0" style={{ zIndex: 0, opacity: 0.35 }}>
+        <FloatingLines
+          linesGradient={['#FFD43B', '#FFF7CC', '#FFFFFF']}
+          enabledWaves={['top', 'middle', 'bottom']}
+          lineCount={[10, 15, 20]}
+          lineDistance={[8, 6, 4]}
+          bendRadius={5}
+          bendStrength={-0.5}
+          interactive
+          parallax
+          mixBlendMode="screen"
+        />
+      </div>
+
+      <header className="px-6 md:px-10 py-6 flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-4 md:gap-6">
+          <img src={studioDarkLogo} alt="Uni-Inside Studio Logo" className="h-10 md:h-12 w-auto object-contain transition-transform hover:scale-105" />
+          <img src={craftDarkLogo} alt="Uni-Inside Craft Logo" className="h-10 md:h-12 w-auto object-contain transition-transform hover:scale-105" />
+        </div>
+        <Link to="/signup" className="text-sm font-medium text-white hover:text-white transition-colors uppercase tracking-wider">
+          Daftar
+        </Link>
+      </header>
+
+      <main className="flex-1 flex flex-col items-center justify-center relative z-10 px-6 text-center">
+        <div className="space-y-6 max-w-4xl nexus-landing-copy">
+          <p className="tracking-wide text-[1.3125rem] font-semibold italic">
+            <span className="text-white">"From nexus,</span>{' '}
+            <span className="text-gray-300">cometh order,</span>{' '}
+            <span className="text-[var(--nexus-yellow)]">and thus, opus."</span>
+          </p>
+
+          <h1 className="text-6xl md:text-8xl nexus-brand-font tracking-tight text-white glow-text">
+            <AnimatedBrandText text="UNI-NEXUS" />
+          </h1>
+
+          <div className="text-2xl md:text-3xl font-bold tracking-wide space-x-4">
+            <span className="text-white">Nexus.</span>
+            <span className="text-gray-300">Ordo.</span>
+            <span className="text-[var(--nexus-yellow)]">Opus.</span>
+          </div>
+
+          <p className="text-white max-w-2xl mx-auto pt-8 text-lg font-light leading-relaxed">
+            Sistem terpusat untuk pengelolaan operasional dan keuangan Uni-Inside Studio.
+            Menghubungkan proses produksi 3D dan layanan kreatif dalam satu ekosistem terpadu.
+          </p>
+
+          <div className="pt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link to="/login" className="nexus-landing-cta inline-flex items-center justify-center rounded-full group px-8 py-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nexus-yellow)] bg-[var(--nexus-yellow)] text-black hover:bg-[var(--nexus-yellow-deep)] hover:shadow-[0_0_20px_rgba(255,212,59,0.3)]">
+              <CornerDownLeft className="mr-2 w-4 h-4" />
+              Tekan Enter untuk Masuk
+            </Link>
+          </div>
+        </div>
+      </main>
+
+      <footer className="py-8 text-center text-xs text-white relative z-10 tracking-wider">
+        © {new Date().getFullYear()} UNI-INSIDE STUDIO. HAK CIPTA DILINDUNGI.
+      </footer>
+    </div>
+  );
+}

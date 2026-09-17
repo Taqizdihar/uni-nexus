@@ -6,6 +6,7 @@ import { AuthProvider } from './lib/auth';
 import { ToastProvider } from './components/ui';
 import { Shell } from './components/shell';
 import { AuthPage } from './pages/auth';
+import { Landing } from './pages/landing';
 import { Dashboard } from './pages/dashboard';
 import { Notifications } from './pages/notifications';
 import { Settings } from './pages/settings';
@@ -23,7 +24,7 @@ createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <AuthProvider>
             <Routes>
-              <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={<AuthPage mode="login" />} />
               <Route path="/signup" element={<AuthPage mode="signup" />} />
               <Route path="/setup" element={<AuthPage mode="setup" />} />

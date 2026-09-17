@@ -1,0 +1,35 @@
+- generic [ref=f2e8]:
+  - link "U N I - N E X U S" [ref=f2e9] [cursor=pointer]:
+    - /url: /
+    - generic [ref=f2e11]:
+      - generic [ref=f2e12]: U
+      - generic [ref=f2e13]: "N"
+      - generic [ref=f2e14]: I
+      - generic [ref=f2e15]: "-"
+      - generic [ref=f2e16]: "N"
+      - generic [ref=f2e17]: E
+      - generic [ref=f2e18]: X
+      - generic [ref=f2e19]: U
+      - generic [ref=f2e20]: S
+  - generic [ref=f2e21]:
+    - generic [ref=f2e22]:
+      - heading "Buat Akun" [level=1] [ref=f2e23]
+      - paragraph [ref=f2e24]: Bergabung dengan sistem operasional Uni-Inside
+    - generic [ref=f2e25]:
+      - generic [ref=f2e26]:
+        - generic [ref=f2e27]: Nama Lengkap
+        - textbox "Nama Lengkap" [ref=f2e28]:
+          - /placeholder: Budi Santoso
+      - generic [ref=f2e29]:
+        - generic [ref=f2e30]: Email
+        - textbox "Email" [ref=f2e31]:
+          - /placeholder: budi@example.com
+      - generic [ref=f2e32]:
+        - generic [ref=f2e33]: Kata Sandi
+        - textbox "Kata Sandi" [ref=f2e34]:
+          - /placeholder: Buat kata sandi
+      - button "Buat Akun" [ref=f2e35] [cursor=pointer]
+    - generic [ref=f2e36]:
+      - text: Sudah memiliki akun?
+      - link "Masuk" [ref=f2e37] [cursor=pointer]:
+        - /url: /login

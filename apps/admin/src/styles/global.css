@@ -1,5 +1,17 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Technique';
+  src: url('../assets/fonts/Technique/techniqo.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TechniqueLanding';
+  src: url('../assets/fonts/Technique/techniqu.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
   --ink: #10262b;
   --ink-soft: #4c6066;
@@ -2086,4 +2098,172 @@ dd.json-value {
   .page-heading {
     flex-direction: column;
   }
+}
+
+/* Cinematic public and authentication surfaces copied from the legacy UNI-NEXUS UI. */
+.dark-theme {
+  background: var(--nexus-black);
+  color: var(--nexus-white);
+}
+
+.nexus-public,
+.nexus-auth {
+  --nexus-black: #000;
+  --nexus-charcoal: #202020;
+  --nexus-yellow: #ffd43b;
+  --nexus-yellow-deep: #e5b900;
+  --nexus-white: #fff;
+  --nexus-muted: #737373;
+  color: var(--nexus-white);
+}
+
+.nexus-public h1,
+.nexus-public h2,
+.nexus-public h3,
+.nexus-auth h1,
+.nexus-auth h2,
+.nexus-auth h3 {
+  color: var(--nexus-white);
+}
+
+.nexus-brand-font {
+  font-family: 'Technique', sans-serif;
+  letter-spacing: 0.08em;
+}
+
+.nexus-public .nexus-brand-font {
+  font-family: 'TechniqueLanding', sans-serif;
+}
+
+.nexus-landing-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.nexus-landing-copy > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nexus-public .nexus-landing-cta {
+  color: #000;
+}
+
+.nexus-auth-input {
+  width: 100%;
+  border: 1px solid #1f2937;
+  border-radius: 0.5rem;
+  background: rgb(0 0 0 / 0.5);
+  padding: 0.625rem 1rem;
+  color: #fff;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 150ms ease;
+}
+
+.nexus-auth-input::placeholder {
+  color: #9ca3af;
+}
+
+.nexus-auth-input:focus {
+  border-color: var(--nexus-yellow);
+}
+
+.nexus-password-field {
+  position: relative;
+}
+
+.nexus-password-field .nexus-auth-input {
+  padding-right: 3rem;
+}
+
+.nexus-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.nexus-password-toggle:hover,
+.nexus-password-toggle:focus-visible {
+  color: var(--nexus-yellow);
+}
+
+.nexus-password-toggle:focus-visible {
+  outline: 2px solid var(--nexus-yellow);
+  outline-offset: 2px;
+}
+
+.nexus-auth-submit {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--nexus-yellow);
+  color: #000;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.nexus-auth-submit:hover:not(:disabled) {
+  background: var(--nexus-yellow-deep);
+  box-shadow: 0 0 20px rgb(255 212 59 / 0.3);
+}
+
+.nexus-auth-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.nexus-field-error {
+  display: block;
+  margin-top: 0.4rem;
+  color: #fca5a5;
+  font-size: 0.75rem;
+}
+
+.nexus-form-error {
+  border: 1px solid rgb(239 68 68 / 0.5);
+  border-radius: 0.5rem;
+  background: rgb(239 68 68 / 0.1);
+  padding: 0.75rem;
+  color: #f87171;
+  font-size: 0.875rem;
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgb(255 212 59 / 0.4), 0 0 40px rgb(255 212 59 / 0.1);
+}
+
+.glow-text-bright-gold {
+  text-shadow: 0 0 10px rgb(255 212 59 / 0.9), 0 0 20px rgb(255 212 59 / 0.7), 0 0 40px rgb(255 212 59 / 0.5), 0 0 80px rgb(255 212 59 / 0.3);
+}
+
+@keyframes wave-jump {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-20px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-7px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-wave-jump {
+  animation: wave-jump 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
