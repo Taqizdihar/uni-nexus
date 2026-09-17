@@ -1,0 +1,1123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model audit_logs {
+  id             BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id   BigInt?     @db.UnsignedBigInt
+  user_id        BigInt?     @db.UnsignedBigInt
+  action         String      @db.VarChar(100)
+  entity_type    String      @db.VarChar(100)
+  entity_id      BigInt?     @db.UnsignedBigInt
+  old_value_json Json?
+  new_value_json Json?
+  ip_address     String?     @db.VarChar(45)
+  user_agent     String?     @db.VarChar(500)
+  created_at     DateTime    @default(now()) @db.DateTime(0)
+  workspaces     workspaces? @relation(fields: [workspace_id], references: [id], map: "audit_logs_ibfk_1")
+  users          users?      @relation(fields: [user_id], references: [id], map: "audit_logs_ibfk_2")
+
+  @@index([entity_type, entity_id], map: "idx_audit_logs_entity")
+  @@index([user_id, created_at], map: "idx_audit_logs_user")
+  @@index([workspace_id, created_at], map: "idx_audit_logs_workspace")
+}
+
+model cost_components {
+  id                BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id      BigInt             @db.UnsignedBigInt
+  name              String             @db.VarChar(120)
+  code              String?            @db.VarChar(60)
+  category          String             @db.VarChar(60)
+  calculation_type  String             @default("MANUAL") @db.VarChar(50)
+  default_unit      String?            @db.VarChar(40)
+  default_unit_cost Decimal?           @db.Decimal(14, 4)
+  description       String?            @db.Text
+  is_active         Boolean            @default(true)
+  created_at        DateTime           @default(now()) @db.DateTime(0)
+  updated_at        DateTime           @default(now()) @db.DateTime(0)
+  workspaces        workspaces         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "cost_components_ibfk_1")
+  production_costs  production_costs[]
+
+  @@unique([workspace_id, code], map: "uq_cost_components_code")
+  @@index([workspace_id, category], map: "idx_cost_components_category")
+}
+
+model custom_requests {
+  id                                                BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id                                      BigInt                @db.UnsignedBigInt
+  request_number                                    String?               @db.VarChar(60)
+  customer_id                                       BigInt                @db.UnsignedBigInt
+  source                                            String                @default("CUSTOMER_APP") @db.VarChar(60)
+  existing_product_id                               BigInt?               @db.UnsignedBigInt
+  title                                             String?               @db.VarChar(180)
+  description                                       String?               @db.Text
+  requested_quantity                                Int                   @default(1) @db.UnsignedInt
+  requested_height_mm                               Decimal?              @db.Decimal(10, 2)
+  requested_width_mm                                Decimal?              @db.Decimal(10, 2)
+  requested_length_mm                               Decimal?              @db.Decimal(10, 2)
+  preferred_material_id                             BigInt?               @db.UnsignedBigInt
+  preferred_color                                   String?               @db.VarChar(100)
+  target_date                                       DateTime?             @db.Date
+  status                                            String                @default("NEW") @db.VarChar(40)
+  assigned_designer_id                              BigInt?               @db.UnsignedBigInt
+  created_by_user_id                                BigInt?               @db.UnsignedBigInt
+  created_at                                        DateTime              @default(now()) @db.DateTime(0)
+  updated_at                                        DateTime              @default(now()) @db.DateTime(0)
+  workspaces                                        workspaces            @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "custom_requests_ibfk_1")
+  customers                                         customers             @relation(fields: [customer_id], references: [id], map: "custom_requests_ibfk_2")
+  products                                          products?             @relation(fields: [existing_product_id], references: [id], map: "custom_requests_ibfk_3")
+  materials                                         materials?            @relation(fields: [preferred_material_id], references: [id], map: "custom_requests_ibfk_4")
+  users_custom_requests_assigned_designer_idTousers users?                @relation("custom_requests_assigned_designer_idTousers", fields: [assigned_designer_id], references: [id], map: "custom_requests_ibfk_5")
+  users_custom_requests_created_by_user_idTousers   users?                @relation("custom_requests_created_by_user_idTousers", fields: [created_by_user_id], references: [id], map: "custom_requests_ibfk_6")
+  design_assets                                     design_assets[]
+  design_tasks                                      design_tasks[]
+  guest_access_tokens                               guest_access_tokens[]
+  ip_reviews                                        ip_reviews[]
+  orders                                            orders[]
+  quotations                                        quotations[]
+  request_files                                     request_files[]
+  request_notes                                     request_notes[]
+
+  @@unique([workspace_id, request_number], map: "uq_custom_requests_number")
+  @@index([created_by_user_id], map: "created_by_user_id")
+  @@index([existing_product_id], map: "existing_product_id")
+  @@index([customer_id], map: "idx_custom_requests_customer")
+  @@index([assigned_designer_id], map: "idx_custom_requests_designer")
+  @@index([workspace_id, status], map: "idx_custom_requests_status")
+  @@index([preferred_material_id], map: "preferred_material_id")
+}
+
+model customer_accounts {
+  id                BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  customer_id       BigInt          @unique(map: "uq_customer_accounts_customer") @db.UnsignedBigInt
+  email             String          @unique(map: "uq_customer_accounts_email") @db.VarChar(190)
+  password_hash     String          @db.VarChar(255)
+  email_verified_at DateTime?       @db.DateTime(0)
+  last_login_at     DateTime?       @db.DateTime(0)
+  is_active         Boolean         @default(true)
+  created_at        DateTime        @default(now()) @db.DateTime(0)
+  updated_at        DateTime        @default(now()) @db.DateTime(0)
+  customers         customers       @relation(fields: [customer_id], references: [id], onDelete: Cascade, map: "customer_accounts_ibfk_1")
+  request_files     request_files[]
+  request_notes     request_notes[]
+}
+
+model customers {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  customer_code       String?               @unique(map: "uq_customers_code") @db.VarChar(60)
+  full_name           String                @db.VarChar(150)
+  email               String?               @db.VarChar(190)
+  phone               String?               @db.VarChar(30)
+  address_text        String?               @db.Text
+  notes               String?               @db.Text
+  is_active           Boolean               @default(true)
+  created_at          DateTime              @default(now()) @db.DateTime(0)
+  updated_at          DateTime              @default(now()) @db.DateTime(0)
+  custom_requests     custom_requests[]
+  customer_accounts   customer_accounts?
+  guest_access_tokens guest_access_tokens[]
+  orders              orders[]
+  quotations          quotations[]
+
+  @@index([email], map: "idx_customers_email")
+  @@index([full_name], map: "idx_customers_name")
+  @@index([phone], map: "idx_customers_phone")
+}
+
+model design_assets {
+  id                  BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt            @db.UnsignedBigInt
+  custom_request_id   BigInt?           @db.UnsignedBigInt
+  design_task_id      BigInt?           @db.UnsignedBigInt
+  file_name           String            @db.VarChar(255)
+  asset_type          String            @db.VarChar(50)
+  mime_type           String?           @db.VarChar(120)
+  file_size_bytes     BigInt?           @db.UnsignedBigInt
+  storage_provider    String?           @db.VarChar(40)
+  bucket_name         String?           @db.VarChar(120)
+  object_key          String?           @db.VarChar(500)
+  external_url        String?           @db.Text
+  version_label       String?           @db.VarChar(60)
+  is_final            Boolean           @default(false)
+  uploaded_by_user_id BigInt?           @db.UnsignedBigInt
+  notes               String?           @db.Text
+  created_at          DateTime          @default(now()) @db.DateTime(0)
+  workspaces          workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "design_assets_ibfk_1")
+  custom_requests     custom_requests?  @relation(fields: [custom_request_id], references: [id], map: "design_assets_ibfk_2")
+  design_tasks        design_tasks?     @relation(fields: [design_task_id], references: [id], map: "design_assets_ibfk_3")
+  users               users?            @relation(fields: [uploaded_by_user_id], references: [id], map: "design_assets_ibfk_4")
+  order_items         order_items[]
+  product_assets      product_assets[]
+  slicing_results     slicing_results[]
+
+  @@index([custom_request_id], map: "idx_design_assets_request")
+  @@index([design_task_id], map: "idx_design_assets_task")
+  @@index([uploaded_by_user_id], map: "uploaded_by_user_id")
+  @@index([workspace_id], map: "workspace_id")
+}
+
+model design_tasks {
+  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt          @db.UnsignedBigInt
+  custom_request_id   BigInt          @db.UnsignedBigInt
+  assigned_to_user_id BigInt?         @db.UnsignedBigInt
+  status              String          @default("PENDING") @db.VarChar(40)
+  priority            String          @default("NORMAL") @db.VarChar(20)
+  started_at          DateTime?       @db.DateTime(0)
+  completed_at        DateTime?       @db.DateTime(0)
+  notes               String?         @db.Text
+  created_at          DateTime        @default(now()) @db.DateTime(0)
+  updated_at          DateTime        @default(now()) @db.DateTime(0)
+  design_assets       design_assets[]
+  workspaces          workspaces      @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "design_tasks_ibfk_1")
+  custom_requests     custom_requests @relation(fields: [custom_request_id], references: [id], onDelete: Cascade, map: "design_tasks_ibfk_2")
+  users               users?          @relation(fields: [assigned_to_user_id], references: [id], map: "design_tasks_ibfk_3")
+
+  @@index([assigned_to_user_id, status], map: "idx_design_tasks_assignee")
+  @@index([custom_request_id], map: "idx_design_tasks_request")
+  @@index([workspace_id], map: "workspace_id")
+}
+
+model experiment_measurements {
+  id              BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  experiment_id   BigInt      @db.UnsignedBigInt
+  parameter_name  String      @db.VarChar(120)
+  parameter_value String?     @db.VarChar(255)
+  unit            String?     @db.VarChar(60)
+  created_at      DateTime    @default(now()) @db.DateTime(0)
+  experiments     experiments @relation(fields: [experiment_id], references: [id], onDelete: Cascade, map: "experiment_measurements_ibfk_1")
+
+  @@index([experiment_id], map: "idx_experiment_measurements_experiment")
+}
+
+model experiments {
+  id                      BigInt                    @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id            BigInt                    @db.UnsignedBigInt
+  experiment_number       String?                   @db.VarChar(60)
+  title                   String                    @db.VarChar(180)
+  printer_id              BigInt?                   @db.UnsignedBigInt
+  material_id             BigInt?                   @db.UnsignedBigInt
+  print_profile_id        BigInt?                   @db.UnsignedBigInt
+  objective               String?                   @db.Text
+  result_summary          String?                   @db.Text
+  result_status           String?                   @db.VarChar(40)
+  notes                   String?                   @db.Text
+  performed_by_user_id    BigInt?                   @db.UnsignedBigInt
+  performed_at            DateTime?                 @db.DateTime(0)
+  created_at              DateTime                  @default(now()) @db.DateTime(0)
+  updated_at              DateTime                  @default(now()) @db.DateTime(0)
+  experiment_measurements experiment_measurements[]
+  workspaces              workspaces                @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "experiments_ibfk_1")
+  printers                printers?                 @relation(fields: [printer_id], references: [id], map: "experiments_ibfk_2")
+  materials               materials?                @relation(fields: [material_id], references: [id], map: "experiments_ibfk_3")
+  print_profiles          print_profiles?           @relation(fields: [print_profile_id], references: [id], map: "experiments_ibfk_4")
+  users                   users?                    @relation(fields: [performed_by_user_id], references: [id], map: "experiments_ibfk_5")
+
+  @@unique([workspace_id, experiment_number], map: "uq_experiments_number")
+  @@index([material_id], map: "idx_experiments_material")
+  @@index([printer_id], map: "idx_experiments_printer")
+  @@index([performed_by_user_id], map: "performed_by_user_id")
+  @@index([print_profile_id], map: "print_profile_id")
+}
+
+model filament_spools {
+  id                    BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id          BigInt            @db.UnsignedBigInt
+  material_id           BigInt            @db.UnsignedBigInt
+  spool_code            String?           @db.VarChar(60)
+  brand                 String?           @db.VarChar(120)
+  color_name            String?           @db.VarChar(100)
+  color_hex             String?           @db.VarChar(10)
+  batch_number          String?           @db.VarChar(100)
+  initial_weight_gram   Decimal           @default(0.000) @db.Decimal(12, 3)
+  remaining_weight_gram Decimal           @default(0.000) @db.Decimal(12, 3)
+  purchase_price        Decimal           @default(0.00) @db.Decimal(14, 2)
+  cost_per_gram         Decimal           @default(0.0000) @db.Decimal(14, 4)
+  purchased_at          DateTime?         @db.DateTime(0)
+  status                String            @default("AVAILABLE") @db.VarChar(30)
+  notes                 String?           @db.Text
+  created_at            DateTime          @default(now()) @db.DateTime(0)
+  updated_at            DateTime          @default(now()) @db.DateTime(0)
+  workspaces            workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "filament_spools_ibfk_1")
+  materials             materials         @relation(fields: [material_id], references: [id], map: "filament_spools_ibfk_2")
+  material_usages       material_usages[]
+
+  @@unique([workspace_id, spool_code], map: "uq_filament_spools_code")
+  @@index([material_id], map: "idx_filament_spools_material")
+  @@index([workspace_id, status], map: "idx_filament_spools_status")
+}
+
+model guest_access_tokens {
+  id                BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  customer_id       BigInt           @db.UnsignedBigInt
+  custom_request_id BigInt?          @db.UnsignedBigInt
+  order_id          BigInt?          @db.UnsignedBigInt
+  token_hash        String           @unique(map: "uq_guest_access_token_hash") @db.VarChar(255)
+  expires_at        DateTime?        @db.DateTime(0)
+  revoked_at        DateTime?        @db.DateTime(0)
+  last_used_at      DateTime?        @db.DateTime(0)
+  created_at        DateTime         @default(now()) @db.DateTime(0)
+  customers         customers        @relation(fields: [customer_id], references: [id], onDelete: Cascade, map: "guest_access_tokens_ibfk_1")
+  custom_requests   custom_requests? @relation(fields: [custom_request_id], references: [id], onDelete: Cascade, map: "guest_access_tokens_ibfk_2")
+  orders            orders?          @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "guest_access_tokens_ibfk_3")
+
+  @@index([customer_id], map: "idx_guest_access_customer")
+  @@index([order_id], map: "idx_guest_access_order")
+  @@index([custom_request_id], map: "idx_guest_access_request")
+}
+
+model ip_review_checklists {
+  id           BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  ip_review_id BigInt     @db.UnsignedBigInt
+  check_type   String     @db.VarChar(100)
+  result       String?    @db.VarChar(30)
+  notes        String?    @db.Text
+  created_at   DateTime   @default(now()) @db.DateTime(0)
+  ip_reviews   ip_reviews @relation(fields: [ip_review_id], references: [id], onDelete: Cascade, map: "ip_review_checklists_ibfk_1")
+
+  @@index([ip_review_id], map: "idx_ip_review_checklists_review")
+}
+
+model ip_reviews {
+  id                   BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id         BigInt                 @db.UnsignedBigInt
+  custom_request_id    BigInt?                @db.UnsignedBigInt
+  order_id             BigInt?                @db.UnsignedBigInt
+  status               String                 @default("NEEDS_REVIEW") @db.VarChar(30)
+  reviewed_by_user_id  BigInt?                @db.UnsignedBigInt
+  reviewed_at          DateTime?              @db.DateTime(0)
+  notes                String?                @db.Text
+  created_at           DateTime               @default(now()) @db.DateTime(0)
+  updated_at           DateTime               @default(now()) @db.DateTime(0)
+  ip_review_checklists ip_review_checklists[]
+  workspaces           workspaces             @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "ip_reviews_ibfk_1")
+  custom_requests      custom_requests?       @relation(fields: [custom_request_id], references: [id], onDelete: Cascade, map: "ip_reviews_ibfk_2")
+  orders               orders?                @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "ip_reviews_ibfk_3")
+  users                users?                 @relation(fields: [reviewed_by_user_id], references: [id], map: "ip_reviews_ibfk_4")
+
+  @@index([order_id], map: "idx_ip_reviews_order")
+  @@index([custom_request_id], map: "idx_ip_reviews_request")
+  @@index([workspace_id, status], map: "idx_ip_reviews_status")
+  @@index([reviewed_by_user_id], map: "reviewed_by_user_id")
+}
+
+model material_usages {
+  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt          @db.UnsignedBigInt
+  print_job_id        BigInt          @db.UnsignedBigInt
+  filament_spool_id   BigInt          @db.UnsignedBigInt
+  usage_type          String          @db.VarChar(40)
+  weight_gram         Decimal         @default(0.000) @db.Decimal(12, 3)
+  cost_per_gram       Decimal         @default(0.0000) @db.Decimal(14, 4)
+  total_cost          Decimal         @default(0.00) @db.Decimal(14, 2)
+  recorded_by_user_id BigInt?         @db.UnsignedBigInt
+  notes               String?         @db.Text
+  created_at          DateTime        @default(now()) @db.DateTime(0)
+  workspaces          workspaces      @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "material_usages_ibfk_1")
+  print_jobs          print_jobs      @relation(fields: [print_job_id], references: [id], onDelete: Cascade, map: "material_usages_ibfk_2")
+  filament_spools     filament_spools @relation(fields: [filament_spool_id], references: [id], map: "material_usages_ibfk_3")
+  users               users?          @relation(fields: [recorded_by_user_id], references: [id], map: "material_usages_ibfk_4")
+
+  @@index([print_job_id], map: "idx_material_usages_print_job")
+  @@index([filament_spool_id], map: "idx_material_usages_spool")
+  @@index([workspace_id, usage_type], map: "idx_material_usages_type")
+  @@index([recorded_by_user_id], map: "recorded_by_user_id")
+}
+
+model materials {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id     BigInt             @db.UnsignedBigInt
+  name             String             @db.VarChar(120)
+  material_type    String             @db.VarChar(60)
+  manufacturer     String?            @db.VarChar(120)
+  description      String?            @db.Text
+  is_active        Boolean            @default(true)
+  created_at       DateTime           @default(now()) @db.DateTime(0)
+  updated_at       DateTime           @default(now()) @db.DateTime(0)
+  custom_requests  custom_requests[]
+  experiments      experiments[]
+  filament_spools  filament_spools[]
+  workspaces       workspaces         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "materials_ibfk_1")
+  pricing_rules    pricing_rules[]
+  print_profiles   print_profiles[]
+  product_variants product_variants[]
+  products         products[]
+
+  @@index([workspace_id, material_type], map: "idx_materials_workspace_type")
+}
+
+model notification_settings {
+  id           BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id BigInt     @db.UnsignedBigInt
+  event_key    String     @db.VarChar(100)
+  channel      String     @db.VarChar(40)
+  destination  String?    @db.VarChar(190)
+  provider     String?    @db.VarChar(80)
+  is_enabled   Boolean    @default(false)
+  config_json  Json?
+  created_at   DateTime   @default(now()) @db.DateTime(0)
+  updated_at   DateTime   @default(now()) @db.DateTime(0)
+  workspaces   workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "notification_settings_ibfk_1")
+
+  @@unique([workspace_id, event_key, channel], map: "uq_notification_settings")
+}
+
+model notifications {
+  id                BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id      BigInt     @db.UnsignedBigInt
+  recipient_user_id BigInt     @db.UnsignedBigInt
+  event_type        String     @db.VarChar(100)
+  entity_type       String?    @db.VarChar(80)
+  entity_id         BigInt?    @db.UnsignedBigInt
+  title             String     @db.VarChar(190)
+  message           String?    @db.Text
+  read_at           DateTime?  @db.DateTime(0)
+  created_at        DateTime   @default(now()) @db.DateTime(0)
+  workspaces        workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "notifications_ibfk_1")
+  users             users      @relation(fields: [recipient_user_id], references: [id], onDelete: Cascade, map: "notifications_ibfk_2")
+
+  @@index([recipient_user_id, read_at], map: "idx_notifications_recipient")
+  @@index([workspace_id, event_type], map: "idx_notifications_workspace_event")
+}
+
+model order_items {
+  id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id           BigInt            @db.UnsignedBigInt
+  product_id         BigInt?           @db.UnsignedBigInt
+  product_variant_id BigInt?           @db.UnsignedBigInt
+  design_asset_id    BigInt?           @db.UnsignedBigInt
+  item_name          String            @db.VarChar(180)
+  description        String?           @db.Text
+  quantity           Int               @default(1) @db.UnsignedInt
+  unit_price         Decimal           @default(0.00) @db.Decimal(14, 2)
+  total_price        Decimal           @default(0.00) @db.Decimal(14, 2)
+  created_at         DateTime          @default(now()) @db.DateTime(0)
+  updated_at         DateTime          @default(now()) @db.DateTime(0)
+  orders             orders            @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "order_items_ibfk_1")
+  products           products?         @relation(fields: [product_id], references: [id], map: "order_items_ibfk_2")
+  product_variants   product_variants? @relation(fields: [product_variant_id], references: [id], map: "order_items_ibfk_3")
+  design_assets      design_assets?    @relation(fields: [design_asset_id], references: [id], map: "order_items_ibfk_4")
+  production_jobs    production_jobs[]
+
+  @@index([design_asset_id], map: "design_asset_id")
+  @@index([order_id], map: "idx_order_items_order")
+  @@index([product_id], map: "product_id")
+  @@index([product_variant_id], map: "product_variant_id")
+}
+
+model order_packaging {
+  id                BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id      BigInt          @db.UnsignedBigInt
+  order_id          BigInt          @db.UnsignedBigInt
+  packaging_type_id BigInt          @db.UnsignedBigInt
+  quantity          Int             @default(1) @db.UnsignedInt
+  actual_cost       Decimal         @default(0.00) @db.Decimal(14, 2)
+  status            String          @default("PENDING") @db.VarChar(30)
+  packed_by_user_id BigInt?         @db.UnsignedBigInt
+  packed_at         DateTime?       @db.DateTime(0)
+  notes             String?         @db.Text
+  created_at        DateTime        @default(now()) @db.DateTime(0)
+  updated_at        DateTime        @default(now()) @db.DateTime(0)
+  workspaces        workspaces      @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "order_packaging_ibfk_1")
+  orders            orders          @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "order_packaging_ibfk_2")
+  packaging_types   packaging_types @relation(fields: [packaging_type_id], references: [id], map: "order_packaging_ibfk_3")
+  users             users?          @relation(fields: [packed_by_user_id], references: [id], map: "order_packaging_ibfk_4")
+
+  @@index([order_id], map: "idx_order_packaging_order")
+  @@index([packaging_type_id], map: "packaging_type_id")
+  @@index([packed_by_user_id], map: "packed_by_user_id")
+  @@index([workspace_id], map: "workspace_id")
+}
+
+model orders {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt                @db.UnsignedBigInt
+  order_number        String?               @db.VarChar(60)
+  customer_id         BigInt                @db.UnsignedBigInt
+  custom_request_id   BigInt?               @db.UnsignedBigInt
+  quotation_id        BigInt?               @unique(map: "uq_orders_quotation") @db.UnsignedBigInt
+  order_source        String                @default("CUSTOMER_APP") @db.VarChar(60)
+  status              String                @default("CONFIRMED") @db.VarChar(40)
+  payment_status      String                @default("UNPAID") @db.VarChar(30)
+  shipping_status     String?               @db.VarChar(30)
+  order_date          DateTime              @default(now()) @db.DateTime(0)
+  target_date         DateTime?             @db.Date
+  subtotal            Decimal               @default(0.00) @db.Decimal(14, 2)
+  discount_amount     Decimal               @default(0.00) @db.Decimal(14, 2)
+  total_price         Decimal               @default(0.00) @db.Decimal(14, 2)
+  currency_code       String                @default("IDR") @db.Char(3)
+  shipping_name       String?               @db.VarChar(150)
+  shipping_phone      String?               @db.VarChar(30)
+  shipping_address    String?               @db.Text
+  customer_notes      String?               @db.Text
+  internal_notes      String?               @db.Text
+  created_by_user_id  BigInt?               @db.UnsignedBigInt
+  completed_at        DateTime?             @db.DateTime(0)
+  created_at          DateTime              @default(now()) @db.DateTime(0)
+  updated_at          DateTime              @default(now()) @db.DateTime(0)
+  guest_access_tokens guest_access_tokens[]
+  ip_reviews          ip_reviews[]
+  order_items         order_items[]
+  order_packaging     order_packaging[]
+  workspaces          workspaces            @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "orders_ibfk_1")
+  customers           customers             @relation(fields: [customer_id], references: [id], map: "orders_ibfk_2")
+  custom_requests     custom_requests?      @relation(fields: [custom_request_id], references: [id], map: "orders_ibfk_3")
+  quotations          quotations?           @relation(fields: [quotation_id], references: [id], map: "orders_ibfk_4")
+  users               users?                @relation(fields: [created_by_user_id], references: [id], map: "orders_ibfk_5")
+  production_costs    production_costs[]
+
+  @@unique([workspace_id, order_number], map: "uq_orders_number")
+  @@index([created_by_user_id], map: "created_by_user_id")
+  @@index([customer_id], map: "idx_orders_customer")
+  @@index([custom_request_id], map: "idx_orders_request")
+  @@index([workspace_id, status], map: "idx_orders_status")
+}
+
+model packaging_types {
+  id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id    BigInt            @db.UnsignedBigInt
+  name            String            @db.VarChar(150)
+  description     String?           @db.Text
+  default_cost    Decimal           @default(0.00) @db.Decimal(14, 2)
+  is_active       Boolean           @default(true)
+  created_at      DateTime          @default(now()) @db.DateTime(0)
+  updated_at      DateTime          @default(now()) @db.DateTime(0)
+  order_packaging order_packaging[]
+  workspaces      workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "packaging_types_ibfk_1")
+
+  @@index([workspace_id, is_active], map: "idx_packaging_types_workspace")
+}
+
+model pricing_rules {
+  id                     BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id           BigInt     @db.UnsignedBigInt
+  name                   String     @db.VarChar(150)
+  rule_type              String     @default("PER_GRAM") @db.VarChar(50)
+  material_id            BigInt?    @db.UnsignedBigInt
+  product_id             BigInt?    @db.UnsignedBigInt
+  price_per_gram         Decimal?   @db.Decimal(14, 4)
+  minimum_price          Decimal?   @db.Decimal(14, 2)
+  design_fee             Decimal    @default(0.00) @db.Decimal(14, 2)
+  finishing_fee          Decimal    @default(0.00) @db.Decimal(14, 2)
+  additional_config_json Json?
+  effective_from         DateTime?  @db.DateTime(0)
+  effective_until        DateTime?  @db.DateTime(0)
+  is_active              Boolean    @default(true)
+  created_at             DateTime   @default(now()) @db.DateTime(0)
+  updated_at             DateTime   @default(now()) @db.DateTime(0)
+  workspaces             workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "pricing_rules_ibfk_1")
+  materials              materials? @relation(fields: [material_id], references: [id], map: "pricing_rules_ibfk_2")
+  products               products?  @relation(fields: [product_id], references: [id], map: "pricing_rules_ibfk_3")
+
+  @@index([workspace_id, is_active], map: "idx_pricing_rules_workspace")
+  @@index([material_id], map: "material_id")
+  @@index([product_id], map: "product_id")
+}
+
+model print_failures {
+  id                   BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id         BigInt     @db.UnsignedBigInt
+  print_job_id         BigInt     @db.UnsignedBigInt
+  failure_type         String     @db.VarChar(60)
+  description          String?    @db.Text
+  failed_at_percentage Decimal?   @db.Decimal(6, 2)
+  wasted_weight_gram   Decimal?   @db.Decimal(12, 3)
+  root_cause           String?    @db.Text
+  corrective_action    String?    @db.Text
+  reported_by_user_id  BigInt?    @db.UnsignedBigInt
+  created_at           DateTime   @default(now()) @db.DateTime(0)
+  workspaces           workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "print_failures_ibfk_1")
+  print_jobs           print_jobs @relation(fields: [print_job_id], references: [id], onDelete: Cascade, map: "print_failures_ibfk_2")
+  users                users?     @relation(fields: [reported_by_user_id], references: [id], map: "print_failures_ibfk_3")
+
+  @@index([print_job_id], map: "idx_print_failures_job")
+  @@index([workspace_id, failure_type], map: "idx_print_failures_type")
+  @@index([reported_by_user_id], map: "reported_by_user_id")
+}
+
+model print_jobs {
+  id                      BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id            BigInt             @db.UnsignedBigInt
+  print_job_number        String?            @db.VarChar(60)
+  production_job_id       BigInt             @db.UnsignedBigInt
+  printer_id              BigInt?            @db.UnsignedBigInt
+  print_profile_id        BigInt?            @db.UnsignedBigInt
+  slicing_result_id       BigInt?            @db.UnsignedBigInt
+  operator_id             BigInt?            @db.UnsignedBigInt
+  status                  String             @default("QUEUED") @db.VarChar(40)
+  queue_position          Int?               @db.UnsignedInt
+  queued_at               DateTime?          @db.DateTime(0)
+  started_at              DateTime?          @db.DateTime(0)
+  completed_at            DateTime?          @db.DateTime(0)
+  estimated_weight_gram   Decimal?           @db.Decimal(12, 3)
+  actual_weight_gram      Decimal?           @db.Decimal(12, 3)
+  estimated_print_minutes Int?               @db.UnsignedInt
+  actual_print_minutes    Int?               @db.UnsignedInt
+  notes                   String?            @db.Text
+  created_at              DateTime           @default(now()) @db.DateTime(0)
+  updated_at              DateTime           @default(now()) @db.DateTime(0)
+  material_usages         material_usages[]
+  print_failures          print_failures[]
+  workspaces              workspaces         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "print_jobs_ibfk_1")
+  production_jobs         production_jobs    @relation(fields: [production_job_id], references: [id], map: "print_jobs_ibfk_2")
+  printers                printers?          @relation(fields: [printer_id], references: [id], map: "print_jobs_ibfk_3")
+  print_profiles          print_profiles?    @relation(fields: [print_profile_id], references: [id], map: "print_jobs_ibfk_4")
+  slicing_results         slicing_results?   @relation(fields: [slicing_result_id], references: [id], map: "print_jobs_ibfk_5")
+  users                   users?             @relation(fields: [operator_id], references: [id], map: "print_jobs_ibfk_6")
+  production_costs        production_costs[]
+  qc_inspections          qc_inspections[]
+
+  @@unique([workspace_id, print_job_number], map: "uq_print_jobs_number")
+  @@index([printer_id, status], map: "idx_print_jobs_printer")
+  @@index([production_job_id], map: "idx_print_jobs_production_job")
+  @@index([workspace_id, status], map: "idx_print_jobs_status")
+  @@index([operator_id], map: "operator_id")
+  @@index([print_profile_id], map: "print_profile_id")
+  @@index([slicing_result_id], map: "slicing_result_id")
+}
+
+model print_profiles {
+  id                       BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id             BigInt            @db.UnsignedBigInt
+  printer_id               BigInt?           @db.UnsignedBigInt
+  material_id              BigInt?           @db.UnsignedBigInt
+  name                     String            @db.VarChar(150)
+  nozzle_size_mm           Decimal?          @db.Decimal(6, 3)
+  layer_height_mm          Decimal?          @db.Decimal(6, 3)
+  nozzle_temperature_c     Decimal?          @db.Decimal(7, 2)
+  bed_temperature_c        Decimal?          @db.Decimal(7, 2)
+  print_speed_mm_s         Decimal?          @db.Decimal(10, 2)
+  infill_percentage        Decimal?          @db.Decimal(6, 2)
+  support_setting          String?           @db.Text
+  additional_settings_json Json?
+  notes                    String?           @db.Text
+  is_active                Boolean           @default(true)
+  created_at               DateTime          @default(now()) @db.DateTime(0)
+  updated_at               DateTime          @default(now()) @db.DateTime(0)
+  experiments              experiments[]
+  print_jobs               print_jobs[]
+  workspaces               workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "print_profiles_ibfk_1")
+  printers                 printers?         @relation(fields: [printer_id], references: [id], map: "print_profiles_ibfk_2")
+  materials                materials?        @relation(fields: [material_id], references: [id], map: "print_profiles_ibfk_3")
+  slicing_results          slicing_results[]
+
+  @@index([material_id], map: "idx_print_profiles_material")
+  @@index([printer_id], map: "idx_print_profiles_printer")
+  @@index([workspace_id], map: "idx_print_profiles_workspace")
+}
+
+model printers {
+  id                     BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id           BigInt            @db.UnsignedBigInt
+  printer_code           String?           @db.VarChar(60)
+  name                   String            @db.VarChar(120)
+  brand                  String?           @db.VarChar(120)
+  model                  String?           @db.VarChar(120)
+  serial_number          String?           @db.VarChar(120)
+  location               String?           @db.VarChar(190)
+  build_volume_x_mm      Decimal?          @db.Decimal(10, 2)
+  build_volume_y_mm      Decimal?          @db.Decimal(10, 2)
+  build_volume_z_mm      Decimal?          @db.Decimal(10, 2)
+  default_nozzle_size_mm Decimal?          @db.Decimal(6, 3)
+  status                 String            @default("IDLE") @db.VarChar(30)
+  last_maintenance_at    DateTime?         @db.DateTime(0)
+  is_active              Boolean           @default(true)
+  created_at             DateTime          @default(now()) @db.DateTime(0)
+  updated_at             DateTime          @default(now()) @db.DateTime(0)
+  experiments            experiments[]
+  print_jobs             print_jobs[]
+  print_profiles         print_profiles[]
+  workspaces             workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "printers_ibfk_1")
+  slicing_results        slicing_results[]
+
+  @@unique([workspace_id, printer_code], map: "uq_printers_code")
+  @@index([workspace_id, status], map: "idx_printers_status")
+}
+
+model product_assets {
+  id                     BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id             BigInt         @db.UnsignedBigInt
+  source_design_asset_id BigInt?        @db.UnsignedBigInt
+  asset_type             String         @db.VarChar(50)
+  file_name              String?        @db.VarChar(255)
+  storage_provider       String?        @db.VarChar(40)
+  bucket_name            String?        @db.VarChar(120)
+  object_key             String?        @db.VarChar(500)
+  external_url           String?        @db.Text
+  version_label          String?        @db.VarChar(60)
+  is_primary             Boolean        @default(false)
+  is_internal_only       Boolean        @default(true)
+  uploaded_by_user_id    BigInt?        @db.UnsignedBigInt
+  notes                  String?        @db.Text
+  created_at             DateTime       @default(now()) @db.DateTime(0)
+  products               products       @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "product_assets_ibfk_1")
+  design_assets          design_assets? @relation(fields: [source_design_asset_id], references: [id], map: "product_assets_ibfk_2")
+  users                  users?         @relation(fields: [uploaded_by_user_id], references: [id], map: "product_assets_ibfk_3")
+
+  @@index([product_id], map: "idx_product_assets_product")
+  @@index([source_design_asset_id], map: "source_design_asset_id")
+  @@index([uploaded_by_user_id], map: "uploaded_by_user_id")
+}
+
+model product_categories {
+  id                       BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id             BigInt               @db.UnsignedBigInt
+  parent_id                BigInt?              @db.UnsignedBigInt
+  name                     String               @db.VarChar(120)
+  slug                     String?              @db.VarChar(160)
+  description              String?              @db.Text
+  is_active                Boolean              @default(true)
+  created_at               DateTime             @default(now()) @db.DateTime(0)
+  updated_at               DateTime             @default(now()) @db.DateTime(0)
+  workspaces               workspaces           @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "product_categories_ibfk_1")
+  product_categories       product_categories?  @relation("product_categoriesToproduct_categories", fields: [parent_id], references: [id], map: "product_categories_ibfk_2")
+  other_product_categories product_categories[] @relation("product_categoriesToproduct_categories")
+  products                 products[]
+
+  @@unique([workspace_id, slug], map: "uq_product_categories_slug")
+  @@index([parent_id], map: "idx_product_categories_parent")
+}
+
+model product_images {
+  id               BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id       BigInt   @db.UnsignedBigInt
+  file_name        String   @db.VarChar(255)
+  storage_provider String?  @db.VarChar(40)
+  bucket_name      String?  @db.VarChar(120)
+  object_key       String?  @db.VarChar(500)
+  public_url       String?  @db.Text
+  alt_text         String?  @db.VarChar(255)
+  sort_order       Int      @default(0)
+  is_primary       Boolean  @default(false)
+  created_at       DateTime @default(now()) @db.DateTime(0)
+  products         products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "product_images_ibfk_1")
+
+  @@index([product_id], map: "product_id")
+}
+
+model product_sales_channels {
+  id                  BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id          BigInt   @db.UnsignedBigInt
+  channel_name        String   @db.VarChar(60)
+  external_product_id String?  @db.VarChar(190)
+  listing_url         String?  @db.Text
+  is_active           Boolean  @default(true)
+  created_at          DateTime @default(now()) @db.DateTime(0)
+  updated_at          DateTime @default(now()) @db.DateTime(0)
+  products            products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "product_sales_channels_ibfk_1")
+
+  @@index([channel_name], map: "idx_product_sales_channels_channel")
+  @@index([product_id], map: "idx_product_sales_channels_product")
+}
+
+model product_variants {
+  id                    BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id            BigInt            @db.UnsignedBigInt
+  variant_code          String?           @db.VarChar(80)
+  name                  String            @db.VarChar(150)
+  material_id           BigInt?           @db.UnsignedBigInt
+  color_name            String?           @db.VarChar(100)
+  size_x_mm             Decimal?          @db.Decimal(10, 2)
+  size_y_mm             Decimal?          @db.Decimal(10, 2)
+  size_z_mm             Decimal?          @db.Decimal(10, 2)
+  estimated_weight_gram Decimal?          @db.Decimal(12, 3)
+  price                 Decimal?          @db.Decimal(14, 2)
+  is_active             Boolean           @default(true)
+  created_at            DateTime          @default(now()) @db.DateTime(0)
+  updated_at            DateTime          @default(now()) @db.DateTime(0)
+  order_items           order_items[]
+  products              products          @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "product_variants_ibfk_1")
+  materials             materials?        @relation(fields: [material_id], references: [id], map: "product_variants_ibfk_2")
+  quotation_items       quotation_items[]
+
+  @@unique([product_id, variant_code], map: "uq_product_variants_code")
+  @@index([material_id], map: "material_id")
+}
+
+model production_costs {
+  id                  BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt           @db.UnsignedBigInt
+  order_id            BigInt?          @db.UnsignedBigInt
+  production_job_id   BigInt?          @db.UnsignedBigInt
+  print_job_id        BigInt?          @db.UnsignedBigInt
+  cost_component_id   BigInt           @db.UnsignedBigInt
+  cost_type           String           @default("ACTUAL") @db.VarChar(20)
+  description         String?          @db.VarChar(255)
+  quantity            Decimal          @default(1.0000) @db.Decimal(14, 4)
+  unit                String?          @db.VarChar(40)
+  unit_cost           Decimal          @default(0.0000) @db.Decimal(14, 4)
+  total_cost          Decimal          @default(0.00) @db.Decimal(14, 2)
+  recorded_by_user_id BigInt?          @db.UnsignedBigInt
+  created_at          DateTime         @default(now()) @db.DateTime(0)
+  updated_at          DateTime         @default(now()) @db.DateTime(0)
+  workspaces          workspaces       @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "production_costs_ibfk_1")
+  orders              orders?          @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "production_costs_ibfk_2")
+  production_jobs     production_jobs? @relation(fields: [production_job_id], references: [id], onDelete: Cascade, map: "production_costs_ibfk_3")
+  print_jobs          print_jobs?      @relation(fields: [print_job_id], references: [id], onDelete: Cascade, map: "production_costs_ibfk_4")
+  cost_components     cost_components  @relation(fields: [cost_component_id], references: [id], map: "production_costs_ibfk_5")
+  users               users?           @relation(fields: [recorded_by_user_id], references: [id], map: "production_costs_ibfk_6")
+
+  @@index([cost_component_id], map: "cost_component_id")
+  @@index([order_id], map: "idx_production_costs_order")
+  @@index([print_job_id], map: "idx_production_costs_print_job")
+  @@index([production_job_id], map: "idx_production_costs_production_job")
+  @@index([workspace_id, cost_type], map: "idx_production_costs_type")
+  @@index([recorded_by_user_id], map: "recorded_by_user_id")
+}
+
+model production_jobs {
+  id                   BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id         BigInt             @db.UnsignedBigInt
+  job_number           String?            @db.VarChar(60)
+  order_item_id        BigInt             @db.UnsignedBigInt
+  assigned_operator_id BigInt?            @db.UnsignedBigInt
+  status               String             @default("WAITING") @db.VarChar(40)
+  priority             String             @default("NORMAL") @db.VarChar(20)
+  planned_start        DateTime?          @db.DateTime(0)
+  planned_end          DateTime?          @db.DateTime(0)
+  actual_start         DateTime?          @db.DateTime(0)
+  actual_end           DateTime?          @db.DateTime(0)
+  notes                String?            @db.Text
+  created_at           DateTime           @default(now()) @db.DateTime(0)
+  updated_at           DateTime           @default(now()) @db.DateTime(0)
+  print_jobs           print_jobs[]
+  production_costs     production_costs[]
+  workspaces           workspaces         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "production_jobs_ibfk_1")
+  order_items          order_items        @relation(fields: [order_item_id], references: [id], map: "production_jobs_ibfk_2")
+  users                users?             @relation(fields: [assigned_operator_id], references: [id], map: "production_jobs_ibfk_3")
+  qc_inspections       qc_inspections[]
+  slicing_results      slicing_results[]
+
+  @@unique([workspace_id, job_number], map: "uq_production_jobs_number")
+  @@index([assigned_operator_id], map: "idx_production_jobs_operator")
+  @@index([order_item_id], map: "idx_production_jobs_order_item")
+  @@index([workspace_id, status], map: "idx_production_jobs_status")
+}
+
+model products {
+  id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id           BigInt                   @db.UnsignedBigInt
+  category_id            BigInt?                  @db.UnsignedBigInt
+  product_code           String?                  @db.VarChar(60)
+  name                   String                   @db.VarChar(180)
+  slug                   String?                  @db.VarChar(200)
+  product_type           String                   @default("READY_MODEL") @db.VarChar(50)
+  short_description      String?                  @db.VarChar(500)
+  description            String?                  @db.Text
+  catalog_visibility     String                   @default("INTERNAL") @db.VarChar(30)
+  status                 String                   @default("DRAFT") @db.VarChar(30)
+  base_price             Decimal?                 @db.Decimal(14, 2)
+  currency_code          String                   @default("IDR") @db.Char(3)
+  default_material_id    BigInt?                  @db.UnsignedBigInt
+  default_weight_gram    Decimal?                 @db.Decimal(12, 3)
+  is_active              Boolean                  @default(true)
+  published_at           DateTime?                @db.DateTime(0)
+  created_by_user_id     BigInt?                  @db.UnsignedBigInt
+  created_at             DateTime                 @default(now()) @db.DateTime(0)
+  updated_at             DateTime                 @default(now()) @db.DateTime(0)
+  custom_requests        custom_requests[]
+  order_items            order_items[]
+  pricing_rules          pricing_rules[]
+  product_assets         product_assets[]
+  product_images         product_images[]
+  product_sales_channels product_sales_channels[]
+  product_variants       product_variants[]
+  workspaces             workspaces               @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "products_ibfk_1")
+  product_categories     product_categories?      @relation(fields: [category_id], references: [id], map: "products_ibfk_2")
+  materials              materials?               @relation(fields: [default_material_id], references: [id], map: "products_ibfk_3")
+  users                  users?                   @relation(fields: [created_by_user_id], references: [id], map: "products_ibfk_4")
+  quotation_items        quotation_items[]
+
+  @@unique([workspace_id, product_code], map: "uq_products_code")
+  @@unique([workspace_id, slug], map: "uq_products_slug")
+  @@index([created_by_user_id], map: "created_by_user_id")
+  @@index([default_material_id], map: "default_material_id")
+  @@index([workspace_id, catalog_visibility, status], map: "idx_products_catalog")
+  @@index([category_id], map: "idx_products_category")
+}
+
+model qc_check_items {
+  id               BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  qc_inspection_id BigInt         @db.UnsignedBigInt
+  check_name       String         @db.VarChar(150)
+  result           String         @db.VarChar(30)
+  notes            String?        @db.Text
+  created_at       DateTime       @default(now()) @db.DateTime(0)
+  qc_inspections   qc_inspections @relation(fields: [qc_inspection_id], references: [id], onDelete: Cascade, map: "qc_check_items_ibfk_1")
+
+  @@index([qc_inspection_id], map: "idx_qc_check_items_inspection")
+}
+
+model qc_inspections {
+  id                   BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id         BigInt           @db.UnsignedBigInt
+  production_job_id    BigInt           @db.UnsignedBigInt
+  print_job_id         BigInt?          @db.UnsignedBigInt
+  result               String           @db.VarChar(30)
+  inspected_by_user_id BigInt?          @db.UnsignedBigInt
+  inspected_at         DateTime?        @db.DateTime(0)
+  notes                String?          @db.Text
+  created_at           DateTime         @default(now()) @db.DateTime(0)
+  qc_check_items       qc_check_items[]
+  workspaces           workspaces       @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "qc_inspections_ibfk_1")
+  production_jobs      production_jobs  @relation(fields: [production_job_id], references: [id], onDelete: Cascade, map: "qc_inspections_ibfk_2")
+  print_jobs           print_jobs?      @relation(fields: [print_job_id], references: [id], map: "qc_inspections_ibfk_3")
+  users                users?           @relation(fields: [inspected_by_user_id], references: [id], map: "qc_inspections_ibfk_4")
+
+  @@index([production_job_id], map: "idx_qc_inspections_job")
+  @@index([workspace_id, result], map: "idx_qc_inspections_result")
+  @@index([inspected_by_user_id], map: "inspected_by_user_id")
+  @@index([print_job_id], map: "print_job_id")
+}
+
+model quotation_items {
+  id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  quotation_id       BigInt            @db.UnsignedBigInt
+  product_id         BigInt?           @db.UnsignedBigInt
+  product_variant_id BigInt?           @db.UnsignedBigInt
+  description        String            @db.VarChar(255)
+  quantity           Decimal           @default(1.000) @db.Decimal(12, 3)
+  unit_price         Decimal           @default(0.00) @db.Decimal(14, 2)
+  amount             Decimal           @default(0.00) @db.Decimal(14, 2)
+  created_at         DateTime          @default(now()) @db.DateTime(0)
+  quotations         quotations        @relation(fields: [quotation_id], references: [id], onDelete: Cascade, map: "quotation_items_ibfk_1")
+  products           products?         @relation(fields: [product_id], references: [id], map: "quotation_items_ibfk_2")
+  product_variants   product_variants? @relation(fields: [product_variant_id], references: [id], map: "quotation_items_ibfk_3")
+
+  @@index([quotation_id], map: "idx_quotation_items_quotation")
+  @@index([product_id], map: "product_id")
+  @@index([product_variant_id], map: "product_variant_id")
+}
+
+model quotations {
+  id                  BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id        BigInt            @db.UnsignedBigInt
+  quotation_number    String?           @db.VarChar(60)
+  revision_no         Int               @default(1) @db.UnsignedInt
+  custom_request_id   BigInt            @db.UnsignedBigInt
+  customer_id         BigInt            @db.UnsignedBigInt
+  subtotal            Decimal           @default(0.00) @db.Decimal(14, 2)
+  discount_amount     Decimal           @default(0.00) @db.Decimal(14, 2)
+  additional_cost     Decimal           @default(0.00) @db.Decimal(14, 2)
+  total_price         Decimal           @default(0.00) @db.Decimal(14, 2)
+  currency_code       String            @default("IDR") @db.Char(3)
+  status              String            @default("DRAFT") @db.VarChar(30)
+  valid_until         DateTime?         @db.DateTime(0)
+  approved_by_user_id BigInt?           @db.UnsignedBigInt
+  sent_at             DateTime?         @db.DateTime(0)
+  accepted_at         DateTime?         @db.DateTime(0)
+  declined_at         DateTime?         @db.DateTime(0)
+  notes               String?           @db.Text
+  created_at          DateTime          @default(now()) @db.DateTime(0)
+  updated_at          DateTime          @default(now()) @db.DateTime(0)
+  orders              orders?
+  quotation_items     quotation_items[]
+  workspaces          workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "quotations_ibfk_1")
+  custom_requests     custom_requests   @relation(fields: [custom_request_id], references: [id], map: "quotations_ibfk_2")
+  customers           customers         @relation(fields: [customer_id], references: [id], map: "quotations_ibfk_3")
+  users               users?            @relation(fields: [approved_by_user_id], references: [id], map: "quotations_ibfk_4")
+
+  @@unique([workspace_id, quotation_number], map: "uq_quotations_number")
+  @@index([approved_by_user_id], map: "approved_by_user_id")
+  @@index([customer_id], map: "customer_id")
+  @@index([custom_request_id], map: "idx_quotations_request")
+  @@index([workspace_id, status], map: "idx_quotations_status")
+}
+
+model request_files {
+  id                              BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  custom_request_id               BigInt             @db.UnsignedBigInt
+  file_type                       String             @db.VarChar(50)
+  file_name                       String             @db.VarChar(255)
+  mime_type                       String?            @db.VarChar(120)
+  file_size_bytes                 BigInt?            @db.UnsignedBigInt
+  storage_provider                String?            @db.VarChar(40)
+  bucket_name                     String?            @db.VarChar(120)
+  object_key                      String?            @db.VarChar(500)
+  uploaded_by_user_id             BigInt?            @db.UnsignedBigInt
+  uploaded_by_customer_account_id BigInt?            @db.UnsignedBigInt
+  created_at                      DateTime           @default(now()) @db.DateTime(0)
+  custom_requests                 custom_requests    @relation(fields: [custom_request_id], references: [id], onDelete: Cascade, map: "request_files_ibfk_1")
+  users                           users?             @relation(fields: [uploaded_by_user_id], references: [id], map: "request_files_ibfk_2")
+  customer_accounts               customer_accounts? @relation(fields: [uploaded_by_customer_account_id], references: [id], map: "request_files_ibfk_3")
+
+  @@index([custom_request_id], map: "idx_request_files_request")
+  @@index([uploaded_by_customer_account_id], map: "uploaded_by_customer_account_id")
+  @@index([uploaded_by_user_id], map: "uploaded_by_user_id")
+}
+
+model request_notes {
+  id                  BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  custom_request_id   BigInt             @db.UnsignedBigInt
+  user_id             BigInt?            @db.UnsignedBigInt
+  customer_account_id BigInt?            @db.UnsignedBigInt
+  note                String             @db.Text
+  is_internal         Boolean            @default(true)
+  created_at          DateTime           @default(now()) @db.DateTime(0)
+  custom_requests     custom_requests    @relation(fields: [custom_request_id], references: [id], onDelete: Cascade, map: "request_notes_ibfk_1")
+  users               users?             @relation(fields: [user_id], references: [id], map: "request_notes_ibfk_2")
+  customer_accounts   customer_accounts? @relation(fields: [customer_account_id], references: [id], map: "request_notes_ibfk_3")
+
+  @@index([customer_account_id], map: "customer_account_id")
+  @@index([custom_request_id], map: "idx_request_notes_request")
+  @@index([user_id], map: "user_id")
+}
+
+model roles {
+  id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String              @db.VarChar(100)
+  code              String              @unique(map: "uq_roles_code") @db.VarChar(60)
+  description       String?             @db.Text
+  is_active         Boolean             @default(true)
+  created_at        DateTime            @default(now()) @db.DateTime(0)
+  updated_at        DateTime            @default(now()) @db.DateTime(0)
+  workspace_members workspace_members[]
+}
+
+model slicing_results {
+  id                      BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id            BigInt          @db.UnsignedBigInt
+  production_job_id       BigInt          @db.UnsignedBigInt
+  design_asset_id         BigInt?         @db.UnsignedBigInt
+  printer_id              BigInt?         @db.UnsignedBigInt
+  print_profile_id        BigInt?         @db.UnsignedBigInt
+  slicer_name             String?         @db.VarChar(100)
+  slicer_version          String?         @db.VarChar(60)
+  model_weight_gram       Decimal?        @db.Decimal(12, 3)
+  support_weight_gram     Decimal?        @db.Decimal(12, 3)
+  total_weight_gram       Decimal?        @db.Decimal(12, 3)
+  estimated_print_minutes Int?            @db.UnsignedInt
+  model_size_x_mm         Decimal?        @db.Decimal(10, 2)
+  model_size_y_mm         Decimal?        @db.Decimal(10, 2)
+  model_size_z_mm         Decimal?        @db.Decimal(10, 2)
+  is_selected             Boolean         @default(false)
+  notes                   String?         @db.Text
+  created_by_user_id      BigInt?         @db.UnsignedBigInt
+  created_at              DateTime        @default(now()) @db.DateTime(0)
+  print_jobs              print_jobs[]
+  workspaces              workspaces      @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "slicing_results_ibfk_1")
+  production_jobs         production_jobs @relation(fields: [production_job_id], references: [id], onDelete: Cascade, map: "slicing_results_ibfk_2")
+  design_assets           design_assets?  @relation(fields: [design_asset_id], references: [id], map: "slicing_results_ibfk_3")
+  printers                printers?       @relation(fields: [printer_id], references: [id], map: "slicing_results_ibfk_4")
+  print_profiles          print_profiles? @relation(fields: [print_profile_id], references: [id], map: "slicing_results_ibfk_5")
+  users                   users?          @relation(fields: [created_by_user_id], references: [id], map: "slicing_results_ibfk_6")
+
+  @@index([created_by_user_id], map: "created_by_user_id")
+  @@index([design_asset_id], map: "design_asset_id")
+  @@index([production_job_id], map: "idx_slicing_results_job")
+  @@index([printer_id], map: "idx_slicing_results_printer")
+  @@index([print_profile_id], map: "print_profile_id")
+  @@index([workspace_id], map: "workspace_id")
+}
+
+model users {
+  id                                                          BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  full_name                                                   String              @db.VarChar(150)
+  email                                                       String              @unique(map: "uq_users_email") @db.VarChar(190)
+  phone                                                       String?             @db.VarChar(30)
+  password_hash                                               String              @db.VarChar(255)
+  account_status                                              String              @default("PENDING") @db.VarChar(30)
+  email_verified_at                                           DateTime?           @db.DateTime(0)
+  last_login_at                                               DateTime?           @db.DateTime(0)
+  is_active                                                   Boolean             @default(true)
+  created_at                                                  DateTime            @default(now()) @db.DateTime(0)
+  updated_at                                                  DateTime            @default(now()) @db.DateTime(0)
+  audit_logs                                                  audit_logs[]
+  custom_requests_custom_requests_assigned_designer_idTousers custom_requests[]   @relation("custom_requests_assigned_designer_idTousers")
+  custom_requests_custom_requests_created_by_user_idTousers   custom_requests[]   @relation("custom_requests_created_by_user_idTousers")
+  design_assets                                               design_assets[]
+  design_tasks                                                design_tasks[]
+  experiments                                                 experiments[]
+  ip_reviews                                                  ip_reviews[]
+  material_usages                                             material_usages[]
+  notifications                                               notifications[]
+  order_packaging                                             order_packaging[]
+  orders                                                      orders[]
+  print_failures                                              print_failures[]
+  print_jobs                                                  print_jobs[]
+  product_assets                                              product_assets[]
+  production_costs                                            production_costs[]
+  production_jobs                                             production_jobs[]
+  products                                                    products[]
+  qc_inspections                                              qc_inspections[]
+  quotations                                                  quotations[]
+  request_files                                               request_files[]
+  request_notes                                               request_notes[]
+  slicing_results                                             slicing_results[]
+  workspace_members                                           workspace_members[]
+
+  @@index([account_status], map: "idx_users_status")
+}
+
+model workspace_members {
+  id                BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id      BigInt     @db.UnsignedBigInt
+  user_id           BigInt     @db.UnsignedBigInt
+  role_id           BigInt?    @db.UnsignedBigInt
+  membership_status String     @default("ACTIVE") @db.VarChar(30)
+  joined_at         DateTime   @default(now()) @db.DateTime(0)
+  created_at        DateTime   @default(now()) @db.DateTime(0)
+  updated_at        DateTime   @default(now()) @db.DateTime(0)
+  workspaces        workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "workspace_members_ibfk_1")
+  users             users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "workspace_members_ibfk_2")
+  roles             roles?     @relation(fields: [role_id], references: [id], map: "workspace_members_ibfk_3")
+
+  @@unique([workspace_id, user_id], map: "uq_workspace_members")
+  @@index([role_id], map: "idx_workspace_members_role")
+  @@index([user_id], map: "idx_workspace_members_user")
+}
+
+model workspace_settings {
+  id            BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  workspace_id  BigInt     @db.UnsignedBigInt
+  setting_key   String     @db.VarChar(120)
+  setting_value String?    @db.Text
+  created_at    DateTime   @default(now()) @db.DateTime(0)
+  updated_at    DateTime   @default(now()) @db.DateTime(0)
+  workspaces    workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, map: "workspace_settings_ibfk_1")
+
+  @@unique([workspace_id, setting_key], map: "uq_workspace_settings")
+}
+
+model workspaces {
+  id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  name                  String                  @db.VarChar(120)
+  code                  String                  @unique(map: "uq_workspaces_code") @db.VarChar(60)
+  description           String?                 @db.Text
+  is_active             Boolean                 @default(true)
+  created_at            DateTime                @default(now()) @db.DateTime(0)
+  updated_at            DateTime                @default(now()) @db.DateTime(0)
+  audit_logs            audit_logs[]
+  cost_components       cost_components[]
+  custom_requests       custom_requests[]
+  design_assets         design_assets[]
+  design_tasks          design_tasks[]
+  experiments           experiments[]
+  filament_spools       filament_spools[]
+  ip_reviews            ip_reviews[]
+  material_usages       material_usages[]
+  materials             materials[]
+  notification_settings notification_settings[]
+  notifications         notifications[]
+  order_packaging       order_packaging[]
+  orders                orders[]
+  packaging_types       packaging_types[]
+  pricing_rules         pricing_rules[]
+  print_failures        print_failures[]
+  print_jobs            print_jobs[]
+  print_profiles        print_profiles[]
+  printers              printers[]
+  product_categories    product_categories[]
+  production_costs      production_costs[]
+  production_jobs       production_jobs[]
+  products              products[]
+  qc_inspections        qc_inspections[]
+  quotations            quotations[]
+  slicing_results       slicing_results[]
+  workspace_members     workspace_members[]
+  workspace_settings    workspace_settings[]
+}

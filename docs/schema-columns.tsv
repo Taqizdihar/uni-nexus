@@ -1,0 +1,559 @@
+﻿TABLE_NAME	COLUMN_NAME	COLUMN_TYPE	IS_NULLABLE	COLUMN_DEFAULT	COLUMN_KEY	EXTRA
+audit_logs	id	bigint unsigned	NO	NULL	PRI	auto_increment
+audit_logs	workspace_id	bigint unsigned	YES	NULL	MUL	
+audit_logs	user_id	bigint unsigned	YES	NULL	MUL	
+audit_logs	action	varchar(100)	NO	NULL		
+audit_logs	entity_type	varchar(100)	NO	NULL	MUL	
+audit_logs	entity_id	bigint unsigned	YES	NULL		
+audit_logs	old_value_json	json	YES	NULL		
+audit_logs	new_value_json	json	YES	NULL		
+audit_logs	ip_address	varchar(45)	YES	NULL		
+audit_logs	user_agent	varchar(500)	YES	NULL		
+audit_logs	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+cost_components	id	bigint unsigned	NO	NULL	PRI	auto_increment
+cost_components	workspace_id	bigint unsigned	NO	NULL	MUL	
+cost_components	name	varchar(120)	NO	NULL		
+cost_components	code	varchar(60)	YES	NULL		
+cost_components	category	varchar(60)	NO	NULL		
+cost_components	calculation_type	varchar(50)	NO	MANUAL		
+cost_components	default_unit	varchar(40)	YES	NULL		
+cost_components	default_unit_cost	decimal(14,4)	YES	NULL		
+cost_components	description	text	YES	NULL		
+cost_components	is_active	tinyint(1)	NO	1		
+cost_components	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+cost_components	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+custom_requests	id	bigint unsigned	NO	NULL	PRI	auto_increment
+custom_requests	workspace_id	bigint unsigned	NO	NULL	MUL	
+custom_requests	request_number	varchar(60)	YES	NULL		
+custom_requests	customer_id	bigint unsigned	NO	NULL	MUL	
+custom_requests	source	varchar(60)	NO	CUSTOMER_APP		
+custom_requests	existing_product_id	bigint unsigned	YES	NULL	MUL	
+custom_requests	title	varchar(180)	YES	NULL		
+custom_requests	description	text	YES	NULL		
+custom_requests	requested_quantity	int unsigned	NO	1		
+custom_requests	requested_height_mm	decimal(10,2)	YES	NULL		
+custom_requests	requested_width_mm	decimal(10,2)	YES	NULL		
+custom_requests	requested_length_mm	decimal(10,2)	YES	NULL		
+custom_requests	preferred_material_id	bigint unsigned	YES	NULL	MUL	
+custom_requests	preferred_color	varchar(100)	YES	NULL		
+custom_requests	target_date	date	YES	NULL		
+custom_requests	status	varchar(40)	NO	NEW		
+custom_requests	assigned_designer_id	bigint unsigned	YES	NULL	MUL	
+custom_requests	created_by_user_id	bigint unsigned	YES	NULL	MUL	
+custom_requests	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+custom_requests	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+customer_accounts	id	bigint unsigned	NO	NULL	PRI	auto_increment
+customer_accounts	customer_id	bigint unsigned	NO	NULL	UNI	
+customer_accounts	email	varchar(190)	NO	NULL	UNI	
+customer_accounts	password_hash	varchar(255)	NO	NULL		
+customer_accounts	email_verified_at	datetime	YES	NULL		
+customer_accounts	last_login_at	datetime	YES	NULL		
+customer_accounts	is_active	tinyint(1)	NO	1		
+customer_accounts	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+customer_accounts	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+customers	id	bigint unsigned	NO	NULL	PRI	auto_increment
+customers	customer_code	varchar(60)	YES	NULL	UNI	
+customers	full_name	varchar(150)	NO	NULL	MUL	
+customers	email	varchar(190)	YES	NULL	MUL	
+customers	phone	varchar(30)	YES	NULL	MUL	
+customers	address_text	text	YES	NULL		
+customers	notes	text	YES	NULL		
+customers	is_active	tinyint(1)	NO	1		
+customers	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+customers	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+design_assets	id	bigint unsigned	NO	NULL	PRI	auto_increment
+design_assets	workspace_id	bigint unsigned	NO	NULL	MUL	
+design_assets	custom_request_id	bigint unsigned	YES	NULL	MUL	
+design_assets	design_task_id	bigint unsigned	YES	NULL	MUL	
+design_assets	file_name	varchar(255)	NO	NULL		
+design_assets	asset_type	varchar(50)	NO	NULL		
+design_assets	mime_type	varchar(120)	YES	NULL		
+design_assets	file_size_bytes	bigint unsigned	YES	NULL		
+design_assets	storage_provider	varchar(40)	YES	NULL		
+design_assets	bucket_name	varchar(120)	YES	NULL		
+design_assets	object_key	varchar(500)	YES	NULL		
+design_assets	external_url	text	YES	NULL		
+design_assets	version_label	varchar(60)	YES	NULL		
+design_assets	is_final	tinyint(1)	NO	0		
+design_assets	uploaded_by_user_id	bigint unsigned	YES	NULL	MUL	
+design_assets	notes	text	YES	NULL		
+design_assets	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+design_tasks	id	bigint unsigned	NO	NULL	PRI	auto_increment
+design_tasks	workspace_id	bigint unsigned	NO	NULL	MUL	
+design_tasks	custom_request_id	bigint unsigned	NO	NULL	MUL	
+design_tasks	assigned_to_user_id	bigint unsigned	YES	NULL	MUL	
+design_tasks	status	varchar(40)	NO	PENDING		
+design_tasks	priority	varchar(20)	NO	NORMAL		
+design_tasks	started_at	datetime	YES	NULL		
+design_tasks	completed_at	datetime	YES	NULL		
+design_tasks	notes	text	YES	NULL		
+design_tasks	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+design_tasks	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+experiment_measurements	id	bigint unsigned	NO	NULL	PRI	auto_increment
+experiment_measurements	experiment_id	bigint unsigned	NO	NULL	MUL	
+experiment_measurements	parameter_name	varchar(120)	NO	NULL		
+experiment_measurements	parameter_value	varchar(255)	YES	NULL		
+experiment_measurements	unit	varchar(60)	YES	NULL		
+experiment_measurements	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+experiments	id	bigint unsigned	NO	NULL	PRI	auto_increment
+experiments	workspace_id	bigint unsigned	NO	NULL	MUL	
+experiments	experiment_number	varchar(60)	YES	NULL		
+experiments	title	varchar(180)	NO	NULL		
+experiments	printer_id	bigint unsigned	YES	NULL	MUL	
+experiments	material_id	bigint unsigned	YES	NULL	MUL	
+experiments	print_profile_id	bigint unsigned	YES	NULL	MUL	
+experiments	objective	text	YES	NULL		
+experiments	result_summary	text	YES	NULL		
+experiments	result_status	varchar(40)	YES	NULL		
+experiments	notes	text	YES	NULL		
+experiments	performed_by_user_id	bigint unsigned	YES	NULL	MUL	
+experiments	performed_at	datetime	YES	NULL		
+experiments	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+experiments	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+filament_spools	id	bigint unsigned	NO	NULL	PRI	auto_increment
+filament_spools	workspace_id	bigint unsigned	NO	NULL	MUL	
+filament_spools	material_id	bigint unsigned	NO	NULL	MUL	
+filament_spools	spool_code	varchar(60)	YES	NULL		
+filament_spools	brand	varchar(120)	YES	NULL		
+filament_spools	color_name	varchar(100)	YES	NULL		
+filament_spools	color_hex	varchar(10)	YES	NULL		
+filament_spools	batch_number	varchar(100)	YES	NULL		
+filament_spools	initial_weight_gram	decimal(12,3)	NO	0.000		
+filament_spools	remaining_weight_gram	decimal(12,3)	NO	0.000		
+filament_spools	purchase_price	decimal(14,2)	NO	0.00		
+filament_spools	cost_per_gram	decimal(14,4)	NO	0.0000		
+filament_spools	purchased_at	datetime	YES	NULL		
+filament_spools	status	varchar(30)	NO	AVAILABLE		
+filament_spools	notes	text	YES	NULL		
+filament_spools	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+filament_spools	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+guest_access_tokens	id	bigint unsigned	NO	NULL	PRI	auto_increment
+guest_access_tokens	customer_id	bigint unsigned	NO	NULL	MUL	
+guest_access_tokens	custom_request_id	bigint unsigned	YES	NULL	MUL	
+guest_access_tokens	order_id	bigint unsigned	YES	NULL	MUL	
+guest_access_tokens	token_hash	varchar(255)	NO	NULL	UNI	
+guest_access_tokens	expires_at	datetime	YES	NULL		
+guest_access_tokens	revoked_at	datetime	YES	NULL		
+guest_access_tokens	last_used_at	datetime	YES	NULL		
+guest_access_tokens	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+ip_review_checklists	id	bigint unsigned	NO	NULL	PRI	auto_increment
+ip_review_checklists	ip_review_id	bigint unsigned	NO	NULL	MUL	
+ip_review_checklists	check_type	varchar(100)	NO	NULL		
+ip_review_checklists	result	varchar(30)	YES	NULL		
+ip_review_checklists	notes	text	YES	NULL		
+ip_review_checklists	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+ip_reviews	id	bigint unsigned	NO	NULL	PRI	auto_increment
+ip_reviews	workspace_id	bigint unsigned	NO	NULL	MUL	
+ip_reviews	custom_request_id	bigint unsigned	YES	NULL	MUL	
+ip_reviews	order_id	bigint unsigned	YES	NULL	MUL	
+ip_reviews	status	varchar(30)	NO	NEEDS_REVIEW		
+ip_reviews	reviewed_by_user_id	bigint unsigned	YES	NULL	MUL	
+ip_reviews	reviewed_at	datetime	YES	NULL		
+ip_reviews	notes	text	YES	NULL		
+ip_reviews	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+ip_reviews	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+material_usages	id	bigint unsigned	NO	NULL	PRI	auto_increment
+material_usages	workspace_id	bigint unsigned	NO	NULL	MUL	
+material_usages	print_job_id	bigint unsigned	NO	NULL	MUL	
+material_usages	filament_spool_id	bigint unsigned	NO	NULL	MUL	
+material_usages	usage_type	varchar(40)	NO	NULL		
+material_usages	weight_gram	decimal(12,3)	NO	0.000		
+material_usages	cost_per_gram	decimal(14,4)	NO	0.0000		
+material_usages	total_cost	decimal(14,2)	NO	0.00		
+material_usages	recorded_by_user_id	bigint unsigned	YES	NULL	MUL	
+material_usages	notes	text	YES	NULL		
+material_usages	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+materials	id	bigint unsigned	NO	NULL	PRI	auto_increment
+materials	workspace_id	bigint unsigned	NO	NULL	MUL	
+materials	name	varchar(120)	NO	NULL		
+materials	material_type	varchar(60)	NO	NULL		
+materials	manufacturer	varchar(120)	YES	NULL		
+materials	description	text	YES	NULL		
+materials	is_active	tinyint(1)	NO	1		
+materials	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+materials	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+notification_settings	id	bigint unsigned	NO	NULL	PRI	auto_increment
+notification_settings	workspace_id	bigint unsigned	NO	NULL	MUL	
+notification_settings	event_key	varchar(100)	NO	NULL		
+notification_settings	channel	varchar(40)	NO	NULL		
+notification_settings	destination	varchar(190)	YES	NULL		
+notification_settings	provider	varchar(80)	YES	NULL		
+notification_settings	is_enabled	tinyint(1)	NO	0		
+notification_settings	config_json	json	YES	NULL		
+notification_settings	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+notification_settings	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+notifications	id	bigint unsigned	NO	NULL	PRI	auto_increment
+notifications	workspace_id	bigint unsigned	NO	NULL	MUL	
+notifications	recipient_user_id	bigint unsigned	NO	NULL	MUL	
+notifications	event_type	varchar(100)	NO	NULL		
+notifications	entity_type	varchar(80)	YES	NULL		
+notifications	entity_id	bigint unsigned	YES	NULL		
+notifications	title	varchar(190)	NO	NULL		
+notifications	message	text	YES	NULL		
+notifications	read_at	datetime	YES	NULL		
+notifications	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+order_items	id	bigint unsigned	NO	NULL	PRI	auto_increment
+order_items	order_id	bigint unsigned	NO	NULL	MUL	
+order_items	product_id	bigint unsigned	YES	NULL	MUL	
+order_items	product_variant_id	bigint unsigned	YES	NULL	MUL	
+order_items	design_asset_id	bigint unsigned	YES	NULL	MUL	
+order_items	item_name	varchar(180)	NO	NULL		
+order_items	description	text	YES	NULL		
+order_items	quantity	int unsigned	NO	1		
+order_items	unit_price	decimal(14,2)	NO	0.00		
+order_items	total_price	decimal(14,2)	NO	0.00		
+order_items	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+order_items	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+order_packaging	id	bigint unsigned	NO	NULL	PRI	auto_increment
+order_packaging	workspace_id	bigint unsigned	NO	NULL	MUL	
+order_packaging	order_id	bigint unsigned	NO	NULL	MUL	
+order_packaging	packaging_type_id	bigint unsigned	NO	NULL	MUL	
+order_packaging	quantity	int unsigned	NO	1		
+order_packaging	actual_cost	decimal(14,2)	NO	0.00		
+order_packaging	status	varchar(30)	NO	PENDING		
+order_packaging	packed_by_user_id	bigint unsigned	YES	NULL	MUL	
+order_packaging	packed_at	datetime	YES	NULL		
+order_packaging	notes	text	YES	NULL		
+order_packaging	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+order_packaging	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+orders	id	bigint unsigned	NO	NULL	PRI	auto_increment
+orders	workspace_id	bigint unsigned	NO	NULL	MUL	
+orders	order_number	varchar(60)	YES	NULL		
+orders	customer_id	bigint unsigned	NO	NULL	MUL	
+orders	custom_request_id	bigint unsigned	YES	NULL	MUL	
+orders	quotation_id	bigint unsigned	YES	NULL	UNI	
+orders	order_source	varchar(60)	NO	CUSTOMER_APP		
+orders	status	varchar(40)	NO	CONFIRMED		
+orders	payment_status	varchar(30)	NO	UNPAID		
+orders	shipping_status	varchar(30)	YES	NULL		
+orders	order_date	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+orders	target_date	date	YES	NULL		
+orders	subtotal	decimal(14,2)	NO	0.00		
+orders	discount_amount	decimal(14,2)	NO	0.00		
+orders	total_price	decimal(14,2)	NO	0.00		
+orders	currency_code	char(3)	NO	IDR		
+orders	shipping_name	varchar(150)	YES	NULL		
+orders	shipping_phone	varchar(30)	YES	NULL		
+orders	shipping_address	text	YES	NULL		
+orders	customer_notes	text	YES	NULL		
+orders	internal_notes	text	YES	NULL		
+orders	created_by_user_id	bigint unsigned	YES	NULL	MUL	
+orders	completed_at	datetime	YES	NULL		
+orders	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+orders	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+packaging_types	id	bigint unsigned	NO	NULL	PRI	auto_increment
+packaging_types	workspace_id	bigint unsigned	NO	NULL	MUL	
+packaging_types	name	varchar(150)	NO	NULL		
+packaging_types	description	text	YES	NULL		
+packaging_types	default_cost	decimal(14,2)	NO	0.00		
+packaging_types	is_active	tinyint(1)	NO	1		
+packaging_types	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+packaging_types	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+pricing_rules	id	bigint unsigned	NO	NULL	PRI	auto_increment
+pricing_rules	workspace_id	bigint unsigned	NO	NULL	MUL	
+pricing_rules	name	varchar(150)	NO	NULL		
+pricing_rules	rule_type	varchar(50)	NO	PER_GRAM		
+pricing_rules	material_id	bigint unsigned	YES	NULL	MUL	
+pricing_rules	product_id	bigint unsigned	YES	NULL	MUL	
+pricing_rules	price_per_gram	decimal(14,4)	YES	NULL		
+pricing_rules	minimum_price	decimal(14,2)	YES	NULL		
+pricing_rules	design_fee	decimal(14,2)	NO	0.00		
+pricing_rules	finishing_fee	decimal(14,2)	NO	0.00		
+pricing_rules	additional_config_json	json	YES	NULL		
+pricing_rules	effective_from	datetime	YES	NULL		
+pricing_rules	effective_until	datetime	YES	NULL		
+pricing_rules	is_active	tinyint(1)	NO	1		
+pricing_rules	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+pricing_rules	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+print_failures	id	bigint unsigned	NO	NULL	PRI	auto_increment
+print_failures	workspace_id	bigint unsigned	NO	NULL	MUL	
+print_failures	print_job_id	bigint unsigned	NO	NULL	MUL	
+print_failures	failure_type	varchar(60)	NO	NULL		
+print_failures	description	text	YES	NULL		
+print_failures	failed_at_percentage	decimal(6,2)	YES	NULL		
+print_failures	wasted_weight_gram	decimal(12,3)	YES	NULL		
+print_failures	root_cause	text	YES	NULL		
+print_failures	corrective_action	text	YES	NULL		
+print_failures	reported_by_user_id	bigint unsigned	YES	NULL	MUL	
+print_failures	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+print_jobs	id	bigint unsigned	NO	NULL	PRI	auto_increment
+print_jobs	workspace_id	bigint unsigned	NO	NULL	MUL	
+print_jobs	print_job_number	varchar(60)	YES	NULL		
+print_jobs	production_job_id	bigint unsigned	NO	NULL	MUL	
+print_jobs	printer_id	bigint unsigned	YES	NULL	MUL	
+print_jobs	print_profile_id	bigint unsigned	YES	NULL	MUL	
+print_jobs	slicing_result_id	bigint unsigned	YES	NULL	MUL	
+print_jobs	operator_id	bigint unsigned	YES	NULL	MUL	
+print_jobs	status	varchar(40)	NO	QUEUED		
+print_jobs	queue_position	int unsigned	YES	NULL		
+print_jobs	queued_at	datetime	YES	NULL		
+print_jobs	started_at	datetime	YES	NULL		
+print_jobs	completed_at	datetime	YES	NULL		
+print_jobs	estimated_weight_gram	decimal(12,3)	YES	NULL		
+print_jobs	actual_weight_gram	decimal(12,3)	YES	NULL		
+print_jobs	estimated_print_minutes	int unsigned	YES	NULL		
+print_jobs	actual_print_minutes	int unsigned	YES	NULL		
+print_jobs	notes	text	YES	NULL		
+print_jobs	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+print_jobs	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+print_profiles	id	bigint unsigned	NO	NULL	PRI	auto_increment
+print_profiles	workspace_id	bigint unsigned	NO	NULL	MUL	
+print_profiles	printer_id	bigint unsigned	YES	NULL	MUL	
+print_profiles	material_id	bigint unsigned	YES	NULL	MUL	
+print_profiles	name	varchar(150)	NO	NULL		
+print_profiles	nozzle_size_mm	decimal(6,3)	YES	NULL		
+print_profiles	layer_height_mm	decimal(6,3)	YES	NULL		
+print_profiles	nozzle_temperature_c	decimal(7,2)	YES	NULL		
+print_profiles	bed_temperature_c	decimal(7,2)	YES	NULL		
+print_profiles	print_speed_mm_s	decimal(10,2)	YES	NULL		
+print_profiles	infill_percentage	decimal(6,2)	YES	NULL		
+print_profiles	support_setting	text	YES	NULL		
+print_profiles	additional_settings_json	json	YES	NULL		
+print_profiles	notes	text	YES	NULL		
+print_profiles	is_active	tinyint(1)	NO	1		
+print_profiles	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+print_profiles	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+printers	id	bigint unsigned	NO	NULL	PRI	auto_increment
+printers	workspace_id	bigint unsigned	NO	NULL	MUL	
+printers	printer_code	varchar(60)	YES	NULL		
+printers	name	varchar(120)	NO	NULL		
+printers	brand	varchar(120)	YES	NULL		
+printers	model	varchar(120)	YES	NULL		
+printers	serial_number	varchar(120)	YES	NULL		
+printers	location	varchar(190)	YES	NULL		
+printers	build_volume_x_mm	decimal(10,2)	YES	NULL		
+printers	build_volume_y_mm	decimal(10,2)	YES	NULL		
+printers	build_volume_z_mm	decimal(10,2)	YES	NULL		
+printers	default_nozzle_size_mm	decimal(6,3)	YES	NULL		
+printers	status	varchar(30)	NO	IDLE		
+printers	last_maintenance_at	datetime	YES	NULL		
+printers	is_active	tinyint(1)	NO	1		
+printers	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+printers	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+product_assets	id	bigint unsigned	NO	NULL	PRI	auto_increment
+product_assets	product_id	bigint unsigned	NO	NULL	MUL	
+product_assets	source_design_asset_id	bigint unsigned	YES	NULL	MUL	
+product_assets	asset_type	varchar(50)	NO	NULL		
+product_assets	file_name	varchar(255)	YES	NULL		
+product_assets	storage_provider	varchar(40)	YES	NULL		
+product_assets	bucket_name	varchar(120)	YES	NULL		
+product_assets	object_key	varchar(500)	YES	NULL		
+product_assets	external_url	text	YES	NULL		
+product_assets	version_label	varchar(60)	YES	NULL		
+product_assets	is_primary	tinyint(1)	NO	0		
+product_assets	is_internal_only	tinyint(1)	NO	1		
+product_assets	uploaded_by_user_id	bigint unsigned	YES	NULL	MUL	
+product_assets	notes	text	YES	NULL		
+product_assets	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+product_categories	id	bigint unsigned	NO	NULL	PRI	auto_increment
+product_categories	workspace_id	bigint unsigned	NO	NULL	MUL	
+product_categories	parent_id	bigint unsigned	YES	NULL	MUL	
+product_categories	name	varchar(120)	NO	NULL		
+product_categories	slug	varchar(160)	YES	NULL		
+product_categories	description	text	YES	NULL		
+product_categories	is_active	tinyint(1)	NO	1		
+product_categories	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+product_categories	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+product_images	id	bigint unsigned	NO	NULL	PRI	auto_increment
+product_images	product_id	bigint unsigned	NO	NULL	MUL	
+product_images	file_name	varchar(255)	NO	NULL		
+product_images	storage_provider	varchar(40)	YES	NULL		
+product_images	bucket_name	varchar(120)	YES	NULL		
+product_images	object_key	varchar(500)	YES	NULL		
+product_images	public_url	text	YES	NULL		
+product_images	alt_text	varchar(255)	YES	NULL		
+product_images	sort_order	int	NO	0		
+product_images	is_primary	tinyint(1)	NO	0		
+product_images	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+product_sales_channels	id	bigint unsigned	NO	NULL	PRI	auto_increment
+product_sales_channels	product_id	bigint unsigned	NO	NULL	MUL	
+product_sales_channels	channel_name	varchar(60)	NO	NULL	MUL	
+product_sales_channels	external_product_id	varchar(190)	YES	NULL		
+product_sales_channels	listing_url	text	YES	NULL		
+product_sales_channels	is_active	tinyint(1)	NO	1		
+product_sales_channels	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+product_sales_channels	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+product_variants	id	bigint unsigned	NO	NULL	PRI	auto_increment
+product_variants	product_id	bigint unsigned	NO	NULL	MUL	
+product_variants	variant_code	varchar(80)	YES	NULL		
+product_variants	name	varchar(150)	NO	NULL		
+product_variants	material_id	bigint unsigned	YES	NULL	MUL	
+product_variants	color_name	varchar(100)	YES	NULL		
+product_variants	size_x_mm	decimal(10,2)	YES	NULL		
+product_variants	size_y_mm	decimal(10,2)	YES	NULL		
+product_variants	size_z_mm	decimal(10,2)	YES	NULL		
+product_variants	estimated_weight_gram	decimal(12,3)	YES	NULL		
+product_variants	price	decimal(14,2)	YES	NULL		
+product_variants	is_active	tinyint(1)	NO	1		
+product_variants	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+product_variants	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+production_costs	id	bigint unsigned	NO	NULL	PRI	auto_increment
+production_costs	workspace_id	bigint unsigned	NO	NULL	MUL	
+production_costs	order_id	bigint unsigned	YES	NULL	MUL	
+production_costs	production_job_id	bigint unsigned	YES	NULL	MUL	
+production_costs	print_job_id	bigint unsigned	YES	NULL	MUL	
+production_costs	cost_component_id	bigint unsigned	NO	NULL	MUL	
+production_costs	cost_type	varchar(20)	NO	ACTUAL		
+production_costs	description	varchar(255)	YES	NULL		
+production_costs	quantity	decimal(14,4)	NO	1.0000		
+production_costs	unit	varchar(40)	YES	NULL		
+production_costs	unit_cost	decimal(14,4)	NO	0.0000		
+production_costs	total_cost	decimal(14,2)	NO	0.00		
+production_costs	recorded_by_user_id	bigint unsigned	YES	NULL	MUL	
+production_costs	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+production_costs	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+production_jobs	id	bigint unsigned	NO	NULL	PRI	auto_increment
+production_jobs	workspace_id	bigint unsigned	NO	NULL	MUL	
+production_jobs	job_number	varchar(60)	YES	NULL		
+production_jobs	order_item_id	bigint unsigned	NO	NULL	MUL	
+production_jobs	assigned_operator_id	bigint unsigned	YES	NULL	MUL	
+production_jobs	status	varchar(40)	NO	WAITING		
+production_jobs	priority	varchar(20)	NO	NORMAL		
+production_jobs	planned_start	datetime	YES	NULL		
+production_jobs	planned_end	datetime	YES	NULL		
+production_jobs	actual_start	datetime	YES	NULL		
+production_jobs	actual_end	datetime	YES	NULL		
+production_jobs	notes	text	YES	NULL		
+production_jobs	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+production_jobs	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+products	id	bigint unsigned	NO	NULL	PRI	auto_increment
+products	workspace_id	bigint unsigned	NO	NULL	MUL	
+products	category_id	bigint unsigned	YES	NULL	MUL	
+products	product_code	varchar(60)	YES	NULL		
+products	name	varchar(180)	NO	NULL		
+products	slug	varchar(200)	YES	NULL		
+products	product_type	varchar(50)	NO	READY_MODEL		
+products	short_description	varchar(500)	YES	NULL		
+products	description	text	YES	NULL		
+products	catalog_visibility	varchar(30)	NO	INTERNAL		
+products	status	varchar(30)	NO	DRAFT		
+products	base_price	decimal(14,2)	YES	NULL		
+products	currency_code	char(3)	NO	IDR		
+products	default_material_id	bigint unsigned	YES	NULL	MUL	
+products	default_weight_gram	decimal(12,3)	YES	NULL		
+products	is_active	tinyint(1)	NO	1		
+products	published_at	datetime	YES	NULL		
+products	created_by_user_id	bigint unsigned	YES	NULL	MUL	
+products	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+products	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+qc_check_items	id	bigint unsigned	NO	NULL	PRI	auto_increment
+qc_check_items	qc_inspection_id	bigint unsigned	NO	NULL	MUL	
+qc_check_items	check_name	varchar(150)	NO	NULL		
+qc_check_items	result	varchar(30)	NO	NULL		
+qc_check_items	notes	text	YES	NULL		
+qc_check_items	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+qc_inspections	id	bigint unsigned	NO	NULL	PRI	auto_increment
+qc_inspections	workspace_id	bigint unsigned	NO	NULL	MUL	
+qc_inspections	production_job_id	bigint unsigned	NO	NULL	MUL	
+qc_inspections	print_job_id	bigint unsigned	YES	NULL	MUL	
+qc_inspections	result	varchar(30)	NO	NULL		
+qc_inspections	inspected_by_user_id	bigint unsigned	YES	NULL	MUL	
+qc_inspections	inspected_at	datetime	YES	NULL		
+qc_inspections	notes	text	YES	NULL		
+qc_inspections	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+quotation_items	id	bigint unsigned	NO	NULL	PRI	auto_increment
+quotation_items	quotation_id	bigint unsigned	NO	NULL	MUL	
+quotation_items	product_id	bigint unsigned	YES	NULL	MUL	
+quotation_items	product_variant_id	bigint unsigned	YES	NULL	MUL	
+quotation_items	description	varchar(255)	NO	NULL		
+quotation_items	quantity	decimal(12,3)	NO	1.000		
+quotation_items	unit_price	decimal(14,2)	NO	0.00		
+quotation_items	amount	decimal(14,2)	NO	0.00		
+quotation_items	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+quotations	id	bigint unsigned	NO	NULL	PRI	auto_increment
+quotations	workspace_id	bigint unsigned	NO	NULL	MUL	
+quotations	quotation_number	varchar(60)	YES	NULL		
+quotations	revision_no	int unsigned	NO	1		
+quotations	custom_request_id	bigint unsigned	NO	NULL	MUL	
+quotations	customer_id	bigint unsigned	NO	NULL	MUL	
+quotations	subtotal	decimal(14,2)	NO	0.00		
+quotations	discount_amount	decimal(14,2)	NO	0.00		
+quotations	additional_cost	decimal(14,2)	NO	0.00		
+quotations	total_price	decimal(14,2)	NO	0.00		
+quotations	currency_code	char(3)	NO	IDR		
+quotations	status	varchar(30)	NO	DRAFT		
+quotations	valid_until	datetime	YES	NULL		
+quotations	approved_by_user_id	bigint unsigned	YES	NULL	MUL	
+quotations	sent_at	datetime	YES	NULL		
+quotations	accepted_at	datetime	YES	NULL		
+quotations	declined_at	datetime	YES	NULL		
+quotations	notes	text	YES	NULL		
+quotations	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+quotations	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+request_files	id	bigint unsigned	NO	NULL	PRI	auto_increment
+request_files	custom_request_id	bigint unsigned	NO	NULL	MUL	
+request_files	file_type	varchar(50)	NO	NULL		
+request_files	file_name	varchar(255)	NO	NULL		
+request_files	mime_type	varchar(120)	YES	NULL		
+request_files	file_size_bytes	bigint unsigned	YES	NULL		
+request_files	storage_provider	varchar(40)	YES	NULL		
+request_files	bucket_name	varchar(120)	YES	NULL		
+request_files	object_key	varchar(500)	YES	NULL		
+request_files	uploaded_by_user_id	bigint unsigned	YES	NULL	MUL	
+request_files	uploaded_by_customer_account_id	bigint unsigned	YES	NULL	MUL	
+request_files	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+request_notes	id	bigint unsigned	NO	NULL	PRI	auto_increment
+request_notes	custom_request_id	bigint unsigned	NO	NULL	MUL	
+request_notes	user_id	bigint unsigned	YES	NULL	MUL	
+request_notes	customer_account_id	bigint unsigned	YES	NULL	MUL	
+request_notes	note	text	NO	NULL		
+request_notes	is_internal	tinyint(1)	NO	1		
+request_notes	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+roles	id	bigint unsigned	NO	NULL	PRI	auto_increment
+roles	name	varchar(100)	NO	NULL		
+roles	code	varchar(60)	NO	NULL	UNI	
+roles	description	text	YES	NULL		
+roles	is_active	tinyint(1)	NO	1		
+roles	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+roles	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+slicing_results	id	bigint unsigned	NO	NULL	PRI	auto_increment
+slicing_results	workspace_id	bigint unsigned	NO	NULL	MUL	
+slicing_results	production_job_id	bigint unsigned	NO	NULL	MUL	
+slicing_results	design_asset_id	bigint unsigned	YES	NULL	MUL	
+slicing_results	printer_id	bigint unsigned	YES	NULL	MUL	
+slicing_results	print_profile_id	bigint unsigned	YES	NULL	MUL	
+slicing_results	slicer_name	varchar(100)	YES	NULL		
+slicing_results	slicer_version	varchar(60)	YES	NULL		
+slicing_results	model_weight_gram	decimal(12,3)	YES	NULL		
+slicing_results	support_weight_gram	decimal(12,3)	YES	NULL		
+slicing_results	total_weight_gram	decimal(12,3)	YES	NULL		
+slicing_results	estimated_print_minutes	int unsigned	YES	NULL		
+slicing_results	model_size_x_mm	decimal(10,2)	YES	NULL		
+slicing_results	model_size_y_mm	decimal(10,2)	YES	NULL		
+slicing_results	model_size_z_mm	decimal(10,2)	YES	NULL		
+slicing_results	is_selected	tinyint(1)	NO	0		
+slicing_results	notes	text	YES	NULL		
+slicing_results	created_by_user_id	bigint unsigned	YES	NULL	MUL	
+slicing_results	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+users	id	bigint unsigned	NO	NULL	PRI	auto_increment
+users	full_name	varchar(150)	NO	NULL		
+users	email	varchar(190)	NO	NULL	UNI	
+users	phone	varchar(30)	YES	NULL		
+users	password_hash	varchar(255)	NO	NULL		
+users	account_status	varchar(30)	NO	PENDING	MUL	
+users	email_verified_at	datetime	YES	NULL		
+users	last_login_at	datetime	YES	NULL		
+users	is_active	tinyint(1)	NO	1		
+users	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+users	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+workspace_members	id	bigint unsigned	NO	NULL	PRI	auto_increment
+workspace_members	workspace_id	bigint unsigned	NO	NULL	MUL	
+workspace_members	user_id	bigint unsigned	NO	NULL	MUL	
+workspace_members	role_id	bigint unsigned	YES	NULL	MUL	
+workspace_members	membership_status	varchar(30)	NO	ACTIVE		
+workspace_members	joined_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+workspace_members	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+workspace_members	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+workspace_settings	id	bigint unsigned	NO	NULL	PRI	auto_increment
+workspace_settings	workspace_id	bigint unsigned	NO	NULL	MUL	
+workspace_settings	setting_key	varchar(120)	NO	NULL		
+workspace_settings	setting_value	text	YES	NULL		
+workspace_settings	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+workspace_settings	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
+workspaces	id	bigint unsigned	NO	NULL	PRI	auto_increment
+workspaces	name	varchar(120)	NO	NULL		
+workspaces	code	varchar(60)	NO	NULL	UNI	
+workspaces	description	text	YES	NULL		
+workspaces	is_active	tinyint(1)	NO	1		
+workspaces	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
+workspaces	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP

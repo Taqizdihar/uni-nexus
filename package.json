@@ -1,0 +1,42 @@
+﻿{
+    "name":  "uni-nexus",
+    "version":  "0.1.0",
+    "private":  true,
+    "workspaces":  [
+                       "apps/*",
+                       "packages/*"
+                   ],
+    "engines":  {
+                    "node":  "\u003e=22.12.0"
+                },
+    "scripts":  {
+                    "dev":  "npm run build -w @uni-nexus/shared \u0026\u0026 concurrently -k -n shared,api,admin \"npm run dev -w @uni-nexus/shared\" \"npm run dev -w @uni-nexus/api\" \"npm run dev -w @uni-nexus/admin\"",
+                    "build":  "npm run build -w @uni-nexus/shared \u0026\u0026 npm run build -w @uni-nexus/api \u0026\u0026 npm run build -w @uni-nexus/admin",
+                    "typecheck":  "npm run build -w @uni-nexus/shared \u0026\u0026 npm run typecheck --workspaces --if-present",
+                    "lint":  "eslint .",
+                    "format":  "prettier --write .",
+                    "format:check":  "prettier --check .",
+                    "test":  "npm run build -w @uni-nexus/shared \u0026\u0026 vitest run",
+                    "db:pull":  "npm run db:pull -w @uni-nexus/api",
+                    "db:generate":  "npm run db:generate -w @uni-nexus/api",
+                    "env:init":  "node scripts/init-env.mjs"
+                },
+    "devDependencies":  {
+                            "@eslint/js":  "^10.0.1",
+                            "@types/node":  "latest",
+                            "concurrently":  "latest",
+                            "eslint":  "^10.10.0",
+                            "eslint-config-prettier":  "latest",
+                            "eslint-plugin-react-hooks":  "latest",
+                            "globals":  "latest",
+                            "prettier":  "latest",
+                            "typescript":  "^5.9.3",
+                            "typescript-eslint":  "latest",
+                            "vitest":  "latest"
+                        },
+    "overrides":  {
+                      "mariadb":  "3.5.4",
+                      "mysql2":  "3.24.4",
+                      "deepmerge-ts":  "8.0.2"
+                  }
+}
