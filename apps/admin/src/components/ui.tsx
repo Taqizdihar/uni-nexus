@@ -2,11 +2,11 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 import { AlertCircle, Check, Inbox, LoaderCircle, RotateCcw, X } from 'lucide-react';
 import { message } from '../lib/api';
 
-export function Spinner({ label = 'Loading workspace data…' }: { label?: string }) {
+export function Spinner({ label = 'Memuat data workspace…' }: { label?: string }) {
   return <div className="loading-state" role="status"><LoaderCircle size={22} className="spin" /><span>{label}</span></div>;
 }
 export function ErrorState({ error, retry }: { error: unknown; retry?: () => void }) {
-  return <div className="error-state" role="alert"><AlertCircle size={22} /><div><strong>We couldn’t load this information</strong><p>{message(error)}</p>{retry && <button className="button secondary small" onClick={retry}><RotateCcw size={14} />Try again</button>}</div></div>;
+  return <div className="error-state" role="alert"><AlertCircle size={22} /><div><strong>Kami tidak dapat memuat informasi ini</strong><p>{message(error)}</p>{retry && <button className="button secondary small" onClick={retry}><RotateCcw size={14} />Coba lagi</button>}</div></div>;
 }
 export function EmptyState({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
   return <div className="empty-state"><div className="empty-icon"><Inbox size={28} strokeWidth={1.5} /></div><h3>{title}</h3><p>{description}</p>{action}</div>;
@@ -28,6 +28,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((items) => [...items, { id, text, error }]);
     setTimeout(() => setToasts((items) => items.filter((item) => item.id !== id)), 6000);
   }, []);
-  return <ToastContext.Provider value={notify}>{children}<div className="toast-stack" aria-live="polite">{toasts.map((toast) => <div className={`toast ${toast.error ? 'toast-error' : ''}`} key={toast.id}>{toast.error ? <AlertCircle size={18} /> : <Check size={18} />}<span>{toast.text}</span><button aria-label="Dismiss notification" onClick={() => setToasts((items) => items.filter((item) => item.id !== toast.id))}><X size={15} /></button></div>)}</div></ToastContext.Provider>;
+  return <ToastContext.Provider value={notify}>{children}<div className="toast-stack" aria-live="polite">{toasts.map((toast) => <div className={`toast ${toast.error ? 'toast-error' : ''}`} key={toast.id}>{toast.error ? <AlertCircle size={18} /> : <Check size={18} />}<span>{toast.text}</span><button aria-label="Tutup notifikasi" onClick={() => setToasts((items) => items.filter((item) => item.id !== toast.id))}><X size={15} /></button></div>)}</div></ToastContext.Provider>;
 }
 export const useToast = () => useContext(ToastContext);

@@ -14,6 +14,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
@@ -63,7 +64,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
     },
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
-      toast('Profile photo updated.');
+      toast('Foto profil diperbarui.');
     },
     onError: (error) => toast(message(error), true),
   });
@@ -87,7 +88,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
       <button
         type="button"
         className="profile-avatar-edit"
-        aria-label="Change profile photo"
+        aria-label="Ganti foto profil"
         onClick={() => input.current?.click()}
         disabled={upload.isPending}
       >
@@ -107,7 +108,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
       <button
         type="button"
         className="profile-presence-anchor"
-        aria-label="Change presence status"
+        aria-label="Ubah status kehadiran"
         onClick={() => setPresenceOpen((value) => !value)}
       >
         <PresenceBadge status={profile.presence_status} size={30} />
@@ -137,13 +138,13 @@ function BannerEdit() {
     },
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
-      toast('Profile banner updated.');
+      toast('Banner profil diperbarui.');
     },
     onError: (error) => toast(message(error), true),
   });
   return (
     <>
-      <button type="button" className="profile-banner-edit" aria-label="Change profile banner" onClick={() => input.current?.click()} disabled={upload.isPending}>
+      <button type="button" className="profile-banner-edit" aria-label="Ganti banner profil" onClick={() => input.current?.click()} disabled={upload.isPending}>
         {upload.isPending ? <LoaderCircle className="spin" size={16} /> : <Pencil size={16} />}
       </button>
       <input
@@ -185,7 +186,7 @@ function TagsRow({ tags }: { tags: Tag[] }) {
       {tags.map((tag) => (
         <span className="tag-pill" key={tag.id}>
           {tag.tag_text}
-          <button type="button" aria-label={`Remove tag ${tag.tag_text}`} onClick={() => remove.mutate(tag.id)} disabled={remove.isPending}>
+          <button type="button" aria-label={`Hapus tag ${tag.tag_text}`} onClick={() => remove.mutate(tag.id)} disabled={remove.isPending}>
             <X size={12} />
           </button>
         </span>
@@ -199,16 +200,16 @@ function TagsRow({ tags }: { tags: Tag[] }) {
               if (text.trim()) add.mutate(text.trim());
             }}
           >
-            <input autoFocus maxLength={40} value={text} onChange={(event) => setText(event.target.value)} placeholder="New tag" />
-            <button type="submit" className="icon-button small" disabled={add.isPending} aria-label="Save tag">
+            <input autoFocus maxLength={40} value={text} onChange={(event) => setText(event.target.value)} placeholder="Tag baru" />
+            <button type="submit" className="icon-button small" disabled={add.isPending} aria-label="Simpan tag">
               {add.isPending ? <LoaderCircle className="spin" size={14} /> : <Check size={14} />}
             </button>
-            <button type="button" className="icon-button small" onClick={() => { setAdding(false); setText(''); }} aria-label="Cancel">
+            <button type="button" className="icon-button small" onClick={() => { setAdding(false); setText(''); }} aria-label="Batal">
               <X size={14} />
             </button>
           </form>
         ) : (
-          <button type="button" className="tag-add" aria-label="Add tag" onClick={() => setAdding(true)}>
+          <button type="button" className="tag-add" aria-label="Tambah tag" onClick={() => setAdding(true)}>
             <Plus size={14} />
           </button>
         ))}
@@ -224,7 +225,7 @@ function WorkspaceCard({ profile }: { profile: ProfileData }) {
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
       await client.invalidateQueries({ queryKey: ['session'] });
-      toast('Default workspace updated.');
+      toast('Default Workspace diperbarui.');
     },
     onError: (error) => toast(message(error), true),
   });
@@ -232,7 +233,7 @@ function WorkspaceCard({ profile }: { profile: ProfileData }) {
     <div className="workspace-card">
       <div className="workspace-card-heading">Default Workspace</div>
       {profile.memberships.length === 0 ? (
-        <p className="helper-note" style={{ marginTop: 0 }}>No workspace assigned yet.</p>
+        <p className="helper-note" style={{ marginTop: 0 }}>Belum ada workspace yang ditetapkan.</p>
       ) : (
         <select
           value={profile.default_workspace?.id ?? ''}
@@ -270,7 +271,7 @@ function PetCardBlock({ profile }: { profile: ProfileData }) {
   return (
     <div className="pet-card">
       <span className="pet-card-label">Pet Card</span>
-      <button type="button" className="pet-card-edit" aria-label="Change pet" onClick={() => setEditing((value) => !value)}>
+      <button type="button" className="pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing((value) => !value)}>
         <Pencil size={13} />
       </button>
       {profile.pet ? (
@@ -280,18 +281,18 @@ function PetCardBlock({ profile }: { profile: ProfileData }) {
           <PawPrint size={34} strokeWidth={1.5} />
         </div>
       )}
-      <h3>{profile.pet?.name ?? 'No pet selected'}</h3>
-      <p>{profile.pet?.subtitle ?? 'Choose a companion from Edit Profile.'}</p>
+      <h3>{profile.pet?.name ?? 'Belum memilih Pet'}</h3>
+      <p>{profile.pet?.subtitle ?? 'Pilih pendamping dari Edit Profil.'}</p>
       {editing && (
         <div style={{ marginTop: 12, textAlign: 'left' }}>
           {pets.isPending ? (
-            <Spinner label="Loading pets…" />
+            <Spinner label="Memuat pet…" />
           ) : !pets.data?.length ? (
-            <p className="helper-note">No pets available yet.</p>
+            <p className="helper-note">Belum ada pet yang tersedia.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <button className="button secondary small" type="button" disabled={mutation.isPending} onClick={() => mutation.mutate(null)}>
-                No pet
+                Tanpa pet
               </button>
               {pets.data.map((pet) => (
                 <button
@@ -318,8 +319,8 @@ function IdentityForm({ profile }: { profile: ProfileData }) {
   const [editing, setEditing] = useState(false);
   const schema = z.object({
     full_name: z.string().trim().min(2).max(150),
-    username: z.string().trim().regex(/^[A-Za-z0-9._-]{3,30}$/, 'Use 3-30 letters, digits, dots, underscores, or hyphens.'),
-    phone: z.string().trim().min(1).max(30).regex(/^[0-9+()\-.\s]+$/, 'Use only digits and phone punctuation.'),
+    username: z.string().trim().regex(/^[A-Za-z0-9._-]{3,30}$/, 'Gunakan 3-30 huruf, angka, titik, garis bawah, atau tanda hubung.'),
+    phone: z.string().trim().min(1).max(30).regex(/^[0-9+()\-.\s]+$/, 'Gunakan hanya angka dan tanda baca nomor telepon.'),
     bio: z.string().trim().max(500).optional(),
   });
   const form = useForm({
@@ -331,35 +332,35 @@ function IdentityForm({ profile }: { profile: ProfileData }) {
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
       await client.invalidateQueries({ queryKey: ['session'] });
-      toast('Profile updated.');
+      toast('Profil diperbarui.');
       setEditing(false);
     },
     onError: (error) => toast(message(error), true),
   });
   return (
     <form className="form-grid" onSubmit={form.handleSubmit((values) => mutation.mutate(values))} noValidate>
-      <label className="field"><span>Full Name</span><input disabled={!editing} {...form.register('full_name')} />
+      <label className="field"><span>Nama Lengkap</span><input disabled={!editing} {...form.register('full_name')} />
         {form.formState.errors.full_name && <small className="field-error">{form.formState.errors.full_name.message}</small>}
       </label>
       <label className="field"><span>Username</span><input disabled={!editing} {...form.register('username')} />
         {form.formState.errors.username && <small className="field-error">{form.formState.errors.username.message}</small>}
       </label>
       <label className="field"><span>Email</span><input disabled value={profile.email} /></label>
-      <label className="field"><span>Phone Number</span><input disabled={!editing} {...form.register('phone')} />
+      <label className="field"><span>Nomor Telepon</span><input disabled={!editing} {...form.register('phone')} />
         {form.formState.errors.phone && <small className="field-error">{form.formState.errors.phone.message}</small>}
       </label>
-      <label className="field full-width"><span>Bio</span><textarea rows={3} disabled={!editing} placeholder="No bio yet" {...form.register('bio')} /></label>
+      <label className="field full-width"><span>Bio</span><textarea rows={3} disabled={!editing} placeholder="Belum ada bio." {...form.register('bio')} /></label>
       <div className="form-actions full-width">
         {editing ? (
           <>
             <button type="submit" className="button primary" disabled={mutation.isPending}>
-              {mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Save changes
+              {mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Simpan Perubahan
             </button>
-            <button type="button" className="button secondary" onClick={() => { form.reset(); setEditing(false); }}>Cancel</button>
+            <button type="button" className="button secondary" onClick={() => { form.reset(); setEditing(false); }}>Batal</button>
           </>
         ) : (
           <button type="button" className="button primary" onClick={() => setEditing(true)}>
-            <Pencil size={16} />Edit Profile
+            <Pencil size={16} />Edit Profil
           </button>
         )}
       </div>
@@ -371,14 +372,14 @@ function SecurityCard({ passwordChangedAt }: { passwordChangedAt: string | null 
   const toast = useToast();
   const [open, setOpen] = useState(false);
   const schema = z
-    .object({ current_password: z.string().min(1, 'Enter your current password.'), new_password: z.string().min(12, 'Use at least 12 characters.').max(72), confirm_password: z.string() })
-    .refine((value) => value.new_password === value.confirm_password, { message: 'Passwords do not match.', path: ['confirm_password'] });
+    .object({ current_password: z.string().min(1, 'Masukkan kata sandi Anda saat ini.'), new_password: z.string().min(12, 'Gunakan minimal 12 karakter.').max(72), confirm_password: z.string() })
+    .refine((value) => value.new_password === value.confirm_password, { message: 'Kata sandi tidak cocok.', path: ['confirm_password'] });
   const form = useForm({ resolver: zodResolver(schema), defaultValues: { current_password: '', new_password: '', confirm_password: '' } });
   const client = useQueryClient();
   const mutation = useMutation({
     mutationFn: (values: z.infer<typeof schema>) => api('/auth/password', { method: 'POST', body: body({ current_password: values.current_password, new_password: values.new_password }) }),
     onSuccess: async () => {
-      toast('Password updated.');
+      toast('Kata sandi diperbarui.');
       form.reset();
       setOpen(false);
       await client.invalidateQueries({ queryKey: ['profile'] });
@@ -398,18 +399,18 @@ function SecurityCard({ passwordChangedAt }: { passwordChangedAt: string | null 
         <button className="button secondary" type="button" style={{ marginTop: 12 }} onClick={() => setOpen(true)}><KeyRound size={16} />Ganti Sandi</button>
       ) : (
         <form className="form-grid" onSubmit={form.handleSubmit((values) => mutation.mutate(values))} noValidate>
-          <label className="field full-width"><span>Current password</span><input type="password" autoComplete="current-password" {...form.register('current_password')} />
+          <label className="field full-width"><span>Kata sandi saat ini</span><input type="password" autoComplete="current-password" {...form.register('current_password')} />
             {form.formState.errors.current_password && <small className="field-error">{form.formState.errors.current_password.message}</small>}
           </label>
-          <label className="field"><span>New password</span><input type="password" autoComplete="new-password" {...form.register('new_password')} />
+          <label className="field"><span>Kata sandi baru</span><input type="password" autoComplete="new-password" {...form.register('new_password')} />
             {form.formState.errors.new_password && <small className="field-error">{form.formState.errors.new_password.message}</small>}
           </label>
-          <label className="field"><span>Confirm new password</span><input type="password" autoComplete="new-password" {...form.register('confirm_password')} />
+          <label className="field"><span>Konfirmasi kata sandi baru</span><input type="password" autoComplete="new-password" {...form.register('confirm_password')} />
             {form.formState.errors.confirm_password && <small className="field-error">{form.formState.errors.confirm_password.message}</small>}
           </label>
           <div className="form-actions full-width">
-            <button className="button primary" type="submit" disabled={mutation.isPending}>{mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Update password</button>
-            <button className="button secondary" type="button" onClick={() => setOpen(false)}>Cancel</button>
+            <button className="button primary" type="submit" disabled={mutation.isPending}>{mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Perbarui Kata Sandi</button>
+            <button className="button secondary" type="button" onClick={() => setOpen(false)}>Batal</button>
           </div>
         </form>
       )}
@@ -437,12 +438,12 @@ function DangerCard() {
 
 export function Profile() {
   const query = useQuery({ queryKey: ['profile'], queryFn: async () => (await api<Envelope<ProfileData>>('/profile')).data });
-  if (query.isPending) return <Spinner label="Loading profile…" />;
+  if (query.isPending) return <Spinner label="Memuat profil…" />;
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
   const profile = query.data;
   return (
     <>
-      <PageHeader eyebrow="YOUR ACCOUNT" title="Profile" description="Manage your personal identity, presence, and security." />
+      <PageHeader eyebrow="AKUN ANDA" title="Profil" description="Kelola identitas, kehadiran, dan keamanan akun Anda." />
       <section className="panel profile-hero">
         <div className="profile-banner" style={profile.banner_url ? { backgroundImage: `url(${assetUrl(profile.banner_url)})` } : undefined}>
           <BannerEdit />
@@ -453,9 +454,9 @@ export function Profile() {
             <h1>{profile.full_name}</h1>
             <div className="profile-username-row">
               <span className="username">@{profile.username}</span>
-              {profile.role && <span className="role-pill">{profile.role.name}</span>}
+              {profile.role && <span className="role-pill">{ROLE_LABELS[profile.role.code as RoleCode] ?? profile.role.name}</span>}
             </div>
-            <p className="profile-bio">{profile.bio || 'No bio yet.'}</p>
+            <p className="profile-bio">{profile.bio || 'Belum ada bio.'}</p>
             <TagsRow tags={profile.tags} />
           </div>
           <WorkspaceCard profile={profile} />

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoaderCircle, Search, ShieldAlert, UserCheck, UserX } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, body, message, type Envelope, type Page } from '../lib/api';
-import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
+import { EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 
 type Account = {
   id: string;
@@ -27,12 +28,18 @@ type Reference = { roles: RoleRef[]; workspaces: WorkspaceRef[] };
 type Summary = { PENDING: number; ACTIVE: number; REJECTED: number; SUSPENDED: number };
 
 const tabs = [
-  { key: 'PENDING', label: 'Pending' },
-  { key: 'ACTIVE', label: 'Active' },
-  { key: 'REJECTED', label: 'Rejected' },
-  { key: 'SUSPENDED', label: 'Suspended' },
-  { key: 'ALL', label: 'All' },
+  { key: 'PENDING', label: 'Menunggu' },
+  { key: 'ACTIVE', label: 'Aktif' },
+  { key: 'REJECTED', label: 'Ditolak' },
+  { key: 'SUSPENDED', label: 'Ditangguhkan' },
+  { key: 'ALL', label: 'Semua' },
 ] as const;
+
+const statusTone: Record<Account['account_status'], string> = { PENDING: 'amber', ACTIVE: 'green', REJECTED: 'red', SUSPENDED: 'amber' };
+const statusLabel: Record<Account['account_status'], string> = { PENDING: 'Menunggu', ACTIVE: 'Aktif', REJECTED: 'Ditolak', SUSPENDED: 'Ditangguhkan' };
+function AccountStatusBadge({ status }: { status: Account['account_status'] }) {
+  return <span className={`badge ${statusTone[status]}`}><span className="badge-dot" />{statusLabel[status]}</span>;
+}
 
 function ApproveRow({ account, reference }: { account: Account; reference: Reference }) {
   const client = useQueryClient();
@@ -54,16 +61,16 @@ function ApproveRow({ account, reference }: { account: Account; reference: Refer
     },
     onSuccess: async () => {
       await invalidate();
-      toast(`${account.full_name} approved.`);
+      toast(`${account.full_name} disetujui.`);
     },
     onError: (error) => toast(message(error), true),
   });
   return (
     <div className="button-row" style={{ marginTop: 10 }}>
-      <select value={roleId} onChange={(event) => setRoleId(event.target.value)} aria-label="Role">
-        <option value="">Select role…</option>
+      <select value={roleId} onChange={(event) => setRoleId(event.target.value)} aria-label="Jabatan">
+        <option value="">Pilih Jabatan…</option>
         {reference.roles.map((role) => (
-          <option value={role.id} key={role.id}>{role.name}</option>
+          <option value={role.id} key={role.id}>{ROLE_LABELS[role.code as RoleCode] ?? role.name}</option>
         ))}
       </select>
       <select value={workspaceId} onChange={(event) => setWorkspaceId(event.target.value)} aria-label="Workspace">
@@ -77,7 +84,7 @@ function ApproveRow({ account, reference }: { account: Account; reference: Refer
         disabled={!roleId || !workspaceId || mutation.isPending}
         onClick={() => mutation.mutate()}
       >
-        {mutation.isPending ? <LoaderCircle className="spin" size={14} /> : <UserCheck size={14} />}Approve
+        {mutation.isPending ? <LoaderCircle className="spin" size={14} /> : <UserCheck size={14} />}Setujui
       </button>
     </div>
   );
@@ -94,14 +101,14 @@ function RejectRow({ account }: { account: Account }) {
         client.invalidateQueries({ queryKey: ['user-management'] }),
         client.invalidateQueries({ queryKey: ['user-management-summary'] }),
       ]);
-      toast(`${account.full_name} rejected.`);
+      toast(`${account.full_name} ditolak.`);
     },
     onError: (error) => toast(message(error), true),
   });
   return (
     <div className="button-row" style={{ marginTop: 10 }}>
       <input
-        placeholder="Rejection reason"
+        placeholder="Alasan penolakan"
         value={reason}
         onChange={(event) => setReason(event.target.value)}
         style={{ minWidth: 220 }}
@@ -111,16 +118,16 @@ function RejectRow({ account }: { account: Account }) {
         type="button"
         disabled={!reason.trim() || mutation.isPending}
         onClick={() => {
-          if (window.confirm(`Reject ${account.full_name}'s account?`)) mutation.mutate();
+          if (window.confirm(`Tolak akun ${account.full_name}?`)) mutation.mutate();
         }}
       >
-        {mutation.isPending ? <LoaderCircle className="spin" size={14} /> : <UserX size={14} />}Reject
+        {mutation.isPending ? <LoaderCircle className="spin" size={14} /> : <UserX size={14} />}Tolak
       </button>
     </div>
   );
 }
 
-function LifecycleButton({ account, action, label }: { account: Account; action: 'suspend' | 'reactivate'; label: string }) {
+function LifecycleButton({ account, action, label, doneText }: { account: Account; action: 'suspend' | 'reactivate'; label: string; doneText: string }) {
   const client = useQueryClient();
   const toast = useToast();
   const mutation = useMutation({
@@ -130,7 +137,7 @@ function LifecycleButton({ account, action, label }: { account: Account; action:
         client.invalidateQueries({ queryKey: ['user-management'] }),
         client.invalidateQueries({ queryKey: ['user-management-summary'] }),
       ]);
-      toast(`${account.full_name}: ${label.toLowerCase()}d.`);
+      toast(`${account.full_name}: ${doneText}.`);
     },
     onError: (error) => toast(message(error), true),
   });
@@ -140,7 +147,7 @@ function LifecycleButton({ account, action, label }: { account: Account; action:
       type="button"
       disabled={mutation.isPending}
       onClick={() => {
-        if (action === 'suspend' && !window.confirm(`Suspend ${account.full_name}'s account?`)) return;
+        if (action === 'suspend' && !window.confirm(`Tangguhkan akun ${account.full_name}?`)) return;
         mutation.mutate();
       }}
     >
@@ -173,16 +180,16 @@ export function UserManagement() {
   });
   return (
     <>
-      <PageHeader eyebrow="INTERNAL ACCOUNTS" title="Manajemen Pengguna" description="Review, approve, or reject accounts requesting access to UNI-NEXUS." />
+      <PageHeader eyebrow="AKUN INTERNAL" title="Manajemen Pengguna" description="Tinjau, setujui, atau tolak akun yang meminta akses ke UNI-NEXUS." />
       {summary.data && (
         <div className="summary-cards">
-          <div className="summary-card"><strong>{summary.data.PENDING}</strong><span>Pending</span></div>
-          <div className="summary-card active"><strong>{summary.data.ACTIVE}</strong><span>Active</span></div>
-          <div className="summary-card rejected"><strong>{summary.data.REJECTED}</strong><span>Rejected</span></div>
-          <div className="summary-card suspended"><strong>{summary.data.SUSPENDED}</strong><span>Suspended</span></div>
+          <div className="summary-card"><strong>{summary.data.PENDING}</strong><span>Menunggu</span></div>
+          <div className="summary-card active"><strong>{summary.data.ACTIVE}</strong><span>Aktif</span></div>
+          <div className="summary-card rejected"><strong>{summary.data.REJECTED}</strong><span>Ditolak</span></div>
+          <div className="summary-card suspended"><strong>{summary.data.SUSPENDED}</strong><span>Ditangguhkan</span></div>
         </div>
       )}
-      <nav className="section-tabs" aria-label="Account status">
+      <nav className="section-tabs" aria-label="Status akun">
         {tabs.map((item) => (
           <button key={item.key} className={tab === item.key ? 'selected' : ''} onClick={() => setSearchParams(item.key === 'PENDING' ? {} : { tab: item.key })}>
             {item.label}
@@ -191,23 +198,23 @@ export function UserManagement() {
       </nav>
       <div className="field" style={{ maxWidth: 320, marginBottom: 16 }}>
         <div className="nexus-password-field">
-          <input placeholder="Search by name, username, or email" value={search} onChange={(event) => setSearch(event.target.value)} style={{ paddingLeft: 34 }} />
+          <input placeholder="Cari berdasarkan nama, username, atau email" value={search} onChange={(event) => setSearch(event.target.value)} style={{ paddingLeft: 34 }} />
           <Search size={16} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--ink-faint)' }} />
         </div>
       </div>
       {list.isPending || reference.isPending ? (
-        <Spinner label="Loading accounts…" />
+        <Spinner label="Memuat akun…" />
       ) : list.isError ? (
         <ErrorState error={list.error} retry={() => void list.refetch()} />
       ) : reference.isError ? (
         <ErrorState error={reference.error} retry={() => void reference.refetch()} />
       ) : !list.data.data.length ? (
-        <EmptyState title="No accounts here" description="Nothing matches this filter right now." />
+        <EmptyState title="Tidak ada akun di sini" description="Tidak ada yang cocok dengan filter ini saat ini." />
       ) : (
         <div className="table-scroll">
           <table>
             <thead>
-              <tr><th>Name</th><th>Username</th><th>Email</th><th>Phone</th><th>Signed up</th><th>Status</th><th>Actions</th></tr>
+              <tr><th>Nama</th><th>Username</th><th>Email</th><th>Telepon</th><th>Mendaftar</th><th>Status</th><th>Aksi</th></tr>
             </thead>
             <tbody>
               {list.data.data.map((account) => (
@@ -216,8 +223,8 @@ export function UserManagement() {
                   <td>@{account.username}</td>
                   <td>{account.email}</td>
                   <td>{account.phone || '—'}</td>
-                  <td>{new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(account.created_at))}</td>
-                  <td><Badge value={account.account_status} /></td>
+                  <td>{new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(account.created_at))}</td>
+                  <td><AccountStatusBadge status={account.account_status} /></td>
                   <td style={{ minWidth: 260 }}>
                     {account.account_status === 'PENDING' && reference.data && (
                       <>
@@ -225,10 +232,10 @@ export function UserManagement() {
                         <RejectRow account={account} />
                       </>
                     )}
-                    {account.account_status === 'ACTIVE' && <LifecycleButton account={account} action="suspend" label="Suspend" />}
-                    {account.account_status === 'SUSPENDED' && <LifecycleButton account={account} action="reactivate" label="Reactivate" />}
+                    {account.account_status === 'ACTIVE' && <LifecycleButton account={account} action="suspend" label="Tangguhkan" doneText="ditangguhkan" />}
+                    {account.account_status === 'SUSPENDED' && <LifecycleButton account={account} action="reactivate" label="Aktifkan Kembali" doneText="diaktifkan kembali" />}
                     {account.account_status === 'REJECTED' && account.rejection_reason && (
-                      <span className="helper-note">Reason: {account.rejection_reason}</span>
+                      <span className="helper-note">Alasan: {account.rejection_reason}</span>
                     )}
                   </td>
                 </tr>

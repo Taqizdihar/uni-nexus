@@ -30,7 +30,7 @@ export async function api<T>(path: string, options: RequestInit & { workspace?: 
     if (response.status === 401 && !path.startsWith('/auth/') && !path.startsWith('/setup')) {
       window.dispatchEvent(new Event('session-expired'));
     }
-    throw new ApiError(response.status, payload?.error?.code || 'REQUEST_FAILED', payload?.error?.message || 'Unable to complete this request. Please try again.', payload?.error?.details);
+    throw new ApiError(response.status, payload?.error?.code || 'REQUEST_FAILED', payload?.error?.message || 'Tidak dapat menyelesaikan permintaan ini. Silakan coba lagi.', payload?.error?.details);
   }
   return payload as T;
 }
@@ -41,7 +41,7 @@ export async function download(resource: string, record: Row, workspace: string)
   const response = await fetch(`${base}/files/${resource}/${record.id}`, { credentials: 'include', headers: { 'X-Workspace-Id': workspace } });
   if (!response.ok) {
     const result = await response.json().catch(() => undefined);
-    throw new Error(result?.error?.message || 'Unable to download this file.');
+    throw new Error(result?.error?.message || 'Tidak dapat mengunduh berkas ini.');
   }
   const url = URL.createObjectURL(await response.blob());
   const anchor = document.createElement('a');
@@ -51,4 +51,4 @@ export async function download(resource: string, record: Row, workspace: string)
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function message(error: unknown) { return error instanceof Error ? error.message : 'Something went wrong. Please try again.'; }
+export function message(error: unknown) { return error instanceof Error ? error.message : 'Terjadi kesalahan. Silakan coba lagi.'; }

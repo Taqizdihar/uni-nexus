@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PawPrint, Search } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, type Envelope } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { PresenceBadge } from '../components/presence-badge';
@@ -24,6 +25,8 @@ function initials(name: string) {
   return name.split(' ').map((part) => part[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
 }
 
+const roleLabel = (role: TeamMember['role']) => (role ? ROLE_LABELS[role.code as RoleCode] ?? role.name : '');
+
 function TeamAvatar({ member, size = 52 }: { member: TeamMember; size?: number }) {
   return member.photo_url ? (
     <img className="profile-avatar" style={{ width: size, height: size }} src={assetUrl(member.photo_url)} alt={member.full_name} />
@@ -44,20 +47,20 @@ function TeamList() {
   });
   return (
     <>
-      <PageHeader eyebrow="TIM" title="Team" description="Internal member directory for this workspace." />
+      <PageHeader eyebrow="TIM" title="Tim" description="Direktori anggota internal untuk workspace ini." />
       <div className="field" style={{ maxWidth: 320, marginBottom: 18 }}>
-        <span className="sr-only">Search team</span>
+        <span className="sr-only">Cari anggota tim</span>
         <div className="nexus-password-field">
-          <input placeholder="Search by name, username, or email" value={search} onChange={(event) => setSearch(event.target.value)} style={{ paddingLeft: 34 }} />
+          <input placeholder="Cari berdasarkan nama, username, atau email" value={search} onChange={(event) => setSearch(event.target.value)} style={{ paddingLeft: 34 }} />
           <Search size={16} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--ink-faint)' }} />
         </div>
       </div>
       {query.isPending ? (
-        <Spinner label="Loading team…" />
+        <Spinner label="Memuat tim…" />
       ) : query.isError ? (
         <ErrorState error={query.error} retry={() => void query.refetch()} />
       ) : !query.data.length ? (
-        <EmptyState title="No team members found" description="Try a different search, or wait for accounts to be approved in User Management." />
+        <EmptyState title="Tidak ada anggota tim ditemukan" description="Coba kata kunci pencarian lain, atau tunggu akun disetujui di Manajemen Pengguna." />
       ) : (
         <div className="team-grid">
           {query.data.map((member) => (
@@ -69,10 +72,10 @@ function TeamList() {
                 </div>
                 <div className="team-card-name">
                   {member.full_name}
-                  <small>@{member.username}{member.role ? ` · ${member.role.name}` : ''}</small>
+                  <small>@{member.username}{member.role ? ` · ${roleLabel(member.role)}` : ''}</small>
                 </div>
               </div>
-              <p className="team-card-bio">{member.bio || 'No bio yet.'}</p>
+              <p className="team-card-bio">{member.bio || 'Belum ada bio.'}</p>
               {member.pet && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--ink-faint)' }}>
                   <PawPrint size={13} />
@@ -94,12 +97,12 @@ function TeamDetail() {
     queryKey: ['team-member', workspace!.id, userId],
     queryFn: async () => (await api<Envelope<TeamMember>>(`/team/${userId}`, { workspace: workspace!.id })).data,
   });
-  if (query.isPending) return <Spinner label="Loading member…" />;
+  if (query.isPending) return <Spinner label="Memuat anggota…" />;
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
   const member = query.data;
   return (
     <>
-      <Link to="/app/team" className="back-link">← Back to Team</Link>
+      <Link to="/app/team" className="back-link">← Kembali ke Tim</Link>
       <section className="panel profile-hero">
         <div className="profile-banner" style={member.banner_url ? { backgroundImage: `url(${assetUrl(member.banner_url)})` } : undefined} />
         <div className="profile-body">
@@ -111,9 +114,9 @@ function TeamDetail() {
             <h1>{member.full_name}</h1>
             <div className="profile-username-row">
               <span className="username">@{member.username}</span>
-              {member.role && <span className="role-pill">{member.role.name}</span>}
+              {member.role && <span className="role-pill">{roleLabel(member.role)}</span>}
             </div>
-            <p className="profile-bio">{member.bio || 'No bio yet.'}</p>
+            <p className="profile-bio">{member.bio || 'Belum ada bio.'}</p>
             <div className="tag-row">
               {member.tags.map((tag) => (
                 <span className="tag-pill" key={tag}>{tag}</span>
@@ -126,7 +129,7 @@ function TeamDetail() {
         <div className="pet-card">
           <span className="pet-card-label">Pet Card</span>
           {member.pet ? <img src={member.pet.image_url ?? undefined} alt={member.pet.name} /> : <div className="pet-placeholder"><PawPrint size={34} strokeWidth={1.5} /></div>}
-          <h3>{member.pet?.name ?? 'No pet selected'}</h3>
+          <h3>{member.pet?.name ?? 'Belum memilih Pet'}</h3>
           <p>{member.pet?.subtitle ?? ''}</p>
         </div>
         <div />

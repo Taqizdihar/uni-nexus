@@ -4,10 +4,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "customers",
     "table": "customers",
-    "title": "Customers",
-    "singular": "Customer",
-    "description": "Customer contacts, notes, and relationships. Customers are a shared company directory.",
-    "group": "Sales",
+    "title": "Pelanggan",
+    "singular": "Pelanggan",
+    "description": "Kontak, catatan, dan relasi pelanggan. Pelanggan adalah direktori perusahaan bersama.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -99,27 +99,27 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "custom-requests",
         "foreignKey": "customer_id",
-        "label": "Custom requests"
+        "label": "Permintaan Custom"
       },
       {
         "resource": "orders",
         "foreignKey": "customer_id",
-        "label": "Orders"
+        "label": "Pesanan"
       },
       {
         "resource": "quotations",
         "foreignKey": "customer_id",
-        "label": "Quotations"
+        "label": "Penawaran"
       }
     ]
   },
   {
     "key": "product-categories",
     "table": "product_categories",
-    "title": "Categories",
-    "singular": "Category",
-    "description": "Organize the product library.",
-    "group": "Catalog",
+    "title": "Kategori",
+    "singular": "Kategori",
+    "description": "Kelola pengelompokan katalog produk.",
+    "group": "Katalog",
     "permission": "sales",
     "fields": [
       {
@@ -192,22 +192,22 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "product-categories",
         "foreignKey": "parent_id",
-        "label": "Categories"
+        "label": "Kategori"
       },
       {
         "resource": "products",
         "foreignKey": "category_id",
-        "label": "Products"
+        "label": "Produk"
       }
     ]
   },
   {
     "key": "products",
     "table": "products",
-    "title": "Products",
-    "singular": "Product",
-    "description": "Manage your reusable designs and catalog, from internal draft to publication.",
-    "group": "Catalog",
+    "title": "Produk",
+    "singular": "Produk",
+    "description": "Kelola desain dan katalog produk yang dapat digunakan kembali, dari draf internal hingga publikasi.",
+    "group": "Katalog",
     "permission": "sales",
     "fields": [
       {
@@ -386,52 +386,52 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "custom-requests",
         "foreignKey": "existing_product_id",
-        "label": "Custom requests"
+        "label": "Permintaan Custom"
       },
       {
         "resource": "order-items",
         "foreignKey": "product_id",
-        "label": "Order items"
+        "label": "Item Pesanan"
       },
       {
         "resource": "pricing-rules",
         "foreignKey": "product_id",
-        "label": "Pricing rules"
+        "label": "Aturan Harga"
       },
       {
         "resource": "product-assets",
         "foreignKey": "product_id",
-        "label": "Product assets"
+        "label": "Aset Produk"
       },
       {
         "resource": "product-images",
         "foreignKey": "product_id",
-        "label": "Product images"
+        "label": "Gambar Produk"
       },
       {
         "resource": "product-sales-channels",
         "foreignKey": "product_id",
-        "label": "Sales channels"
+        "label": "Kanal Penjualan"
       },
       {
         "resource": "product-variants",
         "foreignKey": "product_id",
-        "label": "Variants"
+        "label": "Varian"
       },
       {
         "resource": "quotation-items",
         "foreignKey": "product_id",
-        "label": "Quotation items"
+        "label": "Item Penawaran"
       }
     ]
   },
   {
     "key": "product-variants",
     "table": "product_variants",
-    "title": "Variants",
-    "singular": "Variant",
-    "description": "Material, color, size, and pricing options for a product.",
-    "group": "Catalog",
+    "title": "Varian",
+    "singular": "Varian",
+    "description": "Pilihan material, warna, ukuran, dan harga untuk sebuah produk.",
+    "group": "Katalog",
     "permission": "sales",
     "fields": [
       {
@@ -559,22 +559,22 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "order-items",
         "foreignKey": "product_variant_id",
-        "label": "Order items"
+        "label": "Item Pesanan"
       },
       {
         "resource": "quotation-items",
         "foreignKey": "product_variant_id",
-        "label": "Quotation items"
+        "label": "Item Penawaran"
       }
     ]
   },
   {
     "key": "product-images",
     "table": "product_images",
-    "title": "Product images",
-    "singular": "Product image",
-    "description": "Catalog photography, previews, and image descriptions.",
-    "group": "Catalog",
+    "title": "Gambar Produk",
+    "singular": "Gambar Produk",
+    "description": "Foto katalog, pratinjau, dan deskripsi gambar.",
+    "group": "Katalog",
     "permission": "sales",
     "fields": [
       {
@@ -647,10 +647,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "product-assets",
     "table": "product_assets",
-    "title": "Product assets",
-    "singular": "Product asset",
-    "description": "Private model files, design versions, and external model references.",
-    "group": "Catalog",
+    "title": "Aset Produk",
+    "singular": "Aset Produk",
+    "description": "Berkas model privat, versi desain, dan referensi model eksternal.",
+    "group": "Katalog",
     "permission": "design",
     "fields": [
       {
@@ -758,10 +758,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "product-sales-channels",
     "table": "product_sales_channels",
-    "title": "Sales channels",
-    "singular": "Sales channel",
-    "description": "Maintain marketplace listing links. Synchronization is not enabled.",
-    "group": "Catalog",
+    "title": "Kanal Penjualan",
+    "singular": "Kanal Penjualan",
+    "description": "Kelola tautan listing marketplace. Sinkronisasi belum diaktifkan.",
+    "group": "Katalog",
     "permission": "sales",
     "fields": [
       {
@@ -840,10 +840,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "custom-requests",
     "table": "custom_requests",
-    "title": "Custom requests",
-    "singular": "Custom request",
-    "description": "Capture requirements and guide each custom job through feasibility and estimation.",
-    "group": "Sales",
+    "title": "Permintaan Custom",
+    "singular": "Permintaan Custom",
+    "description": "Catat kebutuhan dan pandu setiap pekerjaan custom melalui tahap kelayakan dan estimasi.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -1025,47 +1025,47 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "design-assets",
         "foreignKey": "custom_request_id",
-        "label": "Design assets"
+        "label": "Aset Desain"
       },
       {
         "resource": "design-tasks",
         "foreignKey": "custom_request_id",
-        "label": "Design tasks"
+        "label": "Tugas Desain"
       },
       {
         "resource": "ip-reviews",
         "foreignKey": "custom_request_id",
-        "label": "IP & license reviews"
+        "label": "Tinjauan IP & Lisensi"
       },
       {
         "resource": "orders",
         "foreignKey": "custom_request_id",
-        "label": "Orders"
+        "label": "Pesanan"
       },
       {
         "resource": "quotations",
         "foreignKey": "custom_request_id",
-        "label": "Quotations"
+        "label": "Penawaran"
       },
       {
         "resource": "request-files",
         "foreignKey": "custom_request_id",
-        "label": "Reference files"
+        "label": "Berkas Referensi"
       },
       {
         "resource": "request-notes",
         "foreignKey": "custom_request_id",
-        "label": "Request notes"
+        "label": "Catatan Permintaan"
       }
     ]
   },
   {
     "key": "request-files",
     "table": "request_files",
-    "title": "Reference files",
-    "singular": "Reference file",
-    "description": "Attach reference photos, documents, and supporting files to requests.",
-    "group": "Design",
+    "title": "Berkas Referensi",
+    "singular": "Berkas Referensi",
+    "description": "Lampirkan foto referensi, dokumen, dan berkas pendukung ke permintaan.",
+    "group": "Desain",
     "permission": "design",
     "fields": [
       {
@@ -1119,10 +1119,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "request-notes",
     "table": "request_notes",
-    "title": "Request notes",
-    "singular": "Request note",
-    "description": "Record customer context and internal production guidance.",
-    "group": "Design",
+    "title": "Catatan Permintaan",
+    "singular": "Catatan Permintaan",
+    "description": "Catat konteks pelanggan dan panduan produksi internal.",
+    "group": "Desain",
     "permission": "design",
     "fields": [
       {
@@ -1178,10 +1178,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "design-tasks",
     "table": "design_tasks",
-    "title": "Design tasks",
-    "singular": "Design task",
-    "description": "Assign design work, track reviews, and record delivery dates.",
-    "group": "Design",
+    "title": "Tugas Desain",
+    "singular": "Tugas Desain",
+    "description": "Tetapkan pekerjaan desain, pantau tinjauan, dan catat tanggal pengiriman.",
+    "group": "Desain",
     "permission": "design",
     "fields": [
       {
@@ -1282,17 +1282,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "design-assets",
         "foreignKey": "design_task_id",
-        "label": "Design assets"
+        "label": "Aset Desain"
       }
     ]
   },
   {
     "key": "design-assets",
     "table": "design_assets",
-    "title": "Design assets",
-    "singular": "Design asset",
-    "description": "Version your models, identify final designs, and reuse approved work.",
-    "group": "Design",
+    "title": "Aset Desain",
+    "singular": "Aset Desain",
+    "description": "Kelola versi model, tentukan desain final, dan gunakan kembali pekerjaan yang disetujui.",
+    "group": "Desain",
     "permission": "design",
     "fields": [
       {
@@ -1392,27 +1392,27 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "order-items",
         "foreignKey": "design_asset_id",
-        "label": "Order items"
+        "label": "Item Pesanan"
       },
       {
         "resource": "product-assets",
         "foreignKey": "source_design_asset_id",
-        "label": "Product assets"
+        "label": "Aset Produk"
       },
       {
         "resource": "slicing-results",
         "foreignKey": "design_asset_id",
-        "label": "Slicing results"
+        "label": "Hasil Slicing"
       }
     ]
   },
   {
     "key": "pricing-rules",
     "table": "pricing_rules",
-    "title": "Pricing rules",
-    "singular": "Pricing rule",
-    "description": "Configure weight-based rates, minimum prices, and design or finishing fees.",
-    "group": "Finance",
+    "title": "Aturan Harga",
+    "singular": "Aturan Harga",
+    "description": "Atur tarif berbasis berat, harga minimum, serta biaya desain atau finishing.",
+    "group": "Keuangan",
     "permission": "finance",
     "fields": [
       {
@@ -1551,10 +1551,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "quotations",
     "table": "quotations",
-    "title": "Quotations",
-    "singular": "Quotation",
-    "description": "Build itemized estimates and preserve quotation revisions.",
-    "group": "Sales",
+    "title": "Penawaran",
+    "singular": "Penawaran",
+    "description": "Susun estimasi rinci dan simpan riwayat revisi penawaran.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -1737,22 +1737,22 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "orders",
         "foreignKey": "quotation_id",
-        "label": "Orders"
+        "label": "Pesanan"
       },
       {
         "resource": "quotation-items",
         "foreignKey": "quotation_id",
-        "label": "Quotation items"
+        "label": "Item Penawaran"
       }
     ]
   },
   {
     "key": "quotation-items",
     "table": "quotation_items",
-    "title": "Quotation items",
-    "singular": "Quotation item",
-    "description": "Itemized quantities and rates; amounts are calculated on the server.",
-    "group": "Sales",
+    "title": "Item Penawaran",
+    "singular": "Item Penawaran",
+    "description": "Kuantitas dan tarif per item; nominal dihitung oleh server.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -1840,10 +1840,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "orders",
     "table": "orders",
-    "title": "Orders",
-    "singular": "Order",
-    "description": "Track confirmed customer orders, payments, and delivery targets.",
-    "group": "Sales",
+    "title": "Pesanan",
+    "singular": "Pesanan",
+    "description": "Pantau pesanan pelanggan yang telah dikonfirmasi, pembayaran, dan target pengiriman.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -2076,32 +2076,32 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "ip-reviews",
         "foreignKey": "order_id",
-        "label": "IP & license reviews"
+        "label": "Tinjauan IP & Lisensi"
       },
       {
         "resource": "order-items",
         "foreignKey": "order_id",
-        "label": "Order items"
+        "label": "Item Pesanan"
       },
       {
         "resource": "order-packaging",
         "foreignKey": "order_id",
-        "label": "Packaging"
+        "label": "Pengemasan"
       },
       {
         "resource": "production-costs",
         "foreignKey": "order_id",
-        "label": "Costing & HPP"
+        "label": "Biaya & HPP"
       }
     ]
   },
   {
     "key": "order-items",
     "table": "order_items",
-    "title": "Order items",
-    "singular": "Order item",
-    "description": "Products and custom designs included in an order.",
-    "group": "Sales",
+    "title": "Item Pesanan",
+    "singular": "Item Pesanan",
+    "description": "Produk dan desain custom yang termasuk dalam sebuah pesanan.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
@@ -2211,17 +2211,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "production-jobs",
         "foreignKey": "order_item_id",
-        "label": "Production"
+        "label": "Produksi"
       }
     ]
   },
   {
     "key": "production-jobs",
     "table": "production_jobs",
-    "title": "Production",
-    "singular": "Production job",
-    "description": "Plan the work for each order item and assign an operator.",
-    "group": "Production",
+    "title": "Produksi",
+    "singular": "Tugas Produksi",
+    "description": "Rencanakan pekerjaan untuk setiap item pesanan dan tetapkan operator.",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -2350,32 +2350,32 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "print-jobs",
         "foreignKey": "production_job_id",
-        "label": "Print queue"
+        "label": "Antrean Cetak"
       },
       {
         "resource": "production-costs",
         "foreignKey": "production_job_id",
-        "label": "Costing & HPP"
+        "label": "Biaya & HPP"
       },
       {
         "resource": "qc-inspections",
         "foreignKey": "production_job_id",
-        "label": "Quality control"
+        "label": "Kontrol Kualitas"
       },
       {
         "resource": "slicing-results",
         "foreignKey": "production_job_id",
-        "label": "Slicing results"
+        "label": "Hasil Slicing"
       }
     ]
   },
   {
     "key": "printers",
     "table": "printers",
-    "title": "Printers",
+    "title": "Printer",
     "singular": "Printer",
-    "description": "Monitor your printer fleet and maintain machine details. Status is managed manually.",
-    "group": "Production",
+    "description": "Pantau armada printer dan kelola detail mesin. Status dikelola secara manual.",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -2530,32 +2530,32 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "experiments",
         "foreignKey": "printer_id",
-        "label": "Experiments"
+        "label": "Eksperimen"
       },
       {
         "resource": "print-jobs",
         "foreignKey": "printer_id",
-        "label": "Print queue"
+        "label": "Antrean Cetak"
       },
       {
         "resource": "print-profiles",
         "foreignKey": "printer_id",
-        "label": "Print profiles"
+        "label": "Profil Cetak"
       },
       {
         "resource": "slicing-results",
         "foreignKey": "printer_id",
-        "label": "Slicing results"
+        "label": "Hasil Slicing"
       }
     ]
   },
   {
     "key": "print-profiles",
     "table": "print_profiles",
-    "title": "Print profiles",
-    "singular": "Print profile",
-    "description": "Store practical slicer settings for repeatable printing.",
-    "group": "Production",
+    "title": "Profil Cetak",
+    "singular": "Profil Cetak",
+    "description": "Simpan pengaturan slicer praktis untuk pencetakan yang dapat diulang.",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -2698,27 +2698,27 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "experiments",
         "foreignKey": "print_profile_id",
-        "label": "Experiments"
+        "label": "Eksperimen"
       },
       {
         "resource": "print-jobs",
         "foreignKey": "print_profile_id",
-        "label": "Print queue"
+        "label": "Antrean Cetak"
       },
       {
         "resource": "slicing-results",
         "foreignKey": "print_profile_id",
-        "label": "Slicing results"
+        "label": "Hasil Slicing"
       }
     ]
   },
   {
     "key": "slicing-results",
     "table": "slicing_results",
-    "title": "Slicing results",
-    "singular": "Slicing result",
-    "description": "Record model weight, support consumption, dimensions, and estimated print time.",
-    "group": "Production",
+    "title": "Hasil Slicing",
+    "singular": "Hasil Slicing",
+    "description": "Catat berat model, pemakaian support, dimensi, dan estimasi waktu cetak.",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -2871,17 +2871,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "print-jobs",
         "foreignKey": "slicing_result_id",
-        "label": "Print queue"
+        "label": "Antrean Cetak"
       }
     ]
   },
   {
     "key": "materials",
     "table": "materials",
-    "title": "Materials",
+    "title": "Material",
     "singular": "Material",
-    "description": "Manage material specifications and manufacturers.",
-    "group": "Inventory",
+    "description": "Kelola spesifikasi material dan produsennya.",
+    "group": "Inventaris",
     "permission": "production",
     "fields": [
       {
@@ -2956,47 +2956,47 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "custom-requests",
         "foreignKey": "preferred_material_id",
-        "label": "Custom requests"
+        "label": "Permintaan Custom"
       },
       {
         "resource": "experiments",
         "foreignKey": "material_id",
-        "label": "Experiments"
+        "label": "Eksperimen"
       },
       {
         "resource": "filament-spools",
         "foreignKey": "material_id",
-        "label": "Filament inventory"
+        "label": "Stok Filamen"
       },
       {
         "resource": "pricing-rules",
         "foreignKey": "material_id",
-        "label": "Pricing rules"
+        "label": "Aturan Harga"
       },
       {
         "resource": "print-profiles",
         "foreignKey": "material_id",
-        "label": "Print profiles"
+        "label": "Profil Cetak"
       },
       {
         "resource": "product-variants",
         "foreignKey": "material_id",
-        "label": "Variants"
+        "label": "Varian"
       },
       {
         "resource": "products",
         "foreignKey": "default_material_id",
-        "label": "Products"
+        "label": "Produk"
       }
     ]
   },
   {
     "key": "filament-spools",
     "table": "filament_spools",
-    "title": "Filament inventory",
-    "singular": "Filament spool",
-    "description": "Track spool stock in grams and purchase cost. Adjustments are audited.",
-    "group": "Inventory",
+    "title": "Stok Filamen",
+    "singular": "Roll Filamen",
+    "description": "Pantau stok roll dalam gram dan biaya pembelian. Penyesuaian tercatat dalam audit.",
+    "group": "Inventaris",
     "permission": "production",
     "fields": [
       {
@@ -3154,17 +3154,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "material-usages",
         "foreignKey": "filament_spool_id",
-        "label": "Material usage"
+        "label": "Pemakaian Material"
       }
     ]
   },
   {
     "key": "material-usages",
     "table": "material_usages",
-    "title": "Material usage",
-    "singular": "Material usage",
-    "description": "Record real consumption or waste against a print attempt; stock is deducted atomically.",
-    "group": "Inventory",
+    "title": "Pemakaian Material",
+    "singular": "Pemakaian Material",
+    "description": "Catat pemakaian aktual atau limbah dari sebuah percobaan cetak; stok dikurangi secara atomik.",
+    "group": "Inventaris",
     "permission": "production",
     "fields": [
       {
@@ -3260,10 +3260,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "print-jobs",
     "table": "print_jobs",
-    "title": "Print queue",
-    "singular": "Print job",
-    "description": "Track individual print attempts, including retries and failed runs.",
-    "group": "Production",
+    "title": "Antrean Cetak",
+    "singular": "Tugas Cetak",
+    "description": "Pantau setiap percobaan cetak, termasuk pengulangan dan kegagalan.",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -3430,32 +3430,32 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "material-usages",
         "foreignKey": "print_job_id",
-        "label": "Material usage"
+        "label": "Pemakaian Material"
       },
       {
         "resource": "print-failures",
         "foreignKey": "print_job_id",
-        "label": "Failures & waste"
+        "label": "Kegagalan & Limbah"
       },
       {
         "resource": "production-costs",
         "foreignKey": "print_job_id",
-        "label": "Costing & HPP"
+        "label": "Biaya & HPP"
       },
       {
         "resource": "qc-inspections",
         "foreignKey": "print_job_id",
-        "label": "Quality control"
+        "label": "Kontrol Kualitas"
       }
     ]
   },
   {
     "key": "print-failures",
     "table": "print_failures",
-    "title": "Failures & waste",
-    "singular": "Print failure",
-    "description": "Capture failed prints, wasted filament, root causes, and corrective action.",
-    "group": "Quality",
+    "title": "Kegagalan & Limbah",
+    "singular": "Kegagalan Cetak",
+    "description": "Catat cetakan gagal, filamen terbuang, penyebab utama, dan tindakan perbaikan.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -3547,10 +3547,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "experiments",
     "table": "experiments",
-    "title": "Experiments",
-    "singular": "Experiment",
-    "description": "Preserve the findings from material and print-setting experiments.",
-    "group": "Quality",
+    "title": "Eksperimen",
+    "singular": "Eksperimen",
+    "description": "Simpan temuan dari eksperimen material dan pengaturan cetak.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -3672,17 +3672,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "experiment-measurements",
         "foreignKey": "experiment_id",
-        "label": "Measurements"
+        "label": "Pengukuran"
       }
     ]
   },
   {
     "key": "experiment-measurements",
     "table": "experiment_measurements",
-    "title": "Measurements",
-    "singular": "Measurement",
-    "description": "Record experimental parameters and results with explicit units.",
-    "group": "Quality",
+    "title": "Pengukuran",
+    "singular": "Pengukuran",
+    "description": "Catat parameter dan hasil eksperimen dengan satuan yang jelas.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -3740,10 +3740,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "cost-components",
     "table": "cost_components",
-    "title": "Cost components",
-    "singular": "Cost component",
-    "description": "Define materials, machine time, electricity, design, waste, and packaging costs.",
-    "group": "Finance",
+    "title": "Komponen Biaya",
+    "singular": "Komponen Biaya",
+    "description": "Tentukan biaya material, waktu mesin, listrik, desain, limbah, dan pengemasan.",
+    "group": "Keuangan",
     "permission": "finance",
     "fields": [
       {
@@ -3852,17 +3852,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "production-costs",
         "foreignKey": "cost_component_id",
-        "label": "Costing & HPP"
+        "label": "Biaya & HPP"
       }
     ]
   },
   {
     "key": "production-costs",
     "table": "production_costs",
-    "title": "Costing & HPP",
-    "singular": "Production cost",
-    "description": "Itemize estimated and actual costs. HPP is derived from these components.",
-    "group": "Finance",
+    "title": "Biaya & HPP",
+    "singular": "Biaya Produksi",
+    "description": "Rincikan biaya estimasi dan aktual. HPP dihitung dari komponen-komponen ini.",
+    "group": "Keuangan",
     "permission": "finance",
     "fields": [
       {
@@ -3989,10 +3989,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "qc-inspections",
     "table": "qc_inspections",
-    "title": "Quality control",
-    "singular": "QC inspection",
-    "description": "Inspect completed prints and record pass, rework, or reprint decisions.",
-    "group": "Quality",
+    "title": "Kontrol Kualitas",
+    "singular": "Inspeksi QC",
+    "description": "Periksa hasil cetak yang selesai dan catat keputusan lolos, perbaikan, atau cetak ulang.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -4069,17 +4069,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "qc-check-items",
         "foreignKey": "qc_inspection_id",
-        "label": "QC checklist"
+        "label": "Checklist QC"
       }
     ]
   },
   {
     "key": "qc-check-items",
     "table": "qc_check_items",
-    "title": "QC checklist",
-    "singular": "QC check",
-    "description": "Record dimensions, surface quality, color, assembly, and completeness.",
-    "group": "Quality",
+    "title": "Checklist QC",
+    "singular": "Pemeriksaan QC",
+    "description": "Catat dimensi, kualitas permukaan, warna, perakitan, dan kelengkapan.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -4136,10 +4136,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "packaging-types",
     "table": "packaging_types",
-    "title": "Packaging types",
-    "singular": "Packaging type",
-    "description": "Maintain packing materials and standard costs.",
-    "group": "Quality",
+    "title": "Jenis Pengemasan",
+    "singular": "Jenis Pengemasan",
+    "description": "Kelola material pengemasan dan biaya standarnya.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -4205,17 +4205,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "order-packaging",
         "foreignKey": "packaging_type_id",
-        "label": "Packaging"
+        "label": "Pengemasan"
       }
     ]
   },
   {
     "key": "order-packaging",
     "table": "order_packaging",
-    "title": "Packaging",
-    "singular": "Order packaging",
-    "description": "Record packing work and actual costs for each order.",
-    "group": "Quality",
+    "title": "Pengemasan",
+    "singular": "Pengemasan Pesanan",
+    "description": "Catat pekerjaan pengemasan dan biaya aktual untuk setiap pesanan.",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -4320,10 +4320,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "ip-reviews",
     "table": "ip_reviews",
-    "title": "IP & license reviews",
-    "singular": "IP review",
-    "description": "Document human review of design ownership and commercial-use concerns.",
-    "group": "Quality",
+    "title": "Tinjauan IP & Lisensi",
+    "singular": "Tinjauan IP",
+    "description": "Dokumentasikan tinjauan manusia atas kepemilikan desain dan isu penggunaan komersial.",
+    "group": "Kualitas",
     "permission": "design",
     "fields": [
       {
@@ -4408,17 +4408,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "ip-review-checklists",
         "foreignKey": "ip_review_id",
-        "label": "IP checklist"
+        "label": "Checklist IP"
       }
     ]
   },
   {
     "key": "ip-review-checklists",
     "table": "ip_review_checklists",
-    "title": "IP checklist",
-    "singular": "IP check",
-    "description": "Record the checks supporting a design license review.",
-    "group": "Quality",
+    "title": "Checklist IP",
+    "singular": "Pemeriksaan IP",
+    "description": "Catat pemeriksaan yang mendukung tinjauan lisensi desain.",
+    "group": "Kualitas",
     "permission": "design",
     "fields": [
       {
@@ -4475,10 +4475,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "notification-settings",
     "table": "notification_settings",
-    "title": "Notification settings",
-    "singular": "Notification setting",
-    "description": "Configure event channels. Only in-app delivery is enabled in this foundation.",
-    "group": "Settings",
+    "title": "Pengaturan Notifikasi",
+    "singular": "Pengaturan Notifikasi",
+    "description": "Atur kanal notifikasi. Saat ini hanya notifikasi dalam aplikasi yang tersedia.",
+    "group": "Pengaturan",
     "permission": "settings",
     "fields": [
       {
@@ -4564,9 +4564,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "notifications",
     "table": "notifications",
-    "title": "Notifications",
-    "singular": "Notification",
-    "description": "Updates for your work in this workspace.",
+    "title": "Notifikasi",
+    "singular": "Notifikasi",
+    "description": "Pembaruan untuk pekerjaan Anda di workspace ini.",
     "group": "Workspace",
     "permission": "read",
     "fields": [
@@ -4651,9 +4651,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "audit-logs",
     "table": "audit_logs",
-    "title": "Audit log",
-    "singular": "Audit entry",
-    "description": "A history of important changes made in this workspace.",
+    "title": "Log Audit",
+    "singular": "Entri Audit",
+    "description": "Riwayat perubahan penting yang dilakukan di workspace ini.",
     "group": "Workspace",
     "permission": "audit",
     "fields": [
@@ -4748,10 +4748,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "workspace-settings",
     "table": "workspace_settings",
-    "title": "Workspace settings",
-    "singular": "Workspace setting",
-    "description": "Store general workspace preferences as named values.",
-    "group": "Settings",
+    "title": "Pengaturan Workspace",
+    "singular": "Pengaturan Workspace",
+    "description": "Simpan preferensi umum workspace sebagai nilai bernama.",
+    "group": "Pengaturan",
     "permission": "settings",
     "fields": [
       {

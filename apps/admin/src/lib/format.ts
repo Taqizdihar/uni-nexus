@@ -24,11 +24,11 @@ export function money(value: unknown): string {
 export const isMoney = (name: string) => /price|cost|fee|amount|subtotal|discount|total_hpp/.test(name) && !/percent|method|type|component_id|costing/.test(name);
 export function display(value: unknown, field?: FieldDefinition): string {
   if (value === null || value === undefined || value === '') return '—';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (typeof value === 'boolean') return value ? 'Ya' : 'Tidak';
   if (field && isMoney(field.name) && /^-?\d+(\.\d+)?$/.test(String(value))) return money(value);
   if (field?.type === 'date' || field?.type === 'datetime' || (field && /_at$|_date$/.test(field.name))) {
     const date = new Date(String(value));
-    if (!Number.isNaN(date.valueOf())) return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', ...(field?.type === 'datetime' ? { hour: '2-digit', minute: '2-digit' } as const : {}) }).format(date);
+    if (!Number.isNaN(date.valueOf())) return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric', ...(field?.type === 'datetime' ? { hour: '2-digit', minute: '2-digit' } as const : {}) }).format(date);
   }
   if (typeof value === 'object') return JSON.stringify(value, null, 2);
   if (field?.type === 'select') return titleCase(String(value));

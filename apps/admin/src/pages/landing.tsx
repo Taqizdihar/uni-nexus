@@ -21,7 +21,7 @@ export function Landing() {
     <div className="nexus-public min-h-screen dark-theme flex flex-col relative overflow-hidden">
       <div className="absolute inset-0" style={{ zIndex: 0, opacity: 0.35 }}>
         <FloatingLines
-          linesGradient={['#FFD43B', '#FFF7CC', '#FFFFFF']}
+          linesGradient={['#FAD02C', '#FFF7CC', '#FFFFFF']}
           enabledWaves={['top', 'middle', 'bottom']}
           lineCount={[10, 15, 20]}
           lineDistance={[8, 6, 4]}

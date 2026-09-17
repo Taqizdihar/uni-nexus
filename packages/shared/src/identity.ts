@@ -19,9 +19,9 @@ export const PRESENCE_STATUSES = ['DEFAULT', 'BUSY', 'SICK', 'LEAVE'] as const;
 export type PresenceStatus = (typeof PRESENCE_STATUSES)[number];
 export const PRESENCE_LABELS: Record<PresenceStatus, string> = {
   DEFAULT: 'Default',
-  BUSY: 'Busy',
-  SICK: 'Sick',
-  LEAVE: 'Leave',
+  BUSY: 'Sibuk',
+  SICK: 'Sakit',
+  LEAVE: 'Cuti',
 };
 
 export const PROFILE_ASSET_TYPES = ['PROFILE_PHOTO', 'PROFILE_BANNER'] as const;

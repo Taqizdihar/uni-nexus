@@ -24,9 +24,9 @@ function CalendarLeaveIcon(props: SVGProps<SVGSVGElement>) {
 
 export const PRESENCE_CONFIG = {
   DEFAULT: { label: 'Default', icon: CalendarCheck2, color: '#22c55e' },
-  BUSY: { label: 'Busy', icon: CalendarX2, color: '#ef4444' },
-  SICK: { label: 'Sick', icon: CalendarPlus2, color: '#a855f7' },
-  LEAVE: { label: 'Leave', icon: CalendarLeaveIcon, color: '#3b82f6' },
+  BUSY: { label: 'Sibuk', icon: CalendarX2, color: '#ef4444' },
+  SICK: { label: 'Sakit', icon: CalendarPlus2, color: '#a855f7' },
+  LEAVE: { label: 'Cuti', icon: CalendarLeaveIcon, color: '#3b82f6' },
 } as const;
 export type PresenceStatus = keyof typeof PRESENCE_CONFIG;
 
@@ -46,7 +46,7 @@ export function PresenceBadge({
       className={`presence-badge${ring ? ' presence-badge-ring' : ''}`}
       style={{ width: size, height: size, background: config.color }}
       role="img"
-      aria-label={`Presence status: ${config.label}`}
+      aria-label={`Status kehadiran: ${config.label}`}
       title={config.label}
     >
       <Icon size={Math.round(size * 0.6)} color="#fff" strokeWidth={2.4} aria-hidden="true" />
@@ -64,7 +64,7 @@ export function PresenceSelector({
   disabled?: boolean;
 }) {
   return (
-    <div className="presence-selector" role="radiogroup" aria-label="Presence status">
+    <div className="presence-selector" role="radiogroup" aria-label="Status kehadiran">
       {(Object.keys(PRESENCE_CONFIG) as PresenceStatus[]).map((status) => {
         const config = PRESENCE_CONFIG[status];
         const selected = value === status;

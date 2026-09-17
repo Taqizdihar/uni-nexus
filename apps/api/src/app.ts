@@ -13,6 +13,7 @@ import { domainRouter } from './modules/resources/router.js';
 import { userManagementRouter } from './modules/user-management/router.js';
 import { teamRouter } from './modules/team/router.js';
 import { profileRouter } from './modules/profile/router.js';
+import { onlinePresenceRouter } from './modules/online-presence/router.js';
 
 export function createApp() {
   const app = express();
@@ -60,6 +61,7 @@ export function createApp() {
     userManagementRouter,
     teamRouter,
     profileRouter,
+    onlinePresenceRouter,
     domainRouter,
   );
   app.use((_request, _response, next) => {
