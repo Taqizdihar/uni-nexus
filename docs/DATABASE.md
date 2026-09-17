@@ -66,6 +66,18 @@ the TSVs from a real schema export, and review the diff before committing — th
 currently-committed `resources.ts` is a reviewed, intentional snapshot, not something to
 regenerate reflexively.
 
+The generator's `configs` array is an **allow-list**, not a denylist:
+`repository.ts`'s `repository()` refuses any table not present in `resources`, so a
+table simply never being added to `configs` is what keeps it out of the generic engine
+— there is no separate "hide this" step. `users`, `roles`, `workspace_members`, and the
+identity tables introspected alongside the account-approval work
+(`system_bootstrap`, `pets`, `user_tags`, `user_profile_assets`) are deliberately never
+added to `configs`; they're owned entirely by the purpose-built `auth`,
+`user-management`, `team`, and `profile` modules (see [IDENTITY.md](IDENTITY.md)),
+which is also why `schema-columns.tsv`/`schema-relations.tsv` were not refreshed when
+those tables were introspected — nothing in `generate-resources.mjs` reads rows for
+tables outside `configs`, so their absence from the TSVs has no effect.
+
 ## Workspace scoping
 
 Almost every business table carries a `workspace_id` column, and every generic-resource

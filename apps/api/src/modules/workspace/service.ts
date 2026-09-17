@@ -74,10 +74,12 @@ export async function addMember(
         where: { email },
         select: { ...safeUserSelect, is_active: true },
       });
-      if (!user || !user.is_active || !['ACTIVE', 'PENDING'].includes(user.account_status))
+      // Only an already-approved account may join another workspace here — this endpoint
+      // grants a second membership, not initial approval. See modules/user-management for that.
+      if (!user || !user.is_active || user.account_status !== 'ACTIVE')
         throw new AppError(
           422,
-          'No eligible account was found for this email. The user must register first.',
+          'No eligible active account was found for this email. The account must already be approved.',
           'USER_NOT_AVAILABLE',
         );
       if (
@@ -99,8 +101,6 @@ export async function addMember(
         },
         include: memberInclude,
       });
-      if (user.account_status === 'PENDING')
-        await tx.users.update({ where: { id: user.id }, data: { account_status: 'ACTIVE' } });
       await tx.audit_logs.create({
         data: {
           workspace_id: workspaceId,
@@ -116,7 +116,7 @@ export async function addMember(
         },
       });
       const { users, roles, ...record } = member;
-      return { ...record, user: { ...users, account_status: 'ACTIVE' }, role: roles };
+      return { ...record, user: users, role: roles };
     },
     { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
   );
@@ -169,17 +169,14 @@ export async function updateMember(
           where: { id: current.user_id },
           select: { is_active: true, account_status: true },
         });
-        if (!user?.is_active || !['ACTIVE', 'PENDING'].includes(user.account_status))
+        // Approval (PENDING -> ACTIVE) only happens through modules/user-management;
+        // reactivating a membership never bypasses that gate.
+        if (!user?.is_active || user.account_status !== 'ACTIVE')
           throw new AppError(
             422,
-            'This account cannot be activated through workspace membership.',
+            'This account is not an approved, active account.',
             'USER_NOT_AVAILABLE',
           );
-        if (user.account_status === 'PENDING')
-          await tx.users.update({
-            where: { id: current.user_id },
-            data: { account_status: 'ACTIVE' },
-          });
       }
       const member = await tx.workspace_members.update({
         where: { id: memberId },

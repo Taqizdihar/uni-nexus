@@ -1,1 +1,1 @@
-export { authorize, hasPermission, rolePermissions } from './auth.js';
+export { authorize, hasPermission, requireUserManagement, reviewerRoleCodes, rolePermissions } from './auth.js';

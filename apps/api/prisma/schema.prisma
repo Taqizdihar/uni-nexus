@@ -1015,20 +1015,31 @@ model slicing_results {
 }
 
 model users {
-  id                                                          BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
-  full_name                                                   String              @db.VarChar(150)
-  email                                                       String              @unique(map: "uq_users_email") @db.VarChar(190)
-  phone                                                       String?             @db.VarChar(30)
-  password_hash                                               String              @db.VarChar(255)
-  account_status                                              String              @default("PENDING") @db.VarChar(30)
-  email_verified_at                                           DateTime?           @db.DateTime(0)
-  last_login_at                                               DateTime?           @db.DateTime(0)
-  is_active                                                   Boolean             @default(true)
-  created_at                                                  DateTime            @default(now()) @db.DateTime(0)
-  updated_at                                                  DateTime            @default(now()) @db.DateTime(0)
+  id                                                          BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  full_name                                                   String                @db.VarChar(150)
+  username                                                    String                @unique(map: "uq_users_username") @db.VarChar(50)
+  email                                                       String                @unique(map: "uq_users_email") @db.VarChar(190)
+  phone                                                       String?               @db.VarChar(30)
+  bio                                                         String?               @db.VarChar(500)
+  password_hash                                               String                @db.VarChar(255)
+  password_changed_at                                         DateTime?             @db.DateTime(0)
+  account_status                                              String                @default("PENDING") @db.VarChar(30)
+  presence_status                                             String                @default("DEFAULT") @db.VarChar(20)
+  pet_id                                                      BigInt?               @db.UnsignedBigInt
+  default_workspace_id                                        BigInt?               @db.UnsignedBigInt
+  approved_by_user_id                                         BigInt?               @db.UnsignedBigInt
+  approved_at                                                 DateTime?             @db.DateTime(0)
+  rejected_by_user_id                                         BigInt?               @db.UnsignedBigInt
+  rejected_at                                                 DateTime?             @db.DateTime(0)
+  rejection_reason                                            String?               @db.VarChar(500)
+  email_verified_at                                           DateTime?             @db.DateTime(0)
+  last_login_at                                               DateTime?             @db.DateTime(0)
+  is_active                                                   Boolean               @default(true)
+  created_at                                                  DateTime              @default(now()) @db.DateTime(0)
+  updated_at                                                  DateTime              @default(now()) @db.DateTime(0)
   audit_logs                                                  audit_logs[]
-  custom_requests_custom_requests_assigned_designer_idTousers custom_requests[]   @relation("custom_requests_assigned_designer_idTousers")
-  custom_requests_custom_requests_created_by_user_idTousers   custom_requests[]   @relation("custom_requests_created_by_user_idTousers")
+  custom_requests_custom_requests_assigned_designer_idTousers custom_requests[]     @relation("custom_requests_assigned_designer_idTousers")
+  custom_requests_custom_requests_created_by_user_idTousers   custom_requests[]     @relation("custom_requests_created_by_user_idTousers")
   design_assets                                               design_assets[]
   design_tasks                                                design_tasks[]
   experiments                                                 experiments[]
@@ -1048,9 +1059,23 @@ model users {
   request_files                                               request_files[]
   request_notes                                               request_notes[]
   slicing_results                                             slicing_results[]
+  system_bootstrap                                            system_bootstrap[]
+  user_profile_assets                                         user_profile_assets[]
+  user_tags                                                   user_tags[]
+  users_users_approved_by_user_idTousers                      users?                @relation("users_approved_by_user_idTousers", fields: [approved_by_user_id], references: [id], map: "fk_users_approved_by")
+  other_users_users_approved_by_user_idTousers                users[]               @relation("users_approved_by_user_idTousers")
+  workspaces                                                  workspaces?           @relation(fields: [default_workspace_id], references: [id], map: "fk_users_default_workspace")
+  pets                                                        pets?                 @relation(fields: [pet_id], references: [id], map: "fk_users_pet")
+  users_users_rejected_by_user_idTousers                      users?                @relation("users_rejected_by_user_idTousers", fields: [rejected_by_user_id], references: [id], map: "fk_users_rejected_by")
+  other_users_users_rejected_by_user_idTousers                users[]               @relation("users_rejected_by_user_idTousers")
   workspace_members                                           workspace_members[]
 
   @@index([account_status], map: "idx_users_status")
+  @@index([approved_by_user_id], map: "idx_users_approved_by")
+  @@index([default_workspace_id], map: "idx_users_default_workspace")
+  @@index([pet_id], map: "idx_users_pet")
+  @@index([presence_status], map: "idx_users_presence_status")
+  @@index([rejected_by_user_id], map: "idx_users_rejected_by")
 }
 
 model workspace_members {
@@ -1118,6 +1143,79 @@ model workspaces {
   qc_inspections        qc_inspections[]
   quotations            quotations[]
   slicing_results       slicing_results[]
+  system_bootstrap      system_bootstrap[]
+  users                 users[]
   workspace_members     workspace_members[]
   workspace_settings    workspace_settings[]
+}
+
+model pets {
+  id                     BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  code                   String   @unique(map: "uq_pets_code") @db.VarChar(60)
+  name                   String   @db.VarChar(120)
+  subtitle               String?  @db.VarChar(190)
+  description            String?  @db.Text
+  image_storage_provider String?  @db.VarChar(40)
+  image_bucket_name      String?  @db.VarChar(120)
+  image_object_key       String?  @db.VarChar(500)
+  image_url              String?  @db.Text
+  is_active              Boolean  @default(true)
+  sort_order             Int      @default(0) @db.UnsignedInt
+  created_at             DateTime @default(now()) @db.DateTime(0)
+  updated_at             DateTime @default(now()) @db.DateTime(0)
+  users                  users[]
+
+  @@index([is_active, sort_order], map: "idx_pets_active_sort")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model system_bootstrap {
+  id                   Int         @id @db.UnsignedTinyInt
+  cto_email            String      @unique(map: "uq_system_bootstrap_cto_email") @db.VarChar(190)
+  default_workspace_id BigInt?     @db.UnsignedBigInt
+  claimed_by_user_id   BigInt?     @db.UnsignedBigInt
+  claimed_at           DateTime?   @db.DateTime(0)
+  created_at           DateTime    @default(now()) @db.DateTime(0)
+  updated_at           DateTime    @default(now()) @db.DateTime(0)
+  users                users?      @relation(fields: [claimed_by_user_id], references: [id], map: "fk_system_bootstrap_claimed_user")
+  workspaces           workspaces? @relation(fields: [default_workspace_id], references: [id], map: "fk_system_bootstrap_workspace")
+
+  @@index([claimed_by_user_id], map: "idx_system_bootstrap_claimed_user")
+  @@index([default_workspace_id], map: "idx_system_bootstrap_workspace")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user_profile_assets {
+  id                 BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id            BigInt   @db.UnsignedBigInt
+  asset_type         String   @db.VarChar(30)
+  original_file_name String?  @db.VarChar(255)
+  mime_type          String?  @db.VarChar(120)
+  file_size_bytes    BigInt?  @db.UnsignedBigInt
+  storage_provider   String?  @db.VarChar(40)
+  bucket_name        String?  @db.VarChar(120)
+  object_key         String?  @db.VarChar(500)
+  public_url         String?  @db.Text
+  alt_text           String?  @db.VarChar(255)
+  created_at         DateTime @default(now()) @db.DateTime(0)
+  updated_at         DateTime @default(now()) @db.DateTime(0)
+  users              users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_user_profile_assets_user")
+
+  @@unique([user_id, asset_type], map: "uq_user_profile_assets_type")
+  @@index([user_id], map: "idx_user_profile_assets_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user_tags {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id    BigInt   @db.UnsignedBigInt
+  tag_text   String   @db.VarChar(40)
+  sort_order Int      @db.UnsignedTinyInt
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_user_tags_user")
+
+  @@unique([user_id, sort_order], map: "uq_user_tags_position")
+  @@unique([user_id, tag_text], map: "uq_user_tags_text")
+  @@index([user_id], map: "idx_user_tags_user")
 }

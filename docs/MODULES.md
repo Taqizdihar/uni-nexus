@@ -3,7 +3,11 @@
 Every module below is rendered by the generic [resource engine](ARCHITECTURE.md#resource-engine)
 unless noted otherwise. "Route" is the admin app path under `/app/`; "permission" is the
 role permission required to use it (see [middleware/auth.ts](../apps/api/src/middleware/auth.ts)
-— `OWNER`/`CEO`/`ADMIN` hold every permission).
+— `CEO`/`CTO` hold every permission). The identity-specific modules — **User
+Management**, **Team**, and **Profile** — are documented separately in
+[IDENTITY.md](IDENTITY.md), since they're built on purpose-written APIs rather than the
+generic resource engine and involve an account-approval lifecycle the table below
+doesn't cover.
 
 ## Dashboard
 
@@ -198,20 +202,26 @@ the UI; there is no manual create/edit route for it.
 ## Settings
 
 **Route:** `/app/settings` · custom page, tabs gated by the `settings` permission
-(`OWNER`/`CEO`/`ADMIN`)
+(`OWNER`/`CEO`/`ADMIN`/`CTO`)
 
 Not a single resource — it composes several already-built API surfaces that don't fit
-the single-table resource model:
+the single-table resource model. This is workspace *administration* (adding an
+already-approved user to an additional workspace, editing workspace details); initial
+account approval is a separate, executive-only flow — see [User
+Management](IDENTITY.md#user-management).
 
-- **Account** (everyone) — view your name/email, change your password.
+- **Account** (everyone) — view your name/email, change your password. The fuller
+  personal-identity experience (bio, presence, tags, pet, photo/banner, default
+  workspace) lives on the [Profile page](IDENTITY.md#profile) instead.
 - **Workspace** — edit the workspace name/description (`PATCH /workspaces/:id`).
-- **Members** — invite an existing user by email, change a member's role or active
-  status (`GET/POST/PATCH /workspaces/:id/members`). Inviting requires the person to
-  already have an account (self-registered via `/signup`, or set up by another admin) —
-  there is no email invitation delivery in this stage.
-- **Roles** — enable one of the six fixed role codes
-  (`OWNER`/`CEO`/`ADMIN`/`MANAGER`/`DESIGNER`/`OPERATOR`) for this workspace with a
-  display name/description (`GET/POST /workspaces/:id/roles`). Owner/CEO access can only
-  be granted by an existing owner or CEO.
+- **Members** — add an *already-approved, active* user by email to this workspace, or
+  change a member's role/active status (`GET/POST/PATCH /workspaces/:id/members`). This
+  no longer activates a `PENDING` account as a side effect — only User Management does
+  that.
+- **Roles** — enable one of the official role codes (or a legacy one, kept only as a
+  compatibility artifact) for this workspace with a display name/description
+  (`GET/POST /workspaces/:id/roles`). See [IDENTITY.md](IDENTITY.md#rbac) for the
+  official set and what each one can do. Owner/CEO access can only be granted by an
+  existing owner or CEO.
 - **Preferences** — the generic `workspace-settings` resource (free-form key/value
   workspace preferences), rendered with the same `ResourceTable` every other module uses.

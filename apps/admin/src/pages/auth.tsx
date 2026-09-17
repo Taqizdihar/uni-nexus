@@ -5,14 +5,22 @@ import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Eye, EyeOff, LoaderCircle } from 'lucide-react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { api, body, message, type Envelope } from '../lib/api';
+import { ApiError, api, body, message, type Envelope } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { AnimatedBrandText } from '../components/public/animated-brand-text';
-import { ErrorState, Spinner, useToast } from '../components/ui';
+import { ErrorState, Spinner } from '../components/ui';
 
-type Mode = 'login' | 'signup' | 'setup';
-type AuthValues = { full_name?: string; email: string; password: string; workspace_name?: string };
-type SetupStatus = { setupRequired: boolean; allowPublicSignup: boolean };
+type Mode = 'login' | 'signup';
+type AuthValues = {
+  full_name?: string;
+  username?: string;
+  email: string;
+  phone?: string;
+  password: string;
+  confirm_password?: string;
+};
+type AuthConfig = { allowPublicSignup: boolean };
+type SignupResult = { status: 'PENDING'; message: string };
 
 const copy = {
   login: {
@@ -24,11 +32,6 @@ const copy = {
     title: 'Buat Akun',
     description: 'Bergabung dengan sistem operasional Uni-Inside',
     button: 'Buat Akun',
-  },
-  setup: {
-    title: 'Siapkan UNI-NEXUS',
-    description: 'Buat akun pemilik dan workspace pertama untuk tim Anda.',
-    button: 'Buat Workspace',
   },
 };
 
@@ -47,36 +50,82 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const { session, loading } = useAuth();
   const client = useQueryClient();
   const navigate = useNavigate();
-  const toast = useToast();
-  const status = useQuery({
-    queryKey: ['setup-status'],
-    queryFn: async () => (await api<Envelope<SetupStatus>>('/setup/status')).data,
+  const config = useQuery({
+    queryKey: ['auth-config'],
+    queryFn: async () => (await api<Envelope<AuthConfig>>('/auth/config')).data,
     retry: false,
   });
-  const schema = z.object({
-    email: z.string().email('Masukkan alamat email yang valid.'),
-    password: mode === 'login' ? z.string().min(1, 'Masukkan kata sandi.') : z.string().min(12, 'Gunakan setidaknya 12 karakter.').max(128),
-    full_name: mode === 'login' ? z.string().optional() : z.string().trim().min(2, 'Masukkan nama lengkap.').max(150).optional(),
-    workspace_name: mode === 'setup' ? z.string().trim().min(2, 'Masukkan nama workspace.').max(150).optional() : z.string().optional(),
-  });
+  // Every field is typed uniformly (matching AuthValues) so mode-specific requirements are
+  // enforced with superRefine instead of branching the zod schema's static shape per mode.
+  const schema = z
+    .object({
+      full_name: z.string().trim().max(150).optional(),
+      username: z.string().trim().max(30).optional(),
+      email: z.string().email('Masukkan alamat email yang valid.'),
+      phone: z.string().trim().max(30).optional(),
+      password: z.string().min(1, 'Masukkan kata sandi.').max(72),
+      confirm_password: z.string().optional(),
+    })
+    .superRefine((value, ctx) => {
+      if (mode !== 'signup') return;
+      if (!value.full_name || value.full_name.length < 2)
+        ctx.addIssue({ code: 'custom', path: ['full_name'], message: 'Masukkan nama lengkap.' });
+      if (!value.username || !/^[A-Za-z0-9._-]{3,30}$/.test(value.username))
+        ctx.addIssue({ code: 'custom', path: ['username'], message: 'Gunakan 3-30 huruf, angka, titik, garis bawah, atau tanda hubung.' });
+      if (!value.phone || !/^[0-9+()\-.\s]+$/.test(value.phone))
+        ctx.addIssue({ code: 'custom', path: ['phone'], message: 'Masukkan nomor telepon yang valid.' });
+      if (value.password.length < 12)
+        ctx.addIssue({ code: 'custom', path: ['password'], message: 'Gunakan setidaknya 12 karakter.' });
+      if (value.password !== value.confirm_password)
+        ctx.addIssue({ code: 'custom', path: ['confirm_password'], message: 'Kata sandi tidak cocok.' });
+    });
   const form = useForm<AuthValues>({
     resolver: zodResolver(schema),
-    defaultValues: { full_name: '', email: '', password: '', workspace_name: '3D Printing' },
+    defaultValues: { full_name: '', username: '', email: '', phone: '', password: '', confirm_password: '' },
   });
   const mutation = useMutation({
     mutationFn: (values: AuthValues) => {
-      const payload: AuthValues = mode === 'login'
-        ? { email: values.email, password: values.password }
-        : mode === 'signup'
-          ? { full_name: values.full_name, email: values.email, password: values.password }
-          : values;
-      return api(mode === 'setup' ? '/setup' : '/auth/' + mode, { method: 'POST', body: body(payload) });
+      const payload =
+        mode === 'login'
+          ? { email: values.email, password: values.password }
+          : {
+              full_name: values.full_name,
+              username: values.username,
+              email: values.email,
+              phone: values.phone,
+              password: values.password,
+            };
+      return api<Envelope<SignupResult> | Envelope<unknown>>('/auth/' + mode, {
+        method: 'POST',
+        body: body(payload),
+      });
     },
-    onSuccess: async () => {
+    onSuccess: async (response) => {
+      if (mode === 'signup') {
+        const data = response.data as SignupResult | { user: unknown };
+        if ('status' in data && data.status === 'PENDING') {
+          navigate('/account-status', { state: { code: 'ACCOUNT_PENDING', message: data.message } });
+          return;
+        }
+        // The one-time CTO bootstrap claim issues a session immediately instead of a pending status.
+        await client.invalidateQueries({ queryKey: ['session'] });
+        navigate('/app', { replace: true });
+        return;
+      }
       await client.invalidateQueries({ queryKey: ['session'] });
-      await client.invalidateQueries({ queryKey: ['setup-status'] });
-      if (mode === 'signup') toast('Akun berhasil dibuat. Masuk untuk melihat akses workspace Anda.');
-      navigate(mode === 'signup' ? '/login' : '/app', { replace: true });
+      navigate('/app', { replace: true });
+    },
+    onError: (error) => {
+      if (
+        error instanceof ApiError &&
+        ['ACCOUNT_PENDING', 'ACCOUNT_REJECTED', 'ACCOUNT_SUSPENDED'].includes(error.code)
+      ) {
+        const reason =
+          error.details && typeof error.details === 'object' && 'reason' in error.details
+            ? String((error.details as { reason?: unknown }).reason ?? '')
+            : undefined;
+        navigate('/account-status', { state: { code: error.code, message: error.message, reason } });
+      }
     },
   });
 
@@ -91,11 +140,9 @@ export function AuthPage({ mode }: { mode: Mode }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mode]);
 
-  if (loading || status.isPending) return <Spinner label="Menghubungkan ke UNI-NEXUS…" />;
+  if (loading || config.isPending) return <Spinner label="Menghubungkan ke UNI-NEXUS…" />;
   if (session) return <Navigate to="/app" replace />;
-  if (status.data?.setupRequired && mode !== 'setup') return <Navigate to="/setup" replace />;
-  if (status.data && !status.data.setupRequired && mode === 'setup') return <Navigate to="/login" replace />;
-  if (status.data && !status.data.allowPublicSignup && mode === 'signup') return <Navigate to="/login" replace />;
+  if (config.data && !config.data.allowPublicSignup && mode === 'signup') return <Navigate to="/login" replace />;
 
   return (
     <div className="nexus-auth min-h-screen dark-theme flex flex-col relative overflow-hidden">
@@ -108,22 +155,36 @@ export function AuthPage({ mode }: { mode: Mode }) {
             <p className="text-sm text-gray-400">{copy[mode].description}</p>
           </div>
 
-          {status.isError ? (
-            <ErrorState error={status.error} retry={() => void status.refetch()} />
+          {config.isError ? (
+            <ErrorState error={config.error} retry={() => void config.refetch()} />
           ) : (
             <form onSubmit={form.handleSubmit((values) => mutation.mutate(values))} className="space-y-4" noValidate>
-              {mode !== 'login' && (
-                <label className="block">
-                  <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Nama Lengkap</span>
-                  <input type="text" autoComplete="name" placeholder="Budi Santoso" className="nexus-auth-input" {...form.register('full_name')} />
-                  {form.formState.errors.full_name && <span className="nexus-field-error">{form.formState.errors.full_name.message}</span>}
-                </label>
+              {mode === 'signup' && (
+                <>
+                  <label className="block">
+                    <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Nama Lengkap</span>
+                    <input type="text" autoComplete="name" placeholder="Budi Santoso" className="nexus-auth-input" {...form.register('full_name')} />
+                    {form.formState.errors.full_name && <span className="nexus-field-error">{form.formState.errors.full_name.message}</span>}
+                  </label>
+                  <label className="block">
+                    <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Username</span>
+                    <input type="text" autoComplete="username" placeholder="budi.santoso" className="nexus-auth-input" {...form.register('username')} />
+                    {form.formState.errors.username && <span className="nexus-field-error">{form.formState.errors.username.message}</span>}
+                  </label>
+                </>
               )}
               <label className="block">
                 <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Email</span>
                 <input type="email" autoComplete="email" placeholder="budi@example.com" className="nexus-auth-input" {...form.register('email')} />
                 {form.formState.errors.email && <span className="nexus-field-error">{form.formState.errors.email.message}</span>}
               </label>
+              {mode === 'signup' && (
+                <label className="block">
+                  <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Nomor Telepon</span>
+                  <input type="tel" autoComplete="tel" placeholder="+62 812-3456-7890" className="nexus-auth-input" {...form.register('phone')} />
+                  {form.formState.errors.phone && <span className="nexus-field-error">{form.formState.errors.phone.message}</span>}
+                </label>
+              )}
               <label className="block">
                 <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Kata Sandi</span>
                 <div className="nexus-password-field">
@@ -139,11 +200,11 @@ export function AuthPage({ mode }: { mode: Mode }) {
                 </div>
                 {form.formState.errors.password && <span className="nexus-field-error">{form.formState.errors.password.message}</span>}
               </label>
-              {mode === 'setup' && (
+              {mode === 'signup' && (
                 <label className="block">
-                  <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Nama Workspace</span>
-                  <input type="text" className="nexus-auth-input" {...form.register('workspace_name')} />
-                  {form.formState.errors.workspace_name && <span className="nexus-field-error">{form.formState.errors.workspace_name.message}</span>}
+                  <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Konfirmasi Kata Sandi</span>
+                  <input type={showPassword ? 'text' : 'password'} autoComplete="new-password" placeholder="Ulangi kata sandi" className="nexus-auth-input" {...form.register('confirm_password')} />
+                  {form.formState.errors.confirm_password && <span className="nexus-field-error">{form.formState.errors.confirm_password.message}</span>}
                 </label>
               )}
               {mode === 'login' && (
@@ -152,7 +213,11 @@ export function AuthPage({ mode }: { mode: Mode }) {
                   Ingat Saya
                 </label>
               )}
-              {mutation.isError && <div className="nexus-form-error" role="alert">{message(mutation.error)}</div>}
+              {mutation.isError &&
+                !(
+                  mutation.error instanceof ApiError &&
+                  ['ACCOUNT_PENDING', 'ACCOUNT_REJECTED', 'ACCOUNT_SUSPENDED'].includes(mutation.error.code)
+                ) && <div className="nexus-form-error" role="alert">{message(mutation.error)}</div>}
               <button id={mode === 'login' ? 'login-submit-btn' : undefined} type="submit" className="nexus-auth-submit w-full mt-4" disabled={mutation.isPending}>
                 {mutation.isPending && <LoaderCircle className="spin" size={18} />}
                 {mutation.isPending ? (mode === 'signup' ? 'Membuat Akun…' : 'Memproses…') : copy[mode].button}
@@ -160,7 +225,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
             </form>
           )}
 
-          {mode === 'login' && status.data?.allowPublicSignup && (
+          {mode === 'login' && config.data?.allowPublicSignup && (
             <div className="mt-8 text-center text-sm text-gray-500">
               Belum memiliki akun? <Link to="/signup" className="text-[var(--nexus-yellow)] hover:text-white transition-colors">Daftar</Link>
             </div>

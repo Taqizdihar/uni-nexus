@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { requireAuth } from '../../middleware/auth.js';
-import { bootstrap, changePassword, currentUser, login, setupStatus, signup } from './service.js';
-import { changePasswordSchema, loginSchema, setupSchema, signupSchema } from './validation.js';
+import { authConfig, changePassword, currentUser, login, signup } from './service.js';
+import { changePasswordSchema, loginSchema, signupSchema } from './validation.js';
 import { clearSession, issueSession } from './session.js';
 
 export const authRouter = Router();
@@ -32,16 +32,20 @@ const registrationLimiter = rateLimit({
   },
 });
 
-authRouter.get('/setup/status', async (_request, response) => {
-  response.json({ data: await setupStatus() });
-});
-authRouter.post('/setup', registrationLimiter, async (request, response) => {
-  const user = await bootstrap(setupSchema.parse(request.body));
-  issueSession(response, user);
-  response.status(201).json({ data: await currentUser(user.id) });
+authRouter.get('/auth/config', async (_request, response) => {
+  response.json({ data: await authConfig() });
 });
 authRouter.post('/auth/signup', registrationLimiter, async (request, response) => {
-  const user = await signup(signupSchema.parse(request.body));
+  const { user, bootstrapped } = await signup(signupSchema.parse(request.body));
+  if (!bootstrapped) {
+    response.status(201).json({
+      data: {
+        status: 'PENDING',
+        message: 'Your UNI-NEXUS account has been submitted and is awaiting approval.',
+      },
+    });
+    return;
+  }
   issueSession(response, user);
   response.status(201).json({ data: await currentUser(user.id) });
 });

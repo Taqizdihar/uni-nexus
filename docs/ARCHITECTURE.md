@@ -37,8 +37,8 @@ both apps.
 
 ## React/Vite frontend
 
-- **Routing** — `react-router-dom` v7. Public routes (`/login`, `/signup`, `/setup`) sit
-  outside the app shell; everything under `/app` renders inside
+- **Routing** — `react-router-dom` v7. Public routes (`/login`, `/signup`,
+  `/account-status`) sit outside the app shell; everything under `/app` renders inside
   [`Shell`](../apps/admin/src/components/shell.tsx), which owns the sidebar, topbar,
   workspace selector, and the auth/workspace gate (loading → error → signed-out →
   no-workspace → authenticated).
@@ -57,7 +57,9 @@ both apps.
   Tailwind utility classes are not used in JSX.
 - **Auth context** — [lib/auth.tsx](../apps/admin/src/lib/auth.tsx) fetches `GET
   /auth/me` once via Query, exposes the current session, the list of workspaces the user
-  belongs to, and the currently-selected workspace (persisted in `localStorage`). A
+  belongs to, and the currently-selected workspace. The selected workspace prefers a
+  `localStorage`-persisted explicit choice, then `users.default_workspace_id`, then the
+  first active membership — never a workspace the user is no longer a member of. A
   `session-expired` window event (dispatched by the API client on a 401) clears the
   cached session so the UI re-prompts for sign-in.
 
@@ -70,18 +72,28 @@ both apps.
   known Prisma error codes to a consistent `{ error: { code, message } }` JSON shape.
 - **Auth** — email/password with `bcrypt`, a JWT signed with `JWT_SECRET` and stored in
   an HttpOnly, `SameSite` cookie (`modules/auth/session.ts`). `requireAuth` verifies the
-  cookie and re-checks the user is still active on every request; `requireWorkspace`
-  additionally resolves and authorizes workspace membership (from the URL param or the
-  `X-Workspace-Id` header) and attaches `request.workspace = { id, role }`.
+  cookie and re-checks the user is still `ACTIVE` on every request (a `PENDING`,
+  `REJECTED`, or `SUSPENDED` account never gets a normal session — see
+  [IDENTITY.md](IDENTITY.md)); `requireWorkspace` additionally resolves and authorizes
+  workspace membership (from the URL param or the `X-Workspace-Id` header) and attaches
+  `request.workspace = { id, role }`.
 - **Authorization** — a small static role→permission table in
-  [middleware/auth.ts](../apps/api/src/middleware/auth.ts) (`OWNER`/`CEO`/`ADMIN` = all
-  permissions; `MANAGER`/`DESIGNER`/`OPERATOR` scoped to specific domains). Every
+  [middleware/auth.ts](../apps/api/src/middleware/auth.ts). The official roles
+  (`CEO`/`CTO` = all permissions; `COO`/`CVO` = `user_management`;
+  `3D_DESIGNER`/`STAFF_OF_SPECIALTY`/`STAFF` scoped to specific domains) sit alongside
+  legacy codes (`OWNER`/`ADMIN`/`MANAGER`/`DESIGNER`/`OPERATOR`) kept only as
+  compatibility artifacts — see [IDENTITY.md](IDENTITY.md#rbac) for the full map. Every
   resource declares the single permission it requires; `authorize(permission)` checks it
-  against the caller's role in the current workspace.
-- **Modules** under `src/modules/`: `auth` (setup/signup/login/logout/session),
-  `workspace` (workspace, members, roles), `resources` (the generic engine, below),
-  `dashboard`, `costing`, `files` (private upload/download), and `workflows` (the
-  cross-resource actions described in [MODULES.md](MODULES.md)).
+  against the caller's role in the current workspace; `requireUserManagement` checks the
+  `user_management` permission across *any* of the caller's workspace memberships,
+  since account approval is a cross-workspace capability.
+- **Modules** under `src/modules/`: `auth` (signup/login/logout/session/password, plus
+  the one-time CTO bootstrap), `user-management` (account approval lifecycle),
+  `team` (read-only internal directory), `profile` (self-service identity, presence,
+  tags, pet, assets), `workspace` (workspace, members, roles), `resources` (the generic
+  engine, below), `dashboard`, `costing`, `files` (private upload/download), and
+  `workflows` (the cross-resource actions described in [MODULES.md](MODULES.md)). See
+  [IDENTITY.md](IDENTITY.md) for the identity/RBAC subsystem in full.
 
 ## Resource engine
 

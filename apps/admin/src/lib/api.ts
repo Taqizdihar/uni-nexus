@@ -11,7 +11,13 @@ export class ApiError extends Error {
   }
 }
 
-const base = `${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/api/v1`;
+const origin = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const base = `${origin}/api/v1`;
+
+/** Backend asset paths already include the /api/v1 prefix, so only the origin is prepended. */
+export function assetUrl(path: string | null | undefined): string | undefined {
+  return path ? `${origin}${path}` : undefined;
+}
 
 export async function api<T>(path: string, options: RequestInit & { workspace?: string } = {}): Promise<T> {
   const { workspace, ...init } = options;

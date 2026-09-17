@@ -14,7 +14,20 @@ import { ResourceTable } from '../components/resource-table';
 type Role = { id: string; name: string; code: string; description?: string | null; is_active?: boolean };
 type Member = { id: string; membership_status: string; joined_at: string; user: { id: string; full_name: string; email: string; account_status?: string }; role: Role | null };
 type WorkspaceDetail = { id: string; name: string; code: string; description: string | null; role: string };
-const roleCodes = ['OWNER', 'CEO', 'ADMIN', 'MANAGER', 'DESIGNER', 'OPERATOR'] as const;
+const roleCodes = [
+  'OWNER',
+  'ADMIN',
+  'MANAGER',
+  'DESIGNER',
+  'OPERATOR',
+  'CEO',
+  'COO',
+  'CTO',
+  'CVO',
+  '3D_DESIGNER',
+  'STAFF_OF_SPECIALTY',
+  'STAFF',
+] as const;
 
 function AccountTab() {
   const { session } = useAuth();
@@ -136,7 +149,7 @@ function PreferencesTab() {
 export function Settings() {
   const { workspace } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const canManage = ['OWNER', 'CEO', 'ADMIN'].includes((workspace?.role ?? '').toUpperCase());
+  const canManage = ['OWNER', 'CEO', 'ADMIN', 'CTO'].includes((workspace?.role ?? '').toUpperCase());
   const tabs = [{ key: 'account', label: 'Account' }, ...(canManage ? [{ key: 'workspace', label: 'Workspace' }, { key: 'members', label: 'Members' }, { key: 'roles', label: 'Roles' }, { key: 'preferences', label: 'Preferences' }] : [])];
   const requested = searchParams.get('tab') || 'account';
   const tab = tabs.some((item) => item.key === requested) ? requested : 'account';

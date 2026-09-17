@@ -21,6 +21,8 @@ vi.mock('./config/env.js', () => ({
     ALLOW_PUBLIC_SIGNUP: true,
     TRUST_PROXY: 0,
     CORS_ORIGINS: ['http://localhost:5173'],
+    LOCAL_STORAGE_PATH: '/tmp/uni-nexus-test-uploads',
+    MAX_UPLOAD_SIZE: 20971520,
   },
 }));
 
@@ -40,10 +42,10 @@ describe('application health and security headers', () => {
     expect(ready.body.data.database).toBe('connected');
   });
 
-  it('reports an empty database as requiring setup without inserting data', async () => {
-    const response = await request(createApp()).get('/api/v1/setup/status');
+  it('reports public signup configuration without requiring authentication', async () => {
+    const response = await request(createApp()).get('/api/v1/auth/config');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: { setupRequired: true, allowPublicSignup: true } });
+    expect(response.body).toEqual({ data: { allowPublicSignup: true } });
   });
 
   it('rejects an unlisted origin and never sends a credentialed wildcard', async () => {

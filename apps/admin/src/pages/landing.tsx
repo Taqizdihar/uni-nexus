@@ -61,7 +61,7 @@ export function Landing() {
             <span className="text-[var(--nexus-yellow)]">Opus.</span>
           </div>
 
-          <p className="text-white max-w-2xl mx-auto pt-8 text-lg font-light leading-relaxed">
+          <p className="nexus-landing-description text-white max-w-2xl mx-auto pt-8 text-lg font-light leading-relaxed">
             Sistem terpusat untuk pengelolaan operasional dan keuangan Uni-Inside Studio.
             Menghubungkan proses produksi 3D dan layanan kreatif dalam satu ekosistem terpadu.
           </p>

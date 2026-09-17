@@ -119,7 +119,20 @@ workspaceRouter.get('/workspaces/:workspaceId/roles', async (_request, response)
 workspaceRouter.post('/workspaces/:workspaceId/roles', async (request, response) => {
   const input = z
     .object({
-      code: z.enum(['OWNER', 'CEO', 'ADMIN', 'MANAGER', 'DESIGNER', 'OPERATOR']),
+      code: z.enum([
+        'OWNER',
+        'ADMIN',
+        'MANAGER',
+        'DESIGNER',
+        'OPERATOR',
+        'CEO',
+        'COO',
+        'CTO',
+        'CVO',
+        '3D_DESIGNER',
+        'STAFF_OF_SPECIALTY',
+        'STAFF',
+      ]),
       name: z.string().trim().min(2).max(100).optional(),
       description: z.string().trim().max(5000).optional(),
     })

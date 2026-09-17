@@ -3,7 +3,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, ApiError, type Envelope } from './api';
 
 export type Workspace = { id: string; name: string; code: string; role: string };
-export type Session = { user: { id: string; full_name: string; email: string; account_status?: string }; workspaces: Workspace[] };
+export type SessionUser = {
+  id: string;
+  full_name: string;
+  username: string;
+  email: string;
+  phone: string | null;
+  account_status?: string;
+  presence_status: string;
+};
+export type Session = { user: SessionUser; workspaces: Workspace[]; default_workspace_id: string | null };
 type AuthContextType = {
   session: Session | null | undefined;
   loading: boolean;
@@ -21,7 +30,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try { return (await api<Envelope<Session>>('/auth/me')).data; }
     catch (error) { if (error instanceof ApiError && error.status === 401) return null; throw error; }
   }, retry: false, staleTime: 60_000 });
-  const workspace = query.data?.workspaces.find((item) => item.id === chosen) || query.data?.workspaces[0];
+  const workspace =
+    query.data?.workspaces.find((item) => item.id === chosen) ||
+    query.data?.workspaces.find((item) => item.id === query.data?.default_workspace_id) ||
+    query.data?.workspaces[0];
   useEffect(() => {
     const expired = () => { client.setQueryData(['session'], null); client.removeQueries({ predicate: (item) => item.queryKey[0] !== 'session' }); };
     window.addEventListener('session-expired', expired);

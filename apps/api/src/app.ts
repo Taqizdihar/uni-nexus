@@ -10,6 +10,9 @@ import { requireTrustedOrigin, sanitizeInput } from './middleware/security.js';
 import { authRouter } from './modules/auth/router.js';
 import { workspaceRouter } from './modules/workspace/router.js';
 import { domainRouter } from './modules/resources/router.js';
+import { userManagementRouter } from './modules/user-management/router.js';
+import { teamRouter } from './modules/team/router.js';
+import { profileRouter } from './modules/profile/router.js';
 
 export function createApp() {
   const app = express();
@@ -50,7 +53,15 @@ export function createApp() {
         });
     }
   });
-  app.use('/api/v1', authRouter, workspaceRouter, domainRouter);
+  app.use(
+    '/api/v1',
+    authRouter,
+    workspaceRouter,
+    userManagementRouter,
+    teamRouter,
+    profileRouter,
+    domainRouter,
+  );
   app.use((_request, _response, next) => {
     next(new AppError(404, 'The requested endpoint was not found.', 'NOT_FOUND'));
   });

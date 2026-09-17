@@ -6,10 +6,14 @@ import { AuthProvider } from './lib/auth';
 import { ToastProvider } from './components/ui';
 import { Shell } from './components/shell';
 import { AuthPage } from './pages/auth';
+import { AccountStatusPage } from './pages/account-status';
 import { Landing } from './pages/landing';
 import { Dashboard } from './pages/dashboard';
 import { Notifications } from './pages/notifications';
 import { Settings } from './pages/settings';
+import { Profile } from './pages/profile';
+import { Team } from './pages/team';
+import { UserManagement } from './pages/user-management';
 import { ResourcePage } from './pages/resources';
 import './styles/global.css';
 
@@ -27,12 +31,16 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<AuthPage mode="login" />} />
               <Route path="/signup" element={<AuthPage mode="signup" />} />
-              <Route path="/setup" element={<AuthPage mode="setup" />} />
+              <Route path="/account-status" element={<AccountStatusPage />} />
               <Route path="/app" element={<Shell />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="settings" element={<Settings />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="team" element={<Team mode="list" />} />
+                <Route path="team/:userId" element={<Team mode="detail" />} />
+                <Route path="user-management" element={<UserManagement />} />
                 <Route path=":resource" element={<ResourcePage mode="list" />} />
                 <Route path=":resource/new" element={<ResourcePage mode="new" />} />
                 <Route path=":resource/:id" element={<ResourcePage mode="detail" />} />
