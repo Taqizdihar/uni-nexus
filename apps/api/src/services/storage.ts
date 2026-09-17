@@ -33,6 +33,7 @@ const allowedTypes: Record<string, string[]> = {
 };
 export const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
 export function validateUpload(file: { originalname: string; mimetype: string; buffer: Buffer; size: number }, maxSize: number, imageOnly = false): { filename: string; mime: string; extension: string } {
+  // eslint-disable-next-line no-control-regex -- intentionally stripping control characters from user-supplied filenames
   const filename = file.originalname.split(/[\\/]/).pop()?.replace(/[\x00-\x1f\x7f]/g, '').slice(0, 255) ?? '';
   const extension = path.extname(filename).toLowerCase();
   const accepted = allowedTypes[extension];

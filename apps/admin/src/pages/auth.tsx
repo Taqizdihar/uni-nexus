@@ -26,11 +26,14 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const schema = z.object({
     email: z.string().email('Enter a valid email address.'),
     password: mode === 'login' ? z.string().min(1, 'Enter your password.') : z.string().min(12, 'Use at least 12 characters.').max(128),
-    full_name: mode === 'login' ? z.string().optional() : z.string().trim().min(2, 'Enter your full name.').max(150),
-    workspace_name: mode === 'setup' ? z.string().trim().min(2, 'Enter a workspace name.').max(150) : z.string().optional(),
+    full_name: mode === 'login' ? z.string().optional() : z.string().trim().min(2, 'Enter your full name.').max(150).optional(),
+    workspace_name: mode === 'setup' ? z.string().trim().min(2, 'Enter a workspace name.').max(150).optional() : z.string().optional(),
   });
   const form = useForm<AuthValues>({ resolver: zodResolver(schema), defaultValues: { full_name: '', email: '', password: '', workspace_name: '3D Printing' } });
-  const mutation = useMutation({ mutationFn: (values: AuthValues) => api(mode === 'setup' ? '/setup' : `/auth/${mode}`, { method: 'POST', body: body(values) }), onSuccess: async () => {
+  const mutation = useMutation({ mutationFn: (values: AuthValues) => {
+    const payload: AuthValues = mode === 'login' ? { email: values.email, password: values.password } : mode === 'signup' ? { full_name: values.full_name, email: values.email, password: values.password } : values;
+    return api(mode === 'setup' ? '/setup' : `/auth/${mode}`, { method: 'POST', body: body(payload) });
+  }, onSuccess: async () => {
     await client.invalidateQueries({ queryKey: ['session'] });
     await client.invalidateQueries({ queryKey: ['setup-status'] });
     if (mode === 'signup') toast('Account created. Sign in to view your workspace access.');

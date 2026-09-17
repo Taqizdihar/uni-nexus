@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import type { ResourceDefinition } from '@uni-nexus/shared';
 import { api, body, download, message, type Envelope, type Row } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { money, recordName, resourceKey, resourcePath, titleCase } from '../lib/format';
+import { money, recordName, resourceKey, resourcePath } from '../lib/format';
 import { useResources } from '../lib/resources';
 import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 import { ResourceTable, FieldValue } from '../components/resource-table';
