@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  Camera,
   Check,
   KeyRound,
   LoaderCircle,
@@ -17,7 +16,7 @@ import {
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
-import { ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
+import { ErrorState, Spinner, useToast } from '../components/ui';
 
 type Tag = { id: string; tag_text: string };
 type Pet = { id: string; name: string; subtitle: string | null; description: string | null; image_url: string | null };
@@ -54,20 +53,7 @@ function initials(name: string) {
 function Avatar({ profile }: { profile: ProfileData }) {
   const client = useQueryClient();
   const toast = useToast();
-  const input = useRef<HTMLInputElement>(null);
   const [presenceOpen, setPresenceOpen] = useState(false);
-  const upload = useMutation({
-    mutationFn: (file: File) => {
-      const form = new FormData();
-      form.append('file', file);
-      return api(`/profile/assets/PROFILE_PHOTO`, { method: 'POST', body: form });
-    },
-    onSuccess: async () => {
-      await client.invalidateQueries({ queryKey: ['profile'] });
-      toast('Foto profil diperbarui.');
-    },
-    onError: (error) => toast(message(error), true),
-  });
   const presence = useMutation({
     mutationFn: (status: PresenceStatus) =>
       api('/profile/presence', { method: 'POST', body: body({ presence_status: status }) }),
@@ -85,26 +71,6 @@ function Avatar({ profile }: { profile: ProfileData }) {
       ) : (
         <div className="profile-avatar-initials">{initials(profile.full_name)}</div>
       )}
-      <button
-        type="button"
-        className="profile-avatar-edit"
-        aria-label="Ganti foto profil"
-        onClick={() => input.current?.click()}
-        disabled={upload.isPending}
-      >
-        {upload.isPending ? <LoaderCircle className="spin" size={14} /> : <Camera size={14} />}
-      </button>
-      <input
-        ref={input}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="sr-only"
-        onChange={(event) => {
-          const file = event.target.files?.[0];
-          if (file) upload.mutate(file);
-          event.target.value = '';
-        }}
-      />
       <button
         type="button"
         className="profile-presence-anchor"
@@ -443,7 +409,6 @@ export function Profile() {
   const profile = query.data;
   return (
     <>
-      <PageHeader eyebrow="AKUN ANDA" title="Profil" description="Kelola identitas, kehadiran, dan keamanan akun Anda." />
       <section className="panel profile-hero">
         <div className="profile-banner" style={profile.banner_url ? { backgroundImage: `url(${assetUrl(profile.banner_url)})` } : undefined}>
           <BannerEdit />

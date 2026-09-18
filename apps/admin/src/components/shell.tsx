@@ -46,7 +46,7 @@ export function Shell() {
   const roleLabel = ROLE_LABELS[workspace.role.toUpperCase() as RoleCode] ?? titleCase(workspace.role);
   return <div className="app-layout">
     {open && <button className="sidebar-backdrop" aria-label="Tutup navigasi" onClick={() => setOpen(false)} />}
-    <aside className={`sidebar ${open ? 'sidebar-open' : ''}`}><Link to="/app/dashboard" className="brand" onClick={() => setOpen(false)}><span className="brand-mark"><Layers3 size={23} /></span><span>UNI<span className="brand-light">NEXUS</span><small>OPERATIONS, CONNECTED</small></span></Link>
+    <aside className={`sidebar ${open ? 'sidebar-open' : ''}`}><Link to="/app/dashboard" className="brand" onClick={() => setOpen(false)}>UNI-NEXUS</Link>
       <nav className="sidebar-nav" aria-label="Navigasi utama">{navigation.map((group) => <div className="nav-group" key={group.label}><p>{group.label}</p>{group.items.map(({ path, label, icon: Icon }) => <NavLink key={path} to={`/app/${path}`} onClick={() => setOpen(false)} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}><Icon size={18} strokeWidth={1.7} /><span>{label}</span>{path === 'notifications' && !!unread.data?.meta.total && <span className="nav-count">{unread.data.meta.total}</span>}</NavLink>)}</div>)}</nav>
       <div className="sidebar-bottom"><span className="live-dot" /><span>Operasional Internal</span><BookOpen size={14} /></div>
     </aside>
@@ -63,8 +63,9 @@ export function Shell() {
         <OnlineUsers />
         <button type="button" className="workspace-pill" disabled title="Workspace Studio belum tersedia." aria-describedby="workspace-pill-hint">
           <ArrowLeftRight size={14} className="workspace-pill-icon" />
+          <span className="workspace-pill-label">WORKSPACE:</span>
           <img src={craftLogo} alt="" className="workspace-pill-logo" />
-          <span className="workspace-pill-text"><small>Workspace</small><strong>Uni-Inside Craft</strong></span>
+          <strong>Uni-Inside Craft</strong>
           <ChevronDown size={14} />
           <span className="sr-only" id="workspace-pill-hint">Workspace Studio belum tersedia.</span>
         </button>
@@ -80,7 +81,7 @@ export function Shell() {
       </div>
     </header>
       <main className="page-content" key={workspace.id}><Outlet /></main>
-      <footer className="app-footer"><span>UNI-NEXUS</span><span>Operasional yang cermat. Hasil yang lebih baik.</span></footer>
+      <footer className="app-footer"><span className="app-footer-brand">UNI-NEXUS</span><span>Nexus. Ordo. Opus.</span></footer>
     </div>
   </div>;
 }
