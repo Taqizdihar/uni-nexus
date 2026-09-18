@@ -11,6 +11,7 @@ export type SessionUser = {
   phone: string | null;
   account_status?: string;
   presence_status: string;
+  photo_url: string | null;
 };
 export type Session = { user: SessionUser; workspaces: Workspace[]; default_workspace_id: string | null };
 type AuthContextType = {

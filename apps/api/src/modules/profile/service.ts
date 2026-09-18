@@ -4,6 +4,9 @@ import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';
 import { LocalStorageService, validateUpload } from '../../services/storage.js';
+import { resolveAssetUrl } from './asset-url.js';
+
+export { resolveAssetUrl } from './asset-url.js';
 
 export const assetStorage = new LocalStorageService(env.LOCAL_STORAGE_PATH);
 
@@ -31,17 +34,6 @@ const profileSelect = {
   },
 } satisfies Prisma.usersSelect;
 type ProfileRow = Prisma.usersGetPayload<{ select: typeof profileSelect }>;
-
-export function resolveAssetUrl(
-  userId: bigint,
-  asset?: { asset_type: string; object_key: string | null; storage_provider: string | null; public_url: string | null },
-) {
-  if (!asset) return null;
-  if (asset.public_url) return asset.public_url;
-  if (asset.storage_provider === 'LOCAL' && asset.object_key)
-    return `/api/v1/profile/assets/${userId.toString()}/${asset.asset_type}`;
-  return null;
-}
 
 function serializeProfile(user: ProfileRow) {
   const { pets: pet, user_tags: tags, user_profile_assets: assets, workspace_members: memberships, default_workspace_id, ...rest } = user;
@@ -301,6 +293,28 @@ export async function uploadProfileAsset(
     await assetStorage.remove(stored.key);
     throw error;
   }
+}
+
+export async function deleteProfileAsset(userId: bigint, type: ProfileAssetType) {
+  const record = await prisma.$transaction(async (tx) => {
+    const existing = await tx.user_profile_assets.findFirst({
+      where: { user_id: userId, asset_type: type },
+    });
+    if (!existing) throw new AppError(404, 'Asset not found.', 'NOT_FOUND');
+    await tx.user_profile_assets.delete({ where: { id: existing.id } });
+    await tx.audit_logs.create({
+      data: {
+        user_id: userId,
+        action: 'PROFILE_UPDATED',
+        entity_type: 'user_profile_assets',
+        entity_id: existing.id,
+        old_value_json: { asset_type: type },
+      },
+    });
+    return existing;
+  });
+  if (record.storage_provider === 'LOCAL' && record.object_key) await assetStorage.remove(record.object_key);
+  return getOwnProfile(userId);
 }
 
 export async function getProfileAssetForDownload(

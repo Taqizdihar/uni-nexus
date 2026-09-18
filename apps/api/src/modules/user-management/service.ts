@@ -2,10 +2,13 @@ import type { Prisma } from '@prisma/client';
 import { ACCOUNT_STATUSES, ROLE_CODES, type AccountStatus, type RoleCode } from '@uni-nexus/shared';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
+import { lifecycleContext, lifecycleSelect, loadContext } from '../account-lifecycle/context.js';
+import { getAllowedAccountActions, isExecutive } from '../account-lifecycle/policy.js';
 import { reviewerRoleCodes } from '../../middleware/auth.js';
 import { InAppNotificationProvider } from '../../services/notifications.js';
 
 const accountSelect = {
+  ...lifecycleSelect,
   id: true,
   full_name: true,
   username: true,
@@ -22,14 +25,23 @@ const accountSelect = {
   users_users_rejected_by_user_idTousers: { select: { id: true, full_name: true } },
 } satisfies Prisma.usersSelect;
 type AccountRow = Prisma.usersGetPayload<{ select: typeof accountSelect }>;
+async function loadReviewer(actorId: bigint) {
+  const actor = await loadContext(prisma, actorId);
+  if (!isExecutive(actor) || !actor.is_active || actor.account_status !== 'ACTIVE')
+    throw new AppError(403, 'Anda tidak dapat mengakses Manajemen Pengguna.', 'ACCOUNT_ACTION_FORBIDDEN');
+  return actor;
+}
 
-function serializeAccount(row: AccountRow) {
+function serializeAccount(row: AccountRow, actor?: Awaited<ReturnType<typeof loadContext>>) {
   const {
     users_users_approved_by_user_idTousers: approved_by,
     users_users_rejected_by_user_idTousers: rejected_by,
     ...rest
   } = row;
-  return { ...rest, approved_by, rejected_by };
+  return { ...rest, approved_by, rejected_by,
+    roles: lifecycleContext(row).roles,
+    ...(actor ? { allowed_actions: getAllowedAccountActions(actor, lifecycleContext(row)) } : {}),
+  };
 }
 
 /** Notifies currently active CEO/COO/CTO/CVO members that a new account needs review. */
@@ -63,6 +75,7 @@ async function assertReviewer(tx: Prisma.TransactionClient, reviewerId: bigint):
       membership_status: 'ACTIVE',
       roles: { code: { in: reviewerRoleCodes }, is_active: true },
       workspaces: { is_active: true },
+      users: { is_active: true, account_status: 'ACTIVE' },
     },
   });
   if (!membership)
@@ -90,12 +103,13 @@ export async function summary(): Promise<Record<AccountStatus, number>> {
   return counts;
 }
 
-export async function listAccounts(query: {
+export async function listAccounts(actorId: bigint, query: {
   status?: AccountStatus;
   search?: string;
   page: number;
   pageSize: number;
 }) {
+  const actor = await loadReviewer(actorId);
   const where: Prisma.usersWhereInput = {
     ...(query.status ? { account_status: query.status } : {}),
     ...(query.search
@@ -119,7 +133,7 @@ export async function listAccounts(query: {
     prisma.users.count({ where }),
   ]);
   return {
-    data: rows.map(serializeAccount),
+    data: rows.map((row) => serializeAccount(row, actor)),
     meta: {
       page: query.page,
       pageSize: query.pageSize,
@@ -129,10 +143,11 @@ export async function listAccounts(query: {
   };
 }
 
-export async function getAccount(id: bigint) {
+export async function getAccount(id: bigint, actorId: bigint) {
+  const actor = await loadReviewer(actorId);
   const row = await prisma.users.findUnique({ where: { id }, select: accountSelect });
   if (!row) throw new AppError(404, 'Account not found.', 'NOT_FOUND');
-  return serializeAccount(row);
+  return serializeAccount(row, actor);
 }
 
 export async function referenceData() {
@@ -242,66 +257,4 @@ export async function rejectAccount(reviewerId: bigint, targetId: bigint, reason
   });
 }
 
-export async function suspendAccount(reviewerId: bigint, targetId: bigint) {
-  return prisma.$transaction(async (tx) => {
-    await assertReviewer(tx, reviewerId);
-    const target = await lockAccount(tx, targetId);
-    if (target.account_status !== 'ACTIVE')
-      throw new AppError(409, 'Only active accounts can be suspended.', 'INVALID_STATE');
-    const memberships = await tx.workspace_members.findMany({
-      where: { user_id: targetId, membership_status: 'ACTIVE' },
-      include: { roles: true },
-    });
-    const isReviewer = memberships.some(
-      (member) => member.roles && reviewerRoleCodes.includes(member.roles.code),
-    );
-    if (isReviewer) {
-      const otherReviewers = await tx.workspace_members.count({
-        where: {
-          user_id: { not: targetId },
-          membership_status: 'ACTIVE',
-          roles: { code: { in: reviewerRoleCodes }, is_active: true },
-          users: { is_active: true, account_status: 'ACTIVE' },
-        },
-      });
-      if (otherReviewers === 0)
-        throw new AppError(
-          409,
-          'Assign another active CEO, COO, CTO, or CVO before suspending the last reviewer.',
-          'LAST_REVIEWER',
-        );
-    }
-    const updated = await tx.users.update({
-      where: { id: targetId },
-      data: { account_status: 'SUSPENDED' },
-      select: accountSelect,
-    });
-    await tx.audit_logs.create({
-      data: { user_id: reviewerId, action: 'USER_SUSPENDED', entity_type: 'users', entity_id: targetId },
-    });
-    return serializeAccount(updated);
-  });
-}
-
-export async function reactivateAccount(reviewerId: bigint, targetId: bigint) {
-  return prisma.$transaction(async (tx) => {
-    await assertReviewer(tx, reviewerId);
-    const target = await lockAccount(tx, targetId);
-    if (target.account_status !== 'SUSPENDED')
-      throw new AppError(409, 'Only suspended accounts can be reactivated.', 'INVALID_STATE');
-    const updated = await tx.users.update({
-      where: { id: targetId },
-      data: { account_status: 'ACTIVE' },
-      select: accountSelect,
-    });
-    await tx.audit_logs.create({
-      data: {
-        user_id: reviewerId,
-        action: 'USER_REACTIVATED',
-        entity_type: 'users',
-        entity_id: targetId,
-      },
-    });
-    return serializeAccount(updated);
-  });
-}
+export { deactivateAccount, reactivateAccount } from '../account-lifecycle/service.js';

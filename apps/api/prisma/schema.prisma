@@ -1015,60 +1015,72 @@ model slicing_results {
 }
 
 model users {
-  id                                                          BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
-  full_name                                                   String                @db.VarChar(150)
-  username                                                    String                @unique(map: "uq_users_username") @db.VarChar(50)
-  email                                                       String                @unique(map: "uq_users_email") @db.VarChar(190)
-  phone                                                       String?               @db.VarChar(30)
-  bio                                                         String?               @db.VarChar(500)
-  password_hash                                               String                @db.VarChar(255)
-  password_changed_at                                         DateTime?             @db.DateTime(0)
-  account_status                                              String                @default("PENDING") @db.VarChar(30)
-  presence_status                                             String                @default("DEFAULT") @db.VarChar(20)
-  pet_id                                                      BigInt?               @db.UnsignedBigInt
-  default_workspace_id                                        BigInt?               @db.UnsignedBigInt
-  approved_by_user_id                                         BigInt?               @db.UnsignedBigInt
-  approved_at                                                 DateTime?             @db.DateTime(0)
-  rejected_by_user_id                                         BigInt?               @db.UnsignedBigInt
-  rejected_at                                                 DateTime?             @db.DateTime(0)
-  rejection_reason                                            String?               @db.VarChar(500)
-  email_verified_at                                           DateTime?             @db.DateTime(0)
-  last_login_at                                               DateTime?             @db.DateTime(0)
-  is_active                                                   Boolean               @default(true)
-  created_at                                                  DateTime              @default(now()) @db.DateTime(0)
-  updated_at                                                  DateTime              @default(now()) @db.DateTime(0)
-  audit_logs                                                  audit_logs[]
-  custom_requests_custom_requests_assigned_designer_idTousers custom_requests[]     @relation("custom_requests_assigned_designer_idTousers")
-  custom_requests_custom_requests_created_by_user_idTousers   custom_requests[]     @relation("custom_requests_created_by_user_idTousers")
-  design_assets                                               design_assets[]
-  design_tasks                                                design_tasks[]
-  experiments                                                 experiments[]
-  ip_reviews                                                  ip_reviews[]
-  material_usages                                             material_usages[]
-  notifications                                               notifications[]
-  order_packaging                                             order_packaging[]
-  orders                                                      orders[]
-  print_failures                                              print_failures[]
-  print_jobs                                                  print_jobs[]
-  product_assets                                              product_assets[]
-  production_costs                                            production_costs[]
-  production_jobs                                             production_jobs[]
-  products                                                    products[]
-  qc_inspections                                              qc_inspections[]
-  quotations                                                  quotations[]
-  request_files                                               request_files[]
-  request_notes                                               request_notes[]
-  slicing_results                                             slicing_results[]
-  system_bootstrap                                            system_bootstrap[]
-  user_profile_assets                                         user_profile_assets[]
-  user_tags                                                   user_tags[]
-  users_users_approved_by_user_idTousers                      users?                @relation("users_approved_by_user_idTousers", fields: [approved_by_user_id], references: [id], map: "fk_users_approved_by")
-  other_users_users_approved_by_user_idTousers                users[]               @relation("users_approved_by_user_idTousers")
-  workspaces                                                  workspaces?           @relation(fields: [default_workspace_id], references: [id], map: "fk_users_default_workspace")
-  pets                                                        pets?                 @relation(fields: [pet_id], references: [id], map: "fk_users_pet")
-  users_users_rejected_by_user_idTousers                      users?                @relation("users_rejected_by_user_idTousers", fields: [rejected_by_user_id], references: [id], map: "fk_users_rejected_by")
-  other_users_users_rejected_by_user_idTousers                users[]               @relation("users_rejected_by_user_idTousers")
-  workspace_members                                           workspace_members[]
+  id                                                                                     BigInt                          @id @default(autoincrement()) @db.UnsignedBigInt
+  full_name                                                                              String                          @db.VarChar(150)
+  username                                                                               String                          @unique(map: "uq_users_username") @db.VarChar(50)
+  email                                                                                  String                          @unique(map: "uq_users_email") @db.VarChar(190)
+  phone                                                                                  String?                         @db.VarChar(30)
+  bio                                                                                    String?                         @db.VarChar(500)
+  password_hash                                                                          String                          @db.VarChar(255)
+  password_changed_at                                                                    DateTime?                       @db.DateTime(0)
+  account_status                                                                         String                          @default("PENDING") @db.VarChar(30)
+  presence_status                                                                        String                          @default("DEFAULT") @db.VarChar(20)
+  pet_id                                                                                 BigInt?                         @db.UnsignedBigInt
+  default_workspace_id                                                                   BigInt?                         @db.UnsignedBigInt
+  approved_by_user_id                                                                    BigInt?                         @db.UnsignedBigInt
+  approved_at                                                                            DateTime?                       @db.DateTime(0)
+  rejected_by_user_id                                                                    BigInt?                         @db.UnsignedBigInt
+  rejected_at                                                                            DateTime?                       @db.DateTime(0)
+  rejection_reason                                                                       String?                         @db.VarChar(500)
+  deactivation_source                                                                    String?                         @db.VarChar(30)
+  deactivated_by_user_id                                                                 BigInt?                         @db.UnsignedBigInt
+  deactivated_at                                                                         DateTime?                       @db.DateTime(0)
+  deactivation_reason                                                                    String?                         @db.VarChar(500)
+  reactivated_by_user_id                                                                 BigInt?                         @db.UnsignedBigInt
+  reactivated_at                                                                         DateTime?                       @db.DateTime(0)
+  email_verified_at                                                                      DateTime?                       @db.DateTime(0)
+  last_login_at                                                                          DateTime?                       @db.DateTime(0)
+  is_active                                                                              Boolean                         @default(true)
+  created_at                                                                             DateTime                        @default(now()) @db.DateTime(0)
+  updated_at                                                                             DateTime                        @default(now()) @db.DateTime(0)
+  account_deactivation_requests_account_deactivation_requests_reviewed_by_user_idTousers account_deactivation_requests[] @relation("account_deactivation_requests_reviewed_by_user_idTousers")
+  account_deactivation_requests_account_deactivation_requests_user_idTousers             account_deactivation_requests[] @relation("account_deactivation_requests_user_idTousers")
+  audit_logs                                                                             audit_logs[]
+  custom_requests_custom_requests_assigned_designer_idTousers                            custom_requests[]               @relation("custom_requests_assigned_designer_idTousers")
+  custom_requests_custom_requests_created_by_user_idTousers                              custom_requests[]               @relation("custom_requests_created_by_user_idTousers")
+  design_assets                                                                          design_assets[]
+  design_tasks                                                                           design_tasks[]
+  experiments                                                                            experiments[]
+  ip_reviews                                                                             ip_reviews[]
+  material_usages                                                                        material_usages[]
+  notifications                                                                          notifications[]
+  order_packaging                                                                        order_packaging[]
+  orders                                                                                 orders[]
+  print_failures                                                                         print_failures[]
+  print_jobs                                                                             print_jobs[]
+  product_assets                                                                         product_assets[]
+  production_costs                                                                       production_costs[]
+  production_jobs                                                                        production_jobs[]
+  products                                                                               products[]
+  qc_inspections                                                                         qc_inspections[]
+  quotations                                                                             quotations[]
+  request_files                                                                          request_files[]
+  request_notes                                                                          request_notes[]
+  slicing_results                                                                        slicing_results[]
+  system_bootstrap                                                                       system_bootstrap[]
+  user_profile_assets                                                                    user_profile_assets[]
+  user_tags                                                                              user_tags[]
+  users_users_approved_by_user_idTousers                                                 users?                          @relation("users_approved_by_user_idTousers", fields: [approved_by_user_id], references: [id], map: "fk_users_approved_by")
+  other_users_users_approved_by_user_idTousers                                           users[]                         @relation("users_approved_by_user_idTousers")
+  users_users_deactivated_by_user_idTousers                                              users?                          @relation("users_deactivated_by_user_idTousers", fields: [deactivated_by_user_id], references: [id], map: "fk_users_deactivated_by")
+  other_users_users_deactivated_by_user_idTousers                                        users[]                         @relation("users_deactivated_by_user_idTousers")
+  workspaces                                                                             workspaces?                     @relation(fields: [default_workspace_id], references: [id], map: "fk_users_default_workspace")
+  pets                                                                                   pets?                           @relation(fields: [pet_id], references: [id], map: "fk_users_pet")
+  users_users_reactivated_by_user_idTousers                                              users?                          @relation("users_reactivated_by_user_idTousers", fields: [reactivated_by_user_id], references: [id], map: "fk_users_reactivated_by")
+  other_users_users_reactivated_by_user_idTousers                                        users[]                         @relation("users_reactivated_by_user_idTousers")
+  users_users_rejected_by_user_idTousers                                                 users?                          @relation("users_rejected_by_user_idTousers", fields: [rejected_by_user_id], references: [id], map: "fk_users_rejected_by")
+  other_users_users_rejected_by_user_idTousers                                           users[]                         @relation("users_rejected_by_user_idTousers")
+  workspace_members                                                                      workspace_members[]
 
   @@index([account_status], map: "idx_users_status")
   @@index([approved_by_user_id], map: "idx_users_approved_by")
@@ -1076,6 +1088,10 @@ model users {
   @@index([pet_id], map: "idx_users_pet")
   @@index([presence_status], map: "idx_users_presence_status")
   @@index([rejected_by_user_id], map: "idx_users_rejected_by")
+  @@index([deactivated_at], map: "idx_users_deactivated_at")
+  @@index([deactivated_by_user_id], map: "idx_users_deactivated_by")
+  @@index([reactivated_at], map: "idx_users_reactivated_at")
+  @@index([reactivated_by_user_id], map: "idx_users_reactivated_by")
 }
 
 model workspace_members {
@@ -1218,4 +1234,32 @@ model user_tags {
   @@unique([user_id, sort_order], map: "uq_user_tags_position")
   @@unique([user_id, tag_text], map: "uq_user_tags_text")
   @@index([user_id], map: "idx_user_tags_user")
+}
+
+model account_deactivation_requests {
+  id                                                             BigInt                                       @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id                                                        BigInt                                       @db.UnsignedBigInt
+  request_status                                                 account_deactivation_requests_request_status @default(PENDING)
+  request_reason                                                 String?                                      @db.VarChar(500)
+  requested_at                                                   DateTime                                     @default(now()) @db.DateTime(0)
+  withdrawn_at                                                   DateTime?                                    @db.DateTime(0)
+  reviewed_by_user_id                                            BigInt?                                      @db.UnsignedBigInt
+  reviewed_at                                                    DateTime?                                    @db.DateTime(0)
+  review_note                                                    String?                                      @db.VarChar(500)
+  pending_user_id                                                BigInt?                                      @unique(map: "uq_adr_one_pending") @db.UnsignedBigInt
+  created_at                                                     DateTime                                     @default(now()) @db.DateTime(0)
+  updated_at                                                     DateTime                                     @default(now()) @db.DateTime(0)
+  users_account_deactivation_requests_reviewed_by_user_idTousers users?                                       @relation("account_deactivation_requests_reviewed_by_user_idTousers", fields: [reviewed_by_user_id], references: [id], onUpdate: NoAction, map: "fk_adr_reviewer")
+  users_account_deactivation_requests_user_idTousers             users                                        @relation("account_deactivation_requests_user_idTousers", fields: [user_id], references: [id], onUpdate: NoAction, map: "fk_adr_user")
+
+  @@index([reviewed_by_user_id, reviewed_at], map: "idx_adr_reviewer")
+  @@index([request_status, requested_at], map: "idx_adr_status_requested")
+  @@index([user_id, request_status], map: "idx_adr_user_status")
+}
+
+enum account_deactivation_requests_request_status {
+  PENDING
+  WITHDRAWN
+  APPROVED
+  REJECTED
 }

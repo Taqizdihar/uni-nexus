@@ -11,7 +11,7 @@ modules built around it: User Management, Team, and Profile.
 Sign Up ──▶ PENDING ──▶ reviewed in User Management ──▶ APPROVE (role + workspace)
                                                     └──▶ REJECT (reason required)
 
-ACTIVE account ──▶ SUSPEND ──▶ SUSPENDED ──▶ REACTIVATE ──▶ ACTIVE
+ACTIVE account --> authorized deactivation --> SUSPENDED (Nonaktif) --> authorized reactivation --> ACTIVE
 ```
 
 `users.account_status` is exactly one of `PENDING` / `ACTIVE` / `REJECTED` /
@@ -29,6 +29,13 @@ ACTIVE account ──▶ SUSPEND ──▶ SUSPENDED ──▶ REACTIVATE ──
   `error.code` — never a generic "invalid credentials" once the password is confirmed
   correct. The admin app's `AuthPage` catches these codes and redirects to
   `/account-status` instead of entering the app shell.
+
+The claimed bootstrap CTO can recover from `SUSPENDED` after a correct password,
+matching claimed user ID and normalized bootstrap email, and an active CTO membership.
+Recovery is transactional and does not change the bootstrap claim. Other suspended
+accounts cannot recover by login. Lifecycle writes preserve `is_active`, roles and
+memberships. See [Account Lifecycle](ACCOUNT-LIFECYCLE.md) for the exact hierarchy,
+request workflow, continuity safeguards, API contracts, and verification report.
 
 ## Signup
 
@@ -93,17 +100,19 @@ entries in the in-code permission map so old data/tests don't crash):
 | `STAFF_OF_SPECIALTY`  | Staff of Specialty             | `read`, `production`                                      |
 | `STAFF`               | Staff                          | `read`                                                    |
 
-`user_management` gates User Management: approve/reject/suspend/reactivate, and
+`user_management` gates User Management for exactly `CEO`, `COO`, `CTO`, and `CVO`;
+legacy wildcard roles do not gain reviewer rights. It covers registration approval,
+policy-controlled deactivation/request review/reactivation, and
 assigning a role + workspace on approval. Team and Profile are **not** permission-gated
 by role — every `ACTIVE` member of a workspace can read its Team directory and manage
-their own Profile; only User Management is executive-only. This is intentionally
-centralized in one map rather than scattered `if (role === '...')` checks; the `STAFF`/
-`3D_DESIGNER`/`STAFF_OF_SPECIALTY` business-permission defaults above are a starting
-point (matching the closest legacy roles) and are expected to be refined later — see
-`middleware/auth.ts` for the single place to do that.
+their own Profile; only User Management is executive-only. Business permission
+maps remain in `middleware/auth.ts`. Lifecycle hierarchy and protection are
+centralized separately in `modules/account-lifecycle/policy.ts`. The
+`STAFF`/`3D_DESIGNER`/`STAFF_OF_SPECIALTY` business-permission defaults are a starting
+point and can be refined without changing lifecycle authority.
 
 `requireUserManagement` is a fast-path check only (any active membership with a
-`user_management`-permitted role, in *any* workspace — approval isn't scoped to one
+official executive role, in *any* workspace — approval isn't scoped to one
 workspace since a pending applicant doesn't have one yet). Every mutating
 user-management action re-derives this authoritatively inside its own transaction (see
 `assertReviewer` in
@@ -118,7 +127,8 @@ for membership changes.
 
 Purpose-built endpoints — not generic CRUD over `users` (the [resources
 engine](ARCHITECTURE.md#resource-engine) never exposes `users`, `roles`,
-`workspace_members`, `system_bootstrap`, `user_profile_assets`, or `user_tags`; its
+`workspace_members`, `system_bootstrap`, `account_deactivation_requests`,
+`user_profile_assets`, or `user_tags`; its
 `repository.ts` only ever picks a model present in the reviewed, hand-maintained
 `resources` allow-list in `@uni-nexus/shared`, so introspecting new identity tables
 could never accidentally expose them). `password_hash` is never selected by any identity
@@ -139,11 +149,17 @@ strips it a second time as a backstop.
   an in-app `ACCOUNT_APPROVED` notification.
 - `POST /user-management/:userId/reject` — body `{ reason }` (required). Sets
   `REJECTED` + `rejected_by_user_id`/`rejected_at`/`rejection_reason`.
-- `POST /user-management/:userId/suspend` — before suspending, checks whether the
-  target holds a `user_management`-permitted role in any active membership; if so,
-  refuses (`LAST_REVIEWER`) unless at least one *other* active reviewer exists, so the
-  system can never end up with zero people able to approve or reactivate anyone.
-- `POST /user-management/:userId/reactivate` — `SUSPENDED` → `ACTIVE`.
+- `POST /user-management/:userId/deactivate` - body `{ reason }` (at least 10
+  trimmed characters). Uses the central lifecycle policy, sets `SUSPENDED`
+  with `DIRECT_ADMIN` metadata, and preserves data and memberships. `/suspend` is a
+  compatibility alias with the same validation and policy.
+- `POST /user-management/:userId/reactivate` - body `{ note? }`. Uses the exact
+  reactivation hierarchy and records the actor/time while preserving history.
+- `GET /user-management/deactivation-requests` and `/:requestId` - safe request
+  details, pending count and reviewer-specific capability flags.
+- `POST /user-management/deactivation-requests/:requestId/approve` or `/reject` -
+  conditional transactional resolution with the central review policy. Rejection
+  requires a note; approval suspends the requester and ends a self-approver's session.
 
 New `PENDING` signups trigger an in-app `ACCOUNT_APPROVAL_REQUESTED` notification to
 every currently `ACTIVE` `CEO`/`COO`/`CTO`/`CVO` member, in each of their own
@@ -198,10 +214,12 @@ Ownership rules the API enforces with strict Zod schemas (never a client-writabl
 - **Password** — reuses `POST /auth/password`; a successful change updates
   `password_changed_at` (shown on the Profile page as "last changed") and writes a
   `PASSWORD_CHANGED` audit entry.
-- **Account deletion** — the Profile page has the section (red, "Penghapusan Akun")
-  management asked for, but there is no deletion-request workflow in this schema yet;
-  the button opens an explanatory notice instead of hard-deleting anyone or faking
-  success.
+- **Account deletion** - the existing red Penghapusan Akun card submits a
+  reversible deactivation request through a custom modal. The account remains active
+  while pending. The card shows the latest request status and timestamps and supports
+  owner-only withdrawal through another confirmation modal. Profile endpoints:
+  `GET/POST /profile/deactivation-request` and
+  `POST /profile/deactivation-request/withdraw` with `{ request_id }`.
 
 ## Presence status design
 
@@ -223,9 +241,11 @@ color is never the only cue. It appears over the avatar on Profile/Team, and as 
 
 ## Audit events
 
-Identity-related actions all write through the shared
-[services/audit.ts](../apps/api/src/services/audit.ts) helper, inside the same
+Identity-related actions write audit entries inside the same
 transaction as the change: `USER_REGISTERED`, `BOOTSTRAP_CTO_CLAIMED`,
-`USER_APPROVED`, `USER_REJECTED`, `USER_SUSPENDED`, `USER_REACTIVATED`,
+`USER_APPROVED`, `USER_REJECTED`, `USER_DEACTIVATED`, `USER_REACTIVATED`,
+`ACCOUNT_DEACTIVATION_REQUESTED`, `ACCOUNT_DEACTIVATION_WITHDRAWN`,
+`ACCOUNT_DEACTIVATION_APPROVED`, `ACCOUNT_DEACTIVATION_REJECTED`,
+`CTO_REACTIVATED_VIA_LOGIN`,
 `PROFILE_UPDATED`, `PRESENCE_CHANGED`, `PASSWORD_CHANGED`. No password, hash, or secret
 is ever written into `old_value_json`/`new_value_json`.

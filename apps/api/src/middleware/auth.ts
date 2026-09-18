@@ -1,12 +1,11 @@
 import type { RequestHandler } from 'express';
+import { REVIEWER_ROLE_CODES } from '@uni-nexus/shared';
 import { prisma } from '../lib/prisma.js';
 import { AppError } from '../lib/errors.js';
 import { env } from '../config/env.js';
 import { matchesFingerprint, verifySession } from '../modules/auth/session.js';
 
-// user_management gates the account-approval module (see modules/user-management). CEO already
-// carries '*' from the legacy role map, which already implies user_management via the wildcard
-// check below; CTO is the primary system administrator and gets the same full wildcard access.
+// User Management uses the exact official executive set, independently of business wildcards.
 export const rolePermissions: Readonly<Record<string, readonly string[]>> = {
   // Legacy codes: no rows use these anymore, kept only as compatibility artifacts.
   OWNER: ['*'],
@@ -25,6 +24,7 @@ export const rolePermissions: Readonly<Record<string, readonly string[]>> = {
 };
 
 export function hasPermission(role: string, permission: string): boolean {
+  if (permission === 'user_management') return (REVIEWER_ROLE_CODES as readonly string[]).includes(role.toUpperCase());
   const permissions = rolePermissions[role.toUpperCase()] ?? [];
   return permissions.includes('*') || permissions.includes(permission);
 }
@@ -96,13 +96,11 @@ export function authorize(permission: string): RequestHandler {
 
 /**
  * Account approval is a cross-workspace, executive-only capability (CEO/COO/CTO/CVO), so unlike
- * `authorize` it does not depend on an X-Workspace-Id: it checks for the user_management
- * permission on any active membership, in any workspace. This is a fast-path UX gate only —
+ * `authorize` it does not depend on an X-Workspace-Id: it checks the official executive
+ * roles on any active membership, in any workspace. This is a fast-path UX gate only —
  * user-management/service.ts re-checks authoritatively with row locking inside each transaction.
  */
-export const reviewerRoleCodes = Object.entries(rolePermissions)
-  .filter(([, permissions]) => permissions.includes('*') || permissions.includes('user_management'))
-  .map(([code]) => code);
+export const reviewerRoleCodes = [...REVIEWER_ROLE_CODES];
 export const requireUserManagement: RequestHandler = async (request, _response, next) => {
   try {
     if (!request.auth) throw new AppError(401, 'Please sign in to continue.', 'UNAUTHENTICATED');

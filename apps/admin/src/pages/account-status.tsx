@@ -17,8 +17,8 @@ const presentation = {
   },
   ACCOUNT_SUSPENDED: {
     icon: ShieldAlert,
-    title: 'Akun Ditangguhkan',
-    body: 'Akun Anda telah ditangguhkan sementara. Hubungi seorang eksekutif berwenang untuk informasi lebih lanjut.',
+    title: 'Akun Nonaktif',
+    body: 'Akun Anda saat ini Nonaktif. Hubungi eksekutif berwenang untuk mengaktifkan kembali akun Anda.',
   },
 } as const;
 

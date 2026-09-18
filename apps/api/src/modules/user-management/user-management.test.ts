@@ -18,7 +18,7 @@ vi.mock('../../services/notifications.js', () => ({
   },
 }));
 
-import { approveAccount, rejectAccount, suspendAccount } from './service.js';
+import { approveAccount, rejectAccount } from './service.js';
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -33,6 +33,7 @@ describe('account approval', () => {
     db.roles.findFirst.mockResolvedValue({ id: 5n, code: 'STAFF' });
     db.workspaces.findFirst.mockResolvedValue({ id: 9n, name: '3D Printing' });
     db.users.update.mockResolvedValue({
+      workspace_members: [], is_active: true,
       id: 42n,
       account_status: 'ACTIVE',
       users_users_approved_by_user_idTousers: { id: 1n, full_name: 'Reviewer' },
@@ -71,6 +72,7 @@ describe('account approval', () => {
     db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
     db.$queryRaw.mockResolvedValue([{ id: 42n, account_status: 'PENDING' }]);
     db.users.update.mockResolvedValue({
+      workspace_members: [], is_active: true,
       id: 42n,
       account_status: 'REJECTED',
       rejection_reason: 'Not affiliated with the team.',
@@ -89,39 +91,5 @@ describe('account approval', () => {
         }),
       }),
     );
-  });
-});
-
-describe('suspension safeguards against lockout', () => {
-  it('blocks suspending the last active CEO/COO/CTO/CVO reviewer', async () => {
-    db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
-    db.$queryRaw.mockResolvedValue([{ id: 7n, account_status: 'ACTIVE' }]);
-    db.workspace_members.findMany.mockResolvedValue([{ roles: { code: 'CEO' } }]);
-    db.workspace_members.count.mockResolvedValue(0);
-    await expect(suspendAccount(1n, 7n)).rejects.toMatchObject({
-      code: 'LAST_REVIEWER',
-      status: 409,
-    });
-    expect(db.users.update).not.toHaveBeenCalled();
-  });
-
-  it('allows suspending a reviewer when another active reviewer remains', async () => {
-    db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
-    db.$queryRaw.mockResolvedValue([{ id: 7n, account_status: 'ACTIVE' }]);
-    db.workspace_members.findMany.mockResolvedValue([{ roles: { code: 'CEO' } }]);
-    db.workspace_members.count.mockResolvedValue(1);
-    db.users.update.mockResolvedValue({ id: 7n, account_status: 'SUSPENDED' });
-    const result = await suspendAccount(1n, 7n);
-    expect(result.account_status).toBe('SUSPENDED');
-  });
-
-  it('allows suspending a non-reviewer without checking the reviewer count', async () => {
-    db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
-    db.$queryRaw.mockResolvedValue([{ id: 8n, account_status: 'ACTIVE' }]);
-    db.workspace_members.findMany.mockResolvedValue([{ roles: { code: 'STAFF' } }]);
-    db.users.update.mockResolvedValue({ id: 8n, account_status: 'SUSPENDED' });
-    const result = await suspendAccount(1n, 8n);
-    expect(result.account_status).toBe('SUSPENDED');
-    expect(db.workspace_members.count).not.toHaveBeenCalled();
   });
 });

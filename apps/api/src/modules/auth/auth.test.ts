@@ -8,6 +8,7 @@ const db = vi.hoisted(() => ({
   users: {
     findFirst: vi.fn(),
     findUnique: vi.fn(),
+    findUniqueOrThrow: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
     updateMany: vi.fn(),
@@ -15,7 +16,7 @@ const db = vi.hoisted(() => ({
   roles: { findFirst: vi.fn() },
   workspaces: { create: vi.fn() },
   workspace_members: { create: vi.fn(), findFirst: vi.fn(), findMany: vi.fn() },
-  system_bootstrap: { update: vi.fn() },
+  system_bootstrap: { update: vi.fn(), findUnique: vi.fn() },
   audit_logs: { create: vi.fn() },
   $queryRaw: vi.fn(),
   $transaction: vi.fn(),
@@ -78,6 +79,7 @@ beforeEach(() => {
   db.audit_logs.create.mockResolvedValue({});
   db.workspace_members.findMany.mockResolvedValue([]);
   db.users.findFirst.mockResolvedValue(null);
+  db.system_bootstrap.findUnique.mockResolvedValue(null);
   db.$queryRaw.mockResolvedValue([
     { id: 1, cto_email: bootstrapEmail, default_workspace_id: null, claimed_at: null },
   ]);
@@ -168,6 +170,72 @@ describe('registration and the one-time CTO bootstrap', () => {
   });
 });
 
+describe('bootstrap CTO recovery login (isolated fixtures)', () => {
+  async function fixture(role = 'CTO', status = 'SUSPENDED') {
+    const row = { id: 42n, email: 'cto@example.test', full_name: 'Fixture CTO', username: 'fixturecto', is_active: true,
+      password_hash: await bcrypt.hash('fixture-password-123', 4), account_status: status,
+      workspace_members: [{ workspace_id: 9n, roles: { code: role, name: role } }], user_profile_assets: [] };
+    db.users.findUnique.mockResolvedValue(row);
+    db.users.findUniqueOrThrow.mockResolvedValue(row);
+    db.system_bootstrap.findUnique.mockResolvedValue({ id: 1, cto_email: row.email, claimed_by_user_id: row.id });
+    db.users.update.mockImplementation(({ data }: { data: object }) => Object.assign(row, data));
+    return row;
+  }
+  it('correct password recovers suspended claimed CTO and issues a normal authenticated session', async () => {
+    await fixture();
+    const response = await request(app()).post('/api/v1/auth/login').set('Origin', 'http://localhost:5173')
+      .send({ email: 'CTO@example.test', password: 'fixture-password-123' });
+    expect(response.status).toBe(200);
+    expect(response.headers['set-cookie']).toEqual(expect.arrayContaining([expect.stringContaining('test_session=')]));
+    expect(db.users.update.mock.calls[0][0].data).toMatchObject({ account_status: 'ACTIVE', reactivated_by_user_id: 42n, reactivated_at: expect.any(Date) });
+    expect(db.audit_logs.create.mock.calls[0][0].data).toMatchObject({ action: 'CTO_REACTIVATED_VIA_LOGIN', user_id: 42n, entity_id: 42n });
+    expect(db.system_bootstrap.update).not.toHaveBeenCalled();
+    expect(db.users.update.mock.calls[0][0].data).not.toHaveProperty('is_active');
+  });
+  it('wrong password never recovers or reads bootstrap', async () => {
+    await fixture();
+    await expect(login('cto@example.test', 'wrong')).rejects.toMatchObject({ code: 'INVALID_CREDENTIALS' });
+    expect(db.users.update).not.toHaveBeenCalled();
+    expect(db.system_bootstrap.findUnique).not.toHaveBeenCalled();
+  });
+  it('a CTO role and matching email do not replace claimed identity', async () => {
+    await fixture();
+    db.system_bootstrap.findUnique.mockResolvedValue({ id: 1, cto_email: 'cto@example.test', claimed_by_user_id: 43n });
+    await expect(login('cto@example.test', 'fixture-password-123')).rejects.toMatchObject({ code: 'ACCOUNT_SUSPENDED' });
+    expect(db.users.update).not.toHaveBeenCalled();
+  });
+  it('bootstrap email mismatch blocks recovery', async () => {
+    await fixture();
+    db.system_bootstrap.findUnique.mockResolvedValue({ id: 1, cto_email: 'other@example.test', claimed_by_user_id: 42n });
+    await expect(login('cto@example.test', 'fixture-password-123')).rejects.toMatchObject({ code: 'ACCOUNT_SUSPENDED' });
+  });
+  it.each(['CEO', 'COO', 'CVO', 'STAFF'])('suspended %s never auto-reactivates', async (role) => {
+    await fixture(role);
+    await expect(login('cto@example.test', 'fixture-password-123')).rejects.toMatchObject({ code: 'ACCOUNT_SUSPENDED' });
+    expect(db.users.update).not.toHaveBeenCalled();
+  });
+  it('active CTO login has no reactivation event', async () => {
+    await fixture('CTO', 'ACTIVE');
+    await login(' CTO@example.test ', 'fixture-password-123');
+    expect(db.audit_logs.create).not.toHaveBeenCalled();
+    expect(db.system_bootstrap.findUnique).not.toHaveBeenCalled();
+    expect(db.users.update.mock.calls[0][0].data).toEqual({ last_login_at: expect.any(Date) });
+  });
+  it('a password change during recovery prevents issuing the old session', async () => {
+    const row = await fixture();
+    db.users.findUnique.mockResolvedValueOnce({ ...row }).mockResolvedValue({ ...row, password_hash: 'changed' });
+    await expect(login('cto@example.test', 'fixture-password-123')).rejects.toMatchObject({ code: 'INVALID_CREDENTIALS' });
+    expect(db.users.update).not.toHaveBeenCalled();
+  });
+  it('concurrent completed recovery proceeds without a duplicate audit', async () => {
+    const row = await fixture();
+    db.users.findUnique.mockResolvedValueOnce({ ...row }).mockResolvedValue({ ...row, account_status: 'ACTIVE' });
+    db.users.findUniqueOrThrow.mockResolvedValue({ ...row, account_status: 'ACTIVE' });
+    expect((await login('cto@example.test', 'fixture-password-123')).account_status).toBe('ACTIVE');
+    expect(db.audit_logs.create).not.toHaveBeenCalled();
+  });
+});
+
 describe('login account-status behavior', () => {
   it('blocks a pending account with the correct password', async () => {
     const hash = await bcrypt.hash('safe-password-123', 4);
@@ -206,6 +274,7 @@ describe('login account-status behavior', () => {
       id: 5n,
       password_hash: hash,
       account_status: 'SUSPENDED',
+      workspace_members: [],
       is_active: true,
     });
     await expect(login('suspended@example.com', 'safe-password-123')).rejects.toMatchObject({
@@ -370,6 +439,7 @@ describe('HTTP security and workspace isolation', () => {
     expect(hasPermission('STAFF', 'user_management')).toBe(false);
     expect(hasPermission('CTO', 'finance')).toBe(true);
     expect(hasPermission('UNKNOWN', 'read')).toBe(false);
+    for (const role of ['OWNER', 'ADMIN', 'MANAGER', 'DESIGNER', 'OPERATOR']) expect(hasPermission(role, 'user_management')).toBe(false);
     expect(matchesFingerprint('old', passwordFingerprint('new'))).toBe(false);
   });
 });

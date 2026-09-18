@@ -4,7 +4,7 @@ import { Activity, ArrowLeftRight, Bell, BookOpen, Box, Boxes, ChevronDown, Clip
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { REVIEWER_ROLE_CODES, ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
-import { api, message, type Page } from '../lib/api';
+import { api, assetUrl, message, type Page } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { useHeartbeat } from '../lib/presence';
 import { titleCase } from '../lib/format';
@@ -12,8 +12,8 @@ import { OnlineUsers } from './online-users';
 import { EmptyState, ErrorState, Spinner, useToast } from './ui';
 
 type NavigationItem = { path: string; label: string; icon: ComponentType<{ size?: number; strokeWidth?: number }> };
-const isReviewerRole = (role: string) => (REVIEWER_ROLE_CODES as readonly string[]).includes(role.toUpperCase()) || role.toUpperCase() === 'CEO';
-function navigationFor(role: string): { label: string; items: NavigationItem[] }[] {
+const isReviewerRole = (role: string) => (REVIEWER_ROLE_CODES as readonly string[]).includes(role.toUpperCase());
+function navigationFor(canReview: boolean): { label: string; items: NavigationItem[] }[] {
   return [
     { label: 'WORKSPACE', items: [{ path: 'dashboard', label: 'Ringkasan', icon: Gauge }, { path: 'customers', label: 'Pelanggan', icon: Users }, { path: 'products', label: 'Katalog Produk', icon: Boxes }] },
     { label: 'PERENCANAAN & PENJUALAN', items: [{ path: 'requests', label: 'Permintaan Custom', icon: MessageSquare }, { path: 'design-tasks', label: 'Studio Desain', icon: Palette }, { path: 'quotations', label: 'Penawaran', icon: ReceiptText }, { path: 'orders', label: 'Pesanan', icon: ClipboardList }, { path: 'pricing-rules', label: 'Aturan Harga', icon: Wallet }] },
@@ -22,7 +22,7 @@ function navigationFor(role: string): { label: string; items: NavigationItem[] }
       label: 'TIM',
       items: [
         { path: 'team', label: 'Tim', icon: Users },
-        ...(isReviewerRole(role) ? [{ path: 'user-management', label: 'Manajemen Pengguna', icon: UserCog }] : []),
+        ...(canReview ? [{ path: 'user-management', label: 'Manajemen Pengguna', icon: UserCog }] : []),
       ],
     },
     { label: 'ADMINISTRASI', items: [{ path: 'notifications', label: 'Notifikasi', icon: Bell }, { path: 'audit', label: 'Aktivitas & Audit', icon: ScrollText }, { path: 'settings', label: 'Pengaturan', icon: Settings2 }] },
@@ -37,7 +37,7 @@ export function Shell() {
   const toast = useToast();
   useHeartbeat();
   const unread = useQuery({ queryKey: ['unread', workspace?.id], enabled: !!workspace, queryFn: () => api<Page>('/notifications?unread=true&pageSize=1', { workspace: workspace!.id }), refetchInterval: 60_000 });
-  const navigation = navigationFor(workspace?.role ?? '');
+  const navigation = navigationFor(session?.workspaces.some((item) => isReviewerRole(item.role)) ?? false);
   const signout = () => { void logout().catch((err: unknown) => toast(message(err), true)); };
   if (loading) return <Spinner label="Membuka workspace Anda…" />;
   if (error) return <div className="standalone-state"><ErrorState error={error} retry={() => void refresh()} /></div>;
@@ -72,7 +72,7 @@ export function Shell() {
         <Link className="icon-button notification-bell" to="/app/notifications" aria-label={`Notifikasi${unread.data ? `, ${unread.data.meta.total} belum dibaca` : ''}`}><Bell size={19} />{!!unread.data?.meta.total && <span />}</Link>
         <div className="user-menu">
           <button className="user-trigger" onClick={() => setUserOpen(!userOpen)} aria-expanded={userOpen} aria-label="Menu pengguna">
-            <span className="avatar">{session.user.full_name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase()}</span>
+            <span className="avatar">{session.user.photo_url ? <img src={assetUrl(session.user.photo_url)} alt="" /> : session.user.full_name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase()}</span>
             <span className="user-info"><strong>{session.user.full_name}</strong><small>{roleLabel}</small></span>
             <ChevronDown size={14} />
           </button>

@@ -6,7 +6,10 @@ import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';
 import { notifyReviewers } from '../user-management/service.js';
+import { resolveAssetUrl } from '../profile/asset-url.js';
 import type { signupSchema } from './validation.js';
+import { lifecycleSelect, lifecycleContext, lockLifecycleUsers } from '../account-lifecycle/context.js';
+import { canRecoverBootstrapCto } from '../account-lifecycle/policy.js';
 
 export const safeUserSelect = {
   id: true,
@@ -136,7 +139,8 @@ export async function signup(input: z.infer<typeof signupSchema>) {
 }
 
 export async function login(email: string, password: string) {
-  const user = await prisma.users.findUnique({ where: { email } });
+  email = email.trim().toLowerCase();
+  let user = await prisma.users.findUnique({ where: { email } });
   const valid = await bcrypt.compare(password, user?.password_hash ?? (await dummyHash));
   if (!valid || !user || !user.is_active)
     throw new AppError(401, 'The email or password is incorrect.', 'INVALID_CREDENTIALS');
@@ -153,8 +157,30 @@ export async function login(email: string, password: string) {
       'ACCOUNT_REJECTED',
       user.rejection_reason ? { reason: user.rejection_reason } : undefined,
     );
-  if (user.account_status === 'SUSPENDED')
-    throw new AppError(403, 'Your account has been suspended.', 'ACCOUNT_SUSPENDED');
+  if (user.account_status === 'SUSPENDED') {
+    const userId = user.id;
+    const validatedHash = user.password_hash;
+    user = await prisma.$transaction(async (tx) => {
+      await lockLifecycleUsers(tx, [userId]);
+      const current = await tx.users.findUnique({ where: { id: userId }, select: { ...lifecycleSelect, email: true, password_hash: true } });
+      if (!current || !current.is_active || current.password_hash !== validatedHash)
+        throw new AppError(401, 'The email or password is incorrect.', 'INVALID_CREDENTIALS');
+      if (current.account_status === 'ACTIVE') return tx.users.findUniqueOrThrow({ where: { id: userId } });
+      const bootstrap = await tx.system_bootstrap.findUnique({ where: { id: 1 }, select: { id: true, cto_email: true, claimed_by_user_id: true } });
+      if (!canRecoverBootstrapCto({ ...lifecycleContext(current), email: current.email }, email, bootstrap))
+        throw new AppError(403, 'Akun Anda saat ini Nonaktif. Hubungi eksekutif berwenang untuk mengaktifkan kembali akun.', 'ACCOUNT_SUSPENDED');
+      const at = new Date();
+      const recovered = await tx.users.update({ where: { id: userId }, data: {
+        account_status: 'ACTIVE', reactivated_by_user_id: userId, reactivated_at: at,
+      } });
+      await tx.audit_logs.create({ data: { workspace_id: current.workspace_members.find((member) => member.roles?.code === 'CTO')?.workspace_id,
+        user_id: userId, action: 'CTO_REACTIVATED_VIA_LOGIN',
+        entity_type: 'users', entity_id: userId, new_value_json: {
+          actor_user_id: userId.toString(), target_user_id: userId.toString(), previous_state: 'SUSPENDED', reactivated_at: at.toISOString(),
+        } } });
+      return recovered;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted, timeout: 20000 });
+  }
   await prisma.users.update({ where: { id: user.id }, data: { last_login_at: new Date() } });
   return user;
 }
@@ -162,12 +188,19 @@ export async function login(email: string, password: string) {
 export async function currentUser(userId: bigint) {
   const record = await prisma.users.findUnique({
     where: { id: userId },
-    select: { ...safeUserSelect, default_workspace_id: true },
+    select: {
+      ...safeUserSelect,
+      default_workspace_id: true,
+      user_profile_assets: {
+        where: { asset_type: 'PROFILE_PHOTO' },
+        select: { asset_type: true, object_key: true, storage_provider: true, public_url: true },
+      },
+    },
   });
   if (!record) throw new AppError(401, 'Please sign in to continue.', 'UNAUTHENTICATED');
-  const { default_workspace_id, ...user } = record;
+  const { default_workspace_id, user_profile_assets, ...user } = record;
   return {
-    user,
+    user: { ...user, photo_url: resolveAssetUrl(user.id, user_profile_assets[0]) },
     workspaces: await listWorkspaces(userId),
     default_workspace_id: default_workspace_id?.toString() ?? null,
   };

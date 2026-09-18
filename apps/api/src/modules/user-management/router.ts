@@ -1,4 +1,7 @@
 import { Router } from 'express';
+import { clearSession } from '../auth/session.js';
+import { getDeactivationRequest, listDeactivationRequests, reviewDeactivationRequest } from '../account-lifecycle/service.js';
+import { deactivateSchema, listRequestsSchema, noteSchema, rejectRequestSchema } from '../account-lifecycle/validation.js';
 import { parseId, requireAuth, requireUserManagement } from '../../middleware/auth.js';
 import { approveSchema, listAccountsSchema, rejectSchema } from './validation.js';
 import {
@@ -8,7 +11,7 @@ import {
   reactivateAccount,
   referenceData,
   rejectAccount,
-  suspendAccount,
+  deactivateAccount,
   summary,
 } from './service.js';
 
@@ -23,10 +26,26 @@ userManagementRouter.get('/user-management/reference', async (_request, response
 });
 userManagementRouter.get('/user-management', async (request, response) => {
   const query = listAccountsSchema.parse(request.query);
-  response.json(await listAccounts(query));
+  response.json(await listAccounts(request.auth!.userId, query));
+});
+userManagementRouter.get('/user-management/deactivation-requests', async (request, response) => {
+  response.json(await listDeactivationRequests(request.auth!.userId, listRequestsSchema.parse(request.query)));
+});
+userManagementRouter.get('/user-management/deactivation-requests/:requestId', async (request, response) => {
+  response.json({ data: await getDeactivationRequest(request.auth!.userId, parseId(request.params.requestId)) });
+});
+userManagementRouter.post('/user-management/deactivation-requests/:requestId/approve', async (request, response) => {
+  const input = noteSchema.parse(request.body ?? {});
+  const data = await reviewDeactivationRequest(request.auth!.userId, parseId(request.params.requestId), 'APPROVED', input.note);
+  if (data.session_ended) clearSession(response);
+  response.json({ data });
+});
+userManagementRouter.post('/user-management/deactivation-requests/:requestId/reject', async (request, response) => {
+  const input = rejectRequestSchema.parse(request.body);
+  response.json({ data: await reviewDeactivationRequest(request.auth!.userId, parseId(request.params.requestId), 'REJECTED', input.note) });
 });
 userManagementRouter.get('/user-management/:userId', async (request, response) => {
-  response.json({ data: await getAccount(parseId(request.params.userId)) });
+  response.json({ data: await getAccount(parseId(request.params.userId), request.auth!.userId) });
 });
 userManagementRouter.post('/user-management/:userId/approve', async (request, response) => {
   const input = approveSchema.parse(request.body);
@@ -41,11 +60,13 @@ userManagementRouter.post('/user-management/:userId/reject', async (request, res
   const data = await rejectAccount(request.auth!.userId, parseId(request.params.userId), input.reason);
   response.json({ data });
 });
-userManagementRouter.post('/user-management/:userId/suspend', async (request, response) => {
-  const data = await suspendAccount(request.auth!.userId, parseId(request.params.userId));
+userManagementRouter.post(['/user-management/:userId/deactivate', '/user-management/:userId/suspend'], async (request, response) => {
+  const input = deactivateSchema.parse(request.body);
+  const data = await deactivateAccount(request.auth!.userId, parseId(request.params.userId), input.reason);
   response.json({ data });
 });
 userManagementRouter.post('/user-management/:userId/reactivate', async (request, response) => {
-  const data = await reactivateAccount(request.auth!.userId, parseId(request.params.userId));
+  const input = noteSchema.parse(request.body ?? {});
+  const data = await reactivateAccount(request.auth!.userId, parseId(request.params.userId), input.note);
   response.json({ data });
 });

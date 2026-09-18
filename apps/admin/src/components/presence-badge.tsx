@@ -2,9 +2,11 @@ import type { SVGProps } from 'react';
 import { CalendarCheck2, CalendarPlus2, CalendarX2 } from 'lucide-react';
 
 /** No calendar/rest combination in lucide matches the reference closely enough; composed to match its stroke style. */
-function CalendarLeaveIcon(props: SVGProps<SVGSVGElement>) {
+function CalendarLeaveIcon({ size = 24, ...props }: SVGProps<SVGSVGElement> & { size?: number | string }) {
   return (
     <svg
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

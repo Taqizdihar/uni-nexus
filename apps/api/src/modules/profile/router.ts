@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { getOwnDeactivationRequest, submitDeactivationRequest, withdrawDeactivationRequest } from '../account-lifecycle/service.js';
+import { selfRequestSchema, withdrawSchema } from '../account-lifecycle/validation.js';
 import multer from 'multer';
 import { env } from '../../config/env.js';
 import { AppError } from '../../lib/errors.js';
@@ -15,6 +17,7 @@ import {
 import {
   addTag,
   assetStorage,
+  deleteProfileAsset,
   getOwnProfile,
   getProfileAssetForDownload,
   listActivePets,
@@ -30,6 +33,17 @@ import {
 
 export const profileRouter = Router();
 profileRouter.use('/profile', requireAuth);
+profileRouter.get('/profile/deactivation-request', async (request, response) => {
+  response.json({ data: await getOwnDeactivationRequest(request.auth!.userId) });
+});
+profileRouter.post('/profile/deactivation-request', async (request, response) => {
+  const input = selfRequestSchema.parse(request.body ?? {});
+  response.status(201).json({ data: await submitDeactivationRequest(request.auth!.userId, input.reason) });
+});
+profileRouter.post('/profile/deactivation-request/withdraw', async (request, response) => {
+  const input = withdrawSchema.parse(request.body);
+  response.json({ data: await withdrawDeactivationRequest(request.auth!.userId, parseId(input.request_id)) });
+});
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: env.MAX_UPLOAD_SIZE, files: 1 } });
 
 profileRouter.get('/profile', async (request, response) => {
@@ -80,6 +94,10 @@ profileRouter.post('/profile/assets/:type', upload.single('file'), async (reques
   const type = assetTypeParam.parse(request.params.type);
   if (!request.file) throw new AppError(422, 'Choose an image to upload.');
   response.json({ data: await uploadProfileAsset(request.auth!.userId, type, request.file) });
+});
+profileRouter.delete('/profile/assets/:type', async (request, response) => {
+  const type = assetTypeParam.parse(request.params.type);
+  response.json({ data: await deleteProfileAsset(request.auth!.userId, type) });
 });
 profileRouter.get('/profile/assets/:userId/:type', async (request, response, next) => {
   const type = assetTypeParam.parse(request.params.type);

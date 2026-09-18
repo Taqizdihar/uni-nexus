@@ -4,6 +4,7 @@ import { AppError } from '../../lib/errors.js';
 
 export type Row = Record<string, unknown>;
 export type Database = Prisma.TransactionClient;
+const sensitiveTables = new Set(['users', 'workspace_members', 'roles', 'system_bootstrap', 'account_deactivation_requests']);
 interface Delegate {
   findMany(args: Row): Promise<Row[]>;
   findFirst(args: Row): Promise<Row | null>;
@@ -14,12 +15,14 @@ interface Delegate {
 }
 // This is the single dynamic boundary. Only the reviewed resource registry can choose a model.
 export function repository(db: Database, table: string): Delegate {
+  if (sensitiveTables.has(table)) throw new AppError(403, 'Use the dedicated account API.', 'FORBIDDEN');
   if (!resources.some(resource => resource.table === table)) throw new AppError(404, 'Unknown resource.');
   return (db as unknown as Record<string, Delegate>)[table]!;
 }
 export function definition(key: string): ResourceDefinition {
   const found = resources.find(resource => resource.key === key);
   if (!found) throw new AppError(404, 'Resource not found.', 'NOT_FOUND');
+  if (sensitiveTables.has(found.table)) throw new AppError(403, 'Use the dedicated account API.', 'FORBIDDEN');
   return found;
 }
 export function modelFor(table: string) {

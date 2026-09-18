@@ -15,6 +15,33 @@ export const REVIEWER_ROLE_CODES: readonly RoleCode[] = ['CEO', 'COO', 'CTO', 'C
 export const ACCOUNT_STATUSES = ['PENDING', 'ACTIVE', 'REJECTED', 'SUSPENDED'] as const;
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
 
+export const ACCOUNT_STATUS_LABELS: Record<AccountStatus, string> = {
+  PENDING: 'Menunggu', ACTIVE: 'Aktif', REJECTED: 'Ditolak', SUSPENDED: 'Nonaktif',
+};
+export const DEACTIVATION_REQUEST_STATUSES = ['PENDING', 'WITHDRAWN', 'APPROVED', 'REJECTED'] as const;
+export type DeactivationRequestStatus = (typeof DEACTIVATION_REQUEST_STATUSES)[number];
+export const DEACTIVATION_REQUEST_LABELS: Record<DeactivationRequestStatus, string> = {
+  PENDING: 'Menunggu Peninjauan', WITHDRAWN: 'Ditarik Kembali', APPROVED: 'Disetujui', REJECTED: 'Ditolak',
+};
+export type AllowedAccountActions = {
+  deactivate: boolean;
+  reactivate: boolean;
+  approve_registration: boolean;
+  reject_registration: boolean;
+  approve_deactivation_request: boolean;
+  reject_deactivation_request: boolean;
+};
+export type DeactivationRequestSummary = {
+  id: string;
+  user_id: string;
+  request_status: DeactivationRequestStatus;
+  request_reason: string | null;
+  requested_at: string;
+  withdrawn_at: string | null;
+  reviewed_at: string | null;
+  review_note: string | null;
+};
+
 export const PRESENCE_STATUSES = ['DEFAULT', 'BUSY', 'SICK', 'LEAVE'] as const;
 export type PresenceStatus = (typeof PRESENCE_STATUSES)[number];
 export const PRESENCE_LABELS: Record<PresenceStatus, string> = {

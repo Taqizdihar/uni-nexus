@@ -20,7 +20,9 @@ import {
   UserRound,
   X,
 } from 'lucide-react';
-import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
+import { DEACTIVATION_REQUEST_LABELS, ROLE_LABELS, type DeactivationRequestSummary, type RoleCode } from '@uni-nexus/shared';
+import { AccountActionModal } from '../components/account-action-modal';
+import { accountActionMessage, formatAccountDate } from '../lib/account-lifecycle';
 import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
@@ -79,13 +81,11 @@ function useClosePopover(open: boolean, setOpen: (open: boolean) => void) {
   return ref;
 }
 
-function Avatar({ profile }: { profile: ProfileData }) {
+function AvatarPhotoModal({ profile, onClose }: { profile: ProfileData; onClose: () => void }) {
   const client = useQueryClient();
   const toast = useToast();
   const fileInput = useRef<HTMLInputElement>(null);
-  const [presenceOpen, setPresenceOpen] = useState(false);
-  const wrapRef = useClosePopover(presenceOpen, setPresenceOpen);
-  const photo = useMutation({
+  const upload = useMutation({
     mutationFn: (file: File) => {
       const form = new FormData();
       form.append('file', file);
@@ -93,10 +93,75 @@ function Avatar({ profile }: { profile: ProfileData }) {
     },
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
+      await client.invalidateQueries({ queryKey: ['session'] });
       toast('Foto profil diperbarui.');
     },
     onError: (error) => toast(message(error), true),
   });
+  const remove = useMutation({
+    mutationFn: () => api('/profile/assets/PROFILE_PHOTO', { method: 'DELETE' }),
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: ['profile'] });
+      await client.invalidateQueries({ queryKey: ['session'] });
+      toast('Foto profil dihapus.');
+      onClose();
+    },
+    onError: (error) => toast(message(error), true),
+  });
+  return (
+    <div className="modal-backdrop avatar-modal-backdrop" onClick={onClose}>
+      <section
+        className="modal avatar-photo-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="avatar-modal-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button className="icon-button modal-close" aria-label="Tutup" onClick={onClose}>
+          <X size={19} />
+        </button>
+        <h2 id="avatar-modal-title" className="sr-only">Foto Profil</h2>
+        <div className="avatar-photo-modal-preview">
+          {profile.photo_url ? (
+            <img src={assetUrl(profile.photo_url)} alt={profile.full_name} />
+          ) : (
+            <div className="profile-avatar-initials" style={{ width: 220, height: 220, fontSize: 64, border: 'none' }}>
+              {initials(profile.full_name)}
+            </div>
+          )}
+        </div>
+        <div className="avatar-photo-modal-actions">
+          <button type="button" className="button primary" onClick={() => fileInput.current?.click()} disabled={upload.isPending}>
+            {upload.isPending ? <LoaderCircle className="spin" size={16} /> : <Camera size={16} />}Ganti Foto
+          </button>
+          {profile.photo_url && (
+            <button type="button" className="button danger" onClick={() => remove.mutate()} disabled={remove.isPending}>
+              {remove.isPending ? <LoaderCircle className="spin" size={16} /> : <Trash2 size={16} />}Hapus Foto
+            </button>
+          )}
+        </div>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          className="sr-only"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) upload.mutate(file);
+            event.target.value = '';
+          }}
+        />
+      </section>
+    </div>
+  );
+}
+
+function Avatar({ profile }: { profile: ProfileData }) {
+  const client = useQueryClient();
+  const toast = useToast();
+  const [presenceOpen, setPresenceOpen] = useState(false);
+  const [photoOpen, setPhotoOpen] = useState(false);
+  const wrapRef = useClosePopover(presenceOpen, setPresenceOpen);
   const presence = useMutation({
     mutationFn: (status: PresenceStatus) =>
       api('/profile/presence', { method: 'POST', body: body({ presence_status: status }) }),
@@ -109,31 +174,13 @@ function Avatar({ profile }: { profile: ProfileData }) {
   });
   return (
     <div className="profile-avatar-wrap" ref={wrapRef}>
-      {profile.photo_url ? (
-        <img className="profile-avatar" src={assetUrl(profile.photo_url)} alt={profile.full_name} />
-      ) : (
-        <div className="profile-avatar-initials">{initials(profile.full_name)}</div>
-      )}
-      <button
-        type="button"
-        className="profile-avatar-edit"
-        aria-label="Ganti foto profil"
-        onClick={() => fileInput.current?.click()}
-        disabled={photo.isPending}
-      >
-        {photo.isPending ? <LoaderCircle className="spin" size={13} /> : <Camera size={13} />}
+      <button type="button" className="profile-avatar-trigger" aria-label="Lihat foto profil" onClick={() => setPhotoOpen(true)}>
+        {profile.photo_url ? (
+          <img className="profile-avatar" src={assetUrl(profile.photo_url)} alt={profile.full_name} />
+        ) : (
+          <div className="profile-avatar-initials">{initials(profile.full_name)}</div>
+        )}
       </button>
-      <input
-        ref={fileInput}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="sr-only"
-        onChange={(event) => {
-          const file = event.target.files?.[0];
-          if (file) photo.mutate(file);
-          event.target.value = '';
-        }}
-      />
       <button
         type="button"
         className="profile-presence-anchor"
@@ -153,6 +200,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
           />
         </div>
       )}
+      {photoOpen && <AvatarPhotoModal profile={profile} onClose={() => setPhotoOpen(false)} />}
     </div>
   );
 }
@@ -422,11 +470,16 @@ function IdentityForm({ profile }: { profile: ProfileData }) {
           </div>
           {editing && errors.phone && <small className="profile-info-error">{errors.phone.message}</small>}
         </div>
-        {editing && (
+        <div className="profile-info-field">
           <div className="profile-info-bio">
-            <textarea rows={3} placeholder="Belum ada bio." {...form.register('bio')} />
+            {editing ? (
+              <textarea rows={3} placeholder="Belum ada bio." {...form.register('bio')} />
+            ) : (
+              <p>{profile.bio || 'Belum ada bio.'}</p>
+            )}
           </div>
-        )}
+          {editing && errors.bio && <small className="profile-info-error">{errors.bio.message}</small>}
+        </div>
       </div>
       <div className="profile-info-actions">
         {editing ? (
@@ -506,6 +559,24 @@ function SecurityCard({ passwordChangedAt }: { passwordChangedAt: string | null 
 
 function DangerCard() {
   const toast = useToast();
+  const client = useQueryClient();
+  const [modal, setModal] = useState<'submit' | 'withdraw' | null>(null);
+  const query = useQuery({ queryKey: ['profile-deactivation-request'],
+    queryFn: async () => (await api<Envelope<DeactivationRequestSummary | null>>('/profile/deactivation-request')).data,
+    refetchInterval: 30000,
+  });
+  const pending = query.data?.request_status === 'PENDING';
+  const mutation = useMutation({
+    mutationFn: (reason: string) => modal === 'withdraw'
+      ? api('/profile/deactivation-request/withdraw', { method: 'POST', body: body({ request_id: query.data?.id }) })
+      : api('/profile/deactivation-request', { method: 'POST', body: body({ reason }) }),
+    onSuccess: async () => {
+      toast(modal === 'withdraw' ? 'Permintaan berhasil ditarik kembali.' : 'Permintaan diajukan. Akun Anda tetap Aktif selama menunggu peninjauan.');
+      setModal(null);
+      await Promise.all([client.invalidateQueries({ queryKey: ['profile-deactivation-request'] }), client.invalidateQueries({ queryKey: ['deactivation-requests'] })]);
+    },
+    onError: async (error) => { toast(accountActionMessage(error), true); await query.refetch(); },
+  });
   return (
     <section className="panel danger-panel profile-danger-card">
       <div className="panel-heading">
@@ -514,15 +585,34 @@ function DangerCard() {
           <div><h2>Penghapusan Akun</h2></div>
         </div>
       </div>
-      <p>Menghapus akun Anda akan menghilangkan akses ke UNI-NEXUS. Alur permintaan penghapusan akun belum tersedia pada versi ini.</p>
+      <p>Permintaan ini akan ditinjau sebelum akun dinonaktifkan. Data akun, role, histori, dan membership tetap tersimpan.</p>
+      {query.isPending ? <Spinner label="Memuat permintaan…" /> : query.isError ? <ErrorState error={query.error} retry={() => void query.refetch()} /> : <>
+      {query.data && <div style={{ marginTop: 12 }}>
+        <strong>{pending ? 'Permintaan Penghapusan Akun' : 'Permintaan Terakhir'}</strong>
+        <p><span className="badge amber">{DEACTIVATION_REQUEST_LABELS[query.data.request_status]}</span></p>
+        <p>Diajukan: {formatAccountDate(query.data.requested_at)}</p>
+        {query.data.reviewed_at && <p>Ditinjau: {formatAccountDate(query.data.reviewed_at)}</p>}
+        {query.data.review_note && <p>Catatan: {query.data.review_note}</p>}
+      </div>}
       <button
         className="button danger"
         type="button"
         style={{ marginTop: 12 }}
-        onClick={() => toast('Permintaan penghapusan akun belum diaktifkan. Hubungi seorang eksekutif berwenang jika diperlukan.', true)}
+        disabled={mutation.isPending}
+        onClick={() => { mutation.reset(); setModal(pending ? 'withdraw' : 'submit'); }}
       >
-        <Trash2 size={16} />Ajukan Penghapusan Akun
+        <Trash2 size={16} />{pending ? 'Tarik Kembali Permintaan' : 'Ajukan Penghapusan Akun'}
       </button>
+      </>}
+      {modal && <AccountActionModal title={modal === 'withdraw' ? 'Tarik Kembali Permintaan' : 'Ajukan Penghapusan Akun'}
+        confirmLabel={modal === 'withdraw' ? 'Tarik Kembali Permintaan' : 'Ajukan Permintaan'} busy={mutation.isPending}
+        showReason={modal === 'submit'} reasonLabel="Alasan (opsional)" error={mutation.isError ? accountActionMessage(mutation.error) : undefined}
+        onClose={() => setModal(null)} onConfirm={(reason) => mutation.mutate(reason)}>
+        {modal === 'withdraw' ? <p>Tarik kembali permintaan yang masih menunggu peninjauan? Akun Anda akan tetap Aktif.</p> : <>
+          <p>Permintaan ini tidak akan menghapus data akun Anda secara permanen. Akun akan ditinjau terlebih dahulu. Jika permintaan disetujui, akun Anda akan dinonaktifkan dan Anda tidak dapat menggunakan UNI-NEXUS sampai akun diaktifkan kembali.</p>
+          <p>Selama menunggu peninjauan, akun Anda tetap Aktif. Anda dapat menarik kembali permintaan sebelum disetujui dan tidak dapat masuk saat akun Nonaktif.</p>
+        </>}
+      </AccountActionModal>}
     </section>
   );
 }
@@ -533,7 +623,7 @@ export function Profile() {
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
   const profile = query.data;
   return (
-    <div className="profile-page">
+    <>
       <section className="panel profile-hero">
         <div className="profile-banner" style={profile.banner_url ? { backgroundImage: `url(${assetUrl(profile.banner_url)})` } : undefined}>
           <BannerEdit />
@@ -570,6 +660,6 @@ export function Profile() {
           <DangerCard />
         </div>
       </div>
-    </div>
+    </>
   );
 }
