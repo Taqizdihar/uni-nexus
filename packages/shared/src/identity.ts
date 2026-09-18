@@ -12,6 +12,18 @@ export const ROLE_LABELS: Record<RoleCode, string> = {
 /** Roles with the account-management (User Management) permission; see rolePermissions in the API. */
 export const REVIEWER_ROLE_CODES: readonly RoleCode[] = ['CEO', 'COO', 'CTO', 'CVO'];
 
+/**
+ * Organizational seats that only one person may hold at a time, globally, across every workspace.
+ * Same 4 codes as REVIEWER_ROLE_CODES today, but a distinct concept — REVIEWER_ROLE_CODES governs who
+ * can access User Management, this governs which roles are subject to singleton-occupancy enforcement.
+ */
+export const EXECUTIVE_SINGLETON_ROLE_CODES: readonly RoleCode[] = ['CEO', 'COO', 'CTO', 'CVO'];
+export const isSingletonExecutiveRole = (code: string): code is RoleCode =>
+  (EXECUTIVE_SINGLETON_ROLE_CODES as readonly string[]).includes(code);
+
+export type ExecutiveSlotStatus = 'VACANT' | 'OCCUPIED';
+export type ExecutiveSlot = { code: RoleCode; label: string; status: ExecutiveSlotStatus };
+
 export const ACCOUNT_STATUSES = ['PENDING', 'ACTIVE', 'REJECTED', 'SUSPENDED'] as const;
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
 

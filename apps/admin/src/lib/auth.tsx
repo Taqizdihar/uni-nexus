@@ -41,7 +41,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('session-expired', expired);
   }, [client]);
   const setWorkspace = (id: string) => { setChosen(id); localStorage.setItem('uni-nexus.workspace', id); };
-  const logout = async () => { await api('/auth/logout', { method: 'POST' }); client.clear(); client.setQueryData(['session'], null); };
+  const logout = async () => {
+    try { await api('/auth/logout', { method: 'POST' }); }
+    finally { client.clear(); client.setQueryData(['session'], null); }
+  };
   return <AuthContext.Provider value={{ session: query.data, loading: query.isPending, error: query.error, workspace, setWorkspace, refresh: () => query.refetch(), logout }}>{children}</AuthContext.Provider>;
 }
 export function useAuth() { const context = useContext(AuthContext); if (!context) throw new Error('AuthProvider is required.'); return context; }

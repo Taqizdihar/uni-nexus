@@ -185,8 +185,8 @@ export function DeactivationRequests() {
                 {query.data.data.map((request) => (
                   <tr key={request.id}>
                     <td>
-                      <div className="button-row">
-                        <span className="avatar">
+                      <div className="account-cell">
+                        <span className="avatar lg">
                           {request.user.photo_url ? (
                             <img src={assetUrl(request.user.photo_url)} alt="" />
                           ) : (
@@ -200,7 +200,7 @@ export function DeactivationRequests() {
                         </span>
                         <div>
                           <strong>{request.user.full_name}</strong>
-                          <div>@{request.user.username}</div>
+                          <small>@{request.user.username}</small>
                         </div>
                       </div>
                     </td>

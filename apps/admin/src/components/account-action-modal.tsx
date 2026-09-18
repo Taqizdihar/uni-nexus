@@ -10,6 +10,9 @@ export function AccountActionModal({
   reasonLabel = 'Catatan (opsional)',
   minimumReason = 0,
   showReason = true,
+  confirmTone = 'danger',
+  confirmDisabled = false,
+  wide = false,
   error,
   onClose,
   onConfirm,
@@ -21,6 +24,12 @@ export function AccountActionModal({
   reasonLabel?: string;
   minimumReason?: number;
   showReason?: boolean;
+  /** Visual weight of the confirm button — 'danger' (default) for destructive actions, 'primary' for affirmative ones like approval. */
+  confirmTone?: 'primary' | 'danger';
+  /** Extra external condition (e.g. required selects not yet filled) that also disables the confirm button. */
+  confirmDisabled?: boolean;
+  /** Wider body for content-heavy dialogs (e.g. an identity summary plus multiple fields). */
+  wide?: boolean;
   error?: string;
   onClose: () => void;
   onConfirm: (reason: string) => void;
@@ -47,7 +56,7 @@ export function AccountActionModal({
       }}
     >
       <section
-        className="modal account-action-modal"
+        className={`modal account-action-modal${wide ? ' wide' : ''}`}
         ref={ref}
         tabIndex={-1}
         role="dialog"
@@ -113,9 +122,9 @@ export function AccountActionModal({
             Batal
           </button>
           <button
-            className="button danger"
+            className={`button ${confirmTone}`}
             type="button"
-            disabled={busy || reason.trim().length < minimumReason}
+            disabled={busy || confirmDisabled || reason.trim().length < minimumReason}
             onClick={() => onConfirm(reason.trim())}
           >
             {busy && <LoaderCircle className="spin" size={16} />}

@@ -4,6 +4,8 @@ import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { lifecycleContext, lifecycleSelect, loadContext } from '../account-lifecycle/context.js';
 import { getAllowedAccountActions, isExecutive } from '../account-lifecycle/policy.js';
+import { assertExecutiveRoleAvailable, getAvailableApprovalRoles, getExecutiveSlots } from '../executive-role/policy.js';
+import { resolveAssetUrl } from '../profile/asset-url.js';
 import { reviewerRoleCodes } from '../../middleware/auth.js';
 import { InAppNotificationProvider } from '../../services/notifications.js';
 
@@ -23,6 +25,10 @@ const accountSelect = {
   rejection_reason: true,
   users_users_approved_by_user_idTousers: { select: { id: true, full_name: true } },
   users_users_rejected_by_user_idTousers: { select: { id: true, full_name: true } },
+  user_profile_assets: {
+    where: { asset_type: 'PROFILE_PHOTO' },
+    select: { asset_type: true, object_key: true, storage_provider: true, public_url: true },
+  },
 } satisfies Prisma.usersSelect;
 type AccountRow = Prisma.usersGetPayload<{ select: typeof accountSelect }>;
 async function loadReviewer(actorId: bigint) {
@@ -36,9 +42,11 @@ function serializeAccount(row: AccountRow, actor?: Awaited<ReturnType<typeof loa
   const {
     users_users_approved_by_user_idTousers: approved_by,
     users_users_rejected_by_user_idTousers: rejected_by,
+    user_profile_assets: assets,
     ...rest
   } = row;
   return { ...rest, approved_by, rejected_by,
+    photo_url: resolveAssetUrl(rest.id, assets[0]),
     roles: lifecycleContext(row).roles,
     ...(actor ? { allowed_actions: getAllowedAccountActions(actor, lifecycleContext(row)) } : {}),
   };
@@ -151,7 +159,7 @@ export async function getAccount(id: bigint, actorId: bigint) {
 }
 
 export async function referenceData() {
-  const [roles, workspaces] = await Promise.all([
+  const [roles, workspaces, availableCodes, executiveSlots] = await Promise.all([
     prisma.roles.findMany({
       where: { code: { in: [...ROLE_CODES] }, is_active: true },
       select: { id: true, code: true, name: true },
@@ -162,8 +170,15 @@ export async function referenceData() {
       select: { id: true, name: true, code: true },
       orderBy: { name: 'asc' },
     }),
+    getAvailableApprovalRoles(prisma),
+    getExecutiveSlots(prisma),
   ]);
-  return { roles, workspaces };
+  const assignable = new Set<string>(availableCodes);
+  return {
+    roles: roles.filter((role) => assignable.has(role.code)),
+    executive_slots: executiveSlots,
+    workspaces,
+  };
 }
 
 export async function approveAccount(
@@ -178,6 +193,7 @@ export async function approveAccount(
       throw new AppError(409, 'Only pending accounts can be approved.', 'INVALID_STATE');
     const role = await tx.roles.findFirst({ where: { code: input.role_code, is_active: true } });
     if (!role) throw new AppError(422, 'Select an active role.', 'INVALID_ROLE');
+    await assertExecutiveRoleAvailable(tx, input.role_code, targetId);
     const workspace = await tx.workspaces.findFirst({
       where: { id: input.workspace_id, is_active: true },
     });

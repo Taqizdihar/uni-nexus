@@ -66,3 +66,63 @@ describe('workspace membership administration', () => {
     );
   });
 });
+
+describe('executive role singleton bypass prevention', () => {
+  it.each(['CEO', 'COO', 'CTO', 'CVO'])(
+    'refuses to grant %s to a new member via addMember',
+    async (code) => {
+      db.workspace_members.findFirst.mockResolvedValueOnce({ roles: { code: 'CEO', is_active: true } });
+      db.roles.findFirst.mockResolvedValue({ id: 3n, code, is_active: true });
+      await expect(addMember(7n, 5n, 'CEO', 'pending@example.com', 3n)).rejects.toMatchObject({
+        code: 'EXECUTIVE_ROLE_MANAGED_BY_USER_MANAGEMENT',
+        status: 403,
+      });
+      expect(db.workspace_members.create).not.toHaveBeenCalled();
+    },
+  );
+
+  it('refuses to promote an existing non-executive member into CTO via updateMember', async () => {
+    db.workspace_members.findFirst
+      .mockResolvedValueOnce({ roles: { code: 'CEO', is_active: true } })
+      .mockResolvedValueOnce({
+        id: 9n, workspace_id: 7n, user_id: 20n, role_id: 1n, membership_status: 'ACTIVE',
+        roles: { id: 1n, code: 'STAFF', is_active: true },
+      });
+    db.roles.findFirst.mockResolvedValue({ id: 4n, code: 'CTO', is_active: true });
+    await expect(updateMember(7n, 5n, 'CEO', 9n, { role_id: 4n })).rejects.toMatchObject({
+      code: 'EXECUTIVE_ROLE_MANAGED_BY_USER_MANAGEMENT',
+      status: 403,
+    });
+    expect(db.workspace_members.update).not.toHaveBeenCalled();
+  });
+
+  it('refuses to demote or deactivate an existing executive via updateMember', async () => {
+    db.workspace_members.findFirst
+      .mockResolvedValueOnce({ roles: { code: 'CEO', is_active: true } })
+      .mockResolvedValueOnce({
+        id: 9n, workspace_id: 7n, user_id: 20n, role_id: 4n, membership_status: 'ACTIVE',
+        roles: { id: 4n, code: 'CTO', is_active: true },
+      });
+    await expect(
+      updateMember(7n, 5n, 'CEO', 9n, { membership_status: 'INACTIVE' }),
+    ).rejects.toMatchObject({ code: 'EXECUTIVE_ROLE_MANAGED_BY_USER_MANAGEMENT', status: 403 });
+    expect(db.workspace_members.update).not.toHaveBeenCalled();
+  });
+
+  it('still allows re-saving an executive membership unchanged (display / no-op)', async () => {
+    db.workspace_members.findFirst
+      .mockResolvedValueOnce({ roles: { code: 'CEO', is_active: true } })
+      .mockResolvedValueOnce({
+        id: 9n, workspace_id: 7n, user_id: 20n, role_id: 4n, membership_status: 'ACTIVE',
+        roles: { id: 4n, code: 'CTO', is_active: true },
+      });
+    db.roles.findFirst.mockResolvedValue({ id: 4n, code: 'CTO', is_active: true });
+    db.users.findUnique.mockResolvedValue({ is_active: true, account_status: 'ACTIVE' });
+    db.workspace_members.update.mockResolvedValue({
+      id: 9n, workspace_id: 7n, user_id: 20n, role_id: 4n, membership_status: 'ACTIVE',
+      roles: { id: 4n, code: 'CTO', is_active: true }, users: { id: 20n, full_name: 'CTO' },
+    });
+    await expect(updateMember(7n, 5n, 'CEO', 9n, { role_id: 4n })).resolves.toBeDefined();
+    expect(db.workspace_members.update).toHaveBeenCalled();
+  });
+});

@@ -1,8 +1,19 @@
 import { Prisma } from '@prisma/client';
+import { isSingletonExecutiveRole } from '@uni-nexus/shared';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { safeUserSelect } from '../auth/service.js';
 import { hasPermission } from '../../middleware/auth.js';
+
+/** Executive seats are granted, changed, or vacated only through User Management's approval flow, never here. */
+function assertNotExecutiveAssignment(forbidden: boolean): void {
+  if (forbidden)
+    throw new AppError(
+      403,
+      'Jabatan eksekutif dikelola melalui Manajemen Pengguna.',
+      'EXECUTIVE_ROLE_MANAGED_BY_USER_MANAGEMENT',
+    );
+}
 
 const memberInclude = {
   users: { select: safeUserSelect },
@@ -70,6 +81,7 @@ export async function addMember(
       const role = await tx.roles.findFirst({ where: { id: roleId, is_active: true } });
       if (!role) throw new AppError(422, 'Select an active role.', 'INVALID_ROLE');
       mayManageRole(actorRole, role.code);
+      assertNotExecutiveAssignment(isSingletonExecutiveRole(role.code));
       const user = await tx.users.findUnique({
         where: { email },
         select: { ...safeUserSelect, is_active: true },
@@ -144,6 +156,13 @@ export async function updateMember(
       if (!role?.is_active) throw new AppError(422, 'Select an active role.', 'INVALID_ROLE');
       mayManageRole(actorRole, role.code);
       const membership_status = input.membership_status ?? current.membership_status;
+      // Preserve an existing executive assignment as-is; only User Management may create, change, or vacate one.
+      const changingAssignment =
+        current.role_id !== role.id || current.membership_status !== membership_status;
+      assertNotExecutiveAssignment(
+        changingAssignment &&
+          (isSingletonExecutiveRole(current.roles?.code ?? '') || isSingletonExecutiveRole(role.code)),
+      );
       if (
         current.roles?.code.toUpperCase() === 'OWNER' &&
         current.membership_status === 'ACTIVE' &&

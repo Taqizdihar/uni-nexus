@@ -8,6 +8,7 @@ import { api, assetUrl, message, type Page } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { useHeartbeat } from '../lib/presence';
 import { titleCase } from '../lib/format';
+import { AccountActionModal } from './account-action-modal';
 import { OnlineUsers } from './online-users';
 import { EmptyState, ErrorState, Spinner, useToast } from './ui';
 
@@ -33,16 +34,26 @@ export function Shell() {
   const { session, loading, error, workspace, logout, refresh } = useAuth();
   const [open, setOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const location = useLocation();
   const toast = useToast();
   useHeartbeat();
   const unread = useQuery({ queryKey: ['unread', workspace?.id], enabled: !!workspace, queryFn: () => api<Page>('/notifications?unread=true&pageSize=1', { workspace: workspace!.id }), refetchInterval: 60_000 });
   const navigation = navigationFor(session?.workspaces.some((item) => isReviewerRole(item.role)) ?? false);
-  const signout = () => { void logout().catch((err: unknown) => toast(message(err), true)); };
+  const confirmSignout = () => {
+    setLoggingOut(true);
+    void logout()
+      .catch((err: unknown) => toast(message(err), true))
+      .finally(() => { setLoggingOut(false); setConfirmLogout(false); });
+  };
   if (loading) return <Spinner label="Membuka workspace Anda…" />;
   if (error) return <div className="standalone-state"><ErrorState error={error} retry={() => void refresh()} /></div>;
   if (!session) return <Navigate to="/login" state={{ from: location.pathname }} replace />;
-  if (!workspace) return <div className="standalone-state"><div className="panel"><EmptyState title="Akun Anda sudah siap" description="Minta administrator workspace Anda untuk menambahkan alamat email Anda ke tim. Workspace Anda akan muncul di sini setelah akses diberikan." action={<div className="button-row"><button className="button primary" onClick={() => void refresh()}>Periksa akses</button><button className="button secondary" onClick={signout}>Keluar</button></div>} /><p className="pending-email">Masuk sebagai {session.user.email}</p></div></div>;
+  const logoutModal = confirmLogout && <AccountActionModal title="Keluar dari UNI-NEXUS" confirmLabel="Keluar" busy={loggingOut} showReason={false} onClose={() => setConfirmLogout(false)} onConfirm={confirmSignout}>
+    <p>Anda akan keluar sebagai {session.user.email}. Anda perlu masuk kembali untuk melanjutkan.</p>
+  </AccountActionModal>;
+  if (!workspace) return <div className="standalone-state"><div className="panel"><EmptyState title="Akun Anda sudah siap" description="Minta administrator workspace Anda untuk menambahkan alamat email Anda ke tim. Workspace Anda akan muncul di sini setelah akses diberikan." action={<div className="button-row"><button className="button primary" onClick={() => void refresh()}>Periksa akses</button><button className="button secondary" onClick={() => setConfirmLogout(true)}>Keluar</button></div>} /><p className="pending-email">Masuk sebagai {session.user.email}</p></div>{logoutModal}</div>;
   const roleLabel = ROLE_LABELS[workspace.role.toUpperCase() as RoleCode] ?? titleCase(workspace.role);
   return <div className="app-layout">
     {open && <button className="sidebar-backdrop" aria-label="Tutup navigasi" onClick={() => setOpen(false)} />}
@@ -76,12 +87,13 @@ export function Shell() {
             <span className="user-info"><strong>{session.user.full_name}</strong><small>{roleLabel}</small></span>
             <ChevronDown size={14} />
           </button>
-          {userOpen && <div className="user-dropdown"><p>{session.user.email}</p><Link to="/app/profile" onClick={() => setUserOpen(false)}><UserCircle size={16} />Profil Saya</Link><Link to="/app/settings?tab=account" onClick={() => setUserOpen(false)}><Settings2 size={16} />Pengaturan Akun</Link><button onClick={signout}><LogOut size={16} />Keluar</button></div>}
+          {userOpen && <div className="user-dropdown"><p>{session.user.email}</p><Link to="/app/profile" onClick={() => setUserOpen(false)}><UserCircle size={16} />Profil Saya</Link><Link to="/app/settings?tab=account" onClick={() => setUserOpen(false)}><Settings2 size={16} />Pengaturan Akun</Link><button onClick={() => { setUserOpen(false); setConfirmLogout(true); }}><LogOut size={16} />Keluar</button></div>}
         </div>
       </div>
     </header>
       <main className="page-content" key={workspace.id}><Outlet /></main>
       <footer className="app-footer"><span className="app-footer-brand">UNI-NEXUS</span><span>Nexus. Ordo. Opus.</span></footer>
     </div>
+    {logoutModal}
   </div>;
 }

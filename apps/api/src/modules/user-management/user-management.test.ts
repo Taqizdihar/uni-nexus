@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const db = vi.hoisted(() => ({
   workspace_members: { findFirst: vi.fn(), findMany: vi.fn(), count: vi.fn(), upsert: vi.fn() },
-  roles: { findFirst: vi.fn() },
-  workspaces: { findFirst: vi.fn() },
+  roles: { findFirst: vi.fn(), findMany: vi.fn() },
+  workspaces: { findFirst: vi.fn(), findMany: vi.fn() },
   users: { update: vi.fn() },
   audit_logs: { create: vi.fn() },
   $queryRaw: vi.fn(),
@@ -18,12 +18,13 @@ vi.mock('../../services/notifications.js', () => ({
   },
 }));
 
-import { approveAccount, rejectAccount } from './service.js';
+import { approveAccount, referenceData, rejectAccount } from './service.js';
 
 beforeEach(() => {
   vi.resetAllMocks();
   db.$transaction.mockImplementation((callback: (tx: unknown) => unknown) => callback(db));
   db.audit_logs.create.mockResolvedValue({});
+  db.workspace_members.findMany.mockResolvedValue([]);
 });
 
 describe('account approval', () => {
@@ -38,6 +39,7 @@ describe('account approval', () => {
       account_status: 'ACTIVE',
       users_users_approved_by_user_idTousers: { id: 1n, full_name: 'Reviewer' },
       users_users_rejected_by_user_idTousers: null,
+      user_profile_assets: [],
     });
     const result = await approveAccount(1n, 42n, { role_code: 'STAFF', workspace_id: 9n });
     expect(result.account_status).toBe('ACTIVE');
@@ -78,6 +80,7 @@ describe('account approval', () => {
       rejection_reason: 'Not affiliated with the team.',
       users_users_approved_by_user_idTousers: null,
       users_users_rejected_by_user_idTousers: { id: 1n, full_name: 'Reviewer' },
+      user_profile_assets: [],
     });
     const result = await rejectAccount(1n, 42n, 'Not affiliated with the team.');
     expect(result.account_status).toBe('REJECTED');
@@ -90,6 +93,98 @@ describe('account approval', () => {
           approved_at: null,
         }),
       }),
+    );
+  });
+});
+
+describe('executive role singleton enforcement', () => {
+  function mockApprovable(roleCode: string) {
+    db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
+    db.$queryRaw.mockResolvedValue([{ id: 42n, account_status: 'PENDING' }]);
+    db.roles.findFirst.mockResolvedValue({ id: 5n, code: roleCode });
+    db.workspaces.findFirst.mockResolvedValue({ id: 9n, name: '3D Printing' });
+    db.users.update.mockResolvedValue({
+      workspace_members: [], is_active: true,
+      id: 42n, account_status: 'ACTIVE',
+      users_users_approved_by_user_idTousers: { id: 1n, full_name: 'Reviewer' },
+      users_users_rejected_by_user_idTousers: null,
+      user_profile_assets: [],
+    });
+  }
+
+  it.each(['CEO', 'COO', 'CTO', 'CVO'] as const)('approves the first %s when the seat is vacant', async (code) => {
+    mockApprovable(code);
+    db.workspace_members.findMany.mockResolvedValue([]);
+    const result = await approveAccount(1n, 42n, { role_code: code, workspace_id: 9n });
+    expect(result.account_status).toBe('ACTIVE');
+    expect(db.workspace_members.upsert).toHaveBeenCalled();
+  });
+
+  it.each(['CEO', 'COO', 'CTO', 'CVO'] as const)('rejects a second %s with 409 EXECUTIVE_ROLE_OCCUPIED', async (code) => {
+    mockApprovable(code);
+    db.workspace_members.findMany.mockResolvedValue([{ user_id: 100n, roles: { code } }]);
+    await expect(approveAccount(1n, 42n, { role_code: code, workspace_id: 9n })).rejects.toMatchObject({
+      status: 409,
+      code: 'EXECUTIVE_ROLE_OCCUPIED',
+      details: { role_code: code },
+    });
+    expect(db.workspace_members.upsert).not.toHaveBeenCalled();
+  });
+
+  it('lets 3D_DESIGNER, STAFF_OF_SPECIALTY, and STAFF be approved without limit', async () => {
+    for (const code of ['3D_DESIGNER', 'STAFF_OF_SPECIALTY', 'STAFF']) {
+      mockApprovable(code);
+      // Occupancy for non-executive codes is never even queried, but seed a "many holders" list
+      // anyway to prove it has no bearing on the outcome.
+      db.workspace_members.findMany.mockResolvedValue([
+        { user_id: 1n, roles: { code } },
+        { user_id: 2n, roles: { code } },
+      ]);
+      const result = await approveAccount(1n, 42n, { role_code: code as never, workspace_id: 9n });
+      expect(result.account_status).toBe('ACTIVE');
+    }
+  });
+
+  it("treats a suspended executive's seat as still occupied — occupancy never checks the user's account_status", async () => {
+    mockApprovable('CEO');
+    db.workspace_members.findMany.mockResolvedValue([{ user_id: 100n, roles: { code: 'CEO' } }]);
+    await expect(approveAccount(1n, 42n, { role_code: 'CEO', workspace_id: 9n })).rejects.toMatchObject({
+      code: 'EXECUTIVE_ROLE_OCCUPIED',
+    });
+    const [{ where }] = db.workspace_members.findMany.mock.calls.at(-1)!;
+    expect(where).not.toHaveProperty('users');
+  });
+
+  it('checks occupancy globally, with no workspace_id filter — a seat held in one workspace blocks assignment anywhere', async () => {
+    mockApprovable('CEO');
+    db.workspace_members.findMany.mockResolvedValue([{ user_id: 100n, roles: { code: 'CEO' } }]);
+    await expect(approveAccount(1n, 42n, { role_code: 'CEO', workspace_id: 9n })).rejects.toMatchObject({
+      code: 'EXECUTIVE_ROLE_OCCUPIED',
+    });
+    const [{ where }] = db.workspace_members.findMany.mock.calls.at(-1)!;
+    expect(where).not.toHaveProperty('workspace_id');
+  });
+});
+
+describe('reference data', () => {
+  it('omits an occupied executive role from assignable roles but reports it in executive_slots', async () => {
+    db.roles.findMany.mockResolvedValue([
+      { id: 1n, code: 'CEO', name: 'Chief Executive Officer' },
+      { id: 2n, code: 'CTO', name: 'Chief Technology Officer' },
+      { id: 3n, code: 'STAFF', name: 'Staff' },
+    ]);
+    db.workspaces.findMany.mockResolvedValue([{ id: 9n, name: '3D Printing', code: 'WS_X' }]);
+    // Mirrors the current real database: CTO occupied, CEO/COO/CVO vacant.
+    db.workspace_members.findMany.mockResolvedValue([{ user_id: 7n, roles: { code: 'CTO' } }]);
+    const result = await referenceData();
+    expect(result.roles.map((role) => role.code)).toEqual(['CEO', 'STAFF']);
+    expect(result.executive_slots).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'CTO', status: 'OCCUPIED' }),
+        expect.objectContaining({ code: 'CEO', status: 'VACANT' }),
+        expect.objectContaining({ code: 'COO', status: 'VACANT' }),
+        expect.objectContaining({ code: 'CVO', status: 'VACANT' }),
+      ]),
     );
   });
 });
