@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const db = vi.hoisted(() => ({
@@ -50,6 +51,25 @@ describe('account approval', () => {
     });
     expect(db.audit_logs.create).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ action: 'USER_APPROVED' }) }),
+    );
+  });
+
+  it('runs the approval transaction under READ COMMITTED, not the MySQL default REPEATABLE READ', async () => {
+    db.workspace_members.findFirst.mockResolvedValue({ id: 1n });
+    db.$queryRaw.mockResolvedValue([{ id: 42n, account_status: 'PENDING' }]);
+    db.roles.findFirst.mockResolvedValue({ id: 5n, code: 'STAFF' });
+    db.workspaces.findFirst.mockResolvedValue({ id: 9n, name: '3D Printing' });
+    db.users.update.mockResolvedValue({
+      workspace_members: [], is_active: true,
+      id: 42n, account_status: 'ACTIVE',
+      users_users_approved_by_user_idTousers: { id: 1n, full_name: 'Reviewer' },
+      users_users_rejected_by_user_idTousers: null,
+      user_profile_assets: [],
+    });
+    await approveAccount(1n, 42n, { role_code: 'STAFF', workspace_id: 9n });
+    expect(db.$transaction).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({ isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }),
     );
   });
 
@@ -153,6 +173,19 @@ describe('executive role singleton enforcement', () => {
     });
     const [{ where }] = db.workspace_members.findMany.mock.calls.at(-1)!;
     expect(where).not.toHaveProperty('users');
+  });
+
+  it('locks the executive role row (SELECT ... FOR UPDATE) before re-reading occupancy, never after', async () => {
+    mockApprovable('CEO');
+    db.workspace_members.findMany.mockResolvedValue([]);
+    await approveAccount(1n, 42n, { role_code: 'CEO', workspace_id: 9n });
+    const roleLockCallOrder = db.$queryRaw.mock.calls.findIndex((call) =>
+      String(call[0]?.[0] ?? call[0]).includes('FROM roles'),
+    );
+    expect(roleLockCallOrder).toBeGreaterThanOrEqual(0);
+    const lockInvocationOrder = db.$queryRaw.mock.invocationCallOrder[roleLockCallOrder];
+    const occupancyInvocationOrder = db.workspace_members.findMany.mock.invocationCallOrder[0];
+    expect(lockInvocationOrder).toBeLessThan(occupancyInvocationOrder);
   });
 
   it('checks occupancy globally, with no workspace_id filter — a seat held in one workspace blocks assignment anywhere', async () => {

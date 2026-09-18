@@ -231,8 +231,14 @@ function LifecycleButton({ account, action, label }: { account: Account; action:
   </>;
 }
 
+/**
+ * Only the actions actually rendered in this table decide "Dilindungi" — deactivation-request
+ * flags belong to the separate Permintaan Penghapusan workflow and must not count here, or a
+ * protected account like the real CTO would show no row action yet also fail to show the badge.
+ */
 function isAccountLocked(account: Account) {
-  return !Object.values(account.allowed_actions).some(Boolean);
+  const { approve_registration, reject_registration, deactivate, reactivate } = account.allowed_actions;
+  return !(approve_registration || reject_registration || deactivate || reactivate);
 }
 
 export function UserManagement() {

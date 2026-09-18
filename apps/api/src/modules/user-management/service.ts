@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { ACCOUNT_STATUSES, ROLE_CODES, type AccountStatus, type RoleCode } from '@uni-nexus/shared';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
@@ -89,6 +89,12 @@ async function assertReviewer(tx: Prisma.TransactionClient, reviewerId: bigint):
   if (!membership)
     throw new AppError(403, 'Only CEO, COO, CTO, or CVO may manage accounts.', 'FORBIDDEN');
 }
+
+/** ReadCommitted avoids a stale REPEATABLE READ snapshot masking a just-committed executive assignment. */
+const approvalTransactionOptions = {
+  isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
+  timeout: 20000,
+};
 
 async function lockAccount(tx: Prisma.TransactionClient, id: bigint) {
   const rows = await tx.$queryRaw<
@@ -239,7 +245,7 @@ export async function approveAccount(
       message: `You now have access to ${workspace.name}.`,
     });
     return serializeAccount(updated);
-  });
+  }, approvalTransactionOptions);
 }
 
 export async function rejectAccount(reviewerId: bigint, targetId: bigint, reason: string) {

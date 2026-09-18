@@ -6,7 +6,7 @@ import { Building2, Check, KeyRound, LoaderCircle, Plus, ShieldCheck, UserPlus }
 import { useSearchParams } from 'react-router-dom';
 import { api, body, message, type Envelope } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
+import { isSingletonExecutiveRole, ROLE_CODES, ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { titleCase } from '../lib/format';
 import { useResources } from '../lib/resources';
 import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
@@ -99,16 +99,27 @@ function MembersTab() {
   if (members.isPending || roles.isPending) return <Spinner />;
   if (members.isError) return <ErrorState error={members.error} retry={() => void members.refetch()} />;
   if (roles.isError) return <ErrorState error={roles.error} retry={() => void roles.refetch()} />;
+  // Executive seats (CEO/COO/CTO/CVO) are only granted through User Management's approval flow;
+  // Settings must not offer them as an ordinary membership choice, nor legacy non-app role codes.
+  const assignableRoles = roles.data.filter(
+    (role) => (ROLE_CODES as readonly string[]).includes(role.code) && !isSingletonExecutiveRole(role.code),
+  );
   return <><section className="panel form-section"><div className="form-section-heading"><UserPlus size={18} /><h2>Tambah Anggota</h2></div>
       <p className="page-description">Orang tersebut harus sudah memiliki akun. Minta mereka mendaftar sebelum ditambahkan ke workspace ini.</p>
       <form className="form-grid" onSubmit={form.handleSubmit((values) => invite.mutate(values))} noValidate>
         <label className="field"><span>Alamat email</span><input type="email" {...form.register('email')} />{form.formState.errors.email && <small className="field-error">{form.formState.errors.email.message}</small>}</label>
-        <label className="field"><span>Jabatan</span><select {...form.register('role_id')}><option value="">Pilih Jabatan</option>{roles.data.map((role) => <option value={role.id} key={role.id}>{role.name}</option>)}</select>{form.formState.errors.role_id && <small className="field-error">{form.formState.errors.role_id.message}</small>}</label>
+        <label className="field"><span>Jabatan</span><select {...form.register('role_id')}><option value="">Pilih Jabatan</option>{assignableRoles.map((role) => <option value={role.id} key={role.id}>{role.name}</option>)}</select>{form.formState.errors.role_id && <small className="field-error">{form.formState.errors.role_id.message}</small>}</label>
         <div className="form-actions"><button className="button primary" type="submit" disabled={invite.isPending}>{invite.isPending ? <LoaderCircle className="spin" size={16} /> : <Plus size={16} />}Tambah Anggota</button></div>
       </form>
     </section>
     <section className="panel"><div className="panel-heading"><div><h2>Anggota</h2><p>{members.data.length} anggota di workspace ini</p></div></div>
-      {!members.data.length ? <EmptyState title="Belum ada anggota" description="Tambahkan anggota tim pertama Anda di atas." /> : <div className="table-scroll"><table><thead><tr><th>Nama</th><th>Email</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>{members.data.map((member) => <tr key={member.id}><td className="primary-cell">{member.user.full_name}</td><td>{member.user.email}</td><td><select value={member.role?.id ?? ''} disabled={update.isPending} onChange={(event) => update.mutate({ id: member.id, role_id: event.target.value })}>{roles.data.map((role) => <option value={role.id} key={role.id}>{role.name}</option>)}</select></td><td><select value={member.membership_status} disabled={update.isPending} onChange={(event) => update.mutate({ id: member.id, membership_status: event.target.value })}><option value="ACTIVE">Aktif</option><option value="INACTIVE">Nonaktif</option></select></td></tr>)}</tbody></table></div>}
+      {!members.data.length ? <EmptyState title="Belum ada anggota" description="Tambahkan anggota tim pertama Anda di atas." /> : <div className="table-scroll"><table><thead><tr><th>Nama</th><th>Email</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>{members.data.map((member) => {
+        const isExecutiveMember = !!member.role && isSingletonExecutiveRole(member.role.code);
+        return <tr key={member.id}><td className="primary-cell">{member.user.full_name}</td><td>{member.user.email}</td>
+          <td>{isExecutiveMember ? <><span className="badge blue"><span className="badge-dot" />{member.role!.name}</span><br /><small className="helper-note">Jabatan eksekutif dikelola melalui Manajemen Pengguna.</small></> : <select value={member.role?.id ?? ''} disabled={update.isPending} onChange={(event) => update.mutate({ id: member.id, role_id: event.target.value })}>{assignableRoles.map((role) => <option value={role.id} key={role.id}>{role.name}</option>)}</select>}</td>
+          <td>{isExecutiveMember ? <Badge value={member.membership_status} /> : <select value={member.membership_status} disabled={update.isPending} onChange={(event) => update.mutate({ id: member.id, membership_status: event.target.value })}><option value="ACTIVE">Aktif</option><option value="INACTIVE">Nonaktif</option></select>}</td>
+        </tr>;
+      })}</tbody></table></div>}
     </section></>;
 }
 
