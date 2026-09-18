@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { PawPrint, Search } from 'lucide-react';
+import { PawPrint, Search, ShieldCheck } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, type Envelope } from '../lib/api';
@@ -114,7 +114,12 @@ function TeamDetail() {
             <h1>{member.full_name}</h1>
             <div className="profile-username-row">
               <span className="username">@{member.username}</span>
-              {member.role && <span className="role-pill">{roleLabel(member.role)}</span>}
+              {member.role && (
+                <span className="role-pill">
+                  <ShieldCheck size={13} strokeWidth={2.5} />
+                  {roleLabel(member.role)}
+                </span>
+              )}
             </div>
             <p className="profile-bio">{member.bio || 'Belum ada bio.'}</p>
             <div className="tag-row">
@@ -125,14 +130,15 @@ function TeamDetail() {
           </div>
         </div>
       </section>
-      <div className="profile-bottom-grid" style={{ gridTemplateColumns: '260px 1fr' }}>
-        <div className="pet-card">
-          <span className="pet-card-label">Pet Card</span>
-          {member.pet ? <img src={member.pet.image_url ?? undefined} alt={member.pet.name} /> : <div className="pet-placeholder"><PawPrint size={34} strokeWidth={1.5} /></div>}
+      <div className="profile-team-pet">
+        <div className="profile-pet-card">
+          <span className="profile-pet-card-label">Pet Card</span>
+          <div className="profile-pet-card-media">
+            {member.pet ? <img src={member.pet.image_url ?? undefined} alt={member.pet.name} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
+          </div>
           <h3>{member.pet?.name ?? 'Belum memilih Pet'}</h3>
           <p>{member.pet?.subtitle ?? ''}</p>
         </div>
-        <div />
       </div>
     </>
   );

@@ -1,22 +1,30 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  Camera,
   Check,
+  IdCard,
   KeyRound,
   LoaderCircle,
+  LockKeyhole,
+  Mail,
   Pencil,
   PawPrint,
+  Phone,
   Plus,
+  ShieldCheck,
   Trash2,
+  UserRound,
   X,
 } from 'lucide-react';
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
+import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
 type Pet = { id: string; name: string; subtitle: string | null; description: string | null; image_url: string | null };
@@ -50,10 +58,45 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+/** Shared by the presence and workspace popovers: close on an outside click or Escape. */
+function useClosePopover(open: boolean, setOpen: (open: boolean) => void) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open, setOpen]);
+  return ref;
+}
+
 function Avatar({ profile }: { profile: ProfileData }) {
   const client = useQueryClient();
   const toast = useToast();
+  const fileInput = useRef<HTMLInputElement>(null);
   const [presenceOpen, setPresenceOpen] = useState(false);
+  const wrapRef = useClosePopover(presenceOpen, setPresenceOpen);
+  const photo = useMutation({
+    mutationFn: (file: File) => {
+      const form = new FormData();
+      form.append('file', file);
+      return api('/profile/assets/PROFILE_PHOTO', { method: 'POST', body: form });
+    },
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: ['profile'] });
+      toast('Foto profil diperbarui.');
+    },
+    onError: (error) => toast(message(error), true),
+  });
   const presence = useMutation({
     mutationFn: (status: PresenceStatus) =>
       api('/profile/presence', { method: 'POST', body: body({ presence_status: status }) }),
@@ -65,7 +108,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
     onError: (error) => toast(message(error), true),
   });
   return (
-    <div className="profile-avatar-wrap">
+    <div className="profile-avatar-wrap" ref={wrapRef}>
       {profile.photo_url ? (
         <img className="profile-avatar" src={assetUrl(profile.photo_url)} alt={profile.full_name} />
       ) : (
@@ -73,14 +116,36 @@ function Avatar({ profile }: { profile: ProfileData }) {
       )}
       <button
         type="button"
+        className="profile-avatar-edit"
+        aria-label="Ganti foto profil"
+        onClick={() => fileInput.current?.click()}
+        disabled={photo.isPending}
+      >
+        {photo.isPending ? <LoaderCircle className="spin" size={13} /> : <Camera size={13} />}
+      </button>
+      <input
+        ref={fileInput}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file) photo.mutate(file);
+          event.target.value = '';
+        }}
+      />
+      <button
+        type="button"
         className="profile-presence-anchor"
         aria-label="Ubah status kehadiran"
+        aria-expanded={presenceOpen}
         onClick={() => setPresenceOpen((value) => !value)}
       >
-        <PresenceBadge status={profile.presence_status} size={30} />
+        <PresenceBadge status={profile.presence_status} size={32} />
       </button>
       {presenceOpen && (
-        <div className="panel" style={{ position: 'absolute', top: '100%', left: 0, zIndex: 20, marginTop: 8, width: 280 }}>
+        <div className="presence-popover" role="dialog" aria-label="Status kehadiran">
+          <p className="presence-popover-heading">Atur Status Kehadiran</p>
           <PresenceSelector
             value={profile.presence_status}
             disabled={presence.isPending}
@@ -183,35 +248,56 @@ function TagsRow({ tags }: { tags: Tag[] }) {
   );
 }
 
-function WorkspaceCard({ profile }: { profile: ProfileData }) {
+function WorkspaceControl({ profile }: { profile: ProfileData }) {
   const client = useQueryClient();
   const toast = useToast();
+  const [open, setOpen] = useState(false);
+  const ref = useClosePopover(open, setOpen);
   const mutation = useMutation({
     mutationFn: (workspaceId: string) => api('/profile/default-workspace', { method: 'POST', body: body({ workspace_id: workspaceId }) }),
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
       await client.invalidateQueries({ queryKey: ['session'] });
       toast('Default Workspace diperbarui.');
+      setOpen(false);
     },
     onError: (error) => toast(message(error), true),
   });
+  const current = profile.default_workspace ?? profile.memberships[0]?.workspace ?? null;
+  const canSwitch = profile.memberships.length > 1;
   return (
-    <div className="workspace-card">
-      <div className="workspace-card-heading">Default Workspace</div>
-      {profile.memberships.length === 0 ? (
-        <p className="helper-note" style={{ marginTop: 0 }}>Belum ada workspace yang ditetapkan.</p>
-      ) : (
-        <select
-          value={profile.default_workspace?.id ?? ''}
-          disabled={mutation.isPending}
-          onChange={(event) => mutation.mutate(event.target.value)}
-        >
+    <div className="profile-workspace" ref={ref}>
+      <button
+        type="button"
+        className="profile-workspace-toggle"
+        disabled={!canSwitch}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <img src={craftLogo} alt="" className="workspace-toggle-logo" />
+        <span className="workspace-toggle-name">{current?.name ?? 'Belum ada'}</span>
+        <span className="workspace-toggle-switch" />
+      </button>
+      <span className="profile-workspace-caption">Default Workspace</span>
+      {open && canSwitch && (
+        <div className="profile-popover workspace-popover" role="listbox" aria-label="Pilih Default Workspace">
           {profile.memberships.map((member) => (
-            <option value={member.workspace.id} key={member.workspace.id}>
-              {member.workspace.name}
-            </option>
+            <button
+              key={member.workspace.id}
+              type="button"
+              role="option"
+              aria-selected={member.workspace.id === current?.id}
+              className={`workspace-popover-option${member.workspace.id === current?.id ? ' selected' : ''}`}
+              disabled={mutation.isPending}
+              onClick={() => mutation.mutate(member.workspace.id)}
+            >
+              <img src={craftLogo} alt="" />
+              <span>{member.workspace.name}</span>
+              {member.workspace.id === current?.id && <Check size={14} />}
+            </button>
           ))}
-        </select>
+        </div>
       )}
     </div>
   );
@@ -235,28 +321,30 @@ function PetCardBlock({ profile }: { profile: ProfileData }) {
     onError: (error) => toast(message(error), true),
   });
   return (
-    <div className="pet-card">
-      <span className="pet-card-label">Pet Card</span>
-      <button type="button" className="pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing((value) => !value)}>
+    <div className="profile-pet-card">
+      <span className="profile-pet-card-label">Pet Card</span>
+      <button type="button" className="profile-pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing((value) => !value)}>
         <Pencil size={13} />
       </button>
-      {profile.pet ? (
-        <img src={profile.pet.image_url ?? undefined} alt={profile.pet.name} />
-      ) : (
-        <div className="pet-placeholder">
-          <PawPrint size={34} strokeWidth={1.5} />
-        </div>
-      )}
+      <div className="profile-pet-card-media">
+        {profile.pet ? (
+          <img src={profile.pet.image_url ?? undefined} alt={profile.pet.name} />
+        ) : (
+          <div className="pet-placeholder">
+            <PawPrint size={36} strokeWidth={1.5} />
+          </div>
+        )}
+      </div>
       <h3>{profile.pet?.name ?? 'Belum memilih Pet'}</h3>
       <p>{profile.pet?.subtitle ?? 'Pilih pendamping dari Edit Profil.'}</p>
       {editing && (
-        <div style={{ marginTop: 12, textAlign: 'left' }}>
+        <div className="profile-pet-picker">
           {pets.isPending ? (
             <Spinner label="Memuat pet…" />
           ) : !pets.data?.length ? (
             <p className="helper-note">Belum ada pet yang tersedia.</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div className="profile-pet-picker-list">
               <button className="button secondary small" type="button" disabled={mutation.isPending} onClick={() => mutation.mutate(null)}>
                 Tanpa pet
               </button>
@@ -303,29 +391,53 @@ function IdentityForm({ profile }: { profile: ProfileData }) {
     },
     onError: (error) => toast(message(error), true),
   });
+  const errors = form.formState.errors;
   return (
-    <form className="form-grid" onSubmit={form.handleSubmit((values) => mutation.mutate(values))} noValidate>
-      <label className="field"><span>Nama Lengkap</span><input disabled={!editing} {...form.register('full_name')} />
-        {form.formState.errors.full_name && <small className="field-error">{form.formState.errors.full_name.message}</small>}
-      </label>
-      <label className="field"><span>Username</span><input disabled={!editing} {...form.register('username')} />
-        {form.formState.errors.username && <small className="field-error">{form.formState.errors.username.message}</small>}
-      </label>
-      <label className="field"><span>Email</span><input disabled value={profile.email} /></label>
-      <label className="field"><span>Nomor Telepon</span><input disabled={!editing} {...form.register('phone')} />
-        {form.formState.errors.phone && <small className="field-error">{form.formState.errors.phone.message}</small>}
-      </label>
-      <label className="field full-width"><span>Bio</span><textarea rows={3} disabled={!editing} placeholder="Belum ada bio." {...form.register('bio')} /></label>
-      <div className="form-actions full-width">
+    <form className="profile-info-column" onSubmit={form.handleSubmit((values) => mutation.mutate(values))} noValidate>
+      <div className="profile-info-list">
+        <div className="profile-info-field">
+          <div className={`profile-info-row${editing ? ' editable' : ''}`}>
+            <IdCard size={16} strokeWidth={2} aria-hidden="true" />
+            {editing ? <input aria-label="Nama Lengkap" {...form.register('full_name')} /> : <span>{profile.full_name}</span>}
+          </div>
+          {editing && errors.full_name && <small className="profile-info-error">{errors.full_name.message}</small>}
+        </div>
+        <div className="profile-info-field">
+          <div className={`profile-info-row${editing ? ' editable' : ''}`}>
+            <UserRound size={16} strokeWidth={2} aria-hidden="true" />
+            {editing ? <input aria-label="Username" {...form.register('username')} /> : <span>@{profile.username}</span>}
+          </div>
+          {editing && errors.username && <small className="profile-info-error">{errors.username.message}</small>}
+        </div>
+        <div className="profile-info-field">
+          <div className="profile-info-row">
+            <Mail size={16} strokeWidth={2} aria-hidden="true" />
+            <span>{profile.email}</span>
+          </div>
+        </div>
+        <div className="profile-info-field">
+          <div className={`profile-info-row${editing ? ' editable' : ''}`}>
+            <Phone size={16} strokeWidth={2} aria-hidden="true" />
+            {editing ? <input aria-label="Nomor Telepon" {...form.register('phone')} /> : <span>{profile.phone || 'Belum diisi.'}</span>}
+          </div>
+          {editing && errors.phone && <small className="profile-info-error">{errors.phone.message}</small>}
+        </div>
+        {editing && (
+          <div className="profile-info-bio">
+            <textarea rows={3} placeholder="Belum ada bio." {...form.register('bio')} />
+          </div>
+        )}
+      </div>
+      <div className="profile-info-actions">
         {editing ? (
           <>
+            <button type="button" className="button secondary" onClick={() => { form.reset(); setEditing(false); }}>Batal</button>
             <button type="submit" className="button primary" disabled={mutation.isPending}>
               {mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Simpan Perubahan
             </button>
-            <button type="button" className="button secondary" onClick={() => { form.reset(); setEditing(false); }}>Batal</button>
           </>
         ) : (
-          <button type="button" className="button primary" onClick={() => setEditing(true)}>
+          <button type="button" className="profile-edit-button" onClick={() => setEditing(true)}>
             <Pencil size={16} />Edit Profil
           </button>
         )}
@@ -353,8 +465,16 @@ function SecurityCard({ passwordChangedAt }: { passwordChangedAt: string | null 
     onError: (error) => toast(message(error), true),
   });
   return (
-    <section className="panel">
-      <div className="panel-heading"><div><h2>Keamanan Akun</h2><p>Jaga kata sandi Anda tetap rahasia dan gunakan kata sandi yang unik.</p></div></div>
+    <section className="panel profile-security-card">
+      <div className="panel-heading">
+        <div className="profile-card-heading">
+          <span className="profile-card-icon"><LockKeyhole size={19} strokeWidth={2} /></span>
+          <div>
+            <h2>Keamanan Akun</h2>
+            <p>Jaga kata sandi Anda tetap rahasia dan gunakan kata sandi yang unik.</p>
+          </div>
+        </div>
+      </div>
       <p className="security-note">
         Terakhir diubah:{' '}
         {passwordChangedAt
@@ -387,8 +507,13 @@ function SecurityCard({ passwordChangedAt }: { passwordChangedAt: string | null 
 function DangerCard() {
   const toast = useToast();
   return (
-    <section className="panel danger-panel">
-      <div className="panel-heading"><div><h2>Penghapusan Akun</h2></div></div>
+    <section className="panel danger-panel profile-danger-card">
+      <div className="panel-heading">
+        <div className="profile-card-heading">
+          <span className="profile-card-icon danger"><Trash2 size={19} strokeWidth={2} /></span>
+          <div><h2>Penghapusan Akun</h2></div>
+        </div>
+      </div>
       <p>Menghapus akun Anda akan menghilangkan akses ke UNI-NEXUS. Alur permintaan penghapusan akun belum tersedia pada versi ini.</p>
       <button
         className="button danger"
@@ -408,7 +533,7 @@ export function Profile() {
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
   const profile = query.data;
   return (
-    <>
+    <div className="profile-page">
       <section className="panel profile-hero">
         <div className="profile-banner" style={profile.banner_url ? { backgroundImage: `url(${assetUrl(profile.banner_url)})` } : undefined}>
           <BannerEdit />
@@ -419,27 +544,32 @@ export function Profile() {
             <h1>{profile.full_name}</h1>
             <div className="profile-username-row">
               <span className="username">@{profile.username}</span>
-              {profile.role && <span className="role-pill">{ROLE_LABELS[profile.role.code as RoleCode] ?? profile.role.name}</span>}
+              {profile.role && (
+                <span className="role-pill">
+                  <ShieldCheck size={13} strokeWidth={2.5} />
+                  {ROLE_LABELS[profile.role.code as RoleCode] ?? profile.role.name}
+                </span>
+              )}
             </div>
             <p className="profile-bio">{profile.bio || 'Belum ada bio.'}</p>
             <TagsRow tags={profile.tags} />
           </div>
-          <WorkspaceCard profile={profile} />
+          <WorkspaceControl profile={profile} />
         </div>
       </section>
 
-      <div className="profile-bottom-grid">
-        <section className="panel">
-          <div className="identity-panel-body">
+      <div className="profile-lower-grid">
+        <section className="panel profile-main-panel">
+          <div className="profile-info-grid">
             <PetCardBlock profile={profile} />
             <IdentityForm profile={profile} />
           </div>
         </section>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div className="profile-side-column">
           <SecurityCard passwordChangedAt={profile.password_changed_at} />
           <DangerCard />
         </div>
       </div>
-    </>
+    </div>
   );
 }
