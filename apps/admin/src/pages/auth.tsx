@@ -61,19 +61,25 @@ export function AuthPage({ mode }: { mode: Mode }) {
     .object({
       full_name: z.string().trim().max(150).optional(),
       username: z.string().trim().max(30).optional(),
-      email: z.string().email('Masukkan alamat email yang valid.'),
+      email: z.string().trim().max(190),
       phone: z.string().trim().max(30).optional(),
       password: z.string().min(1, 'Masukkan kata sandi.').max(72),
       confirm_password: z.string().optional(),
     })
     .superRefine((value, ctx) => {
-      if (mode !== 'signup') return;
+      if (mode !== 'signup') {
+        if (!value.email.trim())
+          ctx.addIssue({ code: 'custom', path: ['email'], message: 'Masukkan email atau username.' });
+        return;
+      }
       if (!value.full_name || value.full_name.length < 2)
         ctx.addIssue({ code: 'custom', path: ['full_name'], message: 'Masukkan nama lengkap.' });
       if (!value.username || !/^[A-Za-z0-9._-]{3,30}$/.test(value.username))
         ctx.addIssue({ code: 'custom', path: ['username'], message: 'Gunakan 3-30 huruf, angka, titik, garis bawah, atau tanda hubung.' });
       if (!value.phone || !/^[0-9+()\-.\s]+$/.test(value.phone))
         ctx.addIssue({ code: 'custom', path: ['phone'], message: 'Masukkan nomor telepon yang valid.' });
+      if (!value.email || !z.string().email().safeParse(value.email).success)
+        ctx.addIssue({ code: 'custom', path: ['email'], message: 'Masukkan alamat email yang valid.' });
       if (value.password.length < 12)
         ctx.addIssue({ code: 'custom', path: ['password'], message: 'Gunakan setidaknya 12 karakter.' });
       if (value.password !== value.confirm_password)
@@ -174,8 +180,8 @@ export function AuthPage({ mode }: { mode: Mode }) {
                 </>
               )}
               <label className="block">
-                <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">Email</span>
-                <input type="email" autoComplete="email" placeholder="budi@example.com" className="nexus-auth-input" {...form.register('email')} />
+                <span className="block text-xs text-gray-400 uppercase tracking-wider mb-2">{mode === 'login' ? 'Email atau Username' : 'Email'}</span>
+                <input type={mode === 'login' ? 'text' : 'email'} autoComplete={mode === 'login' ? 'username' : 'email'} placeholder={mode === 'login' ? 'budi.santoso atau budi@example.com' : 'budi@example.com'} className="nexus-auth-input" {...form.register('email')} />
                 {form.formState.errors.email && <span className="nexus-field-error">{form.formState.errors.email.message}</span>}
               </label>
               {mode === 'signup' && (

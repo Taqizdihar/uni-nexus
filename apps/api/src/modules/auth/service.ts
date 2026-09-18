@@ -138,9 +138,10 @@ export async function signup(input: z.infer<typeof signupSchema>) {
   );
 }
 
-export async function login(email: string, password: string) {
-  email = email.trim().toLowerCase();
-  let user = await prisma.users.findUnique({ where: { email } });
+export async function login(identifier: string, password: string) {
+  identifier = identifier.trim();
+  let user = await prisma.users.findUnique({ where: { email: identifier.toLowerCase() } });
+  if (!user) user = await prisma.users.findUnique({ where: { username: identifier } });
   const valid = await bcrypt.compare(password, user?.password_hash ?? (await dummyHash));
   if (!valid || !user || !user.is_active)
     throw new AppError(401, 'The email or password is incorrect.', 'INVALID_CREDENTIALS');
@@ -167,7 +168,7 @@ export async function login(email: string, password: string) {
         throw new AppError(401, 'The email or password is incorrect.', 'INVALID_CREDENTIALS');
       if (current.account_status === 'ACTIVE') return tx.users.findUniqueOrThrow({ where: { id: userId } });
       const bootstrap = await tx.system_bootstrap.findUnique({ where: { id: 1 }, select: { id: true, cto_email: true, claimed_by_user_id: true } });
-      if (!canRecoverBootstrapCto({ ...lifecycleContext(current), email: current.email }, email, bootstrap))
+      if (!canRecoverBootstrapCto({ ...lifecycleContext(current), email: current.email }, current.email, bootstrap))
         throw new AppError(403, 'Akun Anda saat ini Nonaktif. Hubungi eksekutif berwenang untuk mengaktifkan kembali akun.', 'ACCOUNT_SUSPENDED');
       const at = new Date();
       const recovered = await tx.users.update({ where: { id: userId }, data: {

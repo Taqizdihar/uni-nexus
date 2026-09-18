@@ -35,7 +35,7 @@ export const signupSchema = z
   })
   .strict();
 export const loginSchema = z
-  .object({ email: emailSchema, password: z.string().min(1).max(256) })
+  .object({ email: z.string().trim().min(1).max(190), password: z.string().min(1).max(256) })
   .strict();
 export const changePasswordSchema = z
   .object({ current_password: z.string().min(1).max(256), new_password: passwordSchema })

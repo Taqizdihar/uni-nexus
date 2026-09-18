@@ -94,8 +94,8 @@ entries in the in-code permission map so old data/tests don't crash):
 | -------------------- | ---------------------------- | --------------------------------------------------------- |
 | `CEO`                 | Chief Executive Officer      | `*` (everything)                                          |
 | `CTO`                 | Chief Technology Officer      | `*` (everything) — primary system administrator          |
-| `COO`                 | Chief Operating Officer       | `user_management`                                         |
-| `CVO`                 | Chief Verification Officer    | `user_management`                                         |
+| `COO`                 | Chief Operating Officer       | `*` (general access; User Management actions remain policy-controlled) |
+| `CVO`                 | Chief Verification Officer    | `*` (general access; User Management actions remain policy-controlled) |
 | `3D_DESIGNER`         | 3D Designer                   | `read`, `design`                                          |
 | `STAFF_OF_SPECIALTY`  | Staff of Specialty             | `read`, `production`                                      |
 | `STAFF`               | Staff                          | `read`                                                    |

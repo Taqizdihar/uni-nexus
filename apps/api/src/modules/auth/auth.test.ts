@@ -299,6 +299,26 @@ describe('login account-status behavior', () => {
     expect(user.id).toBe(5n);
     expect(db.users.update).toHaveBeenCalledTimes(1);
   });
+
+  it('logs an active account in with its username', async () => {
+    const hash = await bcrypt.hash('safe-password-123', 4);
+    db.users.findUnique
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({
+        id: 5n,
+        username: 'owner.user',
+        password_hash: hash,
+        account_status: 'ACTIVE',
+        is_active: true,
+      });
+    const user = await login('owner.user', 'safe-password-123');
+    expect(user.id).toBe(5n);
+    expect(db.users.findUnique).toHaveBeenNthCalledWith(2, { where: { username: 'owner.user' } });
+    expect(db.users.update).toHaveBeenCalledWith({
+      where: { id: 5n },
+      data: { last_login_at: expect.any(Date) },
+    });
+  });
 });
 
 describe('password change', () => {
@@ -441,5 +461,12 @@ describe('HTTP security and workspace isolation', () => {
     expect(hasPermission('UNKNOWN', 'read')).toBe(false);
     for (const role of ['OWNER', 'ADMIN', 'MANAGER', 'DESIGNER', 'OPERATOR']) expect(hasPermission(role, 'user_management')).toBe(false);
     expect(matchesFingerprint('old', passwordFingerprint('new'))).toBe(false);
+  });
+
+  it.each(['COO', 'CVO'] as const)('%s has the same general permissions as CEO', (role) => {
+    for (const permission of ['read', 'sales', 'design', 'production', 'finance', 'audit', 'settings']) {
+      expect(hasPermission(role, permission)).toBe(hasPermission('CEO', permission));
+    }
+    expect(hasPermission(role, 'user_management')).toBe(true);
   });
 });

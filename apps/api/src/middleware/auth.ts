@@ -16,8 +16,8 @@ export const rolePermissions: Readonly<Record<string, readonly string[]>> = {
   // Official UNI-NEXUS roles.
   CEO: ['*'],
   CTO: ['*'],
-  COO: ['user_management'],
-  CVO: ['user_management'],
+  COO: ['*'],
+  CVO: ['*'],
   '3D_DESIGNER': ['read', 'design'],
   STAFF_OF_SPECIALTY: ['read', 'production'],
   STAFF: ['read'],

@@ -79,7 +79,8 @@ both apps.
   `request.workspace = { id, role }`.
 - **Authorization** — a small static role→permission table in
   [middleware/auth.ts](../apps/api/src/middleware/auth.ts). The official roles
-  (`CEO`/`CTO` = all permissions; `COO`/`CVO` = `user_management`;
+  (`CEO`/`CTO`/`COO`/`CVO` = all general permissions, with User Management
+  actions still governed by its executive policy;
   `3D_DESIGNER`/`STAFF_OF_SPECIALTY`/`STAFF` scoped to specific domains) sit alongside
   legacy codes (`OWNER`/`ADMIN`/`MANAGER`/`DESIGNER`/`OPERATOR`) kept only as
   compatibility artifacts — see [IDENTITY.md](IDENTITY.md#rbac) for the full map. Every

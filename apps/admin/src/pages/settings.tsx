@@ -161,7 +161,7 @@ function PreferencesTab() {
 export function Settings() {
   const { workspace } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const canManage = ['OWNER', 'CEO', 'ADMIN', 'CTO'].includes((workspace?.role ?? '').toUpperCase());
+  const canManage = ['OWNER', 'CEO', 'ADMIN', 'CTO', 'COO', 'CVO'].includes((workspace?.role ?? '').toUpperCase());
   const tabs = [{ key: 'account', label: 'Akun' }, ...(canManage ? [{ key: 'workspace', label: 'Workspace' }, { key: 'members', label: 'Anggota' }, { key: 'roles', label: 'Jabatan' }, { key: 'preferences', label: 'Preferensi' }] : [])];
   const requested = searchParams.get('tab') || 'account';
   const tab = tabs.some((item) => item.key === requested) ? requested : 'account';
