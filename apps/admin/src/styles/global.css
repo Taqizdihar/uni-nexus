@@ -2836,6 +2836,7 @@ dd.json-value {
 .profile-workspace {
   position: relative;
   flex-shrink: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -2847,6 +2848,7 @@ dd.json-value {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  max-width: 100%;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 999px;
@@ -2879,6 +2881,9 @@ dd.json-value {
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .workspace-toggle-switch {
@@ -2907,10 +2912,8 @@ dd.json-value {
 }
 
 .profile-workspace-caption {
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 11.5px;
+  font-weight: 600;
   color: var(--ink-faint);
 }
 
@@ -2974,7 +2977,12 @@ dd.json-value {
   align-items: stretch;
 }
 
+.profile-lower-grid > * {
+  min-width: 0;
+}
+
 .profile-main-panel {
+  min-width: 0;
   border-radius: var(--radius-xl);
 }
 
@@ -2988,6 +2996,7 @@ dd.json-value {
 
 .profile-pet-card {
   height: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-lg);
@@ -3080,6 +3089,7 @@ dd.json-value {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
 }
 
 .profile-info-list {
@@ -3087,12 +3097,14 @@ dd.json-value {
   flex-direction: column;
   gap: 10px;
   flex: 1;
+  min-width: 0;
 }
 
 .profile-info-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .profile-info-row {
@@ -3100,6 +3112,7 @@ dd.json-value {
   align-items: center;
   gap: 10px;
   min-height: 42px;
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
@@ -3113,6 +3126,8 @@ dd.json-value {
 
 .profile-info-row > span,
 .profile-info-row > input {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink);
@@ -3194,6 +3209,7 @@ dd.json-value {
   flex-direction: column;
   gap: 18px;
   height: 100%;
+  min-width: 0;
 }
 
 .profile-security-card,
