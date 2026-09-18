@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, ApiError, type Envelope } from './api';
 
@@ -35,15 +35,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     query.data?.workspaces.find((item) => item.id === chosen) ||
     query.data?.workspaces.find((item) => item.id === query.data?.default_workspace_id) ||
     query.data?.workspaces[0];
+  const clearAuthenticatedState = useCallback(() => {
+    // Keep the observed session query alive long enough to publish `null` to AuthProvider.
+    // Clearing the whole QueryClient first destroys that observer and leaves the shell
+    // rendered with stale session data until the browser is refreshed.
+    client.setQueryData(['session'], null);
+    client.removeQueries({ predicate: (item) => item.queryKey[0] !== 'session' });
+    setChosen('');
+    localStorage.removeItem('uni-nexus.workspace');
+  }, [client]);
   useEffect(() => {
-    const expired = () => { client.setQueryData(['session'], null); client.removeQueries({ predicate: (item) => item.queryKey[0] !== 'session' }); };
+    const expired = clearAuthenticatedState;
     window.addEventListener('session-expired', expired);
     return () => window.removeEventListener('session-expired', expired);
-  }, [client]);
+  }, [clearAuthenticatedState]);
   const setWorkspace = (id: string) => { setChosen(id); localStorage.setItem('uni-nexus.workspace', id); };
   const logout = async () => {
     try { await api('/auth/logout', { method: 'POST' }); }
-    finally { client.clear(); client.setQueryData(['session'], null); }
+    finally { clearAuthenticatedState(); }
   };
   return <AuthContext.Provider value={{ session: query.data, loading: query.isPending, error: query.error, workspace, setWorkspace, refresh: () => query.refetch(), logout }}>{children}</AuthContext.Provider>;
 }
