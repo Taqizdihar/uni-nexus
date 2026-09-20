@@ -11,6 +11,7 @@ import { titleCase } from '../lib/format';
 import { AccountActionModal } from './account-action-modal';
 import { OnlineUsers } from './online-users';
 import { EmptyState, ErrorState, Spinner, useToast } from './ui';
+import { WorkspaceUpdateModal } from './workspace-update-modal';
 
 type NavigationItem = { path: string; label: string; icon: ComponentType<{ size?: number; strokeWidth?: number }> };
 const isReviewerRole = (role: string) => (REVIEWER_ROLE_CODES as readonly string[]).includes(role.toUpperCase());
@@ -27,6 +28,7 @@ function navigationFor(canReview: boolean): { label: string; items: NavigationIt
 export function Shell() {
   const { session, loading, error, workspace, logout, refresh } = useAuth();
   const [open, setOpen] = useState(false);
+  const [workspaceModalOpen, setWorkspaceModalOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -66,13 +68,12 @@ export function Shell() {
       </div>
       <div className="topbar-right">
         <OnlineUsers />
-        <button type="button" className="workspace-pill" disabled title="Workspace Studio belum tersedia." aria-describedby="workspace-pill-hint">
+        <button type="button" className="workspace-pill" onClick={() => setWorkspaceModalOpen(true)} aria-label="Buka informasi Workspace Studio">
           <ArrowLeftRight size={14} className="workspace-pill-icon" />
           <span className="workspace-pill-label">WORKSPACE:</span>
           <img src={craftLogo} alt="" className="workspace-pill-logo" />
           <strong>Uni-Inside Craft</strong>
           <ChevronDown size={14} />
-          <span className="sr-only" id="workspace-pill-hint">Workspace Studio belum tersedia.</span>
         </button>
         <Link className="icon-button notification-bell" to="/app/notifications" aria-label={`Notifikasi${unread.data ? `, ${unread.data.meta.total} belum dibaca` : ''}`}><Bell size={19} />{!!unread.data?.meta.total && <span />}</Link>
         <div className="user-menu">
@@ -89,5 +90,6 @@ export function Shell() {
       <footer className="app-footer"><span className="app-footer-brand">UNI-NEXUS</span><span>Nexus. Ordo. Opus.</span></footer>
     </div>
     {logoutModal}
+    {workspaceModalOpen && <WorkspaceUpdateModal onClose={() => setWorkspaceModalOpen(false)} />}
   </div>;
 }

@@ -2478,15 +2478,15 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "printers",
     "table": "printers",
-    "title": "Printers",
+    "title": "Printer",
     "singular": "Printer",
-    "description": "Monitor your printer fleet and maintain machine details. Status is managed manually.",
+    "description": "Kelola unit printer fisik dan informasi operasionalnya.",
     "group": "Produksi",
     "permission": "production",
     "fields": [
       {
         "name": "printer_catalog_id",
-        "label": "Printer Catalog",
+        "label": "Data Printer",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -2494,7 +2494,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "printer_code",
-        "label": "Printer Code",
+        "label": "Kode Printer",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2502,7 +2502,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "name",
-        "label": "Name",
+        "label": "Nama",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -2510,7 +2510,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "brand",
-        "label": "Brand",
+        "label": "Merek",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2526,7 +2526,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "serial_number",
-        "label": "Serial Number",
+        "label": "Nomor Serial",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2534,7 +2534,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "location",
-        "label": "Location",
+        "label": "Lokasi",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2542,7 +2542,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "build_volume_x_mm",
-        "label": "Build Volume X (mm)",
+        "label": "Volume Cetak X (mm)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -2551,7 +2551,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "build_volume_y_mm",
-        "label": "Build Volume Y (mm)",
+        "label": "Volume Cetak Y (mm)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -2560,7 +2560,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "build_volume_z_mm",
-        "label": "Build Volume Z (mm)",
+        "label": "Volume Cetak Z (mm)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -2569,7 +2569,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "default_nozzle_size_mm",
-        "label": "Default Nozzle Size (mm)",
+        "label": "Nozzle Bawaan (mm)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -2595,14 +2595,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "last_maintenance_at",
-        "label": "Last Maintenance At",
+        "label": "Perawatan Terakhir",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "is_active",
-        "label": "Is Active",
+        "label": "Aktif",
         "type": "boolean",
         "required": false,
         "nullable": false,
@@ -2610,7 +2610,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -2618,7 +2618,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui",
         "type": "datetime",
         "required": false,
         "nullable": false,

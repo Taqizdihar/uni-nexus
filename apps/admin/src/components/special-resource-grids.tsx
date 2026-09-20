@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit3, MapPin, Plus, Printer, Search, X } from 'lucide-react';
+import { Edit3, MapPin, Plus, Printer, Search, Trash2, Upload, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ResourceDefinition } from '@uni-nexus/shared';
 import { api, assetUrl, body, message, type Page, type Row } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { money, recordName, resourcePath } from '../lib/format';
-import { Badge, EmptyState, ErrorState, Spinner } from './ui';
+import { Badge, EmptyState, ErrorState, Spinner, useToast } from './ui';
 
 const text = (value: unknown, fallback = '—') =>
   value === null || value === undefined || value === '' ? fallback : String(value);
@@ -29,10 +29,7 @@ export function PrinterPhoto({ printer, className = '' }: { printer: Row; classN
           alt={`Foto ${text(printer.name, 'printer')}`}
         />
       ) : (
-        <>
-          <Printer size={31} />
-          <span>Belum ada foto</span>
-        </>
+        <Printer size={58} strokeWidth={1.4} aria-label="Placeholder foto printer" />
       )}
     </div>
   );
@@ -135,7 +132,7 @@ export function PrinterGrid({ resource }: { resource: ResourceDefinition }) {
             <p className="printer-code">{text(printer.printer_code, 'Kode belum diatur')}</p>
             <dl className="card-facts">
               <div>
-                <dt>Serial</dt>
+                <dt>Nomor Serial</dt>
                 <dd>{text(printer.serial_number, 'Belum diisi')}</dd>
               </div>
               <div>
@@ -159,7 +156,7 @@ export function PrinterGrid({ resource }: { resource: ResourceDefinition }) {
                 </dd>
               </div>
               <div>
-                <dt>Nozzle</dt>
+                <dt>Nozzle Bawaan</dt>
                 <dd>
                   {printer.default_nozzle_size_mm ? `${printer.default_nozzle_size_mm} mm` : 'Belum diisi'}
                 </dd>
@@ -265,7 +262,7 @@ export function AddPrinterUnitDialog() {
             {!selected ? (
               <>
                 <h2>Pilih Data Printer</h2>
-                <p>Pilih data printer yang disediakan CTO untuk menambahkan unit fisik.</p>
+                <p>Pilih data printer tersedia.</p>
                 {catalogs.isPending ? (
                   <Spinner label="Memuat data printer…" />
                 ) : catalogs.isError ? (
@@ -371,7 +368,11 @@ export function AddPrinterUnitDialog() {
 export function AddPrinterCatalogDialog() {
   const { workspace } = useAuth();
   const client = useQueryClient();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<Catalog | null>(null);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [removePhoto, setRemovePhoto] = useState(false);
   const empty = {
     name: '',
     brand: '',
@@ -382,26 +383,75 @@ export function AddPrinterCatalogDialog() {
     default_nozzle_size_mm: '',
   };
   const [data, setData] = useState(empty);
+  const catalogs = useQuery({
+    queryKey: ['printer-catalog', workspace!.id],
+    enabled: open,
+    queryFn: async () => (await api<{ data: Catalog[] }>('/printers/catalog', { workspace: workspace!.id })).data,
+  });
+  const preview = useMemo(() => photo ? URL.createObjectURL(photo) : !removePhoto ? editing?.photo_url : null, [photo, removePhoto, editing?.photo_url]);
+  useEffect(() => () => { if (photo && preview) URL.revokeObjectURL(preview); }, [photo, preview]);
   const create = useMutation({
-    mutationFn: () =>
-      api('/printers/catalog', {
-        method: 'POST',
+    mutationFn: async () => {
+      const result = await api<{ data: Catalog }>(`/printers/catalog${editing ? `/${editing.id}` : ''}`, {
+        method: editing ? 'PATCH' : 'POST',
         workspace: workspace!.id,
         body: body(
           Object.fromEntries(
             Object.entries(data).filter(([key, value]) => key === 'name' || value !== ''),
           ),
         ),
-      }),
-    onSuccess: async () => {
-      await client.invalidateQueries({ queryKey: ['printer-catalog', workspace!.id] });
+      });
+      let photoFailed = false;
+      if (photo || (editing && removePhoto)) {
+        try {
+          if (photo) {
+            const form = new FormData();
+            form.append('file', photo);
+            await api(`/printers/catalog/${result.data.id}/photo`, { method: 'POST', body: form, workspace: workspace!.id });
+          } else {
+            await api(`/printers/catalog/${result.data.id}/photo`, { method: 'DELETE', workspace: workspace!.id });
+          }
+        } catch (error) {
+          photoFailed = true;
+          toast(`Data printer berhasil disimpan, tetapi foto gagal ${photo ? 'diunggah' : 'dihapus'}: ${message(error)} Foto dapat dikelola kembali melalui Edit Data Printer.`, true);
+        }
+      }
+      return { ...result.data, photoFailed };
+    },
+    onSuccess: async (saved) => {
+      await Promise.all([client.invalidateQueries({ queryKey: ['printer-catalog', workspace!.id] }), client.invalidateQueries({ queryKey: ['records', workspace!.id, 'printers'] })]);
       setOpen(false);
+      const wasEditing = Boolean(editing);
+      setEditing(null);
+      setPhoto(null);
+      setRemovePhoto(false);
       setData(empty);
+      if (!saved.photoFailed) toast(`Data printer berhasil ${wasEditing ? 'diperbarui' : 'disimpan'}.`);
     },
   });
+  const editCatalog = (catalog: Catalog) => {
+    setEditing(catalog);
+    setRemovePhoto(false);
+    setPhoto(null);
+    setData({
+      name: String(catalog.name ?? ''),
+      brand: String(catalog.brand ?? ''),
+      model: String(catalog.model ?? ''),
+      build_volume_x_mm: String(catalog.build_volume_x_mm ?? ''),
+      build_volume_y_mm: String(catalog.build_volume_y_mm ?? ''),
+      build_volume_z_mm: String(catalog.build_volume_z_mm ?? ''),
+      default_nozzle_size_mm: String(catalog.default_nozzle_size_mm ?? ''),
+    });
+  };
+  const startCreate = () => {
+    setEditing(null);
+    setPhoto(null);
+    setRemovePhoto(false);
+    setData(empty);
+  };
   return (
     <>
-      <button className="button secondary" onClick={() => setOpen(true)}>
+      <button className="button secondary" onClick={() => { startCreate(); setOpen(true); }}>
         Tambah Data Printer
       </button>
       {open && (
@@ -420,20 +470,22 @@ export function AddPrinterCatalogDialog() {
             >
               <X size={19} />
             </button>
-            <h2>Tambah Data Printer</h2>
+            <h2>{editing ? 'Edit Data Printer' : 'Tambah Data Printer'}</h2>
             <p>
-              Data ini menjadi spesifikasi reusable yang dapat dipilih tim saat menambahkan unit
-              fisik.
+              Data ini menjadi spesifikasi model yang dapat dipilih tim saat menambahkan unit fisik.
             </p>
+            {!editing && catalogs.data && catalogs.data.length > 0 && <div className="catalog-management-list"><strong>Data Printer Tersimpan</strong>{catalogs.data.map((catalog) => <div className="catalog-management-item" key={catalog.id}><span><strong>{catalog.name}</strong><small>{[catalog.brand, catalog.model].filter(Boolean).join(' · ') || 'Merek/model belum dicatat'}</small></span><button type="button" className="button secondary small" onClick={() => editCatalog(catalog)}><Edit3 size={14} />Edit</button></div>)}</div>}
+            {editing && <button type="button" className="back-link" onClick={startCreate}>← Tambah data printer baru</button>}
+            <label className="field printer-catalog-photo-field"><span>Foto Printer <small>(opsional)</small></span><div className="printer-catalog-preview">{preview ? <img src={preview} alt="Pratinjau foto printer" /> : <Printer size={52} strokeWidth={1.4} aria-label="Placeholder foto printer" />}</div><span className="upload-drop"><Upload size={22} /><strong>{photo ? photo.name : editing?.photo_url && !removePhoto ? 'Ganti Foto' : 'Pilih Foto'}</strong><small>PNG, JPG, JPEG, atau WEBP.</small><input type="file" accept="image/png,image/jpeg,image/webp" aria-label="Pilih foto printer" onChange={(event) => { setPhoto(event.target.files?.[0] || null); setRemovePhoto(false); }} /></span>{(photo || (editing?.photo_url && !removePhoto)) && <button type="button" className="button danger small" onClick={() => { setPhoto(null); setRemovePhoto(Boolean(editing?.photo_url)); }}><Trash2 size={14} />Hapus Foto</button>}</label>
             <div className="form-grid">
               {(
                 [
                   ['name', 'Nama'],
                   ['brand', 'Merek'],
                   ['model', 'Model'],
-                  ['build_volume_x_mm', 'Build Volume X (mm)'],
-                  ['build_volume_y_mm', 'Build Volume Y (mm)'],
-                  ['build_volume_z_mm', 'Build Volume Z (mm)'],
+                  ['build_volume_x_mm', 'Volume Cetak X (mm)'],
+                  ['build_volume_y_mm', 'Volume Cetak Y (mm)'],
+                  ['build_volume_z_mm', 'Volume Cetak Z (mm)'],
                   ['default_nozzle_size_mm', 'Nozzle Bawaan (mm)'],
                 ] as const
               ).map(([key, label]) => (
@@ -457,7 +509,7 @@ export function AddPrinterCatalogDialog() {
                 disabled={!data.name.trim() || create.isPending}
                 onClick={() => create.mutate()}
               >
-                {create.isPending ? 'Menyimpan…' : 'Simpan Data Printer'}
+                {create.isPending ? 'Menyimpan…' : editing ? 'Simpan Perubahan' : 'Simpan Data Printer'}
               </button>
             </div>
           </section>

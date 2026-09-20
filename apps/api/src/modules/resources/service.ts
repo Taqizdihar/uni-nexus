@@ -12,6 +12,36 @@ export interface ResourceContext {workspaceId: bigint; userId: bigint; role?: st
 const printerOperationalFields = new Set(['serial_number', 'location', 'status', 'last_maintenance_at']);
 const printerProtectedMessage = 'Hanya CTO yang dapat mengubah data utama printer.';
 
+export function resolvePrinterPresentation(row: Row): Row {
+  const catalog = row.printer_catalogs as Row | null | undefined;
+  if (!catalog) return cleanRow(row);
+  const resolved = cleanRow({
+    ...row,
+    name: catalog.name,
+    brand: catalog.brand,
+    model: catalog.model,
+    build_volume_x_mm: catalog.build_volume_x_mm,
+    build_volume_y_mm: catalog.build_volume_y_mm,
+    build_volume_z_mm: catalog.build_volume_z_mm,
+    default_nozzle_size_mm: catalog.default_nozzle_size_mm,
+    photo_original_file_name: catalog.photo_original_file_name,
+    photo_mime_type: catalog.photo_mime_type,
+    photo_file_size_bytes: catalog.photo_file_size_bytes,
+    photo_storage_provider: catalog.photo_storage_provider,
+    photo_bucket_name: catalog.photo_bucket_name,
+    photo_object_key: catalog.photo_object_key,
+    photo_public_url: catalog.photo_public_url,
+    photo_alt_text: catalog.photo_alt_text,
+  });
+  delete resolved.printer_catalogs;
+  if (catalog.photo_public_url || (catalog.photo_storage_provider === 'LOCAL' && catalog.id)) {
+    resolved.photo_url = catalog.photo_public_url ?? `/api/v1/printers/catalog/${String(catalog.id)}/photo`;
+  } else {
+    delete resolved.photo_url;
+  }
+  return resolved;
+}
+
 export function assertPrinterPolicy(resource: ResourceDefinition, data: Row, context: ResourceContext, creating: boolean) {
   if (resource.table !== 'printers') return;
   if (creating) throw new AppError(403, 'Tambahkan unit printer melalui pilihan data printer yang tersedia.', 'PRINTER_CATALOG_REQUIRED');
@@ -47,13 +77,20 @@ export async function list(resource: ResourceDefinition, query: Row, context: Re
   }
   if(resource.table==='notifications'&&query.unread==='true')where.read_at=null;
   const delegate=repository(prisma,resource.table);
-  const [rows,total]=await Promise.all([delegate.findMany({where,skip:(page-1)*pageSize,take:pageSize,orderBy:{[sort]:direction}}),delegate.count({where})]);
-  return {data:rows.map(cleanRow),meta:{page,pageSize,total,totalPages:Math.ceil(total/pageSize)}};
+  const [rows,total]=await Promise.all([
+    resource.table === 'printers'
+      ? prisma.printers.findMany({where,skip:(page-1)*pageSize,take:pageSize,orderBy:{[sort]:direction},include:{printer_catalogs:true}} as never) as unknown as Row[]
+      : delegate.findMany({where,skip:(page-1)*pageSize,take:pageSize,orderBy:{[sort]:direction}}),
+    delegate.count({where}),
+  ]);
+  return {data:rows.map(resource.table === 'printers' ? resolvePrinterPresentation : cleanRow),meta:{page,pageSize,total,totalPages:Math.ceil(total/pageSize)}};
 }
-export async function detail(resource: ResourceDefinition, id: bigint, context: ResourceContext, db: Database=prisma) {
-  const row=await repository(db,resource.table).findFirst({where:{id,...scopeFor(resource.table,context.workspaceId,context.userId)}});
+export async function detail(resource: ResourceDefinition, id: bigint, context: ResourceContext, db: Database=prisma, present=true) {
+  const row=resource.table === 'printers'
+    ? await (db as unknown as {printers:{findFirst(args: Row): Promise<Row|null>}}).printers.findFirst({where:{id,...scopeFor(resource.table,context.workspaceId,context.userId)},include:{printer_catalogs:true}})
+    : await repository(db,resource.table).findFirst({where:{id,...scopeFor(resource.table,context.workspaceId,context.userId)}});
   if(!row)throw new AppError(404,`${resource.singular} not found.`,'NOT_FOUND');
-  return row;
+  return present && resource.table === 'printers' ? resolvePrinterPresentation(row) : row;
 }
 async function relationalConsistency(db:Database,resource:ResourceDefinition,data:Row,existing:Row|null) {
   const merged={...existing,...data};
@@ -84,7 +121,7 @@ export async function save(resource:ResourceDefinition, body:unknown, context:Re
   for(let attempt=0;attempt<3;attempt++) {
     try {
       return await prisma.$transaction(async tx=>{
-        const existing=id?await detail(resource,id,context,tx):null;
+        const existing=id?await detail(resource,id,context,tx,false):null;
         let data={...parsed};
         if(resource.table==='printers') await normalizePrinterData(tx,data,context,id);
         await verifyReferences(tx,resource,data,context.workspaceId,context.userId);

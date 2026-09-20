@@ -78,7 +78,6 @@ printerRouter.post('/units', async (request, response) => {
     const created = await tx.printers.create({ data: {
       workspace_id: context.workspaceId, printer_catalog_id: catalog.id, printer_code: `PRN-${randomUUID().slice(0, 8).toUpperCase()}`,
       name: catalog.name, brand: catalog.brand, model: catalog.model, build_volume_x_mm: catalog.build_volume_x_mm, build_volume_y_mm: catalog.build_volume_y_mm, build_volume_z_mm: catalog.build_volume_z_mm, default_nozzle_size_mm: catalog.default_nozzle_size_mm,
-      photo_original_file_name: catalog.photo_original_file_name, photo_mime_type: catalog.photo_mime_type, photo_file_size_bytes: catalog.photo_file_size_bytes, photo_storage_provider: catalog.photo_storage_provider, photo_bucket_name: catalog.photo_bucket_name, photo_object_key: catalog.photo_object_key, photo_public_url: catalog.photo_public_url, photo_alt_text: catalog.photo_alt_text,
       serial_number: serial, location: input.location?.trim() || null, status: input.status ?? 'IDLE', last_maintenance_at: input.last_maintenance_at ? new Date(input.last_maintenance_at) : null, is_active: true,
     } });
     await audit(tx, context, 'CREATE', 'printers', created.id, undefined, created);
@@ -111,13 +110,35 @@ printerRouter.post('/catalog/:id/photo', requireCto, upload.single('file'), asyn
   } catch (error) { await storage.remove(stored.key); throw error; }
 });
 
+printerRouter.delete('/catalog/:id/photo', requireCto, async (request, response) => {
+  const id = parseId(request.params.id, 'ID data printer');
+  const context = { workspaceId: request.workspace!.id, userId: request.auth!.userId };
+  const previous = await prisma.$transaction(async (tx) => {
+    const existing = await tx.printer_catalogs.findFirst({ where: { id, workspace_id: context.workspaceId } });
+    if (!existing) throw new AppError(404, 'Data printer tidak ditemukan.', 'NOT_FOUND');
+    const updated = await tx.printer_catalogs.update({ where: { id }, data: {
+      photo_original_file_name: null, photo_mime_type: null, photo_file_size_bytes: null,
+      photo_storage_provider: null, photo_bucket_name: null, photo_object_key: null,
+      photo_public_url: null, photo_alt_text: null,
+    } });
+    await audit(tx, context, 'PRINTER_CATALOG_PHOTO_REMOVED', 'printer_catalogs', id, existing, updated);
+    return existing;
+  });
+  if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key)
+    await storage.remove(previous.photo_object_key);
+  response.status(204).end();
+});
+
 printerRouter.post('/:id/photo', requireCto, upload.single('file'), async (request, response) => {
   const id = parseId(request.params.id, 'ID printer');
   const context = { workspaceId: request.workspace!.id, userId: request.auth!.userId };
   if (!request.file) throw new AppError(422, 'Pilih foto printer untuk diunggah.', 'PHOTO_REQUIRED');
   const validated = validateUpload(request.file, env.MAX_UPLOAD_SIZE, true);
-  if (!await printerForWorkspace(id, context.workspaceId))
+  const printer = await printerForWorkspace(id, context.workspaceId);
+  if (!printer)
     throw new AppError(404, 'Printer tidak ditemukan.', 'NOT_FOUND');
+  if (printer.printer_catalog_id)
+    throw new AppError(409, 'Foto unit dikelola melalui Data Printer.', 'PRINTER_CATALOG_PHOTO_ONLY');
   const stored = await storage.save(context.workspaceId, request.file.buffer);
   try {
     const old = await prisma.$transaction(async (tx) => {
@@ -153,6 +174,8 @@ printerRouter.delete('/:id/photo', requireCto, async (request, response) => {
   const previous = await prisma.$transaction(async (tx) => {
     const existing = await tx.printers.findFirst({ where: { id, workspace_id: context.workspaceId } });
     if (!existing) throw new AppError(404, 'Printer tidak ditemukan.', 'NOT_FOUND');
+    if (existing.printer_catalog_id)
+      throw new AppError(409, 'Foto unit dikelola melalui Data Printer.', 'PRINTER_CATALOG_PHOTO_ONLY');
     const updated = await tx.printers.update({ where: { id }, data: {
       photo_original_file_name: null, photo_mime_type: null, photo_file_size_bytes: null,
       photo_storage_provider: null, photo_bucket_name: null, photo_object_key: null,
@@ -171,13 +194,17 @@ printerRouter.get('/:id/photo', async (request, response, next) => {
     throw new AppError(403, 'Anda tidak memiliki akses untuk melihat foto printer.', 'FORBIDDEN');
   const id = parseId(request.params.id, 'ID printer');
   const printer = await printerForWorkspace(id, request.workspace!.id);
-  if (!printer || printer.photo_storage_provider !== 'LOCAL' || !printer.photo_object_key ||
-    !printer.photo_object_key.startsWith(`${request.workspace!.id.toString()}/`) ||
-    !await storage.exists(printer.photo_object_key))
+  const catalog = printer?.printer_catalog_id
+    ? await prisma.printer_catalogs.findFirst({ where: { id: printer.printer_catalog_id, workspace_id: request.workspace!.id } })
+    : null;
+  const photo = catalog ?? printer;
+  if (!photo || photo.photo_storage_provider !== 'LOCAL' || !photo.photo_object_key ||
+    !photo.photo_object_key.startsWith(`${request.workspace!.id.toString()}/`) ||
+    !await storage.exists(photo.photo_object_key))
     throw new AppError(404, 'Foto printer tidak ditemukan.', 'PHOTO_NOT_FOUND');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('Cache-Control', 'private, max-age=60');
   response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
-  response.type(printer.photo_mime_type ?? 'application/octet-stream');
-  response.sendFile(storage.absolutePath(printer.photo_object_key), (error) => { if (error) next(error); });
+  response.type(photo.photo_mime_type ?? 'application/octet-stream');
+  response.sendFile(storage.absolutePath(photo.photo_object_key), (error) => { if (error) next(error); });
 });

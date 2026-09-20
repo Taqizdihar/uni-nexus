@@ -26,6 +26,7 @@ import { accountActionMessage, formatAccountDate } from '../lib/account-lifecycl
 import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
+import { WorkspaceUpdateModal } from '../components/workspace-update-modal';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
@@ -49,6 +50,11 @@ type ProfileData = {
   default_workspace: WorkspaceRef | null;
   role: { code: string; name: string } | null;
 };
+
+function workspaceDisplayName(workspace: WorkspaceRef | null | undefined) {
+  if (!workspace) return 'Belum ada';
+  return workspace.name === '3D Printing' ? 'Craft' : workspace.name;
+}
 
 function initials(name: string) {
   return name
@@ -299,56 +305,23 @@ function TagsRow({ tags }: { tags: Tag[] }) {
 }
 
 function WorkspaceControl({ profile }: { profile: ProfileData }) {
-  const client = useQueryClient();
-  const toast = useToast();
-  const [open, setOpen] = useState(false);
-  const ref = useClosePopover(open, setOpen);
-  const mutation = useMutation({
-    mutationFn: (workspaceId: string) => api('/profile/default-workspace', { method: 'POST', body: body({ workspace_id: workspaceId }) }),
-    onSuccess: async () => {
-      await client.invalidateQueries({ queryKey: ['profile'] });
-      await client.invalidateQueries({ queryKey: ['session'] });
-      toast('Default Workspace diperbarui.');
-      setOpen(false);
-    },
-    onError: (error) => toast(message(error), true),
-  });
+  const [modalOpen, setModalOpen] = useState(false);
   const current = profile.default_workspace ?? profile.memberships[0]?.workspace ?? null;
-  const canSwitch = profile.memberships.length > 1;
   return (
-    <div className="profile-workspace" ref={ref}>
+    <div className="profile-workspace">
       <button
         type="button"
         className="profile-workspace-toggle"
-        disabled={!canSwitch}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
+        aria-haspopup="dialog"
+        aria-expanded={modalOpen}
+        onClick={() => setModalOpen(true)}
       >
         <img src={craftLogo} alt="" className="workspace-toggle-logo" />
-        <span className="workspace-toggle-name">{current?.name ?? 'Belum ada'}</span>
+        <span className="workspace-toggle-name">{workspaceDisplayName(current)}</span>
         <span className="workspace-toggle-switch" />
       </button>
       <span className="profile-workspace-caption">Default Workspace</span>
-      {open && canSwitch && (
-        <div className="profile-popover workspace-popover" role="listbox" aria-label="Pilih Default Workspace">
-          {profile.memberships.map((member) => (
-            <button
-              key={member.workspace.id}
-              type="button"
-              role="option"
-              aria-selected={member.workspace.id === current?.id}
-              className={`workspace-popover-option${member.workspace.id === current?.id ? ' selected' : ''}`}
-              disabled={mutation.isPending}
-              onClick={() => mutation.mutate(member.workspace.id)}
-            >
-              <img src={craftLogo} alt="" />
-              <span>{member.workspace.name}</span>
-              {member.workspace.id === current?.id && <Check size={14} />}
-            </button>
-          ))}
-        </div>
-      )}
+      {modalOpen && <WorkspaceUpdateModal onClose={() => setModalOpen(false)} />}
     </div>
   );
 }
