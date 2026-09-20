@@ -8,7 +8,29 @@ import { beforeWrite, afterWrite } from '../../services/domain.js';
 import { cleanRow, repository, scopeFor, verifyReferences, modelFor, type Row, type Database } from './repository.js';
 import { identifier, inputSchema, listSchema } from './validation.js';
 
-export interface ResourceContext {workspaceId: bigint; userId: bigint}
+export interface ResourceContext {workspaceId: bigint; userId: bigint; role?: string}
+const printerOperationalFields = new Set(['serial_number', 'location', 'status', 'last_maintenance_at']);
+const printerProtectedMessage = 'Hanya CTO yang dapat mengubah data utama printer.';
+
+export function assertPrinterPolicy(resource: ResourceDefinition, data: Row, context: ResourceContext, creating: boolean) {
+  if (resource.table !== 'printers') return;
+  if (creating) throw new AppError(403, 'Tambahkan unit printer melalui pilihan data printer yang tersedia.', 'PRINTER_CATALOG_REQUIRED');
+  if (Object.keys(data).some((field) => !printerOperationalFields.has(field)))
+    throw new AppError(403, printerProtectedMessage, 'PRINTER_MASTER_FORBIDDEN');
+}
+
+export async function normalizePrinterData(tx: Prisma.TransactionClient, data: Row, context: ResourceContext, id?: bigint) {
+  if ('serial_number' in data && typeof data.serial_number === 'string') {
+    data.serial_number = data.serial_number.trim() || null;
+  }
+  if (data.serial_number) {
+    const duplicate = await tx.printers.findFirst({
+      where: { workspace_id: context.workspaceId, serial_number: String(data.serial_number), ...(id ? { id: { not: id } } : {}) },
+      select: { id: true },
+    });
+    if (duplicate) throw new AppError(409, 'Nomor serial tersebut sudah digunakan oleh printer lain.', 'DUPLICATE_PRINTER_SERIAL');
+  }
+}
 export async function list(resource: ResourceDefinition, query: Row, context: ResourceContext) {
   const {page,pageSize,search,sort,direction}=listSchema.parse(query);
   const allowedSort=['id',...resource.fields.filter(field=>field.type!=='json').map(field=>field.name)];
@@ -56,6 +78,7 @@ async function relationalConsistency(db:Database,resource:ResourceDefinition,dat
 export async function save(resource:ResourceDefinition, body:unknown, context:ResourceContext, id?:bigint) {
   if(resource.readOnly)throw new AppError(403,'This resource is read-only.');
   const parsed=inputSchema(resource, id!==undefined).parse(body) as Row;
+  assertPrinterPolicy(resource, parsed, context, id === undefined);
   if(id&&Object.keys(parsed).length===0)throw new AppError(422,'Provide at least one editable field.');
   // SERIALIZABLE protects scope validation, stock, state transitions, and parent totals as one unit.
   for(let attempt=0;attempt<3;attempt++) {
@@ -63,6 +86,7 @@ export async function save(resource:ResourceDefinition, body:unknown, context:Re
       return await prisma.$transaction(async tx=>{
         const existing=id?await detail(resource,id,context,tx):null;
         let data={...parsed};
+        if(resource.table==='printers') await normalizePrinterData(tx,data,context,id);
         await verifyReferences(tx,resource,data,context.workspaceId,context.userId);
         await relationalConsistency(tx,resource,data,existing);
         const names=modelFor(resource.table).fields.map(field=>field.name);
@@ -82,6 +106,12 @@ export async function save(resource:ResourceDefinition, body:unknown, context:Re
       },{isolationLevel:Prisma.TransactionIsolationLevel.Serializable,maxWait:10000,timeout:20000});
     }catch(error){
       if(error instanceof Prisma.PrismaClientKnownRequestError && error.code==='P2034'&&attempt<2)continue;
+      if(error instanceof Prisma.PrismaClientKnownRequestError && error.code==='P2002' && resource.table==='printers') {
+        const target = error.meta?.target;
+        const names = Array.isArray(target) ? target.map(String) : [String(target ?? '')];
+        if(names.some((name) => name.includes('serial_number')))
+          throw new AppError(409,'Nomor serial tersebut sudah digunakan oleh printer lain.','DUPLICATE_PRINTER_SERIAL');
+      }
       throw error;
     }
   }

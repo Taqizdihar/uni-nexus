@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, type Envelope } from './api';
 import { useAuth } from './auth';
 
@@ -18,11 +18,14 @@ const HEARTBEAT_INTERVAL_MS = 30_000;
 /** Sends an authenticated heartbeat for the current workspace so this user counts as online. */
 export function useHeartbeat() {
   const { session, workspace } = useAuth();
+  const client = useQueryClient();
   const workspaceId = workspace?.id;
   useEffect(() => {
     if (!session || !workspaceId) return;
     const send = () => {
-      void api('/online-presence/heartbeat', { method: 'POST', workspace: workspaceId }).catch(() => undefined);
+      void api('/online-presence/heartbeat', { method: 'POST', workspace: workspaceId })
+        .then(() => client.invalidateQueries({ queryKey: ['online-presence', workspaceId] }))
+        .catch(() => undefined);
     };
     send();
     const interval = setInterval(send, HEARTBEAT_INTERVAL_MS);
@@ -34,7 +37,7 @@ export function useHeartbeat() {
       clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [session, workspaceId]);
+  }, [client, session, workspaceId]);
 }
 
 export function useOnlineUsers() {

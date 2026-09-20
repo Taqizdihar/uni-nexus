@@ -94,6 +94,7 @@ function AvatarPhotoModal({ profile, onClose }: { profile: ProfileData; onClose:
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
       await client.invalidateQueries({ queryKey: ['session'] });
+      await client.invalidateQueries({ queryKey: ['online-presence'] });
       toast('Foto profil diperbarui.');
     },
     onError: (error) => toast(message(error), true),
@@ -168,6 +169,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
       await client.invalidateQueries({ queryKey: ['session'] });
+      await client.invalidateQueries({ queryKey: ['online-presence'] });
       setPresenceOpen(false);
     },
     onError: (error) => toast(message(error), true),

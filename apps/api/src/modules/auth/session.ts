@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import type { CookieOptions, Response } from 'express';
 import { env } from '../../config/env.js';
@@ -20,7 +20,9 @@ export function issueSession(
   response: Response,
   user: { id: bigint; password_hash: string },
 ): void {
-  const token = jwt.sign({ fp: passwordFingerprint(user.password_hash) }, env.JWT_SECRET, {
+  // `sid` is deliberately random per browser login. It lets ephemeral services (such as
+  // presence) revoke exactly this session without making other devices disappear.
+  const token = jwt.sign({ fp: passwordFingerprint(user.password_hash), sid: randomUUID() }, env.JWT_SECRET, {
     subject: user.id.toString(),
     issuer,
     audience,
@@ -34,7 +36,7 @@ export function clearSession(response: Response): void {
   response.clearCookie(env.COOKIE_NAME, cookieOptions);
 }
 
-export function verifySession(token: string): { userId: bigint; fingerprint: string } | null {
+export function verifySession(token: string): { userId: bigint; fingerprint: string; sessionId: string } | null {
   try {
     const value = jwt.verify(token, env.JWT_SECRET, { algorithms: ['HS256'], issuer, audience });
     if (
@@ -42,10 +44,12 @@ export function verifySession(token: string): { userId: bigint; fingerprint: str
       typeof value.sub !== 'string' ||
       !/^[1-9]\d{0,19}$/.test(value.sub) ||
       typeof value.fp !== 'string' ||
-      !/^[a-f0-9]{64}$/.test(value.fp)
+      !/^[a-f0-9]{64}$/.test(value.fp) ||
+      typeof value.sid !== 'string' ||
+      !/^[a-f0-9-]{36}$/.test(value.sid)
     )
       return null;
-    return { userId: BigInt(value.sub), fingerprint: value.fp };
+    return { userId: BigInt(value.sub), fingerprint: value.fp, sessionId: value.sid };
   } catch {
     return null;
   }

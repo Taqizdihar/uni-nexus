@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
-import { resolveAssetUrl } from '../profile/service.js';
+import { resolveAssetUrl } from '../profile/asset-url.js';
 
 /**
  * MVP "who's online" registry. In-memory and scoped to a single backend process — a user counts as
@@ -10,20 +10,23 @@ import { resolveAssetUrl } from '../profile/service.js';
  */
 export const HEARTBEAT_TTL_MS = 90_000;
 
-type PresenceEntry = { workspaceId: bigint; lastSeen: number };
-const registry = new Map<bigint, PresenceEntry>();
+type PresenceEntry = { userId: bigint; workspaceId: bigint; lastSeen: number };
+const registry = new Map<string, PresenceEntry>();
 
-export function recordHeartbeat(userId: bigint, workspaceId: bigint): void {
-  registry.set(userId, { workspaceId, lastSeen: Date.now() });
+export function recordHeartbeat(sessionId: string, userId: bigint, workspaceId: bigint): void {
+  registry.set(sessionId, { userId, workspaceId, lastSeen: Date.now() });
 }
+
+/** Removes only the browser/session that explicitly signed out. */
+export function removeSession(sessionId: string): void { registry.delete(sessionId); }
 
 function onlineUserIds(workspaceId: bigint): bigint[] {
   const now = Date.now();
   const ids: bigint[] = [];
-  for (const [userId, entry] of registry) {
+  for (const [sessionId, entry] of registry) {
     const expired = now - entry.lastSeen > HEARTBEAT_TTL_MS;
-    if (expired) registry.delete(userId);
-    else if (entry.workspaceId === workspaceId) ids.push(userId);
+    if (expired) registry.delete(sessionId);
+    else if (entry.workspaceId === workspaceId && !ids.includes(entry.userId)) ids.push(entry.userId);
   }
   return ids;
 }

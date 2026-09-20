@@ -126,3 +126,18 @@ customers ──▶ custom_requests ──▶ quotations ──▶ orders ──
   written inside the same transaction as every create/update/status-change across every
   module (see [services/audit.ts](../apps/api/src/services/audit.ts)) — it is the
   system's single change history, not a per-module log.
+
+## Quotation pricing snapshots
+
+The live `quotation_items` schema records the pricing evidence used when a line was
+calculated: `pricing_rule_id`, `material_id`, `billable_weight_gram`, rule name/type,
+per-gram/minimum/design/finishing snapshots, `pricing_breakdown_json`, and
+`pricing_calculated_at`. `pricing_rule_id` references `pricing_rules`; `material_id`
+references `materials`. Those records are historical snapshots rather than live pricing
+joins, so a future rule edit never reprices an existing quotation or converted order.
+
+`quotations` is uniquely constrained by `(custom_request_id, revision_no)`. The
+workflow revision endpoint relies on that constraint in addition to a transaction lock.
+These manually applied database changes are represented in Prisma and the checked-in
+schema metadata only; this repository does not create a Prisma migration or run a
+database reset for them.

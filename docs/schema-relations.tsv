@@ -70,6 +70,7 @@ print_profiles	workspace_id	workspaces	id
 print_profiles	printer_id	printers	id
 print_profiles	material_id	materials	id
 printers	workspace_id	workspaces	id
+printers	printer_catalog_id	printer_catalogs	id
 product_assets	product_id	products	id
 product_assets	source_design_asset_id	design_assets	id
 product_assets	uploaded_by_user_id	users	id
@@ -100,6 +101,8 @@ qc_inspections	inspected_by_user_id	users	id
 quotation_items	quotation_id	quotations	id
 quotation_items	product_id	products	id
 quotation_items	product_variant_id	product_variants	id
+quotation_items	pricing_rule_id	pricing_rules	id
+quotation_items	material_id	materials	id
 quotations	workspace_id	workspaces	id
 quotations	custom_request_id	custom_requests	id
 quotations	customer_id	customers	id

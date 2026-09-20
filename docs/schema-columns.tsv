@@ -315,6 +315,7 @@ print_profiles	created_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED
 print_profiles	updated_at	datetime	NO	CURRENT_TIMESTAMP		DEFAULT_GENERATED on update CURRENT_TIMESTAMP
 printers	id	bigint unsigned	NO	NULL	PRI	auto_increment
 printers	workspace_id	bigint unsigned	NO	NULL	MUL	
+printers	printer_catalog_id	bigint unsigned	YES	NULL	MUL
 printers	printer_code	varchar(60)	YES	NULL		
 printers	name	varchar(120)	NO	NULL		
 printers	brand	varchar(120)	YES	NULL		
@@ -325,6 +326,14 @@ printers	build_volume_x_mm	decimal(10,2)	YES	NULL
 printers	build_volume_y_mm	decimal(10,2)	YES	NULL		
 printers	build_volume_z_mm	decimal(10,2)	YES	NULL		
 printers	default_nozzle_size_mm	decimal(6,3)	YES	NULL		
+printers	photo_original_file_name	varchar(255)	YES	NULL
+printers	photo_mime_type	varchar(120)	YES	NULL
+printers	photo_file_size_bytes	bigint unsigned	YES	NULL
+printers	photo_storage_provider	varchar(40)	YES	NULL
+printers	photo_bucket_name	varchar(120)	YES	NULL
+printers	photo_object_key	varchar(500)	YES	NULL
+printers	photo_public_url	text	YES	NULL
+printers	photo_alt_text	varchar(255)	YES	NULL
 printers	status	varchar(30)	NO	IDLE		
 printers	last_maintenance_at	datetime	YES	NULL		
 printers	is_active	tinyint(1)	NO	1		
@@ -455,6 +464,17 @@ quotation_items	id	bigint unsigned	NO	NULL	PRI	auto_increment
 quotation_items	quotation_id	bigint unsigned	NO	NULL	MUL	
 quotation_items	product_id	bigint unsigned	YES	NULL	MUL	
 quotation_items	product_variant_id	bigint unsigned	YES	NULL	MUL	
+quotation_items	pricing_rule_id	bigint unsigned	YES	NULL	MUL
+quotation_items	material_id	bigint unsigned	YES	NULL	MUL
+quotation_items	billable_weight_gram	decimal(12,3)	YES	NULL
+quotation_items	pricing_rule_name_snapshot	varchar(150)	YES	NULL
+quotation_items	pricing_rule_type_snapshot	varchar(50)	YES	NULL
+quotation_items	price_per_gram_snapshot	decimal(14,4)	YES	NULL
+quotation_items	minimum_price_snapshot	decimal(14,2)	YES	NULL
+quotation_items	design_fee_snapshot	decimal(14,2)	YES	NULL
+quotation_items	finishing_fee_snapshot	decimal(14,2)	YES	NULL
+quotation_items	pricing_breakdown_json	json	YES	NULL
+quotation_items	pricing_calculated_at	datetime	YES	NULL
 quotation_items	description	varchar(255)	NO	NULL		
 quotation_items	quantity	decimal(12,3)	NO	1.000		
 quotation_items	unit_price	decimal(14,2)	NO	0.00		

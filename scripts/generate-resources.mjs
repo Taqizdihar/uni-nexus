@@ -47,8 +47,8 @@ const configs = [
 ];
 const keyOf = t => t.replaceAll('_','-');
 const allowedTables = new Set(configs.map(c=>c[0]));
-const hidden = new Set(['id','workspace_id','object_key','bucket_name','storage_provider','password_hash','customer_account_id','uploaded_by_customer_account_id','mime_type','file_size_bytes','created_by_user_id','uploaded_by_user_id','recorded_by_user_id','reported_by_user_id']);
-const readOnly = new Set(['created_at','updated_at','approved_by_user_id','sent_at','accepted_at','declined_at','published_at']);
+const hidden = new Set(['id','workspace_id','object_key','bucket_name','storage_provider','password_hash','customer_account_id','uploaded_by_customer_account_id','mime_type','file_size_bytes','created_by_user_id','uploaded_by_user_id','recorded_by_user_id','reported_by_user_id','photo_original_file_name','photo_mime_type','photo_file_size_bytes','photo_storage_provider','photo_bucket_name','photo_object_key','photo_public_url','photo_alt_text']);
+const readOnly = new Set(['created_at','updated_at','approved_by_user_id','sent_at','accepted_at','declined_at','published_at','pricing_rule_name_snapshot','pricing_rule_type_snapshot','price_per_gram_snapshot','minimum_price_snapshot','design_fee_snapshot','finishing_fee_snapshot','pricing_breakdown_json','pricing_calculated_at']);
 const derived = {quotations:['subtotal','total_price'],orders:['subtotal','total_price'],quotation_items:['amount'],order_items:['total_price'],production_costs:['total_cost'],material_usages:['cost_per_gram','total_cost'],slicing_results:['total_weight_gram'],filament_spools:['cost_per_gram']};
 const statuses = {
  custom_requests:['NEW','UNDER_REVIEW','NEED_INFORMATION','FEASIBLE','NOT_FEASIBLE','ESTIMATING','QUOTED','ACCEPTED','DECLINED','CANCELLED'],
@@ -71,7 +71,8 @@ const options = {
  usage_type:['MODEL','SUPPORT','WASTE','PURGE','OTHER'], channel:['IN_APP','EMAIL','WHATSAPP'],
  rule_type:['PER_GRAM','FIXED','CUSTOM'],calculation_type:['MANUAL','PER_GRAM','PER_HOUR','PER_UNIT'],
 };
-const nice = name=>name.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase()).replace(/ Id$/,'').replace(/Gram/g,'(g)').replace(/Mm/g,'(mm)').replace(/Json/g,'JSON');
+const labels = { pricing_rule_id: 'Aturan Harga', material_id: 'Material', billable_weight_gram: 'Berat Ditagihkan (g)', pricing_rule_name_snapshot: 'Aturan Harga (Snapshot)', pricing_rule_type_snapshot: 'Jenis Aturan (Snapshot)', price_per_gram_snapshot: 'Harga per Gram (Snapshot)', minimum_price_snapshot: 'Harga Minimum (Snapshot)', design_fee_snapshot: 'Biaya Desain (Snapshot)', finishing_fee_snapshot: 'Biaya Finishing (Snapshot)', pricing_breakdown_json: 'Rincian Harga', pricing_calculated_at: 'Harga Dihitung Pada' };
+const nice = name=>labels[name]??name.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase()).replace(/ Id$/,'').replace(/Gram/g,'(g)').replace(/Mm/g,'(mm)').replace(/Json/g,'JSON');
 const resources = configs.map(([table,title,singular,description,group,permission,tableColumns])=>{
  const fields=columns.filter(r=>r[0]===table&&!hidden.has(r[1])).map(([,name,sql,nullable,def])=>{
   const fk=foreignKeys.find(r=>r[0]===table&&r[1]===name);

@@ -6,6 +6,7 @@ import { requireAuth, requireWorkspace, authorize } from '../../middleware/auth.
 import { definition, cleanRow } from './repository.js';
 import { identifier } from './validation.js';
 import { list,detail,save } from './service.js';
+import { printerRouter } from '../printers/router.js';
 import { dashboardRouter } from '../dashboard/router.js';
 import { costingRouter } from '../costing/router.js';
 import { workflowsRouter } from '../workflows/router.js';
@@ -18,6 +19,7 @@ domainRouter.get('/meta',(_req,res)=>{res.json({data:resources});});
 domainRouter.use('/dashboard',dashboardRouter);
 domainRouter.use('/costs',costingRouter);
 domainRouter.use('/files',filesRouter);
+domainRouter.use('/printers',printerRouter);
 domainRouter.use(workflowsRouter);
 domainRouter.post('/notifications/read-all',async(req,res)=>{
   const result=await prisma.notifications.updateMany({where:{workspace_id:req.workspace!.id,recipient_user_id:req.auth!.userId,read_at:null},data:{read_at:new Date()}});
@@ -55,7 +57,7 @@ for(const method of ['post','patch'] as const){
     authorize(resource.permission)(req,res,async error=>{
       if(error){next(error);return;}
       try{
-        const row=await save(resource,req.body,{workspaceId:req.workspace!.id,userId:req.auth!.userId},method==='patch'?BigInt(identifier.parse('id' in req.params ? req.params.id : undefined)):undefined);
+        const row=await save(resource,req.body,{workspaceId:req.workspace!.id,userId:req.auth!.userId,role:req.workspace!.role},method==='patch'?BigInt(identifier.parse('id' in req.params ? req.params.id : undefined)):undefined);
         res.status(method==='post'?201:200).json({data:row});
       }catch(error){next(error);}
     });

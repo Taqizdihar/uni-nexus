@@ -45,7 +45,7 @@ export const requireAuth: RequestHandler = async (request, _response, next) => {
       !matchesFingerprint(user.password_hash, session.fingerprint)
     )
       throw new AppError(401, 'Your session has expired. Please sign in again.', 'SESSION_EXPIRED');
-    request.auth = { userId: user.id };
+    request.auth = { userId: user.id, sessionId: session.sessionId };
     next();
   } catch (error) {
     next(error);

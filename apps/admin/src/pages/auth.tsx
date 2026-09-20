@@ -115,10 +115,12 @@ export function AuthPage({ mode }: { mode: Mode }) {
         }
         // The one-time CTO bootstrap claim issues a session immediately instead of a pending status.
         await client.invalidateQueries({ queryKey: ['session'] });
+        await client.invalidateQueries({ queryKey: ['online-presence'] });
         navigate('/app', { replace: true });
         return;
       }
       await client.invalidateQueries({ queryKey: ['session'] });
+      await client.invalidateQueries({ queryKey: ['online-presence'] });
       navigate('/app', { replace: true });
     },
     onError: (error) => {

@@ -6,7 +6,7 @@ export const onlinePresenceRouter = Router();
 onlinePresenceRouter.use('/online-presence', requireAuth, requireWorkspace);
 
 onlinePresenceRouter.post('/online-presence/heartbeat', (request, response) => {
-  recordHeartbeat(request.auth!.userId, request.workspace!.id);
+  recordHeartbeat(request.auth!.sessionId, request.auth!.userId, request.workspace!.id);
   response.status(204).end();
 });
 

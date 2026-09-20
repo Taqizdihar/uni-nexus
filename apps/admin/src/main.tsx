@@ -15,6 +15,7 @@ import { Profile } from './pages/profile';
 import { Team } from './pages/team';
 import { UserManagement } from './pages/user-management';
 import { ResourcePage } from './pages/resources';
+import { ProductionWorkflowWorkspace, SalesWorkflowDetail, SalesWorkflowWorkspace } from './pages/workflows';
 import './styles/global.css';
 
 const queryClient = new QueryClient({
@@ -35,6 +36,9 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/app" element={<Shell />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="pesanan" element={<SalesWorkflowWorkspace />} />
+                <Route path="pesanan/:workflowKey" element={<SalesWorkflowDetail />} />
+                <Route path="produksi" element={<ProductionWorkflowWorkspace />} />
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="profile" element={<Profile />} />

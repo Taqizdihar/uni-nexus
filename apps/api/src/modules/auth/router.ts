@@ -4,6 +4,9 @@ import { requireAuth } from '../../middleware/auth.js';
 import { authConfig, changePassword, currentUser, login, signup } from './service.js';
 import { changePasswordSchema, loginSchema, signupSchema } from './validation.js';
 import { clearSession, issueSession } from './session.js';
+import { verifySession } from './session.js';
+import { removeSession } from '../online-presence/service.js';
+import { env } from '../../config/env.js';
 
 export const authRouter = Router();
 const authLimiter = rateLimit({
@@ -52,10 +55,15 @@ authRouter.post('/auth/signup', registrationLimiter, async (request, response) =
 authRouter.post('/auth/login', authLimiter, async (request, response) => {
   const input = loginSchema.parse(request.body);
   const user = await login(input.email, input.password);
+  const previous = typeof request.cookies?.[env.COOKIE_NAME] === 'string'
+    ? verifySession(request.cookies[env.COOKIE_NAME])
+    : null;
+  if (previous) removeSession(previous.sessionId);
   issueSession(response, user);
   response.json({ data: await currentUser(user.id) });
 });
-authRouter.post('/auth/logout', (_request, response) => {
+authRouter.post('/auth/logout', requireAuth, (request, response) => {
+  removeSession(request.auth!.sessionId);
   clearSession(response);
   response.json({ data: { loggedOut: true } });
 });
@@ -69,6 +77,7 @@ authRouter.post('/auth/password', authLimiter, requireAuth, async (request, resp
     input.current_password,
     input.new_password,
   );
+  removeSession(request.auth!.sessionId);
   issueSession(response, user);
   response.json({ data: { changed: true } });
 });

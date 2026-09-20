@@ -10,6 +10,7 @@ import { useResources } from '../lib/resources';
 import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 import { ResourceTable, FieldValue } from '../components/resource-table';
 import { ResourceForm, uploadResources } from '../components/resource-form';
+import { AddPrinterCatalogDialog, AddPrinterUnitDialog, FilamentGrid, PrinterGrid } from '../components/special-resource-grids';
 
 const clusters: string[][] = [
   ['products', 'product-categories', 'product-variants', 'product-images', 'product-assets', 'product-sales-channels'],
@@ -81,6 +82,7 @@ export function ResourcePage({ mode = 'list' }: { mode?: 'list' | 'new' | 'detai
   const key = resourceKey(params.resource || '');
   const metadata = useResources();
   const { workspace } = useAuth();
+  const isCto = workspace?.role.toUpperCase() === 'CTO';
   const resource = metadata.data?.find((item) => item.key === key);
   const record = useQuery({ queryKey: ['record', workspace!.id, key, params.id], enabled: !!resource && !!params.id && (mode === 'detail' || mode === 'edit'), queryFn: async () => (await api<Envelope<Row>>(`/${key}/${params.id}`, { workspace: workspace!.id })).data });
   if (metadata.isPending) return <Spinner />;
@@ -88,6 +90,7 @@ export function ResourcePage({ mode = 'list' }: { mode?: 'list' | 'new' | 'detai
   if (!resource) return <EmptyState title="Halaman ini tidak tersedia" description="Modul ini mungkin tidak tersedia untuk workspace atau jabatan Anda." action={<Link className="button secondary" to="/app/dashboard">Kembali ke Ringkasan</Link>} />;
   if (mode === 'new' || mode === 'edit') {
     if (resource.readOnly) return <EmptyState title="Catatan ini hanya dapat dibaca" description="Catatan ini dikelola secara otomatis oleh aplikasi." action={<Link className="button secondary" to={resourcePath(resource.key)}>Kembali ke {resource.title.toLowerCase()}</Link>} />;
+    if (mode === 'new' && resource.key === 'printers') return <EmptyState title="Tambah unit melalui katalog" description="Pilih Tambah Printer untuk memilih data printer yang dikelola CTO." action={<Link className="button secondary" to={resourcePath(resource.key)}>Kembali ke Printer</Link>} />;
     if (mode === 'edit' && record.isPending) return <Spinner />;
     if (mode === 'edit' && record.isError) return <ErrorState error={record.error} />;
     return <ResourceForm key={`${key}:${params.id || 'new'}`} resource={resource} record={mode === 'edit' ? record.data : undefined} />;
@@ -97,5 +100,6 @@ export function ResourcePage({ mode = 'list' }: { mode?: 'list' | 'new' | 'detai
     if (record.isError) return <ErrorState error={record.error} retry={() => void record.refetch()} />;
     return <RecordDetail key={`${key}:${params.id}`} resource={resource} record={record.data} resources={metadata.data} />;
   }
-  return <><PageHeader eyebrow={resource.group.toUpperCase()} title={resource.title} description={resource.description} actions={!resource.readOnly && <Link className="button primary" to={`${resourcePath(key)}/new`}><Plus size={17} />{resource.singular} Baru</Link>} /><ResourceNavigation resource={resource} resources={metadata.data} />{key === 'production-costs' && <CostOverview />}<ResourceTable key={key} resource={resource} />{resource.key === 'audit-logs' && <p className="helper-note">Catatan audit hanya dapat dibaca dan dibuat secara otomatis saat catatan berubah.</p>}{resource.key === 'notification-settings' && <p className="helper-note">Notifikasi dalam aplikasi sudah tersedia. Pengiriman Email dan WhatsApp dicadangkan untuk integrasi mendatang.</p>}</>;
+  const canCreate = !resource.readOnly && resource.key !== 'printers';
+  return <><PageHeader eyebrow={resource.group.toUpperCase()} title={resource.title} description={resource.description} actions={resource.key === 'printers' ? <div className="button-row"><AddPrinterUnitDialog />{isCto && <AddPrinterCatalogDialog />}</div> : canCreate && <Link className="button primary" to={`${resourcePath(key)}/new`}><Plus size={17} />{`${resource.singular} Baru`}</Link>} /><ResourceNavigation resource={resource} resources={metadata.data} />{key === 'production-costs' && <CostOverview />}{key === 'printers' ? <PrinterGrid resource={resource} /> : key === 'filament-spools' ? <FilamentGrid resource={resource} /> : <ResourceTable key={key} resource={resource} />}{resource.key === 'audit-logs' && <p className="helper-note">Catatan audit hanya dapat dibaca dan dibuat secara otomatis saat catatan berubah.</p>}{resource.key === 'notification-settings' && <p className="helper-note">Notifikasi dalam aplikasi sudah tersedia. Pengiriman Email dan WhatsApp dicadangkan untuk integrasi mendatang.</p>}</>;
 }

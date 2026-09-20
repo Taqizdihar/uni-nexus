@@ -16,17 +16,11 @@ type NavigationItem = { path: string; label: string; icon: ComponentType<{ size?
 const isReviewerRole = (role: string) => (REVIEWER_ROLE_CODES as readonly string[]).includes(role.toUpperCase());
 function navigationFor(canReview: boolean): { label: string; items: NavigationItem[] }[] {
   return [
-    { label: 'WORKSPACE', items: [{ path: 'dashboard', label: 'Ringkasan', icon: Gauge }, { path: 'customers', label: 'Pelanggan', icon: Users }, { path: 'products', label: 'Katalog Produk', icon: Boxes }] },
-    { label: 'PERENCANAAN & PENJUALAN', items: [{ path: 'requests', label: 'Permintaan Custom', icon: MessageSquare }, { path: 'design-tasks', label: 'Studio Desain', icon: Palette }, { path: 'quotations', label: 'Penawaran', icon: ReceiptText }, { path: 'orders', label: 'Pesanan', icon: ClipboardList }, { path: 'pricing-rules', label: 'Aturan Harga', icon: Wallet }] },
-    { label: 'PRODUKSI & PENYELESAIAN', items: [{ path: 'production', label: 'Produksi', icon: FolderKanban }, { path: 'print-queue', label: 'Antrean Cetak', icon: Printer }, { path: 'printers', label: 'Printer', icon: Box }, { path: 'print-profiles', label: 'Profil Cetak', icon: SlidersHorizontal }, { path: 'materials', label: 'Material', icon: Layers3 }, { path: 'filament', label: 'Stok Filamen', icon: Spool }, { path: 'failures', label: 'Kegagalan Cetak', icon: Activity }, { path: 'experiments', label: 'Eksperimen', icon: FlaskConical }, { path: 'costing', label: 'Biaya & HPP', icon: Wallet }, { path: 'qc', label: 'Kontrol Kualitas', icon: ClipboardCheck }, { path: 'packaging', label: 'Pengemasan', icon: Package }, { path: 'ip-reviews', label: 'IP & Lisensi', icon: ShieldCheck }] },
-    {
-      label: 'TIM',
-      items: [
-        { path: 'team', label: 'Tim', icon: Users },
-        ...(canReview ? [{ path: 'user-management', label: 'Manajemen Pengguna', icon: UserCog }] : []),
-      ],
-    },
-    { label: 'ADMINISTRASI', items: [{ path: 'notifications', label: 'Notifikasi', icon: Bell }, { path: 'audit', label: 'Aktivitas & Audit', icon: ScrollText }, { path: 'settings', label: 'Pengaturan', icon: Settings2 }] },
+    { label: 'RINGKASAN', items: [{ path: 'dashboard', label: 'Ringkasan', icon: Gauge }] },
+    { label: 'PENJUALAN', items: [{ path: 'pesanan', label: 'Pesanan', icon: ClipboardList }, { path: 'customers', label: 'Pelanggan', icon: Users }, { path: 'products', label: 'Katalog Produk', icon: Boxes }] },
+    { label: 'OPERASIONAL', items: [{ path: 'produksi', label: 'Produksi', icon: FolderKanban }, { path: 'filament', label: 'Stok Filamen', icon: Spool }] },
+    { label: 'MASTER & SETUP', items: [{ path: 'printers', label: 'Printer', icon: Printer }, { path: 'materials', label: 'Material', icon: Layers3 }, { path: 'print-profiles', label: 'Profil Cetak', icon: SlidersHorizontal }, { path: 'pricing-rules', label: 'Aturan Harga', icon: Wallet }] },
+    { label: 'LAINNYA', items: [{ path: 'experiments', label: 'Eksperimen', icon: FlaskConical }, { path: 'costing', label: 'Biaya & HPP', icon: Wallet }, { path: 'ip-reviews', label: 'IP & Lisensi', icon: ShieldCheck }, { path: 'team', label: 'Tim', icon: Users }, ...(canReview ? [{ path: 'user-management', label: 'Manajemen Pengguna', icon: UserCog }] : []), { path: 'notifications', label: 'Notifikasi', icon: Bell }, { path: 'audit', label: 'Audit', icon: ScrollText }, { path: 'settings', label: 'Pengaturan', icon: Settings2 }] },
   ];
 }
 

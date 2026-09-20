@@ -1,7 +1,7 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma, PrismaClient } from '@prisma/client';
 import { decimal, money, sumMoney } from './money.js';
 
-export async function costSummary(db: Prisma.TransactionClient, workspaceId: bigint, orderId?: bigint) {
+export async function costSummary(db: Prisma.TransactionClient | PrismaClient, workspaceId: bigint, orderId?: bigint) {
   const orderWhere = { workspace_id: workspaceId, ...(orderId ? { id: orderId } : {}) };
   const scope: Prisma.production_costsWhereInput = { workspace_id: workspaceId, ...(orderId ? { OR: [ { order_id: orderId }, { production_jobs: { order_items: { order_id: orderId } } }, { print_jobs: { production_jobs: { order_items: { order_id: orderId } } } } ] } : {}) };
   const [costs, sales, usages, packaging] = await Promise.all([

@@ -21,6 +21,18 @@ for callers with the `finance` permission. Backed by
 /dashboard`), which runs the metric queries in parallel against `workspace_id`-scoped
 tables. Renders correctly with all-zero metrics and empty lists when the workspace is new.
 
+## Unified sales and production workspaces
+
+**Routes:** `/app/pesanan` and `/app/produksi` · permission: `read`
+
+These purpose-built queues aggregate the established request-to-production lifecycle
+without replacing the underlying resources. `/app/pesanan` shows a customer-facing,
+stage-derived view of custom requests and direct orders; `/app/produksi` shows the
+operator-facing production and print queues. Both support counts, filters, pagination,
+and links into the legacy forms for the actual mutation. Dashboard pipeline cards point
+to these routes. See [WORKFLOWS.md](WORKFLOWS.md) for stage precedence, API contracts,
+pricing snapshots, revision behavior, and compatibility rules.
+
 ## Customers
 
 **Route:** `/app/customers` · permission: `sales`

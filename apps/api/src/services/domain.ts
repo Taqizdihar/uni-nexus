@@ -4,6 +4,7 @@ import { decimal, documentTotal, lineTotal, money, nonnegative, type DecimalInpu
 import { audit, type WorkspaceContext } from './audit.js';
 import { InAppNotificationProvider } from './notifications.js';
 import { validateTransition } from './status.js';
+import { calculateQuotationItemPricing } from '../modules/workflows/pricing.js';
 
 type Row = Record<string, unknown>;
 const value = (record: Row, key: string): DecimalInput => record[key] as DecimalInput;
@@ -33,7 +34,30 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     if (!quote) throw new AppError(404, 'Quotation not found.');
     if (quote.status !== 'DRAFT') throw new AppError(409, 'Only draft quotation items can be edited.');
     if (decimal(value(merged, 'quantity') ?? '1').lte(0)) throw new AppError(422, 'Quantity must be greater than zero.');
+    const pricingInputsChanged = !existing || ['pricing_rule_id', 'material_id', 'billable_weight_gram', 'unit_price'].some((field) => field in next);
+    if (merged.pricing_rule_id != null && pricingInputsChanged) {
+      const now = new Date();
+      const rule = await tx.pricing_rules.findFirst({
+        where: {
+          id: id(merged.pricing_rule_id), workspace_id: context.workspaceId, is_active: true,
+          AND: [{ OR: [{ effective_from: null }, { effective_from: { lte: now } }] }, { OR: [{ effective_until: null }, { effective_until: { gte: now } }] }],
+        },
+      });
+      if (!rule) throw new AppError(404, 'Aturan harga aktif tidak ditemukan untuk tanggal saat ini.', 'PRICING_RULE_NOT_FOUND');
+      Object.assign(next, calculateQuotationItemPricing(rule, {
+        materialId: merged.material_id == null ? null : id(merged.material_id),
+        billableWeightGram: value(merged, 'billable_weight_gram'),
+        manualUnitPrice: value(merged, 'unit_price'),
+      }));
+    } else if (existing && 'pricing_rule_id' in next && merged.pricing_rule_id == null) {
+      Object.assign(next, {
+        material_id: null, billable_weight_gram: null, pricing_rule_name_snapshot: null, pricing_rule_type_snapshot: null,
+        price_per_gram_snapshot: null, minimum_price_snapshot: null, design_fee_snapshot: null, finishing_fee_snapshot: null,
+        pricing_breakdown_json: null, pricing_calculated_at: null,
+      });
+    }
     next.amount = lineTotal(value(merged, 'quantity') ?? '1', value(merged, 'unit_price'));
+    if (next.unit_price != null) next.amount = lineTotal(value(merged, 'quantity') ?? '1', value(next, 'unit_price'));
   }
   if (table === 'order_items') {
     await tx.$queryRaw(Prisma.sql`SELECT id FROM orders WHERE id = ${id(merged.order_id)} AND workspace_id = ${context.workspaceId} FOR UPDATE`);
@@ -59,6 +83,12 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     }
   }
   if (table === 'filament_spools') {
+    if ('color_hex' in next && next.color_hex != null) {
+      const color = String(next.color_hex).trim().toUpperCase();
+      if (!/^#[0-9A-F]{6}$/.test(color))
+        throw new AppError(422, 'Gunakan kode warna HEX dengan format #RRGGBB.', 'INVALID_FILAMENT_COLOR');
+      next.color_hex = color;
+    }
     const initial = nonnegative(value(merged, 'initial_weight_gram'), 'Initial weight');
     const remaining = nonnegative(value(merged, 'remaining_weight_gram') ?? initial, 'Remaining weight');
     if (remaining.gt(initial)) throw new AppError(422, 'Remaining weight cannot exceed initial weight.');

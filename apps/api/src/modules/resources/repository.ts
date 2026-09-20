@@ -64,6 +64,9 @@ export async function verifyReferences(db: Database, resource: ResourceDefinitio
   }
 }
 export function cleanRow(row: Row): Row {
-  const hidden = new Set(['object_key','bucket_name','storage_provider','password_hash','token_hash','uploaded_by_customer_account_id','customer_account_id']);
-  return Object.fromEntries(Object.entries(row).filter(([key])=>!hidden.has(key)));
+  const hidden = new Set(['object_key','bucket_name','storage_provider','password_hash','token_hash','uploaded_by_customer_account_id','customer_account_id','photo_object_key','photo_bucket_name','photo_storage_provider','photo_original_file_name','photo_mime_type','photo_file_size_bytes']);
+  const clean = Object.fromEntries(Object.entries(row).filter(([key])=>!hidden.has(key)));
+  if (row.photo_public_url || (row.photo_storage_provider === 'LOCAL' && row.id))
+    clean.photo_url = row.photo_public_url ?? `/api/v1/printers/${String(row.id)}/photo`;
+  return clean;
 }
