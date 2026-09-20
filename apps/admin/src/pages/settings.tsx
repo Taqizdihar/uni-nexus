@@ -11,6 +11,7 @@ import { titleCase } from '../lib/format';
 import { useResources } from '../lib/resources';
 import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 import { ResourceTable } from '../components/resource-table';
+import { PetManagementTab } from '../components/pet-management-tab';
 
 type Role = { id: string; name: string; code: string; description?: string | null; is_active?: boolean };
 type Member = { id: string; membership_status: string; joined_at: string; user: { id: string; full_name: string; email: string; account_status?: string }; role: Role | null };
@@ -159,10 +160,11 @@ function PreferencesTab() {
 }
 
 export function Settings() {
-  const { workspace } = useAuth();
+  const { workspace, session } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const canManage = ['OWNER', 'CEO', 'ADMIN', 'CTO', 'COO', 'CVO'].includes((workspace?.role ?? '').toUpperCase());
-  const tabs = [{ key: 'account', label: 'Akun' }, ...(canManage ? [{ key: 'workspace', label: 'Workspace' }, { key: 'members', label: 'Anggota' }, { key: 'roles', label: 'Jabatan' }, { key: 'preferences', label: 'Preferensi' }] : [])];
+  const isCto = session?.workspaces.some((item) => item.role.toUpperCase() === 'CTO') ?? false;
+  const tabs = [{ key: 'account', label: 'Akun' }, ...(canManage ? [{ key: 'workspace', label: 'Workspace' }, { key: 'members', label: 'Anggota' }, { key: 'roles', label: 'Jabatan' }, { key: 'preferences', label: 'Preferensi' }] : []), ...(isCto ? [{ key: 'pet', label: 'Pet' }] : [])];
   const requested = searchParams.get('tab') || 'account';
   const tab = tabs.some((item) => item.key === requested) ? requested : 'account';
   return <><PageHeader eyebrow="WORKSPACE ANDA" title="Pengaturan" description="Kelola akun, workspace, dan akses tim Anda." />
@@ -172,5 +174,6 @@ export function Settings() {
     {tab === 'members' && <MembersTab />}
     {tab === 'roles' && <RolesTab />}
     {tab === 'preferences' && <PreferencesTab />}
+    {tab === 'pet' && <PetManagementTab />}
   </>;
 }

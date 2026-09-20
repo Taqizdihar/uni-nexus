@@ -16,6 +16,12 @@ There is no `prisma/migrations` directory in this project and no migration workf
 schema changes happen in MySQL directly (or via whatever process owns
 `uni-nexus_db`), and this repository is re-pointed at the result.
 
+The Pet rollout is documented in
+[docs/migrations/2026-09-pet-management.sql](migrations/2026-09-pet-management.sql). It
+seeds the five global built-ins idempotently, backfills null `users.pet_id` values to
+the record whose code is `UNI_INU`, verifies the backfill, and only then makes the
+foreign-key column required.
+
 ## Prisma introspection
 
 [apps/api/prisma/schema.prisma](../apps/api/prisma/schema.prisma) is a Prisma schema

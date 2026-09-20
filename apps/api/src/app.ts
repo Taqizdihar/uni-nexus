@@ -14,6 +14,7 @@ import { userManagementRouter } from './modules/user-management/router.js';
 import { teamRouter } from './modules/team/router.js';
 import { profileRouter } from './modules/profile/router.js';
 import { onlinePresenceRouter } from './modules/online-presence/router.js';
+import { petManagementRouter } from './modules/pet-management/router.js';
 
 export function createApp() {
   const app = express();
@@ -61,6 +62,7 @@ export function createApp() {
     userManagementRouter,
     teamRouter,
     profileRouter,
+    petManagementRouter,
     onlinePresenceRouter,
     domainRouter,
   );

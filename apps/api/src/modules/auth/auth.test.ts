@@ -16,6 +16,7 @@ const db = vi.hoisted(() => ({
   roles: { findFirst: vi.fn() },
   workspaces: { create: vi.fn() },
   workspace_members: { create: vi.fn(), findFirst: vi.fn(), findMany: vi.fn() },
+  pets: { findFirst: vi.fn() },
   system_bootstrap: { update: vi.fn(), findUnique: vi.fn() },
   audit_logs: { create: vi.fn() },
   $queryRaw: vi.fn(),
@@ -78,6 +79,7 @@ beforeEach(() => {
   db.$transaction.mockImplementation((callback: (tx: unknown) => unknown) => callback(db));
   db.audit_logs.create.mockResolvedValue({});
   db.workspace_members.findMany.mockResolvedValue([]);
+  db.pets.findFirst.mockResolvedValue({ id: 99n, code: 'UNI_INU', is_active: true });
   db.users.findFirst.mockResolvedValue(null);
   db.system_bootstrap.findUnique.mockResolvedValue(null);
   db.$queryRaw.mockResolvedValue([
@@ -96,6 +98,7 @@ describe('registration and the one-time CTO bootstrap', () => {
     const result = await signup(validSignup);
     expect(result.bootstrapped).toBe(false);
     expect(result.user.account_status).toBe('PENDING');
+    expect(db.users.create.mock.calls[0][0].data.pet_id).toBe(99n);
     expect(await bcrypt.compare('safe-password-123', result.user.password_hash as string)).toBe(
       true,
     );
@@ -135,6 +138,7 @@ describe('registration and the one-time CTO bootstrap', () => {
     expect(result.bootstrapped).toBe(true);
     expect(result.user.account_status).toBe('ACTIVE');
     expect(result.user.default_workspace_id).toBe(9n);
+    expect(db.users.create.mock.calls[0][0].data.pet_id).toBe(99n);
     expect(db.workspace_members.create).toHaveBeenCalledWith({
       data: { workspace_id: 9n, user_id: 1n, role_id: 3n, membership_status: 'ACTIVE' },
     });

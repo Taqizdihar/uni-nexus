@@ -10,8 +10,8 @@ const db = vi.hoisted(() => ({
 }));
 vi.mock('../../lib/prisma.js', () => ({ prisma: db }));
 
-import { presenceSchema, updateProfileSchema } from './validation.js';
-import { addTag, updateDefaultWorkspace, updateProfile } from './service.js';
+import { petSchema, presenceSchema, updateProfileSchema } from './validation.js';
+import { addTag, updateDefaultWorkspace, updatePet, updateProfile } from './service.js';
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -28,6 +28,10 @@ describe('profile validation boundaries', () => {
 
   it('rejects an unknown presence status', () => {
     expect(() => presenceSchema.parse({ presence_status: 'AWAY' })).toThrow();
+  });
+
+  it('rejects clearing the required Pet selection', () => {
+    expect(() => petSchema.parse({ pet_id: null })).toThrow();
   });
 });
 
@@ -92,5 +96,24 @@ describe('tag limit', () => {
     db.user_tags.findMany.mockResolvedValue([{ tag_text: 'Pilot' }]);
     await expect(addTag(1n, 'pilot')).rejects.toMatchObject({ code: 'TAG_DUPLICATE', status: 409 });
     expect(db.user_tags.create).not.toHaveBeenCalled();
+  });
+});
+
+describe('required Pet selection', () => {
+  it('rejects nonexistent or inactive Pets', async () => {
+    db.pets.findFirst.mockResolvedValue(null);
+    await expect(updatePet(1n, 900n)).rejects.toMatchObject({ code: 'INVALID_PET', status: 422 });
+    expect(db.users.update).not.toHaveBeenCalled();
+  });
+
+  it('updates only the current user and records USER_PET_CHANGED', async () => {
+    db.pets.findFirst.mockResolvedValue({ id: 2n, code: 'AZZY' });
+    db.users.findUnique.mockResolvedValue({ pet_id: 1n });
+    db.users.update.mockResolvedValue({});
+    db.users.findUnique.mockResolvedValueOnce({ pet_id: 1n }).mockResolvedValueOnce({ ...profileRow, pets: null });
+    const result = await updatePet(1n, 2n);
+    expect(result.id).toBe(1n);
+    expect(db.users.update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 1n }, data: { pet_id: 2n } }));
+    expect(db.audit_logs.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ action: 'USER_PET_CHANGED' }) }));
   });
 });

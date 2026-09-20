@@ -34,4 +34,13 @@ describe('private local storage', () => {
     expect(() => validateUpload(file, 4)).toThrow('exceeds');
     expect(() => validateUpload(file, 1024, true)).toThrow('Unsupported');
   });
+  it('validates AVIF using its ISO-BMFF ftyp brand', () => {
+    const avif = Buffer.alloc(24);
+    avif.writeUInt32BE(24, 0);
+    avif.write('ftyp', 4, 'ascii');
+    avif.write('avif', 8, 'ascii');
+    const file = { originalname: 'pet.avif', mimetype: 'image/avif', size: avif.length, buffer: avif };
+    expect(validateUpload(file, 1024, true).mime).toBe('image/avif');
+    expect(() => validateUpload({ ...file, buffer: Buffer.alloc(24), size: 24 }, 1024, true)).toThrow('content does not match');
+  });
 });

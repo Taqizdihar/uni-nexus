@@ -1082,7 +1082,7 @@ model users {
   password_changed_at                                                                    DateTime?                       @db.DateTime(0)
   account_status                                                                         String                          @default("PENDING") @db.VarChar(30)
   presence_status                                                                        String                          @default("DEFAULT") @db.VarChar(20)
-  pet_id                                                                                 BigInt?                         @db.UnsignedBigInt
+  pet_id                                                                                 BigInt                          @db.UnsignedBigInt
   default_workspace_id                                                                   BigInt?                         @db.UnsignedBigInt
   approved_by_user_id                                                                    BigInt?                         @db.UnsignedBigInt
   approved_at                                                                            DateTime?                       @db.DateTime(0)
@@ -1132,7 +1132,7 @@ model users {
   users_users_deactivated_by_user_idTousers                                              users?                          @relation("users_deactivated_by_user_idTousers", fields: [deactivated_by_user_id], references: [id], map: "fk_users_deactivated_by")
   other_users_users_deactivated_by_user_idTousers                                        users[]                         @relation("users_deactivated_by_user_idTousers")
   workspaces                                                                             workspaces?                     @relation(fields: [default_workspace_id], references: [id], map: "fk_users_default_workspace")
-  pets                                                                                   pets?                           @relation(fields: [pet_id], references: [id], map: "fk_users_pet")
+  pets                                                                                   pets                            @relation(fields: [pet_id], references: [id], map: "fk_users_pet")
   users_users_reactivated_by_user_idTousers                                              users?                          @relation("users_reactivated_by_user_idTousers", fields: [reactivated_by_user_id], references: [id], map: "fk_users_reactivated_by")
   other_users_users_reactivated_by_user_idTousers                                        users[]                         @relation("users_reactivated_by_user_idTousers")
   users_users_rejected_by_user_idTousers                                                 users?                          @relation("users_rejected_by_user_idTousers", fields: [rejected_by_user_id], references: [id], map: "fk_users_rejected_by")
@@ -1226,7 +1226,7 @@ model workspaces {
 model pets {
   id                     BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   code                   String   @unique(map: "uq_pets_code") @db.VarChar(60)
-  name                   String   @db.VarChar(120)
+  name                   String?  @db.VarChar(120)
   subtitle               String?  @db.VarChar(190)
   description            String?  @db.Text
   image_storage_provider String?  @db.VarChar(40)

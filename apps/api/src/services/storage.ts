@@ -26,12 +26,24 @@ export class LocalStorageService implements StorageService {
 }
 
 const allowedTypes: Record<string, string[]> = {
-  '.png': ['image/png'], '.jpg': ['image/jpeg'], '.jpeg': ['image/jpeg'], '.webp': ['image/webp'], '.gif': ['image/gif'], '.pdf': ['application/pdf'],
+  '.png': ['image/png'], '.jpg': ['image/jpeg'], '.jpeg': ['image/jpeg'], '.webp': ['image/webp'], '.gif': ['image/gif'], '.avif': ['image/avif'], '.pdf': ['application/pdf'],
   '.stl': ['model/stl', 'application/sla', 'application/vnd.ms-pki.stl', 'application/octet-stream'], '.3mf': ['model/3mf', 'application/vnd.ms-package.3dmanufacturing-3dmodel+xml', 'application/zip', 'application/octet-stream'],
   '.obj': ['model/obj', 'text/plain', 'application/octet-stream'], '.blend': ['application/x-blender', 'application/octet-stream'],
   '.gcode': ['text/plain', 'text/x-gcode', 'application/octet-stream'], '.txt': ['text/plain'], '.csv': ['text/csv', 'application/vnd.ms-excel', 'text/plain'],
 };
-export const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
+export const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif']);
+
+function hasAvifSignature(bytes: Buffer): boolean {
+  if (bytes.length < 16 || bytes.subarray(4, 8).toString() !== 'ftyp') return false;
+  const boxSize = bytes.readUInt32BE(0);
+  const end = boxSize >= 16 && boxSize <= bytes.length ? boxSize : bytes.length;
+  if (bytes.subarray(8, 12).toString() === 'avif' || bytes.subarray(8, 12).toString() === 'avis') return true;
+  for (let offset = 16; offset + 4 <= end; offset += 4) {
+    const brand = bytes.subarray(offset, offset + 4).toString();
+    if (brand === 'avif' || brand === 'avis') return true;
+  }
+  return false;
+}
 export function validateUpload(file: { originalname: string; mimetype: string; buffer: Buffer; size: number }, maxSize: number, imageOnly = false): { filename: string; mime: string; extension: string } {
   // eslint-disable-next-line no-control-regex -- intentionally stripping control characters from user-supplied filenames
   const filename = file.originalname.split(/[\\/]/).pop()?.replace(/[\x00-\x1f\x7f]/g, '').slice(0, 255) ?? '';
@@ -47,6 +59,7 @@ export function validateUpload(file: { originalname: string; mimetype: string; b
   if (extension === '.jpg' || extension === '.jpeg') valid = prefix[0] === 255 && prefix[1] === 216 && prefix[2] === 255;
   if (extension === '.gif') valid = ['GIF87a', 'GIF89a'].includes(prefix.subarray(0, 6).toString());
   if (extension === '.webp') valid = prefix.subarray(0, 4).toString() === 'RIFF' && prefix.subarray(8, 12).toString() === 'WEBP';
+  if (extension === '.avif') valid = hasAvifSignature(bytes);
   if (extension === '.pdf') valid = prefix.subarray(0, 5).toString() === '%PDF-';
   if (extension === '.3mf') valid = prefix[0] === 80 && prefix[1] === 75 && prefix[2] === 3 && prefix[3] === 4;
   if (extension === '.blend') valid = prefix.subarray(0, 7).toString() === 'BLENDER';

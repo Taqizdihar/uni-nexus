@@ -1,4 +1,5 @@
 export * from './types.js';
 export * from './resources.js';
 export * from './identity.js';
+export * from './pets.js';
 export * from './workflows.js';

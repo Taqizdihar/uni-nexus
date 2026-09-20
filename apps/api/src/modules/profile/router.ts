@@ -69,7 +69,7 @@ profileRouter.get('/profile/pets', async (_request, response) => {
 profileRouter.post('/profile/pet', async (request, response) => {
   const input = petSchema.parse(request.body);
   response.json({
-    data: await updatePet(request.auth!.userId, input.pet_id ? BigInt(input.pet_id) : null),
+    data: await updatePet(request.auth!.userId, parseId(input.pet_id, 'pet ID')),
   });
 });
 profileRouter.get('/profile/tags', async (request, response) => {

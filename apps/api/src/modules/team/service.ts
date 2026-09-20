@@ -2,6 +2,7 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { resolveAssetUrl } from '../profile/service.js';
+import { petSelect, serializePet } from '../pet-management/service.js';
 
 const teamUserSelect = {
   id: true,
@@ -9,7 +10,7 @@ const teamUserSelect = {
   username: true,
   bio: true,
   presence_status: true,
-  pets: { select: { id: true, name: true, subtitle: true, image_url: true } },
+  pets: { select: petSelect },
   user_tags: { select: { tag_text: true }, orderBy: { sort_order: 'asc' } },
   user_profile_assets: {
     select: { asset_type: true, object_key: true, storage_provider: true, public_url: true },
@@ -21,7 +22,7 @@ function serializeTeamUser(user: TeamUserRow) {
   const { pets: pet, user_tags: tags, user_profile_assets: assets, ...rest } = user;
   return {
     ...rest,
-    pet: pet ? { id: pet.id, name: pet.name, subtitle: pet.subtitle, image_url: pet.image_url } : null,
+    pet: pet ? serializePet(pet) : null,
     tags: tags.map((tag) => tag.tag_text),
     photo_url: resolveAssetUrl(rest.id, assets.find((asset) => asset.asset_type === 'PROFILE_PHOTO')),
     banner_url: resolveAssetUrl(rest.id, assets.find((asset) => asset.asset_type === 'PROFILE_BANNER')),

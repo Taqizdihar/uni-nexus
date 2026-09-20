@@ -27,10 +27,11 @@ import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
 import { WorkspaceUpdateModal } from '../components/workspace-update-modal';
+import { displayPetName, resolvePetImage } from '../lib/pets';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
-type Pet = { id: string; name: string; subtitle: string | null; description: string | null; image_url: string | null };
+type Pet = { id: string; code: string; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null };
 type WorkspaceRef = { id: string; name: string; code: string };
 type Membership = { workspace: WorkspaceRef; role: { code: string; name: string } | null };
 type ProfileData = {
@@ -326,66 +327,83 @@ function WorkspaceControl({ profile }: { profile: ProfileData }) {
   );
 }
 
-function PetCardBlock({ profile }: { profile: ProfileData }) {
+function PetSelectionModal({ profile, onClose }: { profile: ProfileData; onClose: () => void }) {
   const client = useQueryClient();
   const toast = useToast();
-  const [editing, setEditing] = useState(false);
+  const [selectedId, setSelectedId] = useState(profile.pet?.id ?? '');
   const pets = useQuery({
     queryKey: ['profile-pets'],
     queryFn: async () => (await api<Envelope<Pet[]>>('/profile/pets')).data,
-    enabled: editing,
   });
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+  useEffect(() => {
+    if (!selectedId && pets.data?.length) setSelectedId(pets.data.find((pet) => pet.code === 'UNI_INU')?.id ?? pets.data[0]!.id);
+  }, [pets.data, selectedId]);
   const mutation = useMutation({
-    mutationFn: (petId: string | null) => api('/profile/pet', { method: 'POST', body: body({ pet_id: petId }) }),
+    mutationFn: (petId: string) => api('/profile/pet', { method: 'POST', body: body({ pet_id: petId }) }),
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ['profile'] });
-      setEditing(false);
+      await client.invalidateQueries({ queryKey: ['profile-pets'] });
+      toast('Pet diperbarui.');
+      onClose();
     },
     onError: (error) => toast(message(error), true),
   });
+  const selected = pets.data?.find((pet) => pet.id === selectedId) ?? profile.pet;
+  const selectedName = selected ? displayPetName(selected) : 'Pet';
+  return (
+    <div className="modal-backdrop pet-selection-backdrop" onClick={onClose}>
+      <section className="modal pet-selection-modal" role="dialog" aria-modal="true" aria-labelledby="pet-selection-title" onClick={(event) => event.stopPropagation()}>
+        <button type="button" className="icon-button modal-close" aria-label="Tutup" onClick={onClose}><X size={19} /></button>
+        <h2 id="pet-selection-title">Pilih Pet</h2>
+        <div className="pet-selection-preview">
+          <div className="pet-selection-preview-image">
+            {selected && resolvePetImage(selected) ? <img src={resolvePetImage(selected)} alt={selectedName} /> : <PawPrint size={58} strokeWidth={1.4} />}
+          </div>
+          <div className="pet-selection-preview-copy">
+            <h3>{selectedName}</h3>
+            {selected?.subtitle ? <p>{selected.subtitle}</p> : <p className="pet-muted">Belum ada subtitle.</p>}
+            {selected?.description ? <p>{selected.description}</p> : <p className="pet-muted">Belum ada deskripsi.</p>}
+          </div>
+        </div>
+        <h3 className="pet-selection-heading">Pet Tersedia</h3>
+        {pets.isPending ? <Spinner label="Memuat Pet…" /> : pets.isError ? <ErrorState error={pets.error} retry={() => void pets.refetch()} /> : !pets.data?.length ? <p className="helper-note">Belum ada Pet yang tersedia.</p> : (
+          <div className="pet-selection-grid" role="radiogroup" aria-label="Pet tersedia">
+            {pets.data.map((pet) => {
+              const name = displayPetName(pet);
+              const selectedCard = pet.id === selectedId;
+              return <button key={pet.id} type="button" className={`pet-selection-card${selectedCard ? ' selected' : ''}`} role="radio" aria-checked={selectedCard} onClick={() => setSelectedId(pet.id)}>
+                <span className="pet-selection-card-image">{resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} /> : <PawPrint size={38} strokeWidth={1.4} />}</span>
+                <span className="pet-selection-card-name">{name}</span>
+                {selectedCard && <Check className="pet-selection-card-check" size={16} aria-hidden="true" />}
+              </button>;
+            })}
+          </div>
+        )}
+        <div className="form-actions pet-selection-actions"><button type="button" className="button secondary" onClick={onClose}>Batal</button><button type="button" className="button primary" disabled={!selectedId || mutation.isPending || pets.isPending} onClick={() => mutation.mutate(selectedId)}>{mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}Pilih</button></div>
+      </section>
+    </div>
+  );
+}
+
+function PetCardBlock({ profile }: { profile: ProfileData }) {
+  const [editing, setEditing] = useState(false);
+  const pet: Pet = profile.pet ?? { id: '', code: 'UNI_INU', name: null, display_name: 'Uni-Inu', subtitle: null, description: null, image_storage_provider: 'BUILTIN', image_url: null };
+  const name = displayPetName(pet);
   return (
     <div className="profile-pet-card">
       <span className="profile-pet-card-label">Pet Card</span>
-      <button type="button" className="profile-pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing((value) => !value)}>
-        <Pencil size={13} />
-      </button>
+      <button type="button" className="profile-pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing(true)}><Pencil size={13} /></button>
       <div className="profile-pet-card-media">
-        {profile.pet ? (
-          <img src={profile.pet.image_url ?? undefined} alt={profile.pet.name} />
-        ) : (
-          <div className="pet-placeholder">
-            <PawPrint size={36} strokeWidth={1.5} />
-          </div>
-        )}
+        {resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
       </div>
-      <h3>{profile.pet?.name ?? 'Belum memilih Pet'}</h3>
-      <p>{profile.pet?.subtitle ?? 'Pilih pendamping dari Edit Profil.'}</p>
-      {editing && (
-        <div className="profile-pet-picker">
-          {pets.isPending ? (
-            <Spinner label="Memuat pet…" />
-          ) : !pets.data?.length ? (
-            <p className="helper-note">Belum ada pet yang tersedia.</p>
-          ) : (
-            <div className="profile-pet-picker-list">
-              <button className="button secondary small" type="button" disabled={mutation.isPending} onClick={() => mutation.mutate(null)}>
-                Tanpa pet
-              </button>
-              {pets.data.map((pet) => (
-                <button
-                  key={pet.id}
-                  type="button"
-                  className="button secondary small"
-                  disabled={mutation.isPending}
-                  onClick={() => mutation.mutate(pet.id)}
-                >
-                  {pet.name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <h3>{name}</h3>
+      {pet.subtitle && <p>{pet.subtitle}</p>}
+      {editing && <PetSelectionModal profile={profile} onClose={() => setEditing(false)} />}
     </div>
   );
 }

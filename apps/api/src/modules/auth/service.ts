@@ -10,6 +10,7 @@ import { resolveAssetUrl } from '../profile/asset-url.js';
 import type { signupSchema } from './validation.js';
 import { lifecycleSelect, lifecycleContext, lockLifecycleUsers } from '../account-lifecycle/context.js';
 import { canRecoverBootstrapCto } from '../account-lifecycle/policy.js';
+import { requireDefaultPetId } from '../pet-management/service.js';
 
 export const safeUserSelect = {
   id: true,
@@ -59,6 +60,7 @@ async function claimCtoBootstrap(
       password_changed_at: new Date(),
       account_status: 'ACTIVE',
       presence_status: 'DEFAULT',
+      pet_id: await requireDefaultPetId(tx),
       default_workspace_id: workspaceId,
     },
   });
@@ -126,6 +128,7 @@ export async function signup(input: z.infer<typeof signupSchema>) {
           password_changed_at: new Date(),
           account_status: 'PENDING',
           presence_status: 'DEFAULT',
+          pet_id: await requireDefaultPetId(tx),
         },
       });
       await tx.audit_logs.create({

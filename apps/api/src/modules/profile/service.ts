@@ -5,6 +5,7 @@ import { AppError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';
 import { LocalStorageService, validateUpload } from '../../services/storage.js';
 import { resolveAssetUrl } from './asset-url.js';
+import { listActivePets as listAvailablePets, petSelect, serializePet } from '../pet-management/service.js';
 
 export { resolveAssetUrl } from './asset-url.js';
 
@@ -20,7 +21,7 @@ const profileSelect = {
   presence_status: true,
   password_changed_at: true,
   default_workspace_id: true,
-  pets: { select: { id: true, name: true, subtitle: true, description: true, image_url: true } },
+  pets: { select: petSelect },
   user_tags: { select: { id: true, tag_text: true }, orderBy: { sort_order: 'asc' } },
   user_profile_assets: {
     select: { asset_type: true, object_key: true, storage_provider: true, public_url: true },
@@ -45,7 +46,7 @@ function serializeProfile(user: ProfileRow) {
   return {
     ...rest,
     tags,
-    pet: pet ? { id: pet.id, name: pet.name, subtitle: pet.subtitle, description: pet.description, image_url: pet.image_url } : null,
+    pet: pet ? serializePet(pet) : null,
     photo_url: resolveAssetUrl(rest.id, assets.find((asset) => asset.asset_type === 'PROFILE_PHOTO')),
     banner_url: resolveAssetUrl(rest.id, assets.find((asset) => asset.asset_type === 'PROFILE_BANNER')),
     memberships: active,
@@ -133,31 +134,28 @@ export async function updateDefaultWorkspace(userId: bigint, workspaceId: bigint
 }
 
 export async function listActivePets() {
-  return prisma.pets.findMany({
-    where: { is_active: true },
-    orderBy: { sort_order: 'asc' },
-    select: { id: true, code: true, name: true, subtitle: true, description: true, image_url: true },
-  });
+  return listAvailablePets();
 }
 
-export async function updatePet(userId: bigint, petId: bigint | null) {
-  return prisma.$transaction(async (tx) => {
-    if (petId !== null) {
-      const pet = await tx.pets.findFirst({ where: { id: petId, is_active: true } });
-      if (!pet) throw new AppError(422, 'Select an active pet.', 'INVALID_PET');
-    }
-    await tx.users.update({ where: { id: userId }, data: { pet_id: petId }, select: { id: true } });
+export async function updatePet(userId: bigint, petId: bigint) {
+  await prisma.$transaction(async (tx) => {
+    const pet = await tx.pets.findFirst({ where: { id: petId, is_active: true }, select: { id: true, code: true } });
+    if (!pet) throw new AppError(422, 'Pet ini tidak ditemukan atau sudah tidak tersedia.', 'INVALID_PET');
+    const current = await tx.users.findUnique({ where: { id: userId }, select: { pet_id: true } });
+    if (!current) throw new AppError(404, 'Profile not found.', 'NOT_FOUND');
+    await tx.users.update({ where: { id: userId }, data: { pet_id: pet.id }, select: { id: true } });
     await tx.audit_logs.create({
       data: {
         user_id: userId,
-        action: 'PROFILE_UPDATED',
+        action: 'USER_PET_CHANGED',
         entity_type: 'users',
         entity_id: userId,
-        new_value_json: { pet_id: petId?.toString() ?? null },
+        old_value_json: { pet_id: current.pet_id?.toString() ?? null },
+        new_value_json: { pet_id: pet.id.toString(), pet_code: pet.code },
       },
     });
-    return getOwnProfile(userId);
   });
+  return getOwnProfile(userId);
 }
 
 export async function listTags(userId: bigint) {
