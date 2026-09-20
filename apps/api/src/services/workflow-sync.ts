@@ -124,13 +124,6 @@ async function advanceProductionTo(
   return current;
 }
 
-async function orderForProductionJob(tx: Tx, productionJobId: bigint, workspaceId: bigint) {
-  return tx.production_jobs.findFirst({
-    where: { id: productionJobId, workspace_id: workspaceId },
-    include: { order_items: { include: { orders: true } } },
-  });
-}
-
 async function allProductionJobsReadyForPackaging(tx: Tx, orderId: bigint, workspaceId: bigint) {
   const jobs = await tx.production_jobs.findMany({
     where: { workspace_id: workspaceId, order_items: { order_id: orderId } },

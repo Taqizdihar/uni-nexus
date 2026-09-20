@@ -3672,6 +3672,7 @@ dd.json-value {
 .workflow-filter-bar .workflow-search input { width: 100%; }
 .workflow-list { display: grid; gap: 9px; }
 .workflow-row { display: grid; grid-template-columns: minmax(190px, 1.55fr) minmax(108px, .82fr) minmax(150px, 1.1fr) minmax(110px, .8fr) minmax(110px, .8fr) auto; gap: 14px; align-items: center; min-width: 0; padding: 14px 15px; color: var(--ink); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); text-decoration: none; }
+.sales-workflow-row { grid-template-columns: 34px minmax(190px, 1.55fr) minmax(108px, .82fr) minmax(150px, 1.1fr) minmax(110px, .8fr) minmax(110px, .8fr) auto; }
 .workflow-row:hover { border-color: var(--brand-black); box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .workflow-row > div { display: grid; gap: 3px; min-width: 0; font-size: 12px; }
 .workflow-row strong { min-width: 0; font-size: 12.5px; overflow-wrap: anywhere; }
@@ -3681,10 +3682,15 @@ dd.json-value {
 .workflow-label { color: var(--ink-faint); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .045em; }
 .workflow-row .badge { width: fit-content; max-width: 100%; }
 .workflow-next { display: inline-flex; align-items: center; justify-content: flex-end; gap: 5px; color: var(--ink-soft); font-size: 11px; font-weight: 700; white-space: nowrap; }
+.workflow-index { display: grid; justify-items: center; color: var(--ink-faint); font-size: 11px; font-weight: 700; }
+.workflow-index-mobile { display: none; }
+.workflow-list-summary { margin: 2px 0 10px; color: var(--ink-soft); font-size: 13px; font-weight: 700; }
 .overdue { color: var(--red); }
 .near-deadline { color: #9a6700; }
-.workflow-pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 2px 0; color: var(--ink-faint); font-size: 12px; }
-.workflow-pagination > div { display: flex; gap: 7px; }
+.workflow-pagination { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px 2px 0; color: var(--ink-faint); font-size: 12px; }
+.workflow-pagination-nav { display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap; }
+.workflow-page-numbers { display: inline-flex; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.workflow-page-numbers li { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; }
 .workflow-timeline { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin: 0 0 20px; padding: 13px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
 .workflow-timeline > div { position: relative; display: grid; justify-items: center; gap: 5px; min-width: 0; color: var(--ink-faint); text-align: center; }
 .workflow-timeline > div:not(:last-child)::after { position: absolute; top: 9px; left: calc(50% + 13px); width: calc(100% - 25px); height: 1px; background: var(--border); content: ''; }
@@ -3742,6 +3748,7 @@ dd.json-value {
 @media (max-width: 1080px) {
   .workflow-filter-bar { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
   .workflow-row { grid-template-columns: minmax(190px, 1.5fr) repeat(3, minmax(110px, 1fr)) auto; }
+  .sales-workflow-row { grid-template-columns: 30px minmax(190px, 1.5fr) repeat(3, minmax(110px, 1fr)) minmax(110px, 1fr) auto; }
   .workflow-row > div:nth-of-type(5) { display: none; }
 }
 
@@ -3749,6 +3756,10 @@ dd.json-value {
   .workflow-filter-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .workflow-filter-bar .workflow-search { grid-column: 1 / -1; }
   .workflow-row { grid-template-columns: minmax(0, 1fr) minmax(115px, .7fr); align-items: start; }
+  .sales-workflow-row { grid-template-columns: minmax(0, 1fr) minmax(115px, .7fr); }
+  .sales-workflow-row .workflow-index { grid-column: 1 / -1; display: block; text-align: left; }
+  .sales-workflow-row .workflow-index-desktop { display: none; }
+  .sales-workflow-row .workflow-index-mobile { display: inline; }
   .workflow-row > div:nth-of-type(2), .workflow-row > div:nth-of-type(4) { display: none; }
   .workflow-row > div:nth-of-type(3) { grid-column: 2; grid-row: 1; text-align: right; justify-items: end; }
   .workflow-row > div:nth-of-type(5) { display: none; }

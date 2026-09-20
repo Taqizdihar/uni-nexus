@@ -1,6 +1,6 @@
 import { useState, type ComponentType } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Activity, ArrowLeftRight, Bell, BookOpen, Box, Boxes, ChevronDown, ClipboardCheck, ClipboardList, FlaskConical, FolderKanban, Gauge, Layers3, LogOut, Menu, MessageSquare, Package, Palette, Printer, ReceiptText, ScrollText, Search, Settings2, ShieldCheck, SlidersHorizontal, Spool, UserCog, UserCircle, Users, Wallet, X } from 'lucide-react';
+import { ArrowLeftRight, Bell, BookOpen, Boxes, ChevronDown, ClipboardList, FlaskConical, FolderKanban, Gauge, Layers3, LogOut, Menu, Printer, ScrollText, Search, Settings2, ShieldCheck, SlidersHorizontal, Spool, UserCog, UserCircle, Users, Wallet, X } from 'lucide-react';
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { REVIEWER_ROLE_CODES, ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';

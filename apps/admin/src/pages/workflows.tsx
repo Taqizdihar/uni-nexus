@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft,
   ArrowRight,
-  CalendarClock,
   Check,
   ClipboardCheck,
   Clock3,
@@ -19,19 +18,25 @@ import {
   Settings2,
   ShieldCheck,
   Truck,
-  UserRound,
   X,
 } from 'lucide-react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
   PRODUCTION_WORKFLOW_TABS,
-  SALES_WORKFLOW_STAGE_LABELS,
   SALES_WORKFLOW_TABS,
   type SalesWorkflowStage,
 } from '@uni-nexus/shared';
 import { api, body, message, type Envelope, type Page, type Row } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { display, money, titleCase } from '../lib/format';
+import {
+  money,
+  paymentStatusLabel,
+  priorityLabel,
+  sourceLabel,
+  statusLabel,
+  titleCase,
+} from '../lib/format';
+import { paginationRange, rowNumber } from '../lib/pagination';
 import { Badge, EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 
 type WorkflowRow = {
@@ -236,8 +241,6 @@ const productionEmpty: Record<string, { title: string; description: string }> = 
   },
 };
 
-const statusLabel = (value: string | null | undefined) =>
-  value ? titleCase(value) : 'Belum ada status';
 const formatDate = (value: string | null | undefined) =>
   value
     ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(
@@ -277,8 +280,23 @@ function queryString(
     else next.delete(key);
   }
   if (!next.get('page')) next.set('page', '1');
-  if (!next.get('pageSize')) next.set('pageSize', '20');
+  next.delete('pageSize');
   return next;
+}
+
+const SALES_FILTER_KEYS = [
+  'search',
+  'customer',
+  'status',
+  'assigned',
+  'targetDate',
+  'deadline',
+  'priority',
+  'source',
+  'paymentStatus',
+] as const;
+function hasActiveSalesFilter(params: URLSearchParams, stage: string) {
+  return stage !== 'ALL' || SALES_FILTER_KEYS.some((key) => Boolean(params.get(key)?.trim()));
 }
 
 function WorkflowTabs({
@@ -343,7 +361,7 @@ function FilterBar({
         <span>Status</span>
         <input
           value={params.get('status') || ''}
-          placeholder="Contoh: PRINTING"
+          placeholder="Contoh: Sedang Dicetak"
           onChange={(event) => change('status', event.target.value)}
         />
       </label>
@@ -364,7 +382,7 @@ function FilterBar({
         />
       </label>
       <label>
-        <span>Deadline</span>
+        <span>Batas waktu</span>
         <select
           value={params.get('deadline') || ''}
           onChange={(event) => change('deadline', event.target.value)}
@@ -381,8 +399,8 @@ function FilterBar({
           onChange={(event) => change('priority', event.target.value)}
         >
           <option value="">Semua</option>
-          {['LOW', 'NORMAL', 'HIGH', 'URGENT'].map((value) => (
-            <option key={value}>{titleCase(value)}</option>
+            {['LOW', 'NORMAL', 'HIGH', 'URGENT'].map((value) => (
+            <option key={value} value={value}>{priorityLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -403,7 +421,7 @@ function FilterBar({
             'OFFLINE',
             'OTHER',
           ].map((value) => (
-            <option key={value}>{titleCase(value)}</option>
+            <option key={value} value={value}>{sourceLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -416,7 +434,7 @@ function FilterBar({
           >
             <option value="">Semua</option>
             {['UNPAID', 'PARTIAL', 'PAID', 'REFUNDED'].map((value) => (
-              <option key={value}>{titleCase(value)}</option>
+              <option key={value} value={value}>{paymentStatusLabel(value)}</option>
             ))}
           </select>
         </label>
@@ -433,7 +451,7 @@ function FilterBar({
         </select>
       </label>
       <label>
-        <span>Arah</span>
+        <span>Urutan</span>
         <select
           value={params.get('direction') || 'desc'}
           onChange={(event) => change('direction', event.target.value)}
@@ -447,7 +465,7 @@ function FilterBar({
         type="button"
         onClick={() => setParams(queryString(new URLSearchParams(), { page: '1' }))}
       >
-        Atur Ulang Filter
+        Reset Filter
       </button>
     </div>
   );
@@ -463,21 +481,38 @@ function Pagination({
   setParams: (next: URLSearchParams) => void;
 }) {
   if (meta.totalPages <= 1) return null;
+  const pages = paginationRange(meta.page, meta.totalPages);
   return (
-    <div className="workflow-pagination">
-      <span>
-        Menampilkan {(meta.page - 1) * meta.pageSize + 1}–
-        {Math.min(meta.page * meta.pageSize, meta.total)} dari {meta.total}
-      </span>
-      <div>
+    <nav className="workflow-pagination" aria-label="Navigasi halaman pesanan">
+      <div className="workflow-pagination-nav">
         <button
+          type="button"
           className="button secondary small"
-          disabled={meta.page === 1}
+          disabled={meta.page <= 1}
           onClick={() => setParams(queryString(params, { page: String(meta.page - 1) }))}
         >
           Sebelumnya
         </button>
+        <ol className="workflow-page-numbers">
+          {pages.map((page, index) =>
+            page === 'ellipsis' ? (
+              <li key={`ellipsis-${index}`} aria-hidden="true">…</li>
+            ) : (
+              <li key={page}>
+                <button
+                  type="button"
+                  className={`button small ${page === meta.page ? 'primary' : 'secondary'}`}
+                  aria-current={page === meta.page ? 'page' : undefined}
+                  onClick={() => setParams(queryString(params, { page: String(page) }))}
+                >
+                  {page}
+                </button>
+              </li>
+            ),
+          )}
+        </ol>
         <button
+          type="button"
           className="button secondary small"
           disabled={meta.page >= meta.totalPages}
           onClick={() => setParams(queryString(params, { page: String(meta.page + 1) }))}
@@ -485,19 +520,23 @@ function Pagination({
           Berikutnya
         </button>
       </div>
-    </div>
+    </nav>
   );
 }
 
-function SalesRows({ rows }: { rows: WorkflowRow[] }) {
+function SalesRows({ rows, meta }: { rows: WorkflowRow[]; meta: ListMeta }) {
   return (
     <div className="workflow-list">
-      {rows.map((row) => (
+      {rows.map((row, index) => (
         <Link
           to={`/app/pesanan/${row.workflow_key}`}
-          className="workflow-row"
+          className="workflow-row sales-workflow-row"
           key={row.workflow_key}
         >
+          <span className="workflow-index" aria-label={`Nomor urut ${rowNumber(meta.page, meta.pageSize, index)}`}>
+            <span className="workflow-index-desktop">{rowNumber(meta.page, meta.pageSize, index)}</span>
+            <span className="workflow-index-mobile">No. {rowNumber(meta.page, meta.pageSize, index)}</span>
+          </span>
           <div className="workflow-identity">
             <strong>{code(row)}</strong>
             <span>{row.title}</span>
@@ -522,15 +561,15 @@ function SalesRows({ rows }: { rows: WorkflowRow[] }) {
             <strong className={deadlineClass(row.target_date)}>
               {formatDate(row.target_date)}
             </strong>
-            <small>{row.priority ? titleCase(row.priority) : 'Prioritas normal'}</small>
+            <small>{priorityLabel(row.priority)}</small>
           </div>
           <div>
             <span className="workflow-label">Nilai</span>
             <strong>{row.value ? money(row.value) : '—'}</strong>
             <small>
               {row.payment_status
-                ? `Bayar: ${titleCase(row.payment_status)}`
-                : titleCase(row.source || '')}
+                ? `Bayar: ${paymentStatusLabel(row.payment_status)}`
+                : sourceLabel(row.source)}
             </small>
           </div>
           <span className="workflow-next">
@@ -554,6 +593,12 @@ export function SalesWorkflowWorkspace() {
   });
   const setWorkflowParams = (next: URLSearchParams) => setParams(next);
   const empty = stageEmpty[active] ?? stageEmpty.ALL!;
+  const filtered = hasActiveSalesFilter(params, active);
+  const emptyTitle = filtered ? 'Tidak ada pesanan yang sesuai dengan filter.' : empty.title;
+  const emptyDescription = filtered
+    ? 'Atur ulang filter untuk melihat pesanan lainnya.'
+    : empty.description;
+  const resetFilters = () => setParams(queryString(new URLSearchParams(), { page: '1' }));
   return (
     <>
       <PageHeader
@@ -579,21 +624,34 @@ export function SalesWorkflowWorkspace() {
         <Spinner label="Memuat alur pesanan…" />
       ) : query.isError ? (
         <ErrorState error={query.error} retry={() => void query.refetch()} />
-      ) : !query.data.data.length ? (
-        <EmptyState
-          title={empty.title}
-          description={empty.description}
-          action={
-            <Link className="button primary small" to="/app/requests/new">
-              <Plus size={15} />
-              Permintaan Baru
-            </Link>
-          }
-        />
       ) : (
         <>
-          <SalesRows rows={query.data.data} />
+          <div className="workflow-list-summary" aria-live="polite">
+            Total {query.data.meta.total} pesanan{filtered ? ' sesuai filter' : ''}
+          </div>
+          {!query.data.data.length ? (
+        <EmptyState
+          title={emptyTitle}
+          description={emptyDescription}
+          action={
+            filtered ? (
+              <button className="button secondary small" type="button" onClick={resetFilters}>
+                Reset Filter
+              </button>
+            ) : (
+              <Link className="button primary small" to="/app/requests/new">
+                <Plus size={15} />
+                Permintaan Baru
+              </Link>
+            )
+          }
+        />
+          ) : (
+          <>
+          <SalesRows rows={query.data.data} meta={query.data.meta} />
           <Pagination meta={query.data.meta} params={params} setParams={setWorkflowParams} />
+          </>
+          )}
         </>
       )}
     </>
@@ -1600,8 +1658,8 @@ export function SalesWorkflowDetail() {
               </Link>
             </Fact>
             <Fact label="Deadline">{formatDate(workflow.target_date)}</Fact>
-            <Fact label="Sumber">{titleCase(workflow.source || '—')}</Fact>
-            <Fact label="Prioritas">{titleCase(workflow.priority || 'NORMAL')}</Fact>
+            <Fact label="Sumber">{sourceLabel(workflow.source)}</Fact>
+            <Fact label="Prioritas">{priorityLabel(workflow.priority)}</Fact>
             <Fact label="Penanggung jawab">{workflow.assigned?.name || 'Belum ditugaskan'}</Fact>
             <Fact label="Terakhir diperbarui">{formatDateTime(workflow.updated_at)}</Fact>
           </dl>
@@ -1660,7 +1718,7 @@ export function SalesWorkflowDetail() {
                       'Designer belum ditugaskan'}
                   </strong>
                   <span>
-                    {titleCase(String(task.priority || 'NORMAL'))} · mulai{' '}
+                    {priorityLabel(String(task.priority || 'NORMAL'))} · mulai{' '}
                     {formatDateTime(String(task.started_at || ''))}
                   </span>
                   <small>
@@ -1757,7 +1815,7 @@ export function SalesWorkflowDetail() {
                     <Badge value={job.status} />
                   </div>
                   <span>
-                    {titleCase(String(job.priority || 'NORMAL'))} ·{' '}
+                    {priorityLabel(String(job.priority || 'NORMAL'))} ·{' '}
                     {(job.users as { full_name?: string } | undefined)?.full_name ||
                       'Operator belum ditugaskan'}
                   </span>
@@ -1766,7 +1824,7 @@ export function SalesWorkflowDetail() {
                       <Printer size={15} />
                       <span>
                         <strong>{String(print.print_job_number || `Cetak #${print.id}`)}</strong> ·{' '}
-                        {titleCase(String(print.status || ''))} ·{' '}
+                        {statusLabel(String(print.status || ''))} ·{' '}
                         {String(
                           (print.printers as { name?: string } | undefined)?.name ||
                             'Printer belum dipilih',

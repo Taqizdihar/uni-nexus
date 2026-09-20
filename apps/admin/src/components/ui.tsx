@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
 import { AlertCircle, Check, Inbox, LoaderCircle, RotateCcw, X } from 'lucide-react';
 import { message } from '../lib/api';
+import { statusLabel } from '../lib/format';
 
 export function Spinner({ label = 'Memuat data workspace…' }: { label?: string }) {
   return <div className="loading-state" role="status"><LoaderCircle size={22} className="spin" /><span>{label}</span></div>;
@@ -14,7 +15,7 @@ export function EmptyState({ title, description, action }: { title: string; desc
 export function Badge({ value }: { value: unknown }) {
   const text = String(value ?? '');
   const tone = /ACTIVE|ACCEPTED|APPROVED|COMPLETED|SUCCESS|PASS|PAID|IDLE|AVAILABLE|FEASIBLE|PUBLISHED/.test(text) && !/INACTIVE|NOT_/.test(text) ? 'green' : /FAILED|ERROR|CANCELLED|REJECTED|DECLINED|NOT_FEASIBLE/.test(text) ? 'red' : /PENDING|REVIEW|QUEUED|DRAFT|NEW|ESTIMATING|MAINTENANCE/.test(text) ? 'amber' : 'blue';
-  return <span className={`badge ${tone}`}><span className="badge-dot" />{text.replace(/_/g, ' ').toLowerCase()}</span>;
+  return <span className={`badge ${tone}`}><span className="badge-dot" />{statusLabel(text)}</span>;
 }
 export function PageHeader({ eyebrow, title, description, actions }: { eyebrow?: string; title: string; description?: string; actions?: ReactNode }) {
   return <header className="page-heading"><div>{eyebrow && <p className="eyebrow">{eyebrow}</p>}<h1>{title}</h1>{description && <p className="page-description">{description}</p>}</div>{actions && <div className="page-actions">{actions}</div>}</header>;

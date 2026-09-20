@@ -447,7 +447,6 @@ const requestInclude = {
   },
 } as const;
 
-const asText = (value: Scalar) => (value == null ? null : String(value));
 const statusOf = (record: { status?: string | null; result?: string | null } | null | undefined) =>
   String(record?.status ?? record?.result ?? '').toUpperCase();
 const dateOf = (value: Scalar) =>
@@ -528,17 +527,37 @@ function workflowStatus(
   return statusOf(candidates[stage].find(Boolean));
 }
 
-function nextAction(stage: SalesWorkflowStage) {
+function nextAction(
+  stage: SalesWorkflowStage,
+  designs: DesignTask[],
+  quotes: Quotation[],
+  order: WorkflowOrder | undefined,
+) {
+  const designStatus = statusOf(latest(designs));
+  const quotationStatus = statusOf(latest(quotes));
+  if (stage === 'DESIGN' && designStatus === 'COMPLETED' && quotes.length === 0)
+    return 'Buat Penawaran';
+  if (stage === 'REQUEST') return 'Tinjau Permintaan';
+  if (stage === 'DESIGN') return 'Lanjutkan Desain';
+  if (stage === 'QUOTATION') {
+    if (quotationStatus === 'DRAFT') return 'Lengkapi Penawaran';
+    if (quotationStatus === 'SENT') return 'Tinjau Penawaran';
+    return 'Tindak Lanjuti Penawaran';
+  }
+  if (stage === 'READY_FOR_PRODUCTION') return 'Siapkan Produksi';
+  if (stage === 'PRODUCTION') return 'Lanjutkan Produksi';
+  if (stage === 'COMPLETION') return 'Lanjutkan Penyelesaian';
+  if (stage === 'COMPLETED' || statusOf(order) === 'CANCELLED') return 'Lihat Detail';
   return (
     {
-      REQUEST: 'Tugaskan designer',
-      DESIGN: 'Lanjutkan desain',
-      QUOTATION: 'Tindak lanjuti penawaran',
-      READY_FOR_PRODUCTION: 'Siapkan produksi',
-      PRODUCTION: 'Pantau produksi',
-      COMPLETION: 'Selesaikan QC atau pengemasan',
-      COMPLETED: 'Lihat riwayat',
-      CANCELLED: 'Lihat alasan pembatalan',
+      REQUEST: 'Tinjau Permintaan',
+      DESIGN: 'Lanjutkan Desain',
+      QUOTATION: 'Tindak Lanjuti Penawaran',
+      READY_FOR_PRODUCTION: 'Siapkan Produksi',
+      PRODUCTION: 'Lanjutkan Produksi',
+      COMPLETION: 'Lanjutkan Penyelesaian',
+      COMPLETED: 'Lihat Detail',
+      CANCELLED: 'Lihat Detail',
     } satisfies Record<SalesWorkflowStage, string>
   )[stage];
 }
@@ -635,7 +654,7 @@ function toSalesWorkflow(
     payment_status: visibility.canSeeSales || visibility.canSeeFinance ? order?.payment_status ?? null : null,
     source: order?.order_source ?? request?.source ?? null,
     updated_at: updatedAt,
-    next_action: nextAction(stage),
+    next_action: nextAction(stage, designs, quotes, order),
   };
 }
 
@@ -661,9 +680,32 @@ function deadlineMatches(value: Date | null, filter: SalesWorkflowFilters) {
   return targetDate >= today && targetDate <= threshold;
 }
 
+const statusFilterAliases: Record<string, string> = {
+  baru: 'NEW',
+  selesai: 'COMPLETED',
+  'sedang dikerjakan': 'IN_PROGRESS',
+  'siap produksi': 'READY_FOR_PRODUCTION',
+  'sedang dicetak': 'PRINTING',
+  'dalam antrean': 'QUEUED',
+  menunggu: 'PENDING',
+  dikonfirmasi: 'CONFIRMED',
+  'dalam produksi': 'IN_PRODUCTION',
+  ditunda: 'ON_HOLD',
+  pengemasan: 'PACKAGING',
+  siap: 'READY',
+  dibatalkan: 'CANCELLED',
+  berhasil: 'SUCCESS',
+  gagal: 'FAILED',
+};
+function normalizedStatusFilter(value: string | undefined) {
+  if (!value) return value;
+  return statusFilterAliases[value.trim().toLocaleLowerCase('id-ID')] ?? value;
+}
+
 export function filterSalesWorkflows(rows: SalesWorkflowRow[], filters: SalesWorkflowFilters) {
   return rows.filter((row) => {
     const search = filters.search;
+    const status = normalizedStatusFilter(filters.status);
     const matchesSearch =
       !search ||
       [row.request_number, row.order_number, row.customer.full_name, row.title].some((value) =>
@@ -673,7 +715,7 @@ export function filterSalesWorkflows(rows: SalesWorkflowRow[], filters: SalesWor
       matchesSearch &&
       (!filters.stage || row.stage === filters.stage) &&
       includesText(row.customer.full_name, filters.customer) &&
-      includesText(row.status, filters.status) &&
+      includesText(row.status, status) &&
       deadlineMatches(row.target_date, filters) &&
       (!filters.priority || row.priority === filters.priority) &&
       includesText(row.assigned?.name, filters.assigned) &&
@@ -793,22 +835,98 @@ function redactQuotation(quotation: Record<string, unknown>, canSeeSales: boolea
   };
 }
 
-function redactOrder(order: Record<string, unknown>, canSeeSales: boolean) {
-  if (canSeeSales) return order;
-  const { total_price: _total, subtotal: _subtotal, discount_amount: _discount, payment_status: _payment, order_items, quotations, ...safe } = order;
+function redactProductionJobs(jobs: unknown, canSeeFinance: boolean) {
+  if (canSeeFinance || !Array.isArray(jobs)) return jobs;
+  return jobs.map((job) => {
+    const { print_jobs, ...safeJob } = job as Record<string, unknown>;
+    return {
+      ...safeJob,
+      print_jobs: Array.isArray(print_jobs)
+        ? print_jobs.map((print) => {
+            const { material_usages, ...safePrint } = print as Record<string, unknown>;
+            return {
+              ...safePrint,
+              material_usages: Array.isArray(material_usages)
+                ? material_usages.map((usage) => {
+                    const {
+                      cost_per_gram: _costPerGram,
+                      total_cost: _totalCost,
+                      ...safeUsage
+                    } = usage as Record<string, unknown>;
+                    return safeUsage;
+                  })
+                : material_usages,
+            };
+          })
+        : print_jobs,
+    };
+  });
+}
+
+function redactPackaging(packaging: unknown, canSeeFinance: boolean) {
+  if (canSeeFinance || !Array.isArray(packaging)) return packaging;
+  return packaging.map((pack) => {
+    const { actual_cost: _actualCost, ...safePackaging } = pack as Record<string, unknown>;
+    return safePackaging;
+  });
+}
+
+function redactOrder(
+  order: Record<string, unknown>,
+  canSeeSales: boolean,
+  canSeeFinance: boolean,
+) {
+  const {
+    total_price: _total,
+    subtotal: _subtotal,
+    discount_amount: _discount,
+    payment_status: _payment,
+    order_items,
+    quotations,
+    order_packaging,
+    ...safe
+  } = order;
+  const visibleOrder = canSeeSales
+    ? { ...order }
+    : safe;
   return {
-    ...safe,
+    ...visibleOrder,
     order_items: Array.isArray(order_items)
       ? order_items.map((item) => {
-          const { unit_price: _unit, total_price: _lineTotal, ...safeItem } = item as Record<string, unknown>;
-          return safeItem;
+          const {
+            unit_price: _unit,
+            total_price: _lineTotal,
+            production_jobs,
+            ...safeItem
+          } = item as Record<string, unknown>;
+          return {
+            ...(canSeeSales ? item : safeItem),
+            production_jobs: redactProductionJobs(production_jobs, canSeeFinance),
+          };
         })
       : order_items,
-    quotations: quotations && typeof quotations === 'object' ? redactQuotation(quotations as Record<string, unknown>, false) : quotations,
+    quotations:
+      quotations && typeof quotations === 'object'
+        ? canSeeSales
+          ? quotations
+          : redactQuotation(quotations as Record<string, unknown>, false)
+        : quotations,
+    order_packaging: redactPackaging(order_packaging, canSeeFinance),
   };
 }
 
-export function redactWorkflowFinancials<T extends Record<string, any>>(
+type RedactableWorkflowDetail = Record<string, unknown> & {
+  workflow: Record<string, unknown>;
+  request?: (Record<string, unknown> & { quotations?: unknown; orders?: unknown }) | null;
+  order?: Record<string, unknown> | null;
+  quotations?: unknown;
+  production_jobs?: unknown;
+  packaging?: unknown;
+  hpp?: unknown;
+  activity?: unknown;
+};
+
+export function redactWorkflowFinancials<T extends RedactableWorkflowDetail>(
   data: T,
   visibility: WorkflowVisibility,
 ): T {
@@ -819,13 +937,20 @@ export function redactWorkflowFinancials<T extends Record<string, any>>(
       ? request.quotations.map((quote: Record<string, unknown>) => redactQuotation(quote, canSeeSales))
       : request.quotations;
     request.orders = Array.isArray(request.orders)
-      ? request.orders.map((order: Record<string, unknown>) => redactOrder(order, canSeeSales))
+      ? request.orders.map((order: Record<string, unknown>) =>
+          redactOrder(order, canSeeSales, visibility.canSeeFinance),
+        )
       : request.orders;
   }
-  const order = data.order && typeof data.order === 'object' ? redactOrder({ ...data.order }, canSeeSales) : data.order;
+  const order =
+    data.order && typeof data.order === 'object'
+      ? redactOrder({ ...data.order }, canSeeSales, visibility.canSeeFinance)
+      : data.order;
   const quotations = Array.isArray(data.quotations)
     ? data.quotations.map((quote) => redactQuotation(quote as Record<string, unknown>, canSeeSales))
     : data.quotations;
+  const productionJobs = redactProductionJobs(data.production_jobs, visibility.canSeeFinance);
+  const packaging = redactPackaging(data.packaging, visibility.canSeeFinance);
   return {
     ...data,
     workflow: {
@@ -837,6 +962,8 @@ export function redactWorkflowFinancials<T extends Record<string, any>>(
     order,
     quotations,
     hpp: visibility.canSeeFinance ? data.hpp : null,
+    production_jobs: productionJobs,
+    packaging,
     activity: visibility.canSeeFinance
       ? data.activity
       : Array.isArray(data.activity)
@@ -891,20 +1018,19 @@ export async function salesWorkflowDetail(
       : [],
     order ? costSummary(db, workspaceId, order.id) : Promise.resolve(null),
   ]);
-  return redactWorkflowFinancials({
-    data: {
-      workflow: row,
-      request,
-      order,
-      quotations: request?.quotations ?? (order?.quotations ? [order.quotations] : []),
-      design_tasks: request?.design_tasks ?? [],
-      production_jobs: productionJobsFor(request?.orders ?? (order ? [order] : [])),
-      packaging: packagingFor(request?.orders ?? (order ? [order] : [])),
-      ip_reviews: [...(request?.ip_reviews ?? []), ...(order?.ip_reviews ?? [])],
-      hpp,
-      activity,
-    },
-  }, visibility);
+  const detail = {
+    workflow: row,
+    request,
+    order,
+    quotations: request?.quotations ?? (order?.quotations ? [order.quotations] : []),
+    design_tasks: request?.design_tasks ?? [],
+    production_jobs: productionJobsFor(request?.orders ?? (order ? [order] : [])),
+    packaging: packagingFor(request?.orders ?? (order ? [order] : [])),
+    ip_reviews: [...(request?.ip_reviews ?? []), ...(order?.ip_reviews ?? [])],
+    hpp,
+    activity,
+  };
+  return { data: redactWorkflowFinancials(detail, visibility) };
 }
 
 export type ProductionWorkflowRow = {

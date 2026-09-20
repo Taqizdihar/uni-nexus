@@ -8,7 +8,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import type { FieldDefinition, ResourceDefinition } from '@uni-nexus/shared';
 import { api, body, message, type Envelope, type Page, type Row } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { recordName, resourcePath, titleCase } from '../lib/format';
+import { fieldValueLabel, metadataLabel, recordName, resourcePath } from '../lib/format';
 import { PageHeader, useToast } from './ui';
 import { PrinterRelationSelector } from './special-resource-grids';
 
@@ -37,19 +37,19 @@ function RelationInput({ field, value, change, invalid }: { field: FieldDefiniti
   const query = useQuery({ queryKey: ['options', workspace!.id, field.reference, search], queryFn: () => api<Page>(`/${field.reference}?pageSize=100&search=${encodeURIComponent(search)}`, { workspace: workspace!.id }), staleTime: 60_000 });
   const selected = useQuery({ queryKey: ['record', workspace!.id, field.reference, value], enabled: !!value && !query.data?.data.some((item) => item.id === value), queryFn: async () => (await api<Envelope<Row>>(`/${field.reference}/${value}`, { workspace: workspace!.id })).data, staleTime: 60_000 });
   const options = query.data?.data || [];
-  return <div className="relation-picker"><div className="relation-search"><Search size={14} /><input aria-label={`Cari ${field.label.toLowerCase()}`} placeholder="Cari catatan…" value={search} onChange={(event) => setSearch(event.target.value)} /></div><select aria-label={field.label} aria-invalid={invalid} value={value} onChange={(event) => change(event.target.value)}><option value="">{query.isPending ? 'Memuat opsi…' : `Pilih ${field.label.toLowerCase()}`}</option>{value && !options.some((option) => option.id === value) && <option value={value}>{selected.data ? recordName(selected.data) : `Catatan terpilih #${value}`}</option>}{options.map((option) => <option value={option.id} key={option.id}>{recordName(option)}</option>)}</select>{query.isError ? <small className="field-error">{message(query.error)}</small> : !query.isPending && !options.length && <small>Tidak ada catatan yang cocok. Buat catatan terkait terlebih dahulu.</small>}{(query.data?.meta?.total || 0) > 100 && <small>Ketik untuk mempersempit daftar catatan yang tersedia.</small>}</div>;
+  return <div className="relation-picker"><div className="relation-search"><Search size={14} /><input aria-label={`Cari ${metadataLabel(field.label).toLowerCase()}`} placeholder="Cari catatan…" value={search} onChange={(event) => setSearch(event.target.value)} /></div><select aria-label={metadataLabel(field.label)} aria-invalid={invalid} value={value} onChange={(event) => change(event.target.value)}><option value="">{query.isPending ? 'Memuat opsi…' : `Pilih ${metadataLabel(field.label).toLowerCase()}`}</option>{value && !options.some((option) => option.id === value) && <option value={value}>{selected.data ? recordName(selected.data) : `Catatan terpilih #${value}`}</option>}{options.map((option) => <option value={option.id} key={option.id}>{recordName(option)}</option>)}</select>{query.isError ? <small className="field-error">{message(query.error)}</small> : !query.isPending && !options.length && <small>Tidak ada catatan yang cocok. Buat catatan terkait terlebih dahulu.</small>}{(query.data?.meta?.total || 0) > 100 && <small>Ketik untuk mempersempit daftar catatan yang tersedia.</small>}</div>;
 }
 
 function FormField({ field, control, errors }: { field: FieldDefinition; control: Control<Values>; errors: FieldErrors<Values> }) {
   const error = errors[field.name];
   const wide = field.type === 'textarea' || field.type === 'json';
-  return <div className={`field ${wide ? 'full-width' : ''}`}><label htmlFor={field.name}>{field.label}{field.required && <span className="required"> *</span>}</label><Controller control={control} name={field.name} render={({ field: controller }) => {
+  return <div className={`field ${wide ? 'full-width' : ''}`}><label htmlFor={field.name}>{metadataLabel(field.label)}{field.required && <span className="required"> *</span>}</label><Controller control={control} name={field.name} render={({ field: controller }) => {
     const common = { id: field.name, name: controller.name, onBlur: controller.onBlur, ref: controller.ref, 'aria-invalid': !!error };
     if (field.type === 'relation' && field.reference === 'printers') return <PrinterRelationSelector value={String(controller.value || '')} onChange={controller.onChange} invalid={!!error} />;
     if (field.type === 'relation') return <RelationInput field={field} value={String(controller.value || '')} change={controller.onChange} invalid={!!error} />;
     if (field.type === 'boolean') return <label className="checkbox-field"><input {...common} type="checkbox" checked={Boolean(controller.value)} onChange={(event) => controller.onChange(event.target.checked)} /><span>{controller.value ? 'Aktif' : 'Nonaktif'}</span></label>;
-    if (field.type === 'select') return <select {...common} value={String(controller.value || '')} onChange={controller.onChange}><option value="">Pilih {field.label.toLowerCase()}</option>{field.options?.map((option) => <option key={option} value={option}>{titleCase(option)}</option>)}</select>;
-    if (wide) return <textarea {...common} className={field.type === 'json' ? 'json-input' : undefined} rows={field.type === 'json' ? 6 : 4} maxLength={field.maxLength} value={String(controller.value || '')} onChange={controller.onChange} placeholder={field.type === 'json' ? '{ }' : `Tambahkan ${field.label.toLowerCase()}…`} />;
+    if (field.type === 'select') return <select {...common} value={String(controller.value || '')} onChange={controller.onChange}><option value="">Pilih {metadataLabel(field.label).toLowerCase()}</option>{field.options?.map((option) => <option key={option} value={option}>{fieldValueLabel(field.name, option)}</option>)}</select>;
+    if (wide) return <textarea {...common} className={field.type === 'json' ? 'json-input' : undefined} rows={field.type === 'json' ? 6 : 4} maxLength={field.maxLength} value={String(controller.value || '')} onChange={controller.onChange} placeholder={field.type === 'json' ? '{ }' : `Tambahkan ${metadataLabel(field.label).toLowerCase()}…`} />;
     if (field.name === 'color_hex') {
       const color = String(controller.value ?? '');
       const picker = /^#[0-9a-fA-F]{6}$/.test(color) ? color.toUpperCase() : '#B9BDC3';
@@ -76,7 +76,7 @@ export function ResourceForm({ resource, record }: { resource: ResourceDefinitio
       const value = values[field.name];
       const empty = value === '' || value === undefined || value === null;
       const issue = (message: string) => context.addIssue({ code: 'custom', message, path: [field.name] });
-      if (field.required && empty) { issue(`${field.label} wajib diisi.`); continue; }
+      if (field.required && empty) { issue(`${metadataLabel(field.label)} wajib diisi.`); continue; }
       if (empty) continue;
       if (field.type === 'decimal' && !/^-?\d+(\.\d+)?$/.test(String(value))) issue('Masukkan angka desimal yang valid.');
       if (field.type === 'decimal' && field.scale !== undefined && (String(value).split('.')[1]?.length || 0) > field.scale) issue(`Gunakan maksimal ${field.scale} angka desimal.`);

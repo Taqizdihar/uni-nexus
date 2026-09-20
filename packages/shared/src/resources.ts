@@ -840,15 +840,15 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "custom-requests",
     "table": "custom_requests",
-    "title": "Custom requests",
-    "singular": "Custom request",
-    "description": "Capture requirements and guide each custom job through feasibility and estimation.",
-    "group": "Sales",
+    "title": "Permintaan Kustom",
+    "singular": "Permintaan Kustom",
+    "description": "Catat kebutuhan pelanggan dan pandu setiap pekerjaan kustom melalui kelayakan serta estimasi.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
         "name": "request_number",
-        "label": "Request Number",
+        "label": "Nomor Permintaan",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -1410,14 +1410,14 @@ export const resources: ResourceDefinition[] = [
     "key": "pricing-rules",
     "table": "pricing_rules",
     "title": "Aturan Harga",
-    "singular": "Pricing rule",
+    "singular": "Aturan Harga",
     "description": "Atur harga berbasis berat, harga minimum, jasa desain, dan jasa finishing/cat.",
     "group": "Finance",
     "permission": "finance",
     "fields": [
       {
         "name": "name",
-        "label": "Name",
+        "label": "Nama",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -1425,7 +1425,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "rule_type",
-        "label": "Rule Type",
+        "label": "Jenis Aturan",
         "type": "select",
         "required": false,
         "nullable": false,
@@ -1447,7 +1447,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "product_id",
-        "label": "Product",
+        "label": "Produk",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -1455,7 +1455,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "price_per_gram",
-        "label": "Price Per (g)",
+        "label": "Harga per (g)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -1464,7 +1464,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "minimum_price",
-        "label": "Minimum Price",
+        "label": "Harga Minimum",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -1493,14 +1493,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "additional_config_json",
-        "label": "Additional Config JSON",
+        "label": "Konfigurasi Tambahan JSON",
         "type": "json",
         "required": false,
         "nullable": true
       },
       {
         "name": "effective_from",
-        "label": "Effective From",
+        "label": "Berlaku Mulai",
         "type": "datetime",
         "required": false,
         "nullable": true
@@ -1558,15 +1558,15 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "quotations",
     "table": "quotations",
-    "title": "Quotations",
-    "singular": "Quotation",
-    "description": "Build itemized estimates and preserve quotation revisions.",
-    "group": "Sales",
+    "title": "Penawaran",
+    "singular": "Penawaran",
+    "description": "Susun estimasi per item dan simpan setiap revisi penawaran.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
         "name": "quotation_number",
-        "label": "Quotation Number",
+        "label": "Nomor Penawaran",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -1946,15 +1946,15 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "orders",
     "table": "orders",
-    "title": "Orders",
-    "singular": "Order",
-    "description": "Track confirmed customer orders, payments, and delivery targets.",
-    "group": "Sales",
+    "title": "Pesanan",
+    "singular": "Pesanan",
+    "description": "Pantau pesanan pelanggan yang dikonfirmasi, pembayaran, dan target pengiriman.",
+    "group": "Penjualan",
     "permission": "sales",
     "fields": [
       {
         "name": "order_number",
-        "label": "Order Number",
+        "label": "Nomor Pesanan",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2327,12 +2327,12 @@ export const resources: ResourceDefinition[] = [
     "title": "Produksi",
     "singular": "Pekerjaan Produksi",
     "description": "Rencanakan pekerjaan untuk setiap item pesanan dan tetapkan operator.",
-    "group": "Production",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
         "name": "job_number",
-        "label": "Job Number",
+        "label": "Nomor Job",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -2340,7 +2340,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "order_item_id",
-        "label": "Order Item",
+        "label": "Item Pesanan",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -2348,7 +2348,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "assigned_operator_id",
-        "label": "Assigned Operator",
+        "label": "Operator Penanggung Jawab",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -2376,7 +2376,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "priority",
-        "label": "Priority",
+        "label": "Prioritas",
         "type": "select",
         "required": false,
         "nullable": false,
@@ -2391,42 +2391,42 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "planned_start",
-        "label": "Planned Start",
+        "label": "Mulai Terencana",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "planned_end",
-        "label": "Planned End",
+        "label": "Selesai Terencana",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "actual_start",
-        "label": "Actual Start",
+        "label": "Mulai Aktual",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "actual_end",
-        "label": "Actual End",
+        "label": "Selesai Aktual",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "notes",
-        "label": "Notes",
+        "label": "Catatan",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -2434,7 +2434,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -2456,17 +2456,17 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "print-jobs",
         "foreignKey": "production_job_id",
-        "label": "Print queue"
+        "label": "Antrean Cetak"
       },
       {
         "resource": "production-costs",
         "foreignKey": "production_job_id",
-        "label": "Costing & HPP"
+        "label": "Biaya & HPP"
       },
       {
         "resource": "qc-inspections",
         "foreignKey": "production_job_id",
-        "label": "Quality control"
+        "label": "Kontrol Kualitas"
       },
       {
         "resource": "slicing-results",
@@ -2481,7 +2481,7 @@ export const resources: ResourceDefinition[] = [
     "title": "Printers",
     "singular": "Printer",
     "description": "Monitor your printer fleet and maintain machine details. Status is managed manually.",
-    "group": "Production",
+    "group": "Produksi",
     "permission": "production",
     "fields": [
       {
@@ -2861,7 +2861,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "print_profile_id",
-        "label": "Print Profile",
+        "label": "Profil Cetak",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -3128,7 +3128,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "spool_code",
-        "label": "Spool Code",
+        "label": "Kode Roll",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3136,7 +3136,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "brand",
-        "label": "Brand",
+        "label": "Merek",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3144,7 +3144,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "color_name",
-        "label": "Color Name",
+        "label": "Nama Warna",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3152,7 +3152,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "color_hex",
-        "label": "Color Hex",
+        "label": "HEX Warna",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3160,7 +3160,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "batch_number",
-        "label": "Batch Number",
+        "label": "Nomor Batch",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3233,14 +3233,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "notes",
-        "label": "Notes",
+        "label": "Catatan",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -3248,7 +3248,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -3320,7 +3320,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "weight_gram",
-        "label": "Weight (g)",
+        "label": "Berat (g)",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3341,7 +3341,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "total_cost",
-        "label": "Total Cost",
+        "label": "Total Biaya",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3388,7 +3388,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "print_job_number",
-        "label": "Print Job Number",
+        "label": "Nomor Pekerjaan Cetak",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3420,7 +3420,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "slicing_result_id",
-        "label": "Slicing Result",
+        "label": "Hasil Slicing",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -3453,7 +3453,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "queue_position",
-        "label": "Queue Position",
+        "label": "Posisi Antrean",
         "type": "integer",
         "required": false,
         "nullable": true
@@ -3481,7 +3481,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "estimated_weight_gram",
-        "label": "Estimated Weight (g)",
+        "label": "Berat Estimasi (g)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -3490,7 +3490,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "actual_weight_gram",
-        "label": "Actual Weight (g)",
+        "label": "Berat Aktual (g)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -3499,14 +3499,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "estimated_print_minutes",
-        "label": "Estimated Print Minutes",
+        "label": "Durasi Cetak Estimasi (Menit)",
         "type": "integer",
         "required": false,
         "nullable": true
       },
       {
         "name": "actual_print_minutes",
-        "label": "Actual Print Minutes",
+        "label": "Durasi Cetak Aktual (Menit)",
         "type": "integer",
         "required": false,
         "nullable": true
@@ -3863,12 +3863,12 @@ export const resources: ResourceDefinition[] = [
     "title": "Komponen Biaya",
     "singular": "Komponen Biaya",
     "description": "Kelola komponen biaya seperti desain, cat, waste, dan pengemasan.",
-    "group": "Finance",
+    "group": "Keuangan",
     "permission": "finance",
     "fields": [
       {
         "name": "name",
-        "label": "Name",
+        "label": "Nama",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -3876,7 +3876,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "code",
-        "label": "Code",
+        "label": "Kode",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3884,7 +3884,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "category",
-        "label": "Category",
+        "label": "Kategori",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -3892,7 +3892,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "calculation_type",
-        "label": "Calculation Type",
+        "label": "Jenis Perhitungan",
         "type": "select",
         "required": false,
         "nullable": false,
@@ -3907,7 +3907,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "default_unit",
-        "label": "Default Unit",
+        "label": "Satuan Default",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -3915,7 +3915,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "default_unit_cost",
-        "label": "Default Unit Cost",
+        "label": "Biaya Satuan Default",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -3924,14 +3924,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "description",
-        "label": "Description",
+        "label": "Deskripsi",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "is_active",
-        "label": "Is Active",
+        "label": "Aktif",
         "type": "boolean",
         "required": false,
         "nullable": false,
@@ -3939,7 +3939,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -3947,7 +3947,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -3982,7 +3982,7 @@ export const resources: ResourceDefinition[] = [
     "title": "Biaya & HPP",
     "singular": "Biaya Produksi",
     "description": "Kelola biaya estimasi dan aktual. HPP v1 dihitung dari filamen, desain, dan cat.",
-    "group": "Finance",
+    "group": "Keuangan",
     "permission": "finance",
     "fields": [
       {
@@ -4032,7 +4032,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "description",
-        "label": "Description",
+        "label": "Deskripsi",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -4040,7 +4040,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "quantity",
-        "label": "Quantity",
+        "label": "Jumlah",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -4050,7 +4050,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "unit",
-        "label": "Unit",
+        "label": "Satuan",
         "type": "text",
         "required": false,
         "nullable": true,
@@ -4058,7 +4058,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "unit_cost",
-        "label": "Unit Cost",
+        "label": "Biaya Satuan",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -4068,7 +4068,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "total_cost",
-        "label": "Total Cost",
+        "label": "Total Biaya",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -4079,7 +4079,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4087,7 +4087,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4112,12 +4112,12 @@ export const resources: ResourceDefinition[] = [
     "title": "Kontrol Kualitas",
     "singular": "Pemeriksaan QC",
     "description": "Periksa hasil cetak dan catat keputusan lulus, rework, atau cetak ulang.",
-    "group": "Quality",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
         "name": "production_job_id",
-        "label": "Production Job",
+        "label": "Pekerjaan Produksi",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -4125,7 +4125,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "print_job_id",
-        "label": "Print Job",
+        "label": "Pekerjaan Cetak",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -4133,7 +4133,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "result",
-        "label": "Result",
+        "label": "Hasil",
         "type": "select",
         "required": true,
         "nullable": false,
@@ -4147,7 +4147,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "inspected_by_user_id",
-        "label": "Inspected By User",
+        "label": "Diperiksa Oleh",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -4155,21 +4155,21 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "inspected_at",
-        "label": "Inspected At",
+        "label": "Diperiksa Pada",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "notes",
-        "label": "Notes",
+        "label": "Catatan",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4199,7 +4199,7 @@ export const resources: ResourceDefinition[] = [
     "title": "QC checklist",
     "singular": "QC check",
     "description": "Record dimensions, surface quality, color, assembly, and completeness.",
-    "group": "Quality",
+    "group": "Kualitas",
     "permission": "production",
     "fields": [
       {
@@ -4212,7 +4212,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "check_name",
-        "label": "Check Name",
+        "label": "Nama Pemeriksaan",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -4220,7 +4220,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "result",
-        "label": "Result",
+        "label": "Hasil",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -4228,14 +4228,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "notes",
-        "label": "Notes",
+        "label": "Catatan",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4264,7 +4264,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "name",
-        "label": "Name",
+        "label": "Nama",
         "type": "text",
         "required": true,
         "nullable": false,
@@ -4272,14 +4272,14 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "description",
-        "label": "Description",
+        "label": "Deskripsi",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "default_cost",
-        "label": "Default Cost",
+        "label": "Biaya Default",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -4289,7 +4289,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "is_active",
-        "label": "Is Active",
+        "label": "Aktif",
         "type": "boolean",
         "required": false,
         "nullable": false,
@@ -4297,7 +4297,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4305,7 +4305,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4340,7 +4340,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "order_id",
-        "label": "Order",
+        "label": "Pesanan",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -4356,7 +4356,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "quantity",
-        "label": "Quantity",
+        "label": "Jumlah",
         "type": "integer",
         "required": false,
         "nullable": false,
@@ -4364,7 +4364,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "actual_cost",
-        "label": "Actual Cost",
+        "label": "Biaya Aktual",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -4389,7 +4389,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "packed_by_user_id",
-        "label": "Packed By User",
+        "label": "Dikemas Oleh",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -4397,21 +4397,21 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "packed_at",
-        "label": "Packed At",
+        "label": "Dikemas Pada",
         "type": "datetime",
         "required": false,
         "nullable": true
       },
       {
         "name": "notes",
-        "label": "Notes",
+        "label": "Catatan",
         "type": "textarea",
         "required": false,
         "nullable": true
       },
       {
         "name": "created_at",
-        "label": "Created At",
+        "label": "Dibuat Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
@@ -4419,7 +4419,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "updated_at",
-        "label": "Updated At",
+        "label": "Diperbarui Pada",
         "type": "datetime",
         "required": false,
         "nullable": false,
