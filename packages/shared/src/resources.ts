@@ -1409,9 +1409,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "pricing-rules",
     "table": "pricing_rules",
-    "title": "Pricing rules",
+    "title": "Aturan Harga",
     "singular": "Pricing rule",
-    "description": "Configure weight-based rates, minimum prices, and design or finishing fees.",
+    "description": "Atur harga berbasis berat, harga minimum, jasa desain, dan jasa finishing/cat.",
     "group": "Finance",
     "permission": "finance",
     "fields": [
@@ -1473,7 +1473,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "design_fee",
-        "label": "Design Fee",
+        "label": "Jasa Desain",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -1483,7 +1483,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "finishing_fee",
-        "label": "Finishing Fee",
+        "label": "Jasa Finishing / Cat",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -1851,7 +1851,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "design_fee_snapshot",
-        "label": "Biaya Desain (Snapshot)",
+        "label": "Jasa Desain (Snapshot)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -1861,7 +1861,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "finishing_fee_snapshot",
-        "label": "Biaya Finishing (Snapshot)",
+        "label": "Jasa Finishing / Cat (Snapshot)",
         "type": "decimal",
         "required": false,
         "nullable": true,
@@ -2212,7 +2212,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "order_id",
-        "label": "Order",
+        "label": "Pesanan",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -2324,9 +2324,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "production-jobs",
     "table": "production_jobs",
-    "title": "Production",
-    "singular": "Production job",
-    "description": "Plan the work for each order item and assign an operator.",
+    "title": "Produksi",
+    "singular": "Pekerjaan Produksi",
+    "description": "Rencanakan pekerjaan untuk setiap item pesanan dan tetapkan operator.",
     "group": "Production",
     "permission": "production",
     "fields": [
@@ -2837,7 +2837,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "production_job_id",
-        "label": "Production Job",
+        "label": "Pekerjaan Produksi",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -3112,10 +3112,10 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "filament-spools",
     "table": "filament_spools",
-    "title": "Filament inventory",
-    "singular": "Filament spool",
-    "description": "Track spool stock in grams and purchase cost. Adjustments are audited.",
-    "group": "Inventory",
+    "title": "Stok Filamen",
+    "singular": "Roll Filamen",
+    "description": "Kelola stok roll filamen, berat, dan harga beli. Pemakaian dicatat secara audit.",
+    "group": "Inventaris",
     "permission": "production",
     "fields": [
       {
@@ -3168,7 +3168,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "initial_weight_gram",
-        "label": "Initial Weight (g)",
+        "label": "Berat Awal (g)",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3178,17 +3178,18 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "remaining_weight_gram",
-        "label": "Remaining Weight (g)",
+        "label": "Sisa Berat (g)",
         "type": "decimal",
         "required": false,
         "nullable": false,
         "precision": 12,
         "scale": 3,
-        "default": "0.000"
+        "default": "0.000",
+        "readOnly": true
       },
       {
         "name": "purchase_price",
-        "label": "Purchase Price",
+        "label": "Harga Beli",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3198,7 +3199,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "cost_per_gram",
-        "label": "Cost Per (g)",
+        "label": "Biaya per Gram",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3209,7 +3210,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "purchased_at",
-        "label": "Purchased At",
+        "label": "Tanggal Pembelian",
         "type": "datetime",
         "required": false,
         "nullable": true
@@ -3273,22 +3274,22 @@ export const resources: ResourceDefinition[] = [
       {
         "resource": "material-usages",
         "foreignKey": "filament_spool_id",
-        "label": "Material usage"
+        "label": "Pemakaian Material"
       }
     ]
   },
   {
     "key": "material-usages",
     "table": "material_usages",
-    "title": "Material usage",
-    "singular": "Material usage",
-    "description": "Record real consumption or waste against a print attempt; stock is deducted atomically.",
-    "group": "Inventory",
+    "title": "Pemakaian Material",
+    "singular": "Pemakaian Material",
+    "description": "Catat pemakaian normal atau waste pada percobaan cetak; stok dikurangi secara atomik.",
+    "group": "Inventaris",
     "permission": "production",
     "fields": [
       {
         "name": "print_job_id",
-        "label": "Print Job",
+        "label": "Pekerjaan Cetak",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -3296,7 +3297,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "filament_spool_id",
-        "label": "Filament Spool",
+        "label": "Roll Filamen",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -3304,7 +3305,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "usage_type",
-        "label": "Usage Type",
+        "label": "Jenis Pemakaian",
         "type": "select",
         "required": true,
         "nullable": false,
@@ -3329,7 +3330,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "cost_per_gram",
-        "label": "Cost Per (g)",
+        "label": "Biaya per Gram",
         "type": "decimal",
         "required": false,
         "nullable": false,
@@ -3379,9 +3380,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "print-jobs",
     "table": "print_jobs",
-    "title": "Print queue",
-    "singular": "Print job",
-    "description": "Track individual print attempts, including retries and failed runs.",
+    "title": "Antrean Cetak",
+    "singular": "Pekerjaan Cetak",
+    "description": "Pantau setiap percobaan cetak, termasuk pengulangan dan kegagalan.",
     "group": "Production",
     "permission": "production",
     "fields": [
@@ -3395,7 +3396,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "production_job_id",
-        "label": "Production Job",
+        "label": "Pekerjaan Produksi",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -3579,7 +3580,7 @@ export const resources: ResourceDefinition[] = [
     "fields": [
       {
         "name": "print_job_id",
-        "label": "Print Job",
+        "label": "Pekerjaan Cetak",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -3859,9 +3860,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "cost-components",
     "table": "cost_components",
-    "title": "Cost components",
-    "singular": "Cost component",
-    "description": "Define materials, machine time, electricity, design, waste, and packaging costs.",
+    "title": "Komponen Biaya",
+    "singular": "Komponen Biaya",
+    "description": "Kelola komponen biaya seperti desain, cat, waste, dan pengemasan.",
     "group": "Finance",
     "permission": "finance",
     "fields": [
@@ -3978,15 +3979,15 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "production-costs",
     "table": "production_costs",
-    "title": "Costing & HPP",
-    "singular": "Production cost",
-    "description": "Itemize estimated and actual costs. HPP is derived from these components.",
+    "title": "Biaya & HPP",
+    "singular": "Biaya Produksi",
+    "description": "Kelola biaya estimasi dan aktual. HPP v1 dihitung dari filamen, desain, dan cat.",
     "group": "Finance",
     "permission": "finance",
     "fields": [
       {
         "name": "order_id",
-        "label": "Order",
+        "label": "Pesanan",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -3994,7 +3995,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "production_job_id",
-        "label": "Production Job",
+        "label": "Pekerjaan Produksi",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -4002,7 +4003,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "print_job_id",
-        "label": "Print Job",
+        "label": "Pekerjaan Cetak",
         "type": "relation",
         "required": false,
         "nullable": true,
@@ -4010,7 +4011,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "cost_component_id",
-        "label": "Cost Component",
+        "label": "Komponen Biaya",
         "type": "relation",
         "required": true,
         "nullable": false,
@@ -4018,7 +4019,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "cost_type",
-        "label": "Cost Type",
+        "label": "Jenis Biaya",
         "type": "select",
         "required": false,
         "nullable": false,
@@ -4108,9 +4109,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "qc-inspections",
     "table": "qc_inspections",
-    "title": "Quality control",
-    "singular": "QC inspection",
-    "description": "Inspect completed prints and record pass, rework, or reprint decisions.",
+    "title": "Kontrol Kualitas",
+    "singular": "Pemeriksaan QC",
+    "description": "Periksa hasil cetak dan catat keputusan lulus, rework, atau cetak ulang.",
     "group": "Quality",
     "permission": "production",
     "fields": [
@@ -4331,9 +4332,9 @@ export const resources: ResourceDefinition[] = [
   {
     "key": "order-packaging",
     "table": "order_packaging",
-    "title": "Packaging",
-    "singular": "Order packaging",
-    "description": "Record packing work and actual costs for each order.",
+    "title": "Pengemasan",
+    "singular": "Pengemasan Pesanan",
+    "description": "Catat pekerjaan pengemasan dan biaya aktual setiap pesanan.",
     "group": "Quality",
     "permission": "production",
     "fields": [
@@ -4347,7 +4348,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "packaging_type_id",
-        "label": "Packaging Type",
+        "label": "Jenis Pengemasan",
         "type": "relation",
         "required": true,
         "nullable": false,

@@ -131,11 +131,17 @@ type Detail = {
   packaging: Array<Record<string, unknown>>;
   ip_reviews: Array<Record<string, unknown>>;
   hpp: {
-    estimatedHpp: string;
+    estimatedHpp: string | null;
     actualHpp: string;
     sellingPrice: string;
     margin: string;
+    marginPercent: string | null;
+    filamentCost: string;
+    designCost: string;
+    paintCost: string;
+    wasteCost: string;
     materialUsageGram: string;
+    filamentUsageGram: string;
     packagingCost: string;
   } | null;
   activity: Array<Record<string, unknown>>;
@@ -940,11 +946,100 @@ function PricingItemDialog({ quotation, onClose }: { quotation: Quote; onClose: 
   );
 }
 
+function HppPanel({ hpp, orderId }: { hpp: NonNullable<Detail['hpp']>; orderId: string }) {
+  const { workspace } = useAuth();
+  const client = useQueryClient();
+  const toast = useToast();
+  const [editing, setEditing] = useState<'HPP_DESIGN' | 'HPP_PAINT' | null>(null);
+  const [amount, setAmount] = useState('0');
+  const save = useMutation({
+    mutationFn: (componentCode: 'HPP_DESIGN' | 'HPP_PAINT') =>
+      api(`/workflows/orders/${orderId}/hpp`, {
+        method: 'POST',
+        workspace: workspace!.id,
+        body: body({ componentCode, amount }),
+      }),
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: ['sales-workflow', workspace!.id] });
+      await client.invalidateQueries({ queryKey: ['sales-workflows'] });
+      setEditing(null);
+      toast('HPP berhasil diperbarui.');
+    },
+    onError: (error) => toast(message(error), true),
+  });
+  const beginEdit = (component: 'HPP_DESIGN' | 'HPP_PAINT', current: string) => {
+    setEditing(component);
+    setAmount(current);
+  };
+  const field = (code: 'HPP_DESIGN' | 'HPP_PAINT', label: string, value: string) => (
+    <div className="hpp-line" key={code}>
+      <span>{label}</span>
+      {editing === code ? (
+        <form
+          className="hpp-edit-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            save.mutate(code);
+          }}
+        >
+          <input
+            aria-label={`${label} HPP`}
+            inputMode="decimal"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+            autoFocus
+          />
+          <button className="button primary small" type="submit" disabled={save.isPending}>
+            Simpan
+          </button>
+          <button className="button secondary small" type="button" onClick={() => setEditing(null)}>
+            Batal
+          </button>
+        </form>
+      ) : (
+        <>
+          <strong>{money(value)}</strong>
+          <button className="button secondary small" type="button" onClick={() => beginEdit(code, value)}>
+            Edit
+          </button>
+        </>
+      )}
+    </div>
+  );
+  return (
+    <section className="hpp-panel">
+      <div className="hpp-panel-heading">
+        <div>
+          <h3>Biaya &amp; HPP</h3>
+          <p>HPP Aktual v1 hanya memakai pemakaian filamen normal, desain, dan cat.</p>
+        </div>
+      </div>
+      <div className="hpp-lines">
+        <div className="hpp-line"><span>Filamen</span><strong>{money(hpp.filamentCost)}</strong><small>Otomatis dari pemakaian filamen · {hpp.filamentUsageGram} g</small></div>
+        {field('HPP_DESIGN', 'Biaya Desain HPP', hpp.designCost)}
+        {field('HPP_PAINT', 'Biaya Cat HPP', hpp.paintCost)}
+      </div>
+      <div className="hpp-total"><span>HPP Aktual</span><strong>{money(hpp.actualHpp)}</strong></div>
+      <div className="hpp-commercial">
+        <div><span>Harga Jual</span><strong>{money(hpp.sellingPrice)}</strong></div>
+        <div><span>Margin Kotor</span><strong>{money(hpp.margin)}</strong></div>
+        <div><span>Margin %</span><strong>{hpp.marginPercent == null ? '—' : `${hpp.marginPercent}%`}</strong></div>
+      </div>
+      <p className="helper-note">Waste {money(hpp.wasteCost)} · Pengemasan {money(hpp.packagingCost)} — informasional, tidak masuk HPP v1.</p>
+    </section>
+  );
+}
+
 function ContextualActions({ detail }: { detail: Detail }) {
   const { workspace } = useAuth();
   const client = useQueryClient();
   const toast = useToast();
   const [pricingOpen, setPricingOpen] = useState(false);
+  const [usageOpen, setUsageOpen] = useState(false);
+  const [spoolId, setSpoolId] = useState('');
+  const [usageType, setUsageType] = useState('MODEL');
+  const [weightGram, setWeightGram] = useState('');
+  const [usageNotes, setUsageNotes] = useState('');
   const workflow = detail.workflow;
   const quote = detail.quotations[0];
   const requestId = workflow.custom_request_id;
@@ -965,6 +1060,12 @@ function ContextualActions({ detail }: { detail: Detail }) {
   )?.[0];
   const packaging = detail.packaging[0] as { status?: string } | undefined;
   const ipReview = detail.ip_reviews[0] as { id?: string; status?: string } | undefined;
+  const spoolOptions = useQuery({
+    queryKey: ['workflow-filament-spools', workspace?.id],
+    enabled: usageOpen && !!workspace,
+    queryFn: () => api<{ data: Array<{ id: string; spool_code?: string | null; brand?: string | null; color_name?: string | null; remaining_weight_gram: string; cost_per_gram: string; materials?: { name?: string | null } | null }> }>('/workflows/filament-spools', { workspace: workspace!.id }),
+    staleTime: 30_000,
+  });
   const refresh = async () => {
     await Promise.all([
       client.invalidateQueries({ queryKey: ['sales-workflow'] }),
@@ -995,14 +1096,36 @@ function ContextualActions({ detail }: { detail: Detail }) {
   });
   const statusChange = useMutation({
     mutationFn: ({ resource, id, status }: { resource: string; id: string; status: string }) =>
-      api(`/${resource}/${id}`, {
-        method: 'PATCH',
-        workspace: workspace!.id,
-        body: body({ status }),
-      }),
+      api(
+        resource === 'orders' && status === 'COMPLETED'
+          ? `/workflows/orders/${id}/complete`
+          : `/${resource}/${id}`,
+        {
+          method: resource === 'orders' && status === 'COMPLETED' ? 'POST' : 'PATCH',
+          workspace: workspace!.id,
+          ...(resource === 'orders' && status === 'COMPLETED' ? {} : { body: body({ status }) }),
+        },
+      ),
     onSuccess: async () => {
       await refresh();
       toast('Status berhasil diperbarui.');
+    },
+    onError: (error) => toast(message(error), true),
+  });
+  const recordUsage = useMutation({
+    mutationFn: () =>
+      api(`/workflows/print-jobs/${latestPrint!.id}/material-usages`, {
+        method: 'POST',
+        workspace: workspace!.id,
+        body: body({ filamentSpoolId: spoolId, usageType, weightGram, notes: usageNotes || undefined }),
+      }),
+    onSuccess: async () => {
+      await refresh();
+      await client.invalidateQueries({ queryKey: ['workflow-filament-spools', workspace!.id] });
+      setUsageOpen(false);
+      setWeightGram('');
+      setUsageNotes('');
+      toast('Pemakaian filamen dicatat dan stok diperbarui.');
     },
     onError: (error) => toast(message(error), true),
   });
@@ -1251,6 +1374,13 @@ function ContextualActions({ detail }: { detail: Detail }) {
         </Link>,
       );
   }
+  if ((workflow.stage === 'PRODUCTION' || workflow.stage === 'COMPLETION') && latestPrint?.id)
+    links.push(
+      <button className="button secondary small" key="material-usage" onClick={() => setUsageOpen(true)}>
+        <Layers3 size={15} />
+        Catat Pemakaian Filamen
+      </button>,
+    );
   if (workflow.stage === 'COMPLETION' && production?.id) {
     links.push(
       <Link
@@ -1312,6 +1442,21 @@ function ContextualActions({ detail }: { detail: Detail }) {
       {links.length > 0 && <div className="workflow-actions">{links}</div>}
       {pricingOpen && quote && (
         <PricingItemDialog quotation={quote} onClose={() => setPricingOpen(false)} />
+      )}
+      {usageOpen && latestPrint?.id && (
+        <div className="modal-backdrop" onClick={() => setUsageOpen(false)}>
+          <section className="modal" role="dialog" aria-modal="true" aria-labelledby="material-usage-title" onClick={(event) => event.stopPropagation()}>
+            <button className="icon-button modal-close" aria-label="Tutup" onClick={() => setUsageOpen(false)}><X size={19} /></button>
+            <h2 id="material-usage-title">Catat Pemakaian Filamen</h2>
+            <p>Pemakaian dicatat ke pekerjaan cetak dan langsung mengurangi stok roll secara atomik.</p>
+            <label className="field"><span>Roll Filamen</span><select value={spoolId} onChange={(event) => setSpoolId(event.target.value)}><option value="">Pilih roll filamen</option>{spoolOptions.data?.data.map((spool) => <option key={spool.id} value={spool.id}>{[spool.materials?.name, spool.brand, spool.color_name, spool.spool_code].filter(Boolean).join(' · ')} — sisa {spool.remaining_weight_gram} g · {money(spool.cost_per_gram)}/g</option>)}</select></label>
+            {spoolOptions.isError && <small className="field-error">{message(spoolOptions.error)}</small>}
+            <label className="field"><span>Berat Dipakai (g)</span><input inputMode="decimal" value={weightGram} onChange={(event) => setWeightGram(event.target.value)} placeholder="Contoh: 42.000" /></label>
+            <label className="field"><span>Jenis Pemakaian</span><select value={usageType} onChange={(event) => setUsageType(event.target.value)}><option value="MODEL">Model</option><option value="SUPPORT">Support</option><option value="WASTE">Waste</option><option value="PURGE">Purge</option><option value="OTHER">Lainnya</option></select></label>
+            <label className="field"><span>Catatan</span><textarea value={usageNotes} onChange={(event) => setUsageNotes(event.target.value)} rows={3} /></label>
+            <div className="form-actions"><button className="button secondary" onClick={() => setUsageOpen(false)}>Batal</button><button className="button primary" disabled={recordUsage.isPending || !spoolId || !weightGram} onClick={() => recordUsage.mutate()}>{recordUsage.isPending ? 'Menyimpan…' : 'Simpan Pemakaian'}</button></div>
+          </section>
+        </div>
       )}
     </>
   );
@@ -1598,24 +1743,7 @@ export function SalesWorkflowDetail() {
               </div>
             )}
             {hpp && (
-              <div className="hpp-summary">
-                <div>
-                  <span>Estimasi HPP</span>
-                  <strong>{money(hpp.estimatedHpp)}</strong>
-                </div>
-                <div>
-                  <span>HPP Aktual</span>
-                  <strong>{money(hpp.actualHpp)}</strong>
-                </div>
-                <div>
-                  <span>Harga Jual</span>
-                  <strong>{money(hpp.sellingPrice)}</strong>
-                </div>
-                <div>
-                  <span>Margin</span>
-                  <strong>{money(hpp.margin)}</strong>
-                </div>
-              </div>
+              <HppPanel hpp={hpp} orderId={String(order.id)} />
             )}
           </Section>
         )}

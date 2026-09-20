@@ -3720,6 +3720,21 @@ dd.json-value {
 .hpp-summary div { display: grid; gap: 3px; padding: 8px; border-radius: var(--radius-sm); background: var(--surface-secondary); }
 .hpp-summary span { color: var(--ink-faint); font-size: 10.5px; }
 .hpp-summary strong { font-size: 12px; overflow-wrap: anywhere; }
+.hpp-panel { display: grid; gap: 12px; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border-soft); }
+.hpp-panel-heading h3 { margin: 0 0 3px; font-size: 14px; }
+.hpp-panel-heading p, .hpp-panel .helper-note { margin: 0; color: var(--ink-faint); font-size: 11px; }
+.hpp-lines { display: grid; gap: 6px; }
+.hpp-line { display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 7px 9px; border-radius: var(--radius-sm); background: var(--surface-secondary); }
+.hpp-line > span { flex: 1; color: var(--ink-soft); font-size: 12px; }
+.hpp-line > strong { font-size: 12px; }
+.hpp-line > small { color: var(--ink-faint); font-size: 10px; }
+.hpp-edit-form { display: flex; align-items: center; gap: 6px; }
+.hpp-edit-form input { width: 120px; }
+.hpp-total { display: flex; justify-content: space-between; align-items: center; padding: 10px 9px; border-top: 1px solid var(--border-soft); font-weight: 700; }
+.hpp-commercial { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.hpp-commercial div { display: grid; gap: 3px; padding: 8px 9px; background: var(--surface-secondary); border-radius: var(--radius-sm); }
+.hpp-commercial span { color: var(--ink-faint); font-size: 10px; }
+.hpp-commercial strong { font-size: 12px; }
 .pricing-dialog { width: min(690px, calc(100vw - 28px)); max-height: min(760px, calc(100vh - 28px)); overflow: auto; }
 .pricing-dialog > p { margin: 5px 0 16px; color: var(--ink-soft); font-size: 12.5px; }
 .pricing-dialog .pricing-breakdown { margin-top: 14px; }

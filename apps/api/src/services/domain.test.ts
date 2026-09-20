@@ -8,7 +8,7 @@ const context = { workspaceId: 4n, userId: 7n };
 function mockInventory(count: number) {
   const updateMany = vi.fn().mockResolvedValue({ count });
   const auditCreate = vi.fn().mockResolvedValue({});
-  const tx = { filament_spools: { findFirst: vi.fn().mockResolvedValue({ id: 12n, remaining_weight_gram: '50', cost_per_gram: '123.4567' }), updateMany }, audit_logs: { create: auditCreate } };
+  const tx = { filament_spools: { findFirst: vi.fn().mockResolvedValue({ id: 12n, remaining_weight_gram: '50', cost_per_gram: '123.4567' }), updateMany }, print_jobs: { findFirst: vi.fn().mockResolvedValue({ id: 99n }) }, audit_logs: { create: auditCreate } };
   return { tx: tx as unknown as Prisma.TransactionClient, updateMany, auditCreate };
 }
 describe('inventory invariants', () => {
@@ -22,7 +22,7 @@ describe('inventory invariants', () => {
   });
   it('refuses insufficient stock without recording an audit success', async () => {
     const { tx, auditCreate } = mockInventory(0);
-    await expect(beforeWrite(tx, 'material_usages', { filament_spool_id: 12n, weight_gram: '60' }, null, context)).rejects.toThrow('Insufficient remaining filament');
+    await expect(beforeWrite(tx, 'material_usages', { filament_spool_id: 12n, print_job_id: 99n, weight_gram: '60' }, null, context)).rejects.toThrow('Insufficient remaining filament');
     expect(auditCreate).not.toHaveBeenCalled();
   });
   it('prevents rewriting consumption and stock above original capacity', async () => {
@@ -30,6 +30,22 @@ describe('inventory invariants', () => {
     await expect(beforeWrite(tx, 'material_usages', { weight_gram: '1' }, { id: 1n }, context)).rejects.toThrow('immutable');
     await expect(beforeWrite(tx, 'filament_spools', { initial_weight_gram: '100', remaining_weight_gram: '101' }, null, context)).rejects.toThrow('cannot exceed');
     expect(updateMany).not.toHaveBeenCalled();
+  });
+  it('initializes new spool stock from the initial weight and protects it on edit', async () => {
+    const tx = {
+      filament_spools: { findFirst: vi.fn(), updateMany: vi.fn() },
+      audit_logs: { create: vi.fn() },
+    } as unknown as Prisma.TransactionClient;
+    const created = await beforeWrite(tx, 'filament_spools', {
+      initial_weight_gram: '1000',
+      remaining_weight_gram: '0',
+      purchase_price: '154540',
+    }, null, context);
+    expect(created.remaining_weight_gram).toBe('1000.000');
+    expect(created.cost_per_gram).toBe('154.5400');
+    await expect(beforeWrite(tx, 'filament_spools', {
+      remaining_weight_gram: '500',
+    }, { id: 1n, initial_weight_gram: '1000', remaining_weight_gram: '958', purchase_price: '154540' }, context)).rejects.toThrow('Sisa berat');
   });
 });
 describe('workflow and audit integrity', () => {

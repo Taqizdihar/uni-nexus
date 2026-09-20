@@ -45,6 +45,8 @@ function latest(records: StatusRecord[] | undefined): StatusRecord | undefined {
 export function deriveSalesWorkflowStage(input: SalesWorkflowStageInput): SalesWorkflowStage {
   const orders = input.orders ?? [];
   const latestQuotation = latest(input.quotations);
+  const latestPrint = latest(input.printJobs);
+  const latestQc = latest(input.qcInspections);
   const requestStatus = statusOf(input.customRequest);
   const hasOrder = orders.length > 0;
 
@@ -69,7 +71,7 @@ export function deriveSalesWorkflowStage(input: SalesWorkflowStageInput): SalesW
     return 'CANCELLED';
 
   // A failed print or an explicit QC reprint returns the job to the production queue.
-  if (someStatus(input.printJobs, ['FAILED']) || someStatus(input.qcInspections, ['REPRINT']))
+  if (statusOf(latestPrint) === 'FAILED' || statusOf(latestQc) === 'REPRINT')
     return 'PRODUCTION';
 
   // Successful print output, QC, and packaging are the completion path. REWORK stays here
@@ -77,8 +79,8 @@ export function deriveSalesWorkflowStage(input: SalesWorkflowStageInput): SalesW
   if (
     someStatus(orders, ['QC', 'PACKAGING', 'READY']) ||
     someStatus(input.productionJobs, ['QC', 'PACKAGING']) ||
-    someStatus(input.printJobs, ['SUCCESS']) ||
-    someStatus(input.qcInspections, ['PASS', 'FAIL', 'REWORK']) ||
+    statusOf(latestPrint) === 'SUCCESS' ||
+    ['PASS', 'FAIL', 'REWORK'].includes(statusOf(latestQc)) ||
     someStatus(input.packaging, ['PENDING', 'PACKING', 'PACKED'])
   )
     return 'COMPLETION';
@@ -120,18 +122,20 @@ export function deriveProductionWorkflowTab(
   input: ProductionWorkflowStageInput,
 ): ProductionWorkflowTab {
   const jobStatus = statusOf(input.productionJob);
+  const latestPrint = latest(input.printJobs);
+  const latestQc = latest(input.qcInspections);
   if (statusOf(input.order) === 'COMPLETED' || jobStatus === 'COMPLETED') return 'COMPLETED';
   if (
     jobStatus === 'ON_HOLD' ||
-    someStatus(input.printJobs, ['FAILED']) ||
-    someStatus(input.qcInspections, ['FAIL', 'REWORK', 'REPRINT'])
+    statusOf(latestPrint) === 'FAILED' ||
+    ['FAIL', 'REWORK', 'REPRINT'].includes(statusOf(latestQc))
   )
     return 'ATTENTION';
   if (jobStatus === 'PACKAGING' || someStatus(input.packaging, ['PENDING', 'PACKING']))
     return 'PACKAGING';
-  if (jobStatus === 'QC' || someStatus(input.printJobs, ['SUCCESS'])) return 'QC';
-  if (someStatus(input.printJobs, ['PRINTING', 'PAUSED']) || jobStatus === 'PRINTING')
+  if (jobStatus === 'QC' || statusOf(latestPrint) === 'SUCCESS') return 'QC';
+  if (['PRINTING', 'PAUSED'].includes(statusOf(latestPrint)) || jobStatus === 'PRINTING')
     return 'PRINTING';
-  if (someStatus(input.printJobs, ['QUEUED']) || jobStatus === 'QUEUED') return 'PRINT_QUEUE';
+  if (statusOf(latestPrint) === 'QUEUED' || jobStatus === 'QUEUED') return 'PRINT_QUEUE';
   return 'NEEDS_PROCESSING';
 }

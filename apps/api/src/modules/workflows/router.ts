@@ -4,10 +4,15 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
-import { authorize, parseId } from '../../middleware/auth.js';
+import { authorize, hasPermission, parseId } from '../../middleware/auth.js';
 import { audit, type WorkspaceContext } from '../../services/audit.js';
+import { beforeWrite } from '../../services/domain.js';
+import { HPP_V1_COMPONENT_CODES } from '../../services/costing.js';
 import { decimal, documentTotal, money, sumMoney } from '../../services/money.js';
 import { InAppNotificationProvider } from '../../services/notifications.js';
+import { assertOrderCanComplete } from '../../services/workflow-sync.js';
+import { validateTransition } from '../../services/status.js';
+import { upsertOrderHpp } from '../../services/hpp.js';
 import { calculateQuotationItemPricing } from './pricing.js';
 import {
   listProductionWorkflows,
@@ -25,6 +30,20 @@ const decimalInput = z
     /^\d+(\.\d{1,3})?$/,
     'Gunakan angka desimal non-negatif dengan maksimal tiga angka di belakang koma.',
   );
+const materialUsageInput = z
+  .object({
+    filamentSpoolId: z.string().regex(/^\d+$/),
+    usageType: z.enum(['MODEL', 'SUPPORT', 'WASTE', 'PURGE', 'OTHER']),
+    weightGram: decimalInput,
+    notes: z.string().trim().max(5000).optional(),
+  })
+  .strict();
+const hppAmountInput = z
+  .object({
+    componentCode: z.enum(HPP_V1_COMPONENT_CODES),
+    amount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Masukkan nominal Rupiah yang valid.'),
+  })
+  .strict();
 const optionalId = z.string().regex(/^\d+$/).optional();
 const workflowListInput = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -301,17 +320,104 @@ const pricedItemInput = z
   })
   .strict();
 
+workflowsRouter.get('/workflows/filament-spools', authorize('read'), async (req, res) => {
+  const spools = await prisma.filament_spools.findMany({
+    where: {
+      workspace_id: req.workspace!.id,
+      status: { not: 'ARCHIVED' },
+      remaining_weight_gram: { gt: '0' },
+    },
+    orderBy: [{ status: 'asc' }, { updated_at: 'desc' }],
+    select: {
+      id: true,
+      spool_code: true,
+      brand: true,
+      color_name: true,
+      remaining_weight_gram: true,
+      cost_per_gram: true,
+      materials: { select: { id: true, name: true, material_type: true } },
+    },
+  });
+  res.json({ data: spools });
+});
+
+workflowsRouter.post('/workflows/print-jobs/:id/material-usages', authorize('production'), async (req, res) => {
+  const input = materialUsageInput.parse(req.body);
+  const printJobId = parseId(req.params.id, 'print job ID');
+  const context = { workspaceId: req.workspace!.id, userId: req.auth!.userId };
+  const data = await prisma.$transaction(
+    async (tx) => {
+      const print = await tx.print_jobs.findFirst({
+        where: { id: printJobId, workspace_id: context.workspaceId },
+        select: { id: true },
+      });
+      if (!print) throw new AppError(404, 'Print job tidak ditemukan di workspace ini.', 'PRINT_JOB_NOT_FOUND');
+      const prepared = await beforeWrite(
+        tx,
+        'material_usages',
+        {
+          workspace_id: context.workspaceId,
+          print_job_id: printJobId,
+          filament_spool_id: BigInt(input.filamentSpoolId),
+          usage_type: input.usageType,
+          weight_gram: input.weightGram,
+          notes: input.notes,
+        },
+        null,
+        context,
+      );
+      const usage = await tx.material_usages.create({ data: prepared as Prisma.material_usagesUncheckedCreateInput });
+      await audit(tx, context, 'MATERIAL_USAGE_RECORDED', 'material_usages', usage.id, undefined, usage);
+      return usage;
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 15000 },
+  );
+  res.status(201).json({ data });
+});
+
+workflowsRouter.post('/workflows/orders/:id/hpp', authorize('finance'), async (req, res) => {
+  const input = hppAmountInput.parse(req.body);
+  const orderId = parseId(req.params.id, 'order ID');
+  const context = { workspaceId: req.workspace!.id, userId: req.auth!.userId };
+  const data = await prisma.$transaction(
+    (tx) => upsertOrderHpp(tx, orderId, input, context),
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 15000 },
+  );
+  res.json({ data });
+});
+
+workflowsRouter.post('/workflows/orders/:id/complete', authorize('production'), async (req, res) => {
+  const orderId = parseId(req.params.id, 'order ID');
+  const context = { workspaceId: req.workspace!.id, userId: req.auth!.userId };
+  const data = await prisma.$transaction(async (tx) => {
+    const order = await tx.orders.findFirst({ where: { id: orderId, workspace_id: context.workspaceId } });
+    if (!order) throw new AppError(404, 'Pesanan tidak ditemukan.', 'ORDER_NOT_FOUND');
+    await assertOrderCanComplete(tx, order.id, context);
+    validateTransition('orders', order.status, 'COMPLETED');
+    const completed = await tx.orders.update({ where: { id: order.id }, data: { status: 'COMPLETED', completed_at: new Date(), updated_at: new Date() } });
+    await audit(tx, context, 'ORDER_COMPLETED', 'orders', order.id, order, completed);
+    return completed;
+  });
+  res.json({ data });
+});
+
 workflowsRouter.get('/workflows/orders', authorize('read'), async (req, res) => {
   const input = workflowListInput.parse(req.query) as SalesWorkflowFilters;
-  res.json(await listSalesWorkflows(prisma, req.workspace!.id, input));
+  const role = req.workspace!.role;
+  res.json(await listSalesWorkflows(prisma, req.workspace!.id, input, {
+    canSeeSales: hasPermission(role, 'sales'),
+    canSeeFinance: hasPermission(role, 'finance'),
+  }));
 });
 
 workflowsRouter.get('/workflows/orders/:workflowKey', authorize('read'), async (req, res) => {
+  const role = req.workspace!.role;
   res.json(
     await salesWorkflowDetail(
       prisma,
       req.workspace!.id,
       typeof req.params.workflowKey === 'string' ? req.params.workflowKey : '',
+      { canSeeSales: hasPermission(role, 'sales'), canSeeFinance: hasPermission(role, 'finance') },
     ),
   );
 });

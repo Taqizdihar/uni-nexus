@@ -4,6 +4,7 @@ import {
   filterSalesWorkflows,
   listSalesWorkflows,
   salesWorkflowDetail,
+  redactWorkflowFinancials,
   type SalesWorkflowRow,
 } from './service.js';
 
@@ -26,6 +27,33 @@ const base = (id: string, stage: SalesWorkflowRow['stage'], request = true): Sal
   source: 'WHATSAPP',
   updated_at: new Date(`2026-09-2${id}T00:00:00Z`),
   next_action: 'Lanjutkan',
+});
+
+describe('workflow financial redaction', () => {
+  const detail = {
+    workflow: { value: '66000.00', payment_status: 'PAID' },
+    request: {
+      quotations: [{ total_price: '66000.00', quotation_items: [{ unit_price: '500.00', amount: '20000.00', description: 'Model' }] }],
+      orders: [{ total_price: '66000.00', order_items: [{ unit_price: '66000.00', total_price: '66000.00', item_name: 'Model' }] }],
+    },
+    order: { total_price: '66000.00', order_items: [{ unit_price: '66000.00', total_price: '66000.00' }] },
+    quotations: [{ total_price: '66000.00', quotation_items: [{ unit_price: '500.00', amount: '20000.00' }] }],
+    hpp: { actualHpp: '38490.68', margin: '27509.32' },
+  };
+  it('redacts HPP and commercial values for read-only workflow access', () => {
+    const safe = redactWorkflowFinancials(detail, { canSeeSales: false, canSeeFinance: false });
+    expect(safe.workflow.value).toBeNull();
+    expect(safe.hpp).toBeNull();
+    expect(safe.order.total_price).toBeUndefined();
+    expect(safe.quotations[0].total_price).toBeUndefined();
+    expect(safe.quotations[0].quotation_items[0].unit_price).toBeUndefined();
+  });
+  it('keeps HPP for finance and commercial values for sales', () => {
+    const visible = redactWorkflowFinancials(detail, { canSeeSales: true, canSeeFinance: true });
+    expect(visible.workflow.value).toBe('66000.00');
+    expect(visible.hpp.actualHpp).toBe('38490.68');
+    expect(visible.order.total_price).toBe('66000.00');
+  });
 });
 
 describe('unified sales workflow list', () => {

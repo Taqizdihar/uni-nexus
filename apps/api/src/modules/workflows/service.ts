@@ -12,6 +12,8 @@ import { deriveProductionWorkflowTab, deriveSalesWorkflowStage } from './stages.
 
 type Db = PrismaClient | Prisma.TransactionClient;
 type Scalar = string | number | bigint | Date | null | undefined;
+export type WorkflowVisibility = { canSeeSales: boolean; canSeeFinance: boolean };
+const defaultVisibility: WorkflowVisibility = { canSeeSales: false, canSeeFinance: false };
 type Named = {
   id: bigint;
   full_name?: string | null;
@@ -193,6 +195,21 @@ type PrintJob = StatusRecord & {
   users?: Named | null;
   print_failures: PrintFailure[];
   qc_inspections: QcInspection[];
+  material_usages?: Array<{
+    id: bigint;
+    usage_type: string;
+    weight_gram: Scalar;
+    total_cost: Scalar;
+    cost_per_gram: Scalar;
+    notes?: string | null;
+    filament_spools?: {
+      id: bigint;
+      spool_code?: string | null;
+      brand?: string | null;
+      color_name?: string | null;
+      materials?: Named | null;
+    } | null;
+  }>;
 };
 type QcInspection = StatusRecord & {
   result?: string | null;
@@ -327,6 +344,20 @@ const printInclude = {
   qc_inspections: {
     orderBy: { created_at: 'desc' as const },
     include: { users: { select: userSelect } },
+  },
+  material_usages: {
+    orderBy: { created_at: 'desc' as const },
+    include: {
+      filament_spools: {
+        select: {
+          id: true,
+          spool_code: true,
+          brand: true,
+          color_name: true,
+          materials: { select: { id: true, name: true, material_type: true } },
+        },
+      },
+    },
   },
 } as const;
 const productionInclude = {
@@ -536,6 +567,7 @@ export type SalesWorkflowRow = {
 function toSalesWorkflow(
   request: WorkflowRequest | undefined,
   directOrder: WorkflowOrder | undefined,
+  visibility: WorkflowVisibility = defaultVisibility,
 ): SalesWorkflowRow {
   const orders = request?.orders ?? (directOrder ? [directOrder] : []);
   const order = preferredOrder(orders);
@@ -597,8 +629,10 @@ function toSalesWorkflow(
         ? { id: String(operator.id), name: operator.full_name, role: 'OPERATOR' }
         : null,
     target_date: order?.target_date ?? request?.target_date ?? null,
-    value: stringMoney(order?.total_price ?? latest(quotes)?.total_price),
-    payment_status: order?.payment_status ?? null,
+    value: visibility.canSeeSales || visibility.canSeeFinance
+      ? stringMoney(order?.total_price ?? latest(quotes)?.total_price)
+      : null,
+    payment_status: visibility.canSeeSales || visibility.canSeeFinance ? order?.payment_status ?? null : null,
     source: order?.order_source ?? request?.source ?? null,
     updated_at: updatedAt,
     next_action: nextAction(stage),
@@ -673,6 +707,7 @@ export async function listSalesWorkflows(
   db: Db,
   workspaceId: bigint,
   filters: SalesWorkflowFilters,
+  visibility: WorkflowVisibility = defaultVisibility,
 ) {
   const [requests, directOrders] = await Promise.all([
     db.custom_requests.findMany({
@@ -688,10 +723,10 @@ export async function listSalesWorkflows(
   ]);
   const rows = [
     ...(requests as unknown as WorkflowRequest[]).map((request) =>
-      toSalesWorkflow(request, undefined),
+      toSalesWorkflow(request, undefined, visibility),
     ),
     ...(directOrders as unknown as WorkflowOrder[]).map((order) =>
-      toSalesWorkflow(undefined, order),
+      toSalesWorkflow(undefined, order, visibility),
     ),
   ];
   const filtered = sortSalesWorkflows(filterSalesWorkflows(rows, filters), filters);
@@ -744,7 +779,81 @@ function workflowAuditTargets(
   return targets;
 }
 
-export async function salesWorkflowDetail(db: Db, workspaceId: bigint, key: string) {
+function redactQuotation(quotation: Record<string, unknown>, canSeeSales: boolean) {
+  if (canSeeSales) return quotation;
+  const { total_price: _total, subtotal: _subtotal, discount_amount: _discount, additional_cost: _additional, quotation_items, ...safe } = quotation;
+  return {
+    ...safe,
+    quotation_items: Array.isArray(quotation_items)
+      ? quotation_items.map((item) => {
+          const { unit_price: _unit, amount: _amount, pricing_breakdown_json: _breakdown, price_per_gram_snapshot: _price, minimum_price_snapshot: _minimum, design_fee_snapshot: _design, finishing_fee_snapshot: _finishing, ...safeItem } = item as Record<string, unknown>;
+          return safeItem;
+        })
+      : quotation_items,
+  };
+}
+
+function redactOrder(order: Record<string, unknown>, canSeeSales: boolean) {
+  if (canSeeSales) return order;
+  const { total_price: _total, subtotal: _subtotal, discount_amount: _discount, payment_status: _payment, order_items, quotations, ...safe } = order;
+  return {
+    ...safe,
+    order_items: Array.isArray(order_items)
+      ? order_items.map((item) => {
+          const { unit_price: _unit, total_price: _lineTotal, ...safeItem } = item as Record<string, unknown>;
+          return safeItem;
+        })
+      : order_items,
+    quotations: quotations && typeof quotations === 'object' ? redactQuotation(quotations as Record<string, unknown>, false) : quotations,
+  };
+}
+
+export function redactWorkflowFinancials<T extends Record<string, any>>(
+  data: T,
+  visibility: WorkflowVisibility,
+): T {
+  const canSeeSales = visibility.canSeeSales || visibility.canSeeFinance;
+  const request = data.request && typeof data.request === 'object' ? { ...data.request } : data.request;
+  if (request && typeof request === 'object') {
+    request.quotations = Array.isArray(request.quotations)
+      ? request.quotations.map((quote: Record<string, unknown>) => redactQuotation(quote, canSeeSales))
+      : request.quotations;
+    request.orders = Array.isArray(request.orders)
+      ? request.orders.map((order: Record<string, unknown>) => redactOrder(order, canSeeSales))
+      : request.orders;
+  }
+  const order = data.order && typeof data.order === 'object' ? redactOrder({ ...data.order }, canSeeSales) : data.order;
+  const quotations = Array.isArray(data.quotations)
+    ? data.quotations.map((quote) => redactQuotation(quote as Record<string, unknown>, canSeeSales))
+    : data.quotations;
+  return {
+    ...data,
+    workflow: {
+      ...data.workflow,
+      value: canSeeSales ? data.workflow.value : null,
+      payment_status: canSeeSales ? data.workflow.payment_status : null,
+    },
+    request,
+    order,
+    quotations,
+    hpp: visibility.canSeeFinance ? data.hpp : null,
+    activity: visibility.canSeeFinance
+      ? data.activity
+      : Array.isArray(data.activity)
+        ? data.activity.map((entry: Record<string, unknown>) => {
+            const { old_value_json: _old, new_value_json: _new, ...safeEntry } = entry;
+            return safeEntry;
+          })
+        : data.activity,
+  };
+}
+
+export async function salesWorkflowDetail(
+  db: Db,
+  workspaceId: bigint,
+  key: string,
+  visibility: WorkflowVisibility = defaultVisibility,
+) {
   const match =
     /^(request|order):(\d+)$/.exec(key) ?? (/^\d+$/.test(key) ? ['order', 'order', key] : null);
   if (!match) throw new AppError(404, 'Workflow tidak ditemukan.', 'WORKFLOW_NOT_FOUND');
@@ -766,7 +875,7 @@ export async function salesWorkflowDetail(db: Db, workspaceId: bigint, key: stri
       : null;
   if (!request && !directOrder)
     throw new AppError(404, 'Workflow tidak ditemukan.', 'WORKFLOW_NOT_FOUND');
-  const row = toSalesWorkflow(request ?? undefined, directOrder ?? undefined);
+  const row = toSalesWorkflow(request ?? undefined, directOrder ?? undefined, visibility);
   const order = selectOrderForDetail(
     preferredOrder(request?.orders ?? (directOrder ? [directOrder] : [])),
   );
@@ -782,7 +891,7 @@ export async function salesWorkflowDetail(db: Db, workspaceId: bigint, key: stri
       : [],
     order ? costSummary(db, workspaceId, order.id) : Promise.resolve(null),
   ]);
-  return {
+  return redactWorkflowFinancials({
     data: {
       workflow: row,
       request,
@@ -795,7 +904,7 @@ export async function salesWorkflowDetail(db: Db, workspaceId: bigint, key: stri
       hpp,
       activity,
     },
-  };
+  }, visibility);
 }
 
 export type ProductionWorkflowRow = {

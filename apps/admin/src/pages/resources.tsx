@@ -33,13 +33,13 @@ function ResourceNavigation({ resource, resources }: { resource: ResourceDefinit
   return <nav className="section-tabs" aria-label={`${resource.group} modules`}>{cluster.map((key) => { const item = resources.find((candidate) => candidate.key === key); return item && <Link key={key} className={key === resource.key ? 'selected' : ''} to={resourcePath(key)}>{item.title}</Link>; })}</nav>;
 }
 
-type CostSummary = { estimatedHpp: string; actualHpp: string; sellingPrice: string; margin: string; materialCost: string; wasteCost: string; packagingCost: string };
+type CostSummary = { estimatedHpp: string | null; actualHpp: string; sellingPrice: string; margin: string; filamentCost: string; designCost: string; paintCost: string; materialCost: string; wasteCost: string; packagingCost: string };
 function CostOverview() {
   const { workspace } = useAuth();
   const query = useQuery({ queryKey: ['costs-summary', workspace!.id], queryFn: async () => (await api<Envelope<CostSummary>>('/costs/summary', { workspace: workspace!.id })).data });
   if (query.isPending) return <Spinner label="Menghitung biaya tercatat…" />;
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
-  return <><div className="metric-grid cost-metrics">{[{ label: 'Estimasi HPP', value: query.data.estimatedHpp }, { label: 'HPP Aktual', value: query.data.actualHpp }, { label: 'Harga jual', value: query.data.sellingPrice }, { label: 'Margin tercatat', value: query.data.margin }].map((item) => <div className="metric-card" key={item.label}><div className="metric-top">{item.label}</div><strong className="cost-metric-value">{money(item.value)}</strong></div>)}</div><div className="cost-breakdown"><span>Material <strong>{money(query.data.materialCost)}</strong></span><span>Limbah <strong>{money(query.data.wasteCost)}</strong></span><span>Pengemasan <strong>{money(query.data.packagingCost)}</strong></span></div></>;
+  return <><div className="metric-grid cost-metrics">{[{ label: 'Estimasi HPP', value: query.data.estimatedHpp }, { label: 'HPP Aktual', value: query.data.actualHpp }, { label: 'Harga jual', value: query.data.sellingPrice }, { label: 'Margin tercatat', value: query.data.margin }].map((item) => <div className="metric-card" key={item.label}><div className="metric-top">{item.label}</div><strong className="cost-metric-value">{money(item.value)}</strong></div>)}</div><div className="cost-breakdown"><span>Filamen <strong>{money(query.data.filamentCost)}</strong></span><span>Desain <strong>{money(query.data.designCost)}</strong></span><span>Cat <strong>{money(query.data.paintCost)}</strong></span><span>Waste <strong>{money(query.data.wasteCost)}</strong></span><span>Pengemasan <strong>{money(query.data.packagingCost)}</strong></span></div></>;
 }
 
 function FilePanel({ resource, record }: { resource: ResourceDefinition; record: Row }) {

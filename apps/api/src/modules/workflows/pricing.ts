@@ -127,8 +127,8 @@ export function calculateQuotationItemPricing(rule: PricingRule, input: PricingI
       lines: [
         { key: 'MATERIAL', label: 'Biaya material', amount: estimate.materialPrice },
         { key: 'BASE', label: 'Harga dasar setelah minimum', amount: estimate.basePrice },
-        { key: 'DESIGN', label: 'Biaya desain', amount: estimate.designFee },
-        { key: 'FINISHING', label: 'Biaya finishing', amount: estimate.finishingFee },
+        { key: 'DESIGN', label: 'Jasa Desain', amount: estimate.designFee },
+        { key: 'FINISHING', label: 'Jasa Finishing / Cat', amount: estimate.finishingFee },
       ],
     });
   }
@@ -146,8 +146,8 @@ export function calculateQuotationItemPricing(rule: PricingRule, input: PricingI
       finishing_fee: money(finishingFee),
       lines: [
         { key: 'FIXED', label: 'Harga tetap', amount: money(base) },
-        { key: 'DESIGN', label: 'Biaya desain', amount: money(designFee) },
-        { key: 'FINISHING', label: 'Biaya finishing', amount: money(finishingFee) },
+        { key: 'DESIGN', label: 'Jasa Desain', amount: money(designFee) },
+        { key: 'FINISHING', label: 'Jasa Finishing / Cat', amount: money(finishingFee) },
       ],
     });
   }

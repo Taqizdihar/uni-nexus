@@ -58,6 +58,15 @@ describe('sales workflow stage resolver', () => {
         qcInspections: [{ result: 'REPRINT' }],
       }),
     ).toBe('PRODUCTION');
+    expect(
+      deriveSalesWorkflowStage({
+        orders: [{ status: 'IN_PRODUCTION' }],
+        printJobs: [
+          { status: 'FAILED', updated_at: new Date('2026-09-20T08:00:00Z') },
+          { status: 'SUCCESS', updated_at: new Date('2026-09-20T09:00:00Z') },
+        ],
+      }),
+    ).toBe('COMPLETION');
   });
 });
 
@@ -96,6 +105,15 @@ describe('production queue resolver', () => {
         printJobs: [{ status: 'FAILED' }],
       }),
     ).toBe('ATTENTION');
+    expect(
+      deriveProductionWorkflowTab({
+        productionJob: { status: 'QC' },
+        printJobs: [
+          { status: 'FAILED', updated_at: new Date('2026-09-20T08:00:00Z') },
+          { status: 'SUCCESS', updated_at: new Date('2026-09-20T09:00:00Z') },
+        ],
+      }),
+    ).toBe('QC');
     expect(deriveProductionWorkflowTab({ productionJob: { status: 'COMPLETED' } })).toBe(
       'COMPLETED',
     );

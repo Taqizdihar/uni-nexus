@@ -5,6 +5,11 @@ import { audit, type WorkspaceContext } from './audit.js';
 import { InAppNotificationProvider } from './notifications.js';
 import { validateTransition } from './status.js';
 import { calculateQuotationItemPricing } from '../modules/workflows/pricing.js';
+import {
+  assertOrderCanComplete,
+  assertPackagingReady,
+  syncProductionWorkflow,
+} from './workflow-sync.js';
 
 type Row = Record<string, unknown>;
 const value = (record: Row, key: string): DecimalInput => record[key] as DecimalInput;
@@ -28,6 +33,10 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     if (Object.keys(next).some((key) => !editable.has(key) && String(next[key]) !== String(existing[key]))) throw new AppError(409, 'Only draft quotations can be edited. Create a new revision.');
   }
   if (table === 'orders' && existing && ['COMPLETED', 'CANCELLED'].includes(String(existing.status))) throw new AppError(409, 'A closed order cannot be modified.');
+  if (table === 'orders' && String(merged.status ?? next.status) === 'COMPLETED' && String(existing?.status ?? '') !== 'COMPLETED') {
+    if (!existing) throw new AppError(422, 'Pesanan baru harus dimulai dari status CONFIRMED.');
+    await assertOrderCanComplete(tx, id(existing.id), context);
+  }
   if (table === 'quotation_items') {
     await tx.$queryRaw(Prisma.sql`SELECT id FROM quotations WHERE id = ${id(merged.quotation_id)} AND workspace_id = ${context.workspaceId} FOR UPDATE`);
     const quote = await tx.quotations.findFirst({ where: { id: id(merged.quotation_id), workspace_id: context.workspaceId } });
@@ -92,7 +101,9 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     const initial = nonnegative(value(merged, 'initial_weight_gram'), 'Initial weight');
     const remaining = nonnegative(value(merged, 'remaining_weight_gram') ?? initial, 'Remaining weight');
     if (remaining.gt(initial)) throw new AppError(422, 'Remaining weight cannot exceed initial weight.');
-    if (!existing && !('remaining_weight_gram' in next)) next.remaining_weight_gram = initial.toFixed(3);
+    if (existing && 'remaining_weight_gram' in next && remaining.toFixed(3) !== nonnegative(value(existing, 'remaining_weight_gram'), 'Remaining weight').toFixed(3))
+      throw new AppError(409, 'Sisa berat hanya dapat berubah melalui pencatatan pemakaian filamen.');
+    if (!existing && ( !('remaining_weight_gram' in next) || remaining.isZero())) next.remaining_weight_gram = initial.toFixed(3);
     next.cost_per_gram = initial.isZero() ? '0.0000' : nonnegative(value(merged, 'purchase_price'), 'Purchase price').div(initial).toFixed(4);
   }
   if (table === 'material_usages') {
@@ -100,6 +111,8 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     if (weight.lte(0)) throw new AppError(422, 'Consumed weight must be greater than zero.');
     const spool = await tx.filament_spools.findFirst({ where: { id: id(merged.filament_spool_id), workspace_id: context.workspaceId } });
     if (!spool) throw new AppError(404, 'Filament spool not found.');
+    const print = await tx.print_jobs.findFirst({ where: { id: id(merged.print_job_id), workspace_id: context.workspaceId }, select: { id: true } });
+    if (!print) throw new AppError(404, 'Print job not found in this workspace.');
     const changed = await tx.filament_spools.updateMany({ where: { id: spool.id, workspace_id: context.workspaceId, remaining_weight_gram: { gte: weight.toFixed(3) } }, data: { remaining_weight_gram: { decrement: weight.toFixed(3) } } });
     if (changed.count !== 1) throw new AppError(409, 'Insufficient remaining filament. No consumption was recorded.');
     next.cost_per_gram = spool.cost_per_gram.toString();
@@ -119,6 +132,9 @@ export async function beforeWrite(tx: Prisma.TransactionClient, table: string, d
     const packaging = await tx.packaging_types.findFirst({ where: { id: id(merged.packaging_type_id), workspace_id: context.workspaceId } });
     if (!packaging) throw new AppError(404, 'Packaging type not found.');
     next.actual_cost = lineTotal(value(merged, 'quantity') ?? '1', packaging.default_cost);
+  }
+  if (table === 'order_packaging' && String(merged.status ?? 'PENDING') !== 'CANCELLED') {
+    await assertPackagingReady(tx, id(merged.order_id), context);
   }
   if (table === 'pricing_rules' && merged.effective_from && merged.effective_until && new Date(String(merged.effective_from)) > new Date(String(merged.effective_until))) throw new AppError(422, 'Effective end must be after the start.');
   if (table === 'product_assets') next.is_internal_only = true;
@@ -150,6 +166,12 @@ export async function afterWrite(tx: Prisma.TransactionClient, table: string, re
     const total = (await tx.quotation_items.aggregate({ where: { quotation_id: quoteId }, _sum: { amount: true } }))._sum.amount;
     const updated = await tx.quotations.update({ where: { id: quoteId }, data: { subtotal: money(total), total_price: documentTotal(total, quote.discount_amount, quote.additional_cost) } });
     await audit(tx, context, 'RECALCULATED', 'quotations', quoteId, quote, updated);
+  }
+  if (table === 'material_usages') {
+    await audit(tx, context, 'MATERIAL_USAGE_RECORDED', 'material_usages', id(record.id), undefined, record);
+  }
+  if (['production_jobs', 'print_jobs', 'qc_inspections', 'order_packaging'].includes(table)) {
+    await syncProductionWorkflow(tx, table as 'production_jobs' | 'print_jobs' | 'qc_inspections' | 'order_packaging', id(record.id), context);
   }
   if (table === 'order_items') {
     const orderId = id(record.order_id);
