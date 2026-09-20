@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, Edit3, LoaderCircle, PawPrint, Plus, X } from 'lucide-react';
 import { api, body, message, type Envelope } from '../lib/api';
-import { displayPetName, resolvePetImage } from '../lib/pets';
+import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
 import { Badge, EmptyState, ErrorState, Spinner, useToast } from './ui';
 
 type ManagedPet = {
   id: string;
-  code: string;
+  builtin_key: string | null;
+  code: string | null;
   name: string | null;
   display_name: string;
   subtitle: string | null;
@@ -24,7 +25,8 @@ const blankForm: PetFormValues = { code: '', name: '', subtitle: '', description
 
 function PetEditor({ pet, onClose, onSaved }: { pet: ManagedPet | null; onClose: () => void; onSaved: () => Promise<void> }) {
   const toast = useToast();
-  const [values, setValues] = useState<PetFormValues>(pet ? { code: pet.code, name: pet.name ?? '', subtitle: pet.subtitle ?? '', description: pet.description ?? '' } : blankForm);
+  const [values, setValues] = useState<PetFormValues>(pet ? { code: pet.code ?? '', name: pet.name ?? '', subtitle: pet.subtitle ?? '', description: pet.description ?? '' } : blankForm);
+  const [touched, setTouched] = useState<Partial<Record<keyof PetFormValues, boolean>>>({});
   const [file, setFile] = useState<File | null>(null);
   const mutation = useMutation({
     mutationFn: async () => {
@@ -40,6 +42,10 @@ function PetEditor({ pet, onClose, onSaved }: { pet: ManagedPet | null; onClose:
     onError: (error) => toast(message(error), true),
   });
   const set = (key: keyof PetFormValues, value: string) => setValues((current) => ({ ...current, [key]: value }));
+  const touch = (key: keyof PetFormValues) => setTouched((current) => ({ ...current, [key]: true }));
+  const invalid = (key: keyof PetFormValues) => required && touched[key] && !values[key].trim();
+  const complete = Object.values(values).every((value) => value.trim().length > 0);
+  const required = !pet || !pet.builtin_key;
   return <div className="modal-backdrop" onClick={onClose}>
     <section className="modal pet-editor-modal" role="dialog" aria-modal="true" aria-labelledby="pet-editor-title" onClick={(event) => event.stopPropagation()}>
       <button type="button" className="icon-button modal-close" aria-label="Tutup" onClick={onClose}><X size={19} /></button>
@@ -47,19 +53,19 @@ function PetEditor({ pet, onClose, onSaved }: { pet: ManagedPet | null; onClose:
       <p>{pet ? 'Perubahan metadata langsung terlihat oleh semua pengguna yang memilih Pet ini.' : 'Tambahkan Pet global untuk digunakan anggota UNI-NEXUS.'}</p>
       <div className="form-grid">
         <label className="field"><span>Foto Pet</span><input type="file" accept=".avif,image/avif" onChange={(event) => setFile(event.target.files?.[0] ?? null)} /><small className="helper-note">Gunakan gambar AVIF. Opsional.</small></label>
-        <label className="field"><span>Kode</span><input value={values.code} disabled={pet?.code === 'UNI_INU'} onChange={(event) => set('code', event.target.value)} placeholder="HAPPY_FOX" maxLength={60} /><small className="helper-note">Kode akan dinormalisasi menjadi huruf besar.</small></label>
-        <label className="field"><span>Nama</span><input value={values.name} onChange={(event) => set('name', event.target.value)} placeholder="Opsional" maxLength={120} /></label>
-        <label className="field"><span>Subtitle</span><input value={values.subtitle} onChange={(event) => set('subtitle', event.target.value)} placeholder="Opsional" maxLength={190} /></label>
-        <label className="field full-width"><span>Deskripsi</span><textarea rows={4} value={values.description} onChange={(event) => set('description', event.target.value)} placeholder="Opsional" maxLength={10000} /></label>
+        <label className="field"><span>Kode{required && ' *'}</span><input value={values.code} onChange={(event) => set('code', event.target.value)} onBlur={() => touch('code')} placeholder="HAPPY_FOX" maxLength={60} required={required} />{invalid('code') && <small className="field-error">Kode Pet wajib diisi.</small>}<small className="helper-note">Kode dapat diubah dan akan dinormalisasi menjadi huruf besar.</small></label>
+        <label className="field"><span>Nama{required && ' *'}</span><input value={values.name} onChange={(event) => set('name', event.target.value)} onBlur={() => touch('name')} placeholder={required ? 'Nama Pet' : 'Kosongkan untuk menghapus'} maxLength={120} required={required} />{invalid('name') && <small className="field-error">Nama Pet wajib diisi.</small>}</label>
+        <label className="field"><span>Subtitle{required && ' *'}</span><input value={values.subtitle} onChange={(event) => set('subtitle', event.target.value)} onBlur={() => touch('subtitle')} placeholder={required ? 'Tagline Pet' : 'Kosongkan untuk menghapus'} maxLength={190} required={required} />{invalid('subtitle') && <small className="field-error">Subtitle Pet wajib diisi.</small>}</label>
+        <label className="field full-width"><span>Deskripsi{required && ' *'}</span><textarea rows={4} value={values.description} onChange={(event) => set('description', event.target.value)} onBlur={() => touch('description')} placeholder={required ? 'Deskripsi Pet' : 'Kosongkan untuk menghapus'} maxLength={10000} required={required} />{invalid('description') && <small className="field-error">Deskripsi Pet wajib diisi.</small>}</label>
       </div>
-      <div className="form-actions"><button type="button" className="button secondary" onClick={onClose}>Batal</button><button type="button" className="button primary" disabled={mutation.isPending || !values.code.trim()} onClick={() => mutation.mutate()}>{mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}{pet ? 'Simpan Perubahan' : 'Tambah Pet'}</button></div>
+      <div className="form-actions"><button type="button" className="button secondary" onClick={onClose}>Batal</button><button type="button" className="button primary" disabled={mutation.isPending || (required && !complete) || (!required && !values.code.trim() && !values.name.trim() && !values.subtitle.trim() && !values.description.trim())} onClick={() => mutation.mutate()}>{mutation.isPending ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />}{pet ? 'Simpan Perubahan' : 'Tambah Pet'}</button></div>
     </section>
   </div>;
 }
 
 function PetArtwork({ pet, large = false }: { pet: ManagedPet; large?: boolean }) {
   const image = resolvePetImage(pet);
-  return <div className={`pet-management-art${large ? ' large' : ''}`}>{image ? <img src={image} alt={displayPetName(pet)} /> : <PawPrint size={large ? 68 : 44} strokeWidth={1.3} />}</div>;
+  return <div className={`pet-management-art${large ? ' large' : ''}`}>{image ? <img src={image} alt={displayPetName(pet)} onError={(event) => handlePetImageError(event, pet)} /> : <PawPrint size={large ? 68 : 44} strokeWidth={1.3} />}</div>;
 }
 
 export function PetManagementTab() {
@@ -71,7 +77,7 @@ export function PetManagementTab() {
   if (pets.isError) return <ErrorState error={pets.error} retry={() => void pets.refetch()} />;
   return <>
     <section className="panel pet-management-header"><div><h2>Pet</h2><p>Master Pet global dengan satu state visual: Idle.</p></div><button type="button" className="button primary" onClick={() => setEditor(null)}><Plus size={16} />Tambah Pet</button></section>
-    {!pets.data.length ? <section className="panel"><EmptyState title="Belum ada data Pet." description="Tambahkan Pet pertama untuk membuatnya tersedia bagi anggota." /></section> : <section className="pet-management-grid">{pets.data.map((pet) => <article className="pet-management-card" key={pet.id}><PetArtwork pet={pet} large /><div className="pet-management-card-body"><div className="pet-management-card-heading"><div><h3>{displayPetName(pet)}</h3><code>{pet.code}</code></div><Badge value={pet.is_active ? 'ACTIVE' : 'INACTIVE'} /></div><p className="pet-management-subtitle">{pet.subtitle || '—'}</p><button type="button" className="button secondary small" onClick={() => setEditor(pet)}><Edit3 size={14} />Edit</button></div></article>)}</section>}
+    {!pets.data.length ? <section className="panel"><EmptyState title="Belum ada data Pet." description="Tambahkan Pet pertama untuk membuatnya tersedia bagi anggota." /></section> : <section className="pet-management-grid">{pets.data.map((pet) => <article className="pet-management-card" key={pet.id}><PetArtwork pet={pet} large /><div className="pet-management-card-body"><div className="pet-management-card-heading"><div><h3>{displayPetName(pet)}</h3><code>{pet.code || '—'}</code></div><Badge value={pet.is_active ? 'ACTIVE' : 'INACTIVE'} /></div><p className="pet-management-subtitle">{pet.subtitle || '—'}</p><p className="pet-management-description">{pet.description || '—'}</p><button type="button" className="button secondary small" onClick={() => setEditor(pet)}><Edit3 size={14} />Edit</button></div></article>)}</section>}
     {editor !== undefined && <PetEditor pet={editor} onClose={() => setEditor(undefined)} onSaved={refresh} />}
   </>;
 }

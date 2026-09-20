@@ -1,4 +1,5 @@
-import { BUILTIN_PET_LABELS, petDisplayName } from '@uni-nexus/shared';
+import { petDisplayName } from '@uni-nexus/shared';
+import type { SyntheticEvent } from 'react';
 import { assetUrl } from './api';
 import uniInuIdle from '../assets/pets/Uni-Inu/Idle/Uni-Inu.avif';
 import azzyIdle from '../assets/pets/Azzy/Idle/Azzy.avif';
@@ -7,7 +8,8 @@ import craftyCatIdle from '../assets/pets/Crafty Cat/Idle/Crafty Cat.avif';
 import dessyIdle from '../assets/pets/Dessy/Idle/Dessy.avif';
 
 export type PetImageData = {
-  code: string;
+  builtin_key: string | null;
+  code: string | null;
   name?: string | null;
   image_storage_provider?: string | null;
   image_url?: string | null;
@@ -25,12 +27,21 @@ export function displayPetName(pet: PetImageData & { display_name?: string | nul
   return pet.display_name?.trim() || petDisplayName(pet);
 }
 
-export function resolvePetImage(pet: PetImageData): string | undefined {
-  if (pet.image_url) return /^https?:\/\//i.test(pet.image_url) ? pet.image_url : assetUrl(pet.image_url);
-  if (pet.image_storage_provider === 'BUILTIN') return PET_BUILTIN_ASSETS[pet.code];
-  return undefined;
+export function bundledPetImage(pet: PetImageData): string | undefined {
+  return pet.builtin_key ? PET_BUILTIN_ASSETS[pet.builtin_key] : undefined;
 }
 
-export function builtinPetLabel(code: string) {
-  return BUILTIN_PET_LABELS[code];
+export function resolvePetImage(pet: PetImageData): string | undefined {
+  if (pet.image_url) return /^https?:\/\//i.test(pet.image_url) ? pet.image_url : assetUrl(pet.image_url);
+  return bundledPetImage(pet);
+}
+
+export function handlePetImageError(event: SyntheticEvent<HTMLImageElement>, pet: PetImageData) {
+  const fallback = bundledPetImage(pet);
+  if (fallback && event.currentTarget.dataset.bundledFallback !== 'true') {
+    event.currentTarget.dataset.bundledFallback = 'true';
+    event.currentTarget.src = fallback;
+    return;
+  }
+  event.currentTarget.style.display = 'none';
 }

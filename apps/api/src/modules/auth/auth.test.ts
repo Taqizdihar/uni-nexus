@@ -79,7 +79,7 @@ beforeEach(() => {
   db.$transaction.mockImplementation((callback: (tx: unknown) => unknown) => callback(db));
   db.audit_logs.create.mockResolvedValue({});
   db.workspace_members.findMany.mockResolvedValue([]);
-  db.pets.findFirst.mockResolvedValue({ id: 99n, code: 'UNI_INU', is_active: true });
+  db.pets.findFirst.mockResolvedValue({ id: 99n, builtin_key: 'UNI_INU', is_active: true });
   db.users.findFirst.mockResolvedValue(null);
   db.system_bootstrap.findUnique.mockResolvedValue(null);
   db.$queryRaw.mockResolvedValue([

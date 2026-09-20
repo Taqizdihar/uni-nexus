@@ -4,7 +4,7 @@ import { PawPrint, Search, ShieldCheck } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import { api, assetUrl, type Envelope } from '../lib/api';
-import { displayPetName, resolvePetImage } from '../lib/pets';
+import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
 import { useAuth } from '../lib/auth';
 import { PresenceBadge } from '../components/presence-badge';
 import { EmptyState, ErrorState, PageHeader, Spinner } from '../components/ui';
@@ -18,7 +18,7 @@ type TeamMember = {
   photo_url: string | null;
   banner_url: string | null;
   tags: string[];
-  pet: { id: string; code: string; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null } | null;
+  pet: { id: string; builtin_key: string | null; code: string | null; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null } | null;
   role: { code: string; name: string } | null;
 };
 
@@ -101,7 +101,7 @@ function TeamDetail() {
   if (query.isPending) return <Spinner label="Memuat anggota…" />;
   if (query.isError) return <ErrorState error={query.error} retry={() => void query.refetch()} />;
   const member = query.data;
-  const pet = member.pet ?? { id: '', code: 'UNI_INU', name: null, display_name: 'Uni-Inu', subtitle: null, description: null, image_storage_provider: 'BUILTIN', image_url: null };
+  const pet = member.pet;
   return (
     <>
       <Link to="/app/team" className="back-link">← Kembali ke Tim</Link>
@@ -136,10 +136,10 @@ function TeamDetail() {
         <div className="profile-pet-card">
           <span className="profile-pet-card-label">Pet Card</span>
           <div className="profile-pet-card-media">
-            {resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={displayPetName(pet)} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
+            {pet && resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={displayPetName(pet)} onError={(event) => handlePetImageError(event, pet)} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
           </div>
-          <h3>{displayPetName(pet)}</h3>
-          {pet.subtitle && <p>{pet.subtitle}</p>}
+          <h3>{pet ? displayPetName(pet) : 'Pet belum tersedia'}</h3>
+          {pet?.subtitle && <p>{pet.subtitle}</p>}
         </div>
       </div>
     </>

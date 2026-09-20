@@ -202,7 +202,7 @@ Ownership rules the API enforces with strict Zod schemas (never a client-writabl
   constraint); adding/removing renumbers ascending in place instead, since that never
   collides.
 - **Pet** (`pets` → `users.pet_id`) — mandatory for every user and must reference an
-  active Pet. `UNI_INU` (Uni-Inu) is the stable global default; the rollout backfills
+  active Pet. `builtin_key = UNI_INU` (Uni-Inu) is the stable global default; the rollout backfills
   legacy null selections before making `users.pet_id` `NOT NULL`, and every new user
   receives the active `UNI_INU` record at creation time.
 - Pet master data is global, not workspace-scoped. Every active user can select one
@@ -211,8 +211,10 @@ Ownership rules the API enforces with strict Zod schemas (never a client-writabl
 - Pet v1 renders the `IDLE` state only. The five initial Pets use bundled AVIF artwork
   through the admin asset resolver. CTO-uploaded AVIF images use the existing storage
   abstraction and replace the image for every user selecting that Pet immediately.
-- Pet names, subtitles, and descriptions are nullable. UI serialization uses the
-  centralized built-in/code fallback and never displays `null` or `undefined`.
+- Built-in Pet `builtin_key` values are immutable; CTO-editable `code` values may be
+  nullable for built-ins. New custom Pets require code, name, subtitle, and description.
+  UI serialization uses the centralized built-in/code fallback and never displays `null`
+  or `undefined`.
 - **Photo / banner** (`user_profile_assets`, one row per `(user_id, asset_type)`) —
   uploaded via the existing [storage abstraction](ARCHITECTURE.md#file-storage-abstraction)
   (`LocalStorageService` today; swap-in-place for object storage later), validated by

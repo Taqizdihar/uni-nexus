@@ -19,7 +19,7 @@ schema changes happen in MySQL directly (or via whatever process owns
 The Pet rollout is documented in
 [docs/migrations/2026-09-pet-management.sql](migrations/2026-09-pet-management.sql). It
 seeds the five global built-ins idempotently, backfills null `users.pet_id` values to
-the record whose code is `UNI_INU`, verifies the backfill, and only then makes the
+the record whose immutable `builtin_key` is `UNI_INU`, verifies the backfill, and only then makes the
 foreign-key column required.
 
 ## Prisma introspection

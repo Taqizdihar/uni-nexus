@@ -27,11 +27,11 @@ import { api, assetUrl, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
 import { WorkspaceUpdateModal } from '../components/workspace-update-modal';
-import { displayPetName, resolvePetImage } from '../lib/pets';
+import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
-type Pet = { id: string; code: string; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null };
+type Pet = { id: string; builtin_key: string | null; code: string | null; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null };
 type WorkspaceRef = { id: string; name: string; code: string };
 type Membership = { workspace: WorkspaceRef; role: { code: string; name: string } | null };
 type ProfileData = {
@@ -341,7 +341,7 @@ function PetSelectionModal({ profile, onClose }: { profile: ProfileData; onClose
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
   useEffect(() => {
-    if (!selectedId && pets.data?.length) setSelectedId(pets.data.find((pet) => pet.code === 'UNI_INU')?.id ?? pets.data[0]!.id);
+    if (!selectedId && pets.data?.length) setSelectedId(pets.data.find((pet) => pet.builtin_key === 'UNI_INU')?.id ?? pets.data[0]!.id);
   }, [pets.data, selectedId]);
   const mutation = useMutation({
     mutationFn: (petId: string) => api('/profile/pet', { method: 'POST', body: body({ pet_id: petId }) }),
@@ -362,7 +362,7 @@ function PetSelectionModal({ profile, onClose }: { profile: ProfileData; onClose
         <h2 id="pet-selection-title">Pilih Pet</h2>
         <div className="pet-selection-preview">
           <div className="pet-selection-preview-image">
-            {selected && resolvePetImage(selected) ? <img src={resolvePetImage(selected)} alt={selectedName} /> : <PawPrint size={58} strokeWidth={1.4} />}
+            {selected && resolvePetImage(selected) ? <img src={resolvePetImage(selected)} alt={selectedName} onError={(event) => handlePetImageError(event, selected)} /> : <PawPrint size={58} strokeWidth={1.4} />}
           </div>
           <div className="pet-selection-preview-copy">
             <h3>{selectedName}</h3>
@@ -377,7 +377,7 @@ function PetSelectionModal({ profile, onClose }: { profile: ProfileData; onClose
               const name = displayPetName(pet);
               const selectedCard = pet.id === selectedId;
               return <button key={pet.id} type="button" className={`pet-selection-card${selectedCard ? ' selected' : ''}`} role="radio" aria-checked={selectedCard} onClick={() => setSelectedId(pet.id)}>
-                <span className="pet-selection-card-image">{resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} /> : <PawPrint size={38} strokeWidth={1.4} />}</span>
+                <span className="pet-selection-card-image">{resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} onError={(event) => handlePetImageError(event, pet)} /> : <PawPrint size={38} strokeWidth={1.4} />}</span>
                 <span className="pet-selection-card-name">{name}</span>
                 {selectedCard && <Check className="pet-selection-card-check" size={16} aria-hidden="true" />}
               </button>;
@@ -392,17 +392,17 @@ function PetSelectionModal({ profile, onClose }: { profile: ProfileData; onClose
 
 function PetCardBlock({ profile }: { profile: ProfileData }) {
   const [editing, setEditing] = useState(false);
-  const pet: Pet = profile.pet ?? { id: '', code: 'UNI_INU', name: null, display_name: 'Uni-Inu', subtitle: null, description: null, image_storage_provider: 'BUILTIN', image_url: null };
-  const name = displayPetName(pet);
+  const pet = profile.pet;
+  const name = pet ? displayPetName(pet) : 'Pet belum tersedia';
   return (
     <div className="profile-pet-card">
       <span className="profile-pet-card-label">Pet Card</span>
       <button type="button" className="profile-pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing(true)}><Pencil size={13} /></button>
       <div className="profile-pet-card-media">
-        {resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
+        {pet && resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} onError={(event) => handlePetImageError(event, pet)} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
       </div>
       <h3>{name}</h3>
-      {pet.subtitle && <p>{pet.subtitle}</p>}
+      {pet?.subtitle && <p>{pet.subtitle}</p>}
       {editing && <PetSelectionModal profile={profile} onClose={() => setEditing(false)} />}
     </div>
   );

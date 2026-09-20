@@ -1225,7 +1225,8 @@ model workspaces {
 
 model pets {
   id                     BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  code                   String   @unique(map: "uq_pets_code") @db.VarChar(60)
+  builtin_key            String?  @unique(map: "uq_pets_builtin_key") @db.VarChar(60)
+  code                   String?  @unique(map: "uq_pets_code") @db.VarChar(60)
   name                   String?  @db.VarChar(120)
   subtitle               String?  @db.VarChar(190)
   description            String?  @db.Text

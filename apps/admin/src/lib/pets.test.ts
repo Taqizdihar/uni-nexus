@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PET_BUILTIN_ASSETS, displayPetName } from './pets';
+import { PET_BUILTIN_ASSETS, displayPetName, resolvePetImage } from './pets';
 
 describe('built-in Pet Idle assets', () => {
   it.each([
@@ -14,7 +14,13 @@ describe('built-in Pet Idle assets', () => {
   });
 
   it('falls back safely when metadata is nullable', () => {
-    expect(displayPetName({ code: 'TEST_PET', name: null })).toBe('Test Pet');
-    expect(displayPetName({ code: 'AZZY', name: null })).toBe('Azzy');
+    expect(displayPetName({ builtin_key: null, code: 'TEST_PET', name: null })).toBe('Test Pet');
+    expect(displayPetName({ builtin_key: 'AZZY', code: null, name: null })).toBe('Azzy');
+  });
+
+  it('resolves built-in artwork by builtin_key and gives uploaded artwork priority', () => {
+    const pet = { builtin_key: 'AZZY', code: 'RENAMED', name: null, image_storage_provider: 'LOCAL', image_url: null };
+    expect(decodeURIComponent(resolvePetImage(pet)!)).toContain('Azzy/Idle/Azzy.avif');
+    expect(resolvePetImage({ ...pet, image_url: 'https://cdn.example.test/azzy.avif' })).toBe('https://cdn.example.test/azzy.avif');
   });
 });
