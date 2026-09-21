@@ -363,8 +363,18 @@ export async function reorderPetFrames(actorId: bigint, petId: bigint, stateValu
 }
 
 export async function getPetImageForDownload(petId: bigint) {
-  const pet = await prisma.pets.findFirst({ where: { id: petId, is_active: true }, select: petSelect });
+  // Keep this transitional endpoint independent from pet_media. It is only for
+  // legacy repository/local assets and must not make the new media relation a
+  // prerequisite for serving a fallback.
+  const pet = await prisma.pets.findFirst({
+    where: { id: petId, is_active: true },
+    select: { id: true, image_storage_provider: true, image_object_key: true },
+  });
   if (!pet || pet.image_storage_provider !== 'LOCAL' || !pet.image_object_key)
     throw new AppError(404, 'Foto Pet tidak ditemukan.', 'PET_IMAGE_NOT_FOUND');
+  if (!/^\d+\/[a-f0-9-]{36}$/.test(pet.image_object_key))
+    throw new AppError(404, 'Foto Pet legacy sudah tidak tersedia.', 'PET_IMAGE_NOT_FOUND');
+  if (!await petStorage.exists(pet.image_object_key))
+    throw new AppError(404, 'Foto Pet legacy sudah tidak tersedia.', 'PET_IMAGE_NOT_FOUND');
   return { key: pet.image_object_key };
 }

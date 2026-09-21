@@ -17,7 +17,11 @@ petManagementRouter.get('/pet-management/:petId/image', requireAuth, async (requ
   response.setHeader('Cache-Control', 'private, max-age=300');
   response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
   response.type('image/avif');
-  response.sendFile(petStorage.absolutePath(record.key), (error) => { if (error) next(error); });
+  response.sendFile(petStorage.absolutePath(record.key), { dotfiles: 'deny' }, (error) => {
+    // A legacy file can disappear independently of the database. Preserve the
+    // normal image fallback contract instead of turning ENOENT into HTTP 500.
+    if (error && !response.headersSent) next(new AppError(404, 'Foto Pet tidak ditemukan.', 'PET_IMAGE_NOT_FOUND'));
+  });
 });
 
 petManagementRouter.use('/pet-management', requireAuth, async (request, _response, next) => {
