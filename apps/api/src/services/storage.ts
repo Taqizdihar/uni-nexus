@@ -57,13 +57,20 @@ export class CloudinaryImageService implements ImageStorageService {
   }
   async upload(input: { bytes: Buffer; assetFolder: string; private?: boolean; localScope?: bigint }): Promise<StoredImage> {
     const assetFolder = `${this.configuration.folderRoot.replace(/^\/+|\/+$/g, '')}/${input.assetFolder.replace(/^\/+|\/+$/g, '')}`;
-    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream({
-        resource_type: 'image', type: input.private ? 'authenticated' : 'upload', asset_folder: assetFolder, public_id: randomUUID(),
-        overwrite: false, unique_filename: false, use_filename: false,
-      }, (error, upload) => error || !upload ? reject(error ?? new Error('Cloudinary did not return an upload result.')) : resolve(upload));
-      stream.end(input.bytes);
-    });
+    let result: UploadApiResponse;
+    try {
+      result = await new Promise<UploadApiResponse>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({
+          resource_type: 'image', type: input.private ? 'authenticated' : 'upload', asset_folder: assetFolder, public_id: randomUUID(),
+          overwrite: false, unique_filename: false, use_filename: false,
+        }, (error, upload) => error || !upload ? reject(error ?? new Error('Cloudinary did not return an upload result.')) : resolve(upload));
+        stream.end(input.bytes);
+      });
+    } catch (error) {
+      // Do not expose SDK responses, cloud names, or credentials to clients.
+      throw new AppError(502, 'Penyimpanan gambar sedang tidak tersedia. Coba lagi.', 'IMAGE_STORAGE_UNAVAILABLE',
+        error instanceof Error ? { provider: 'CLOUDINARY' } : undefined);
+    }
     return {
       provider: 'CLOUDINARY', key: result.public_id, size: result.bytes, publicUrl: result.secure_url,
       assetId: result.asset_id, assetFolder: result.asset_folder ?? assetFolder,
