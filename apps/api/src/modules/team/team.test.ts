@@ -10,6 +10,8 @@ const member = (overrides: Record<string, unknown> = {}) => ({
     id: 1n,
     full_name: 'Budi Santoso',
     username: 'budi',
+    email: 'budi@example.com',
+    phone: '08123456789',
     bio: null,
     presence_status: 'DEFAULT',
     pets: null,
@@ -50,11 +52,14 @@ describe('team directory', () => {
     await expect(getTeamMember(7n, 99n)).rejects.toMatchObject({ code: 'NOT_FOUND', status: 404 });
   });
 
-  it('returns the member profile shape with role, tags, and pet', async () => {
+  it('returns the read-only member profile shape without account security fields', async () => {
     db.workspace_members.findFirst.mockResolvedValue(member());
     const result = await getTeamMember(7n, 1n);
     expect(result.role).toEqual({ code: 'STAFF', name: 'Staff' });
     expect(result.tags).toEqual([]);
     expect(result.pet).toBeNull();
+    expect(result).toMatchObject({ email: 'budi@example.com', phone: '08123456789' });
+    expect(result).not.toHaveProperty('password_hash');
+    expect(result).not.toHaveProperty('password_changed_at');
   });
 });

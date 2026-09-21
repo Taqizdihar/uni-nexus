@@ -42,8 +42,8 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="team" element={<Team mode="list" />} />
-                <Route path="team/:userId" element={<Team mode="detail" />} />
+                <Route path="team" element={<Team />} />
+                <Route path="team/:userId" element={<Team />} />
                 <Route path="user-management" element={<UserManagement />} />
                 <Route path=":resource" element={<ResourcePage mode="list" />} />
                 <Route path=":resource/new" element={<ResourcePage mode="new" />} />
