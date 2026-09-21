@@ -2997,7 +2997,7 @@ dd.json-value {
   height: 100%;
   object-fit: cover;
 }
-.profile-banner > :not(.profile-banner-media) { position: relative; z-index: 1; }
+.profile-banner > .profile-banner-edit { z-index: 1; }
 
 .profile-banner-edit {
   position: absolute;
