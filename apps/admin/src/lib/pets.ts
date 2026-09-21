@@ -13,6 +13,7 @@ export type PetImageData = {
   name?: string | null;
   image_storage_provider?: string | null;
   image_url?: string | null;
+  media?: Record<string, Array<{ id: string | number; frame_index: number; duration_ms: number | null; url: string | null }>>;
 };
 
 export const PET_BUILTIN_ASSETS: Readonly<Record<string, string>> = {
@@ -32,7 +33,9 @@ export function bundledPetImage(pet: PetImageData): string | undefined {
 }
 
 export function resolvePetImage(pet: PetImageData): string | undefined {
-  if (pet.image_url) return /^https?:\/\//i.test(pet.image_url) ? pet.image_url : assetUrl(pet.image_url);
+  const frameUrl = pet.media?.IDLE?.[0]?.url;
+  const url = frameUrl ?? pet.image_url;
+  if (url) return /^https?:\/\//i.test(url) ? url : assetUrl(url);
   return bundledPetImage(pet);
 }
 

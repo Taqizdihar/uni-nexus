@@ -32,7 +32,13 @@ export function inputSchema(resource: ResourceDefinition, partial: boolean) {
   const shape: Record<string,z.ZodType>={};
   for(const field of resource.fields) {
     if(field.readOnly) continue;
-    const schema=fieldSchema(field);
+    let schema=fieldSchema(field);
+    if (field.name === 'external_url' && (resource.table === 'design_assets' || resource.table === 'product_assets')) {
+      schema = z.string().trim().url('Masukkan tautan HTTPS yang valid.').refine((value) => {
+        try { const url = new URL(value); return url.protocol === 'https:' && url.hostname === 'drive.google.com'; } catch { return false; }
+      }, 'Gunakan Tautan Google Drive HTTPS.');
+      if (field.nullable) schema = schema.nullable();
+    }
     shape[field.name]=partial||!field.required?schema.optional():schema;
   }
   return z.object(shape).strict();

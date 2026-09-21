@@ -3,13 +3,14 @@ import { MAX_USER_TAGS, type PresenceStatus, type ProfileAssetType } from '@uni-
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';
-import { LocalStorageService, validateUpload } from '../../services/storage.js';
+import { createImageStorageService, LocalStorageService, validateUpload } from '../../services/storage.js';
 import { resolveAssetUrl } from './asset-url.js';
 import { listActivePets as listAvailablePets, petSelect, serializePet } from '../pet-management/service.js';
 
 export { resolveAssetUrl } from './asset-url.js';
 
 export const assetStorage = new LocalStorageService(env.LOCAL_STORAGE_PATH);
+const imageStorage = createImageStorageService();
 
 const profileSelect = {
   id: true,
@@ -247,7 +248,7 @@ export async function uploadProfileAsset(
   file: { originalname: string; mimetype: string; buffer: Buffer; size: number },
 ) {
   const validated = validateUpload(file, env.MAX_UPLOAD_SIZE, true);
-  const stored = await assetStorage.save(userId, file.buffer);
+  const stored = await imageStorage.upload({ bytes: file.buffer, localScope: userId, assetFolder: `profiles/user-${userId.toString()}/${type === 'PROFILE_PHOTO' ? 'photo' : 'banner'}` });
   try {
     const previous = await prisma.$transaction(async (tx) => {
       const old = await tx.user_profile_assets.findFirst({
@@ -261,22 +262,23 @@ export async function uploadProfileAsset(
           original_file_name: validated.filename,
           mime_type: validated.mime,
           file_size_bytes: BigInt(stored.size),
-          storage_provider: 'LOCAL',
+          storage_provider: stored.provider,
           object_key: stored.key,
+          public_url: stored.publicUrl,
         },
         update: {
           original_file_name: validated.filename,
           mime_type: validated.mime,
           file_size_bytes: BigInt(stored.size),
-          storage_provider: 'LOCAL',
+          storage_provider: stored.provider,
           object_key: stored.key,
-          public_url: null,
+          public_url: stored.publicUrl,
         },
       });
       await tx.audit_logs.create({
         data: {
           user_id: userId,
-          action: 'PROFILE_UPDATED',
+          action: 'PROFILE_MEDIA_UPDATED',
           entity_type: 'user_profile_assets',
           entity_id: record.id,
           new_value_json: { asset_type: type },
@@ -284,11 +286,13 @@ export async function uploadProfileAsset(
       });
       return old;
     });
-    if (previous?.object_key && previous.object_key !== stored.key)
-      await assetStorage.remove(previous.object_key);
-    return { asset_type: type, url: `/api/v1/profile/assets/${userId.toString()}/${type}` };
+    if (previous?.object_key && previous.object_key !== stored.key) {
+      if (previous.storage_provider === 'CLOUDINARY') await imageStorage.remove(previous.object_key).catch(() => undefined);
+      else if (previous.storage_provider === 'LOCAL') await assetStorage.remove(previous.object_key).catch(() => undefined);
+    }
+    return { asset_type: type, url: stored.publicUrl ?? `/api/v1/profile/assets/${userId.toString()}/${type}` };
   } catch (error) {
-    await assetStorage.remove(stored.key);
+    await imageStorage.remove(stored.key).catch(() => undefined);
     throw error;
   }
 }
@@ -303,7 +307,7 @@ export async function deleteProfileAsset(userId: bigint, type: ProfileAssetType)
     await tx.audit_logs.create({
       data: {
         user_id: userId,
-        action: 'PROFILE_UPDATED',
+        action: 'PROFILE_MEDIA_REMOVED',
         entity_type: 'user_profile_assets',
         entity_id: existing.id,
         old_value_json: { asset_type: type },
@@ -311,7 +315,8 @@ export async function deleteProfileAsset(userId: bigint, type: ProfileAssetType)
     });
     return existing;
   });
-  if (record.storage_provider === 'LOCAL' && record.object_key) await assetStorage.remove(record.object_key);
+  if (record.storage_provider === 'CLOUDINARY' && record.object_key) await imageStorage.remove(record.object_key).catch(() => undefined);
+  if (record.storage_provider === 'LOCAL' && record.object_key) await assetStorage.remove(record.object_key).catch(() => undefined);
   return getOwnProfile(userId);
 }
 

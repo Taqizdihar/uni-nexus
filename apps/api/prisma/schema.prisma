@@ -1113,6 +1113,7 @@ model users {
   notifications                                                                          notifications[]
   order_packaging                                                                        order_packaging[]
   orders                                                                                 orders[]
+  pet_media                                                                              pet_media[]
   print_failures                                                                         print_failures[]
   print_jobs                                                                             print_jobs[]
   product_assets                                                                         product_assets[]
@@ -1238,9 +1239,41 @@ model pets {
   sort_order             Int      @default(0) @db.UnsignedInt
   created_at             DateTime @default(now()) @db.DateTime(0)
   updated_at             DateTime @default(now()) @db.DateTime(0)
+  pet_media              pet_media[]
   users                  users[]
 
   @@index([is_active, sort_order], map: "idx_pets_active_sort")
+}
+
+model pet_media {
+  id                     BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  pet_id                 BigInt   @db.UnsignedBigInt
+  state                  String   @db.VarChar(40)
+  frame_index            Int      @db.UnsignedInt
+  duration_ms            Int?     @db.UnsignedInt
+  original_file_name     String?  @db.VarChar(255)
+  mime_type              String?  @db.VarChar(120)
+  file_size_bytes        BigInt?  @db.UnsignedBigInt
+  storage_provider       String?  @db.VarChar(40)
+  cloudinary_asset_id    String?  @unique(map: "uq_pet_media_cloudinary_asset_id") @db.VarChar(255)
+  cloudinary_public_id   String?  @unique(map: "uq_pet_media_cloudinary_public_id") @db.VarChar(500)
+  cloudinary_asset_folder String? @db.VarChar(500)
+  cloudinary_secure_url  String?  @db.Text
+  cloudinary_resource_type String? @db.VarChar(40)
+  cloudinary_format      String?  @db.VarChar(40)
+  cloudinary_version     Int?     @db.UnsignedInt
+  width_px               Int?     @db.UnsignedInt
+  height_px              Int?     @db.UnsignedInt
+  is_active              Boolean  @default(true)
+  uploaded_by_user_id    BigInt?  @db.UnsignedBigInt
+  created_at             DateTime @default(now()) @db.DateTime(0)
+  updated_at             DateTime @default(now()) @db.DateTime(0)
+  pets                   pets     @relation(fields: [pet_id], references: [id], onDelete: Cascade, map: "fk_pet_media_pet")
+  users                  users?   @relation(fields: [uploaded_by_user_id], references: [id], onDelete: SetNull, map: "fk_pet_media_uploaded_by")
+
+  @@unique([pet_id, state, frame_index], map: "uq_pet_media_frame")
+  @@index([pet_id, state, is_active, frame_index], map: "idx_pet_media_playback")
+  @@index([uploaded_by_user_id], map: "idx_pet_media_uploaded_by")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

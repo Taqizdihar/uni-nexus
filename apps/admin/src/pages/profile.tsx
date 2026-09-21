@@ -28,10 +28,11 @@ import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../compone
 import { ErrorState, Spinner, useToast } from '../components/ui';
 import { WorkspaceUpdateModal } from '../components/workspace-update-modal';
 import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
+import { PetImage } from '../components/pet-image';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
-type Pet = { id: string; builtin_key: string | null; code: string | null; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null };
+type Pet = { id: string; builtin_key: string | null; code: string | null; name: string | null; display_name: string; subtitle: string | null; description: string | null; image_storage_provider: string | null; image_url: string | null; media?: Record<string, Array<{ id: string; frame_index: number; duration_ms: number | null; url: string | null }> > };
 type WorkspaceRef = { id: string; name: string; code: string };
 type Membership = { workspace: WorkspaceRef; role: { code: string; name: string } | null };
 type ProfileData = {
@@ -399,7 +400,7 @@ function PetCardBlock({ profile }: { profile: ProfileData }) {
       <span className="profile-pet-card-label">Pet Card</span>
       <button type="button" className="profile-pet-card-edit" aria-label="Ganti Pet" onClick={() => setEditing(true)}><Pencil size={13} /></button>
       <div className="profile-pet-card-media">
-        {pet && resolvePetImage(pet) ? <img src={resolvePetImage(pet)} alt={name} onError={(event) => handlePetImageError(event, pet)} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
+        {pet && resolvePetImage(pet) ? <PetImage pet={pet} alt={name} /> : <div className="pet-placeholder"><PawPrint size={36} strokeWidth={1.5} /></div>}
       </div>
       <h3>{name}</h3>
       {pet?.subtitle && <p>{pet.subtitle}</p>}

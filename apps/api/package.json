@@ -1,43 +1,45 @@
 {
-    "name":  "@uni-nexus/api",
-    "version":  "0.1.0",
-    "private":  true,
-    "type":  "module",
-    "scripts":  {
-                    "dev":  "tsx watch src/server.ts",
-                    "build":  "tsc",
-                    "start":  "node dist/server.js",
-                    "typecheck":  "tsc --noEmit",
-                    "db:pull":  "prisma db pull",
-                    "db:generate":  "prisma generate",
-                    "postinstall":  "prisma generate"
-                },
-    "dependencies":  {
-                         "@uni-nexus/shared":  "*",
-                         "@prisma/client":  "7.10.0",
-                         "@prisma/adapter-mariadb":  "7.10.0",
-                         "bcrypt":  "latest",
-                         "cookie-parser":  "latest",
-                         "cors":  "latest",
-                         "decimal.js":  "latest",
-                         "dotenv":  "latest",
-                         "express":  "latest",
-                         "express-rate-limit":  "latest",
-                         "helmet":  "latest",
-                         "jsonwebtoken":  "latest",
-                         "multer":  "latest",
-                         "zod":  "latest"
-                     },
-    "devDependencies":  {
-                            "@types/bcrypt":  "latest",
-                            "@types/cookie-parser":  "latest",
-                            "@types/cors":  "latest",
-                            "@types/express":  "latest",
-                            "@types/jsonwebtoken":  "latest",
-                            "@types/multer":  "latest",
-                            "@types/supertest":  "latest",
-                            "prisma":  "7.10.0",
-                            "supertest":  "latest",
-                            "tsx":  "latest"
-                        }
+    "name": "@uni-nexus/api",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js",
+        "typecheck": "tsc --noEmit",
+        "db:pull": "prisma db pull",
+        "db:generate": "prisma generate",
+        "migrate:pet-media:cloudinary": "tsx src/scripts/migrate-pet-media-cloudinary.ts",
+        "postinstall": "prisma generate"
+    },
+    "dependencies": {
+        "@prisma/adapter-mariadb": "7.10.0",
+        "@prisma/client": "7.10.0",
+        "@uni-nexus/shared": "*",
+        "bcrypt": "latest",
+        "cloudinary": "^2.11.0",
+        "cookie-parser": "latest",
+        "cors": "latest",
+        "decimal.js": "latest",
+        "dotenv": "latest",
+        "express": "latest",
+        "express-rate-limit": "latest",
+        "helmet": "latest",
+        "jsonwebtoken": "latest",
+        "multer": "latest",
+        "zod": "latest"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "latest",
+        "@types/cookie-parser": "latest",
+        "@types/cors": "latest",
+        "@types/express": "latest",
+        "@types/jsonwebtoken": "latest",
+        "@types/multer": "latest",
+        "@types/supertest": "latest",
+        "prisma": "7.10.0",
+        "supertest": "latest",
+        "tsx": "latest"
+    }
 }

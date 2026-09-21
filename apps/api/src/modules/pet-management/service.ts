@@ -3,11 +3,12 @@ import { petDisplayName } from '@uni-nexus/shared';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';
-import { LocalStorageService, validateUpload } from '../../services/storage.js';
+import { createImageStorageService, LocalStorageService, validateUpload } from '../../services/storage.js';
 import { normalizePetCode } from './validation.js';
 
 export const PET_DEFAULT_BUILTIN_KEY = 'UNI_INU';
 export const petStorage = new LocalStorageService(env.LOCAL_STORAGE_PATH || 'storage');
+const imageStorage = createImageStorageService();
 
 export const BUILTIN_PET_SEEDS = [
   { builtin_key: 'UNI_INU', label: 'Uni-Inu', object_key: 'pets/Uni-Inu/Idle/Uni-Inu.avif', sort_order: 0 },
@@ -30,6 +31,14 @@ export const petSelect = {
   image_url: true,
   is_active: true,
   sort_order: true,
+  pet_media: {
+    where: { is_active: true },
+    orderBy: [{ state: 'asc' }, { frame_index: 'asc' }],
+    select: {
+      id: true, state: true, frame_index: true, duration_ms: true,
+      cloudinary_secure_url: true, width_px: true, height_px: true,
+    },
+  },
 } satisfies Prisma.petsSelect;
 export type PetRow = Prisma.petsGetPayload<{ select: typeof petSelect }>;
 
@@ -40,6 +49,12 @@ export function petImageUrl(pet: Pick<PetRow, 'id' | 'image_storage_provider' | 
 }
 
 export function serializePet(pet: PetRow) {
+  const media = (pet.pet_media ?? []).reduce<Record<string, Array<{ id: bigint; frame_index: number; duration_ms: number | null; url: string | null; width: number | null; height: number | null }>>>((states, frame) => {
+    const key = frame.state.toUpperCase();
+    (states[key] ??= []).push({ id: frame.id, frame_index: frame.frame_index, duration_ms: frame.duration_ms, url: frame.cloudinary_secure_url, width: frame.width_px, height: frame.height_px });
+    return states;
+  }, {});
+  const idleUrl = media.IDLE?.[0]?.url ?? null;
   return {
     id: pet.id,
     builtin_key: pet.builtin_key,
@@ -49,7 +64,8 @@ export function serializePet(pet: PetRow) {
     subtitle: pet.subtitle,
     description: pet.description,
     image_storage_provider: pet.image_storage_provider,
-    image_url: petImageUrl(pet),
+    image_url: idleUrl ?? petImageUrl(pet),
+    media,
     is_active: pet.is_active,
     sort_order: pet.sort_order,
   };
@@ -239,33 +255,111 @@ export async function updatePet(actorId: bigint, petId: bigint, input: PetMetada
   });
 }
 
-export async function uploadPetImage(actorId: bigint, petId: bigint, file: { originalname: string; mimetype: string; buffer: Buffer; size: number }) {
+type UploadedFile = { originalname: string; mimetype: string; buffer: Buffer; size: number };
+type PetFrameInput = { state?: string; duration_ms?: number | null; frame_index?: number };
+
+function normalizeState(value: string | undefined): string {
+  const state = (value ?? 'IDLE').trim().toUpperCase();
+  if (!/^[A-Z][A-Z0-9_]{0,39}$/.test(state))
+    throw new AppError(422, 'State Pet tidak valid.', 'INVALID_PET_STATE');
+  return state;
+}
+
+function serializeFrame(frame: { id: bigint; state: string; frame_index: number; duration_ms: number | null; cloudinary_secure_url: string | null; width_px: number | null; height_px: number | null }) {
+  return { id: frame.id, state: frame.state, frame_index: frame.frame_index, duration_ms: frame.duration_ms, url: frame.cloudinary_secure_url, width: frame.width_px, height: frame.height_px };
+}
+
+/** Uploads one immutable Pet frame. The old legacy pets image columns remain read-only fallback data. */
+export async function uploadPetFrame(actorId: bigint, petId: bigint, file: UploadedFile, input: PetFrameInput = {}) {
   const validated = validateUpload(file, env.MAX_UPLOAD_SIZE, true);
   if (validated.extension !== '.avif')
     throw new AppError(422, 'Format foto Pet harus AVIF.', 'INVALID_PET_IMAGE_FORMAT');
-  const stored = await petStorage.save(actorId, file.buffer);
+  const state = normalizeState(input.state);
+  if (input.duration_ms !== undefined && input.duration_ms !== null && (!Number.isInteger(input.duration_ms) || input.duration_ms < 50 || input.duration_ms > 60_000))
+    throw new AppError(422, 'Durasi frame harus antara 50 dan 60000 milidetik.', 'INVALID_FRAME_DURATION');
+  await assertCto(prisma, actorId);
+  const pet = await prisma.pets.findUnique({ where: { id: petId }, select: { id: true } });
+  if (!pet) throw new AppError(404, 'Pet tidak ditemukan.', 'PET_NOT_FOUND');
+  const last = await prisma.pet_media.findFirst({ where: { pet_id: petId, state, is_active: true }, orderBy: { frame_index: 'desc' }, select: { frame_index: true } });
+  const frameIndex = input.frame_index ?? (last?.frame_index ?? 0) + 1;
+  if (!Number.isInteger(frameIndex) || frameIndex < 1)
+    throw new AppError(422, 'Urutan frame harus dimulai dari 1.', 'INVALID_FRAME_INDEX');
+  const stored = await imageStorage.upload({ bytes: file.buffer, assetFolder: `pets/pet-${petId.toString()}/states/${state.toLowerCase()}` });
   try {
-    const result = await prisma.$transaction(async (tx): Promise<{ previous: PetRow; updated: PetRow }> => {
+    const frame = await prisma.$transaction(async (tx) => {
       await assertCto(tx, actorId);
-      const current = await tx.pets.findUnique({ where: { id: petId }, select: petSelect });
-      if (!current) throw new AppError(404, 'Pet tidak ditemukan.', 'PET_NOT_FOUND');
-      const updated = await tx.pets.update({
-        where: { id: petId },
-        data: { image_storage_provider: 'LOCAL', image_bucket_name: null, image_object_key: stored.key, image_url: null },
-        select: petSelect,
-      });
-      await tx.audit_logs.create({
-        data: { user_id: actorId, action: 'PET_IMAGE_UPDATED', entity_type: 'pets', entity_id: petId, new_value_json: { pet_code: current.code, image_updated: true } },
-      });
-      return { previous: current, updated };
+      const created = await tx.pet_media.create({ data: {
+        pet_id: petId, state, frame_index: frameIndex, duration_ms: input.duration_ms ?? null,
+        original_file_name: validated.filename, mime_type: validated.mime, file_size_bytes: BigInt(stored.size),
+        storage_provider: stored.provider, cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.provider === 'CLOUDINARY' ? stored.key : null,
+        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: stored.publicUrl,
+        cloudinary_resource_type: stored.resourceType, cloudinary_format: stored.format, cloudinary_version: stored.version,
+        width_px: stored.width, height_px: stored.height, uploaded_by_user_id: actorId,
+      }, select: { id: true, state: true, frame_index: true, duration_ms: true, cloudinary_secure_url: true, width_px: true, height_px: true } });
+      await tx.audit_logs.create({ data: {
+        user_id: actorId, action: 'PET_MEDIA_UPLOADED', entity_type: 'pet_media', entity_id: created.id,
+        new_value_json: { pet_id: petId.toString(), state, frame_index: frameIndex },
+      }});
+      return created;
     });
-    if (result.previous.image_storage_provider === 'LOCAL' && result.previous.image_object_key && result.previous.image_object_key !== stored.key)
-      await petStorage.remove(result.previous.image_object_key);
-    return serializePet(result.updated);
+    return serializeFrame(frame);
   } catch (error) {
-    await petStorage.remove(stored.key);
+    await imageStorage.remove(stored.key).catch(() => undefined);
     throw error;
   }
+}
+
+/** Compatibility endpoint: now creates an IDLE frame instead of mutating pets.image_*. */
+export const uploadPetImage = (actorId: bigint, petId: bigint, file: UploadedFile) => uploadPetFrame(actorId, petId, file, { state: 'IDLE' });
+
+export async function replacePetFrame(actorId: bigint, petId: bigint, frameId: bigint, file: UploadedFile, durationMs?: number | null) {
+  const validated = validateUpload(file, env.MAX_UPLOAD_SIZE, true);
+  if (validated.extension !== '.avif') throw new AppError(422, 'Format foto Pet harus AVIF.', 'INVALID_PET_IMAGE_FORMAT');
+  await assertCto(prisma, actorId);
+  const old = await prisma.pet_media.findFirst({ where: { id: frameId, pet_id: petId, is_active: true } });
+  if (!old) throw new AppError(404, 'Frame Pet tidak ditemukan.', 'PET_FRAME_NOT_FOUND');
+  const stored = await imageStorage.upload({ bytes: file.buffer, assetFolder: `pets/pet-${petId.toString()}/states/${old.state.toLowerCase()}` });
+  try {
+    const updated = await prisma.$transaction(async (tx) => {
+      await assertCto(tx, actorId);
+      const value = await tx.pet_media.update({ where: { id: frameId }, data: {
+        original_file_name: validated.filename, mime_type: validated.mime, file_size_bytes: BigInt(stored.size), storage_provider: stored.provider,
+        cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.provider === 'CLOUDINARY' ? stored.key : null,
+        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: stored.publicUrl, cloudinary_resource_type: stored.resourceType,
+        cloudinary_format: stored.format, cloudinary_version: stored.version, width_px: stored.width, height_px: stored.height,
+        duration_ms: durationMs === undefined ? old.duration_ms : durationMs,
+      }, select: { id: true, state: true, frame_index: true, duration_ms: true, cloudinary_secure_url: true, width_px: true, height_px: true } });
+      await tx.audit_logs.create({ data: { user_id: actorId, action: 'PET_MEDIA_UPDATED', entity_type: 'pet_media', entity_id: frameId, new_value_json: { pet_id: petId.toString() } } });
+      return value;
+    });
+    if (old.storage_provider === 'CLOUDINARY' && old.cloudinary_public_id) await imageStorage.remove(old.cloudinary_public_id).catch(() => undefined);
+    return serializeFrame(updated);
+  } catch (error) { await imageStorage.remove(stored.key).catch(() => undefined); throw error; }
+}
+
+export async function deletePetFrame(actorId: bigint, petId: bigint, frameId: bigint) {
+  const previous = await prisma.$transaction(async (tx) => {
+    await assertCto(tx, actorId);
+    const frame = await tx.pet_media.findFirst({ where: { id: frameId, pet_id: petId, is_active: true } });
+    if (!frame) throw new AppError(404, 'Frame Pet tidak ditemukan.', 'PET_FRAME_NOT_FOUND');
+    await tx.pet_media.delete({ where: { id: frameId } });
+    await tx.audit_logs.create({ data: { user_id: actorId, action: 'PET_MEDIA_REMOVED', entity_type: 'pet_media', entity_id: frameId, old_value_json: { pet_id: petId.toString() } } });
+    return frame;
+  });
+  if (previous.storage_provider === 'CLOUDINARY' && previous.cloudinary_public_id) await imageStorage.remove(previous.cloudinary_public_id).catch(() => undefined);
+}
+
+export async function reorderPetFrames(actorId: bigint, petId: bigint, stateValue: string, frameIds: bigint[]) {
+  const state = normalizeState(stateValue);
+  await prisma.$transaction(async (tx) => {
+    await assertCto(tx, actorId);
+    const frames = await tx.pet_media.findMany({ where: { pet_id: petId, state, is_active: true }, orderBy: { frame_index: 'asc' } });
+    if (frames.length !== frameIds.length || new Set(frameIds.map(String)).size !== frameIds.length || new Set(frames.map((frame) => frame.id.toString())).size !== new Set(frameIds.map(String)).size || !frameIds.every((id) => frames.some((frame) => frame.id === id)))
+      throw new AppError(422, 'Urutan frame harus memuat semua frame tepat satu kali.', 'INVALID_FRAME_ORDER');
+    for (const frame of frames) await tx.pet_media.update({ where: { id: frame.id }, data: { frame_index: 1_000_000 + frame.frame_index } });
+    for (const [index, id] of frameIds.entries()) await tx.pet_media.update({ where: { id }, data: { frame_index: index + 1 } });
+    await tx.audit_logs.create({ data: { user_id: actorId, action: 'PET_MEDIA_REORDERED', entity_type: 'pets', entity_id: petId, new_value_json: { state, frame_ids: frameIds.map(String) } } });
+  });
 }
 
 export async function getPetImageForDownload(petId: bigint) {

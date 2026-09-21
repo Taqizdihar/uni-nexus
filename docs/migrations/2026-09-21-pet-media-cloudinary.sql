@@ -1,0 +1,33 @@
+-- ALREADY APPLIED to the production Aiven MySQL database on 2026-09-21.
+-- This source-controlled record is intentionally not executed during API startup.
+CREATE TABLE pet_media (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  pet_id BIGINT UNSIGNED NOT NULL,
+  state VARCHAR(40) NOT NULL,
+  frame_index INT UNSIGNED NOT NULL,
+  duration_ms INT UNSIGNED NULL,
+  original_file_name VARCHAR(255) NULL,
+  mime_type VARCHAR(120) NULL,
+  file_size_bytes BIGINT UNSIGNED NULL,
+  storage_provider VARCHAR(40) NULL,
+  cloudinary_asset_id VARCHAR(255) NULL,
+  cloudinary_public_id VARCHAR(500) NULL,
+  cloudinary_asset_folder VARCHAR(500) NULL,
+  cloudinary_secure_url TEXT NULL,
+  cloudinary_resource_type VARCHAR(40) NULL,
+  cloudinary_format VARCHAR(40) NULL,
+  cloudinary_version INT UNSIGNED NULL,
+  width_px INT UNSIGNED NULL,
+  height_px INT UNSIGNED NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  uploaded_by_user_id BIGINT UNSIGNED NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_pet_media_frame (pet_id, state, frame_index),
+  UNIQUE KEY uq_pet_media_cloudinary_asset_id (cloudinary_asset_id),
+  UNIQUE KEY uq_pet_media_cloudinary_public_id (cloudinary_public_id),
+  KEY idx_pet_media_playback (pet_id, state, is_active, frame_index),
+  CONSTRAINT fk_pet_media_pet FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  CONSTRAINT fk_pet_media_uploaded_by FOREIGN KEY (uploaded_by_user_id) REFERENCES users(id) ON DELETE SET NULL
+);
