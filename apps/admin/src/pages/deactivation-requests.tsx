@@ -11,7 +11,8 @@ import {
   type DeactivationRequestSummary,
   type RoleCode,
 } from '@uni-nexus/shared';
-import { api, assetUrl, body, type Envelope, type Page } from '../lib/api';
+import { api, body, type Envelope, type Page } from '../lib/api';
+import { SafeImage } from '../components/safe-image';
 import { accountActionMessage, formatAccountDate } from '../lib/account-lifecycle';
 import { AccountActionModal } from '../components/account-action-modal';
 import { EmptyState, ErrorState, Spinner, useToast } from '../components/ui';
@@ -187,16 +188,12 @@ export function DeactivationRequests() {
                     <td>
                       <div className="account-cell">
                         <span className="avatar lg">
-                          {request.user.photo_url ? (
-                            <img src={assetUrl(request.user.photo_url)} alt="" />
-                          ) : (
-                            request.user.full_name
+                          <SafeImage source={request.user.photo_url} alt="" fallback={request.user.full_name
                               .split(' ')
                               .map((part) => part[0])
                               .slice(0, 2)
                               .join('')
-                              .toUpperCase()
-                          )}
+                              .toUpperCase()} />
                         </span>
                         <div>
                           <strong>{request.user.full_name}</strong>

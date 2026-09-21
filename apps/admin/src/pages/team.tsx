@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { PawPrint, Search, ShieldCheck } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
-import { api, assetUrl, type Envelope } from '../lib/api';
+import { api, type Envelope } from '../lib/api';
+import { SafeImage } from '../components/safe-image';
 import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
 import { useAuth } from '../lib/auth';
 import { PresenceBadge } from '../components/presence-badge';
@@ -29,13 +30,7 @@ function initials(name: string) {
 const roleLabel = (role: TeamMember['role']) => (role ? ROLE_LABELS[role.code as RoleCode] ?? role.name : '');
 
 function TeamAvatar({ member, size = 52 }: { member: TeamMember; size?: number }) {
-  return member.photo_url ? (
-    <img className="profile-avatar" style={{ width: size, height: size }} src={assetUrl(member.photo_url)} alt={member.full_name} />
-  ) : (
-    <div className="profile-avatar-initials" style={{ width: size, height: size, fontSize: size * 0.32 }}>
-      {initials(member.full_name)}
-    </div>
-  );
+  return <SafeImage source={member.photo_url} alt={member.full_name} className="profile-avatar" fallback={<div className="profile-avatar-initials" style={{ width: size, height: size, fontSize: size * 0.32 }}>{initials(member.full_name)}</div>} />;
 }
 
 function TeamList() {
@@ -106,7 +101,7 @@ function TeamDetail() {
     <>
       <Link to="/app/team" className="back-link">← Kembali ke Tim</Link>
       <section className="panel profile-hero">
-        <div className="profile-banner" style={member.banner_url ? { backgroundImage: `url(${assetUrl(member.banner_url)})` } : undefined} />
+        <div className="profile-banner"><SafeImage source={member.banner_url} alt="" className="profile-banner-media" /></div>
         <div className="profile-body">
           <div className="profile-avatar-wrap">
             <TeamAvatar member={member} size={108} />

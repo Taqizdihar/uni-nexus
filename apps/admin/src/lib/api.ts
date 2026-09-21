@@ -14,9 +14,21 @@ export class ApiError extends Error {
 const origin = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 const base = `${origin}/api/v1`;
 
-/** Backend asset paths already include the /api/v1 prefix, so only the origin is prepended. */
-export function assetUrl(path: string | null | undefined): string | undefined {
-  return path ? `${origin}${path}` : undefined;
+/**
+ * Browser media may come from Cloudinary directly or from a transitional API
+ * endpoint. Storage identities are deliberately not URLs and must never reach
+ * an img src attribute.
+ */
+export function assetUrl(value: string | null | undefined): string | undefined {
+  if (!value) return undefined;
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      return ['http:', 'https:'].includes(url.protocol) ? url.toString() : undefined;
+    } catch { return undefined; }
+  }
+  if (value.startsWith('/')) return origin ? `${origin}${value}` : value;
+  return undefined;
 }
 
 export async function api<T>(path: string, options: RequestInit & { workspace?: string } = {}): Promise<T> {

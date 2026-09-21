@@ -23,12 +23,13 @@ import {
 import { DEACTIVATION_REQUEST_LABELS, ROLE_LABELS, type DeactivationRequestSummary, type RoleCode } from '@uni-nexus/shared';
 import { AccountActionModal } from '../components/account-action-modal';
 import { accountActionMessage, formatAccountDate } from '../lib/account-lifecycle';
-import { api, assetUrl, body, message, type Envelope } from '../lib/api';
+import { api, body, message, type Envelope } from '../lib/api';
 import { PresenceBadge, PresenceSelector, type PresenceStatus } from '../components/presence-badge';
 import { ErrorState, Spinner, useToast } from '../components/ui';
 import { WorkspaceUpdateModal } from '../components/workspace-update-modal';
 import { displayPetName, handlePetImageError, resolvePetImage } from '../lib/pets';
 import { PetImage } from '../components/pet-image';
+import { SafeImage } from '../components/safe-image';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
 
 type Tag = { id: string; tag_text: string };
@@ -131,13 +132,7 @@ function AvatarPhotoModal({ profile, onClose }: { profile: ProfileData; onClose:
         </button>
         <h2 id="avatar-modal-title" className="sr-only">Foto Profil</h2>
         <div className="avatar-photo-modal-preview">
-          {profile.photo_url ? (
-            <img src={assetUrl(profile.photo_url)} alt={profile.full_name} />
-          ) : (
-            <div className="profile-avatar-initials" style={{ width: 220, height: 220, fontSize: 64, border: 'none' }}>
-              {initials(profile.full_name)}
-            </div>
-          )}
+          <SafeImage source={profile.photo_url} alt={profile.full_name} fallback={<div className="profile-avatar-initials" style={{ width: 220, height: 220, fontSize: 64, border: 'none' }}>{initials(profile.full_name)}</div>} />
         </div>
         <div className="avatar-photo-modal-actions">
           <button type="button" className="button primary" onClick={() => fileInput.current?.click()} disabled={upload.isPending}>
@@ -185,11 +180,7 @@ function Avatar({ profile }: { profile: ProfileData }) {
   return (
     <div className="profile-avatar-wrap" ref={wrapRef}>
       <button type="button" className="profile-avatar-trigger" aria-label="Lihat foto profil" onClick={() => setPhotoOpen(true)}>
-        {profile.photo_url ? (
-          <img className="profile-avatar" src={assetUrl(profile.photo_url)} alt={profile.full_name} />
-        ) : (
-          <div className="profile-avatar-initials">{initials(profile.full_name)}</div>
-        )}
+        <SafeImage source={profile.photo_url} alt={profile.full_name} className="profile-avatar" fallback={<div className="profile-avatar-initials">{initials(profile.full_name)}</div>} />
       </button>
       <button
         type="button"
@@ -619,7 +610,8 @@ export function Profile() {
   return (
     <>
       <section className="panel profile-hero">
-        <div className="profile-banner" style={profile.banner_url ? { backgroundImage: `url(${assetUrl(profile.banner_url)})` } : undefined}>
+        <div className="profile-banner">
+          <SafeImage source={profile.banner_url} alt="" className="profile-banner-media" />
           <BannerEdit />
         </div>
         <div className="profile-body">

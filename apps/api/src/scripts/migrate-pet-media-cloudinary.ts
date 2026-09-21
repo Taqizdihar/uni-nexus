@@ -22,12 +22,16 @@ async function run() {
     if (dryRun) { console.info(`[dry-run] Akan unggah ${builtinKey} dari ${source}.`); continue; }
     const bytes = await readFile(source);
     const stored = await storage.upload({ bytes, assetFolder: `pets/pet-${pet.id.toString()}/states/idle` });
+    if (stored.provider !== 'CLOUDINARY' || !stored.key || !stored.publicUrl || !stored.resourceType) {
+      await storage.remove(stored.key).catch(() => undefined);
+      throw new Error('Cloudinary wajib dikonfigurasi sebelum migrasi media Pet dijalankan.');
+    }
     try {
       await prisma.pet_media.create({ data: {
         pet_id: pet.id, state: 'IDLE', frame_index: 1, original_file_name: `${filename}.avif`, mime_type: 'image/avif', file_size_bytes: BigInt(stored.size),
-        storage_provider: stored.provider, cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.provider === 'CLOUDINARY' ? stored.key : null,
+        storage_provider: 'CLOUDINARY', cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.key,
         cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: stored.publicUrl, cloudinary_resource_type: stored.resourceType,
-        cloudinary_format: stored.format, cloudinary_version: stored.version, width_px: stored.width, height_px: stored.height,
+        cloudinary_format: stored.format, cloudinary_version: stored.version === null ? null : BigInt(stored.version), width_px: stored.width, height_px: stored.height,
       } });
       console.info(`Berhasil memigrasikan ${builtinKey}.`);
     } catch (error) {

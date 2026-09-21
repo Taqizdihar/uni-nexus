@@ -4,7 +4,8 @@ import { ArrowLeftRight, Bell, BookOpen, Boxes, ChevronDown, ClipboardList, Flas
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { REVIEWER_ROLE_CODES, ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
 import craftLogo from '../assets/branding/logos/uni-inside-craft/Uni-Inside Craft Light Mode.png';
-import { api, assetUrl, message, type Page } from '../lib/api';
+import { api, message, type Page } from '../lib/api';
+import { SafeImage } from './safe-image';
 import { useAuth } from '../lib/auth';
 import { useHeartbeat } from '../lib/presence';
 import { titleCase } from '../lib/format';
@@ -78,7 +79,7 @@ export function Shell() {
         <Link className="icon-button notification-bell" to="/app/notifications" aria-label={`Notifikasi${unread.data ? `, ${unread.data.meta.total} belum dibaca` : ''}`}><Bell size={19} />{!!unread.data?.meta.total && <span />}</Link>
         <div className="user-menu">
           <button className="user-trigger" onClick={() => setUserOpen(!userOpen)} aria-expanded={userOpen} aria-label="Menu pengguna">
-            <span className="avatar">{session.user.photo_url ? <img src={assetUrl(session.user.photo_url)} alt="" /> : session.user.full_name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase()}</span>
+            <span className="avatar"><SafeImage source={session.user.photo_url} alt="" fallback={session.user.full_name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase()} /></span>
             <span className="user-info"><strong>{session.user.full_name}</strong><small>{roleLabel}</small></span>
             <ChevronDown size={14} />
           </button>

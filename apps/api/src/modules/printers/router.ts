@@ -92,7 +92,7 @@ printerRouter.get('/catalog/:id/photo', async (request, response, next) => {
   const id = parseId(request.params.id, 'ID data printer');
   const catalog = await prisma.printer_catalogs.findFirst({ where: { id, workspace_id: request.workspace!.id } });
   if (!catalog || catalog.photo_storage_provider !== 'LOCAL' || !catalog.photo_object_key || !catalog.photo_object_key.startsWith(`${request.workspace!.id.toString()}/`) || !await storage.exists(catalog.photo_object_key)) throw new AppError(404, 'Foto printer tidak ditemukan.', 'PHOTO_NOT_FOUND');
-  response.setHeader('X-Content-Type-Options', 'nosniff'); response.setHeader('Cache-Control', 'private, max-age=60'); response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
+  response.setHeader('X-Content-Type-Options', 'nosniff'); response.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'); response.setHeader('Cache-Control', 'private, max-age=60'); response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
   response.type(catalog.photo_mime_type ?? 'application/octet-stream'); response.sendFile(storage.absolutePath(catalog.photo_object_key), (error) => { if (error) next(error); });
 });
 
@@ -205,6 +205,7 @@ printerRouter.get('/:id/photo', async (request, response, next) => {
     !await storage.exists(photo.photo_object_key))
     throw new AppError(404, 'Foto printer tidak ditemukan.', 'PHOTO_NOT_FOUND');
   response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   response.setHeader('Cache-Control', 'private, max-age=60');
   response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
   response.type(photo.photo_mime_type ?? 'application/octet-stream');
