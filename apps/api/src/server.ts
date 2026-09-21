@@ -2,11 +2,11 @@ import type { Server } from 'node:http';
 import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './lib/prisma.js';
-import { ensureBuiltinPets } from './modules/pet-management/service.js';
+import { initializeDatabase } from './startup.js';
 
 let server: Server | undefined;
 async function start() {
-  await prisma.$transaction((tx) => ensureBuiltinPets(tx));
+  await initializeDatabase();
   server = createApp().listen(env.PORT, () => {
     console.info(`UNI-NEXUS API listening on http://localhost:${env.PORT}`);
   });
@@ -16,7 +16,7 @@ async function start() {
   });
 }
 void start().catch((error) => {
-  console.error('API server could not initialize Pet data.', error);
+  console.error('API server could not initialize database or required master data.', error);
   process.exitCode = 1;
 });
 let stopping = false;
