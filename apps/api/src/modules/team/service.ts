@@ -8,6 +8,8 @@ const teamUserSelect = {
   id: true,
   full_name: true,
   username: true,
+  email: true,
+  phone: true,
   bio: true,
   presence_status: true,
   pets: { select: petSelect },
