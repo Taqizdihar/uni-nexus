@@ -1,10 +1,26 @@
 import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile, unlink, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { v2 as cloudinary } from 'cloudinary';
+import type { UploadApiResponse } from 'cloudinary';
+import { env } from '../config/env.js';
 import { AppError } from '../lib/errors.js';
 
 export interface StoredObject { key: string; size: number }
 export interface StorageService { save(workspaceId: bigint, bytes: Buffer): Promise<StoredObject>; absolutePath(key: string): string; remove(key: string): Promise<void>; exists(key: string): Promise<boolean> }
+
+export type StoredImage = {
+  provider: 'LOCAL' | 'CLOUDINARY'; key: string; size: number; publicUrl: string | null;
+  assetId: string | null; assetFolder: string | null; resourceType: string | null;
+  format: string | null; version: number | null; width: number | null; height: number | null;
+};
+
+/** Image storage deliberately has no filesystem operations: Cloudinary identities are not paths. */
+export interface ImageStorageService {
+  upload(input: { bytes: Buffer; assetFolder: string; private?: boolean; localScope?: bigint }): Promise<StoredImage>;
+  remove(key: string): Promise<void>;
+  authenticatedUrl(key: string): string | null;
+}
 export class LocalStorageService implements StorageService {
   private readonly root: string;
   constructor(root: string) { this.root = path.resolve(root); }
@@ -23,6 +39,53 @@ export class LocalStorageService implements StorageService {
   }
   async remove(key: string): Promise<void> { await unlink(this.absolutePath(key)).catch((error: NodeJS.ErrnoException) => { if (error.code !== 'ENOENT') throw error; }); }
   async exists(key: string): Promise<boolean> { return stat(this.absolutePath(key)).then((result) => result.isFile(), () => false); }
+}
+
+class LocalImageStorageService implements ImageStorageService {
+  constructor(private readonly storage: LocalStorageService) {}
+  async upload(input: { bytes: Buffer; assetFolder: string; private?: boolean; localScope?: bigint }): Promise<StoredImage> {
+    const saved = await this.storage.save(input.localScope ?? 0n, input.bytes);
+    return { provider: 'LOCAL', key: saved.key, size: saved.size, publicUrl: null, assetId: null, assetFolder: null, resourceType: 'image', format: null, version: null, width: null, height: null };
+  }
+  remove(key: string) { return this.storage.remove(key); }
+  authenticatedUrl() { return null; }
+}
+
+export class CloudinaryImageService implements ImageStorageService {
+  constructor(private readonly configuration: { cloudName: string; apiKey: string; apiSecret: string; folderRoot: string }) {
+    cloudinary.config({ cloud_name: configuration.cloudName, api_key: configuration.apiKey, api_secret: configuration.apiSecret, secure: true });
+  }
+  async upload(input: { bytes: Buffer; assetFolder: string; private?: boolean; localScope?: bigint }): Promise<StoredImage> {
+    const assetFolder = `${this.configuration.folderRoot.replace(/^\/+|\/+$/g, '')}/${input.assetFolder.replace(/^\/+|\/+$/g, '')}`;
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream({
+        resource_type: 'image', type: input.private ? 'authenticated' : 'upload', asset_folder: assetFolder, public_id: randomUUID(),
+        overwrite: false, unique_filename: false, use_filename: false,
+      }, (error, upload) => error || !upload ? reject(error ?? new Error('Cloudinary did not return an upload result.')) : resolve(upload));
+      stream.end(input.bytes);
+    });
+    return {
+      provider: 'CLOUDINARY', key: result.public_id, size: result.bytes, publicUrl: result.secure_url,
+      assetId: result.asset_id, assetFolder: result.asset_folder ?? assetFolder,
+      resourceType: result.resource_type, format: result.format, version: result.version,
+      width: result.width ?? null, height: result.height ?? null,
+    };
+  }
+  async remove(key: string): Promise<void> {
+    await cloudinary.uploader.destroy(key, { resource_type: 'image', invalidate: true });
+  }
+  authenticatedUrl(key: string): string | null {
+    return cloudinary.url(key, { resource_type: 'image', type: 'authenticated', secure: true, sign_url: true });
+  }
+}
+
+let imageStorage: ImageStorageService | undefined;
+export function createImageStorageService(): ImageStorageService {
+  if (imageStorage) return imageStorage;
+  imageStorage = env.STORAGE_DRIVER === 'cloudinary'
+    ? new CloudinaryImageService({ cloudName: env.CLOUDINARY_CLOUD_NAME!, apiKey: env.CLOUDINARY_API_KEY!, apiSecret: env.CLOUDINARY_API_SECRET!, folderRoot: env.CLOUDINARY_FOLDER_ROOT })
+    : new LocalImageStorageService(new LocalStorageService(env.LOCAL_STORAGE_PATH ?? 'uploads'));
+  return imageStorage;
 }
 
 const allowedTypes: Record<string, string[]> = {

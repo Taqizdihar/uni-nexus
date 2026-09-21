@@ -7,11 +7,12 @@ import { AppError } from '../../lib/errors.js';
 import { prisma } from '../../lib/prisma.js';
 import { hasPermission, parseId } from '../../middleware/auth.js';
 import { audit } from '../../services/audit.js';
-import { LocalStorageService, validateUpload } from '../../services/storage.js';
+import { createImageStorageService, LocalStorageService, validateUpload } from '../../services/storage.js';
 
 /** Purpose-built photo endpoints keep binary uploads outside the generic JSON resource engine. */
 export const printerRouter = Router();
 const storage = new LocalStorageService(env.LOCAL_STORAGE_PATH);
+const imageStorage = createImageStorageService();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: env.MAX_UPLOAD_SIZE, files: 1, fields: 2, fieldSize: 2048 },
@@ -98,16 +99,17 @@ printerRouter.get('/catalog/:id/photo', async (request, response, next) => {
 printerRouter.post('/catalog/:id/photo', requireCto, upload.single('file'), async (request, response) => {
   const id = parseId(request.params.id, 'ID data printer'); const context = { workspaceId: request.workspace!.id, userId: request.auth!.userId };
   if (!request.file) throw new AppError(422, 'Pilih foto printer untuk diunggah.', 'PHOTO_REQUIRED');
-  const validated = validateUpload(request.file, env.MAX_UPLOAD_SIZE, true); const stored = await storage.save(context.workspaceId, request.file.buffer);
+  const validated = validateUpload(request.file, env.MAX_UPLOAD_SIZE, true); const stored = await imageStorage.upload({ bytes: request.file.buffer, localScope: context.workspaceId, assetFolder: `printers/catalogs/catalog-${id.toString()}` });
   try {
     const previous = await prisma.$transaction(async (tx) => {
       const old = await tx.printer_catalogs.findFirst({ where: { id, workspace_id: context.workspaceId } }); if (!old) throw new AppError(404, 'Data printer tidak ditemukan.', 'NOT_FOUND');
-      const updated = await tx.printer_catalogs.update({ where: { id }, data: { photo_original_file_name: validated.filename, photo_mime_type: validated.mime, photo_file_size_bytes: BigInt(stored.size), photo_storage_provider: 'LOCAL', photo_bucket_name: null, photo_object_key: stored.key, photo_public_url: null } });
+      const updated = await tx.printer_catalogs.update({ where: { id }, data: { photo_original_file_name: validated.filename, photo_mime_type: validated.mime, photo_file_size_bytes: BigInt(stored.size), photo_storage_provider: stored.provider, photo_bucket_name: null, photo_object_key: stored.key, photo_public_url: stored.publicUrl } });
       await audit(tx, context, 'PRINTER_CATALOG_PHOTO_UPDATED', 'printer_catalogs', id, old, updated); return old;
     });
-    if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key && previous.photo_object_key !== stored.key) await storage.remove(previous.photo_object_key);
-    response.json({ data: { photo_url: `/api/v1/printers/catalog/${id.toString()}/photo` } });
-  } catch (error) { await storage.remove(stored.key); throw error; }
+    if (previous.photo_storage_provider === 'CLOUDINARY' && previous.photo_object_key && previous.photo_object_key !== stored.key) await imageStorage.remove(previous.photo_object_key).catch(() => undefined);
+    if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key && previous.photo_object_key !== stored.key) await storage.remove(previous.photo_object_key).catch(() => undefined);
+    response.json({ data: { photo_url: stored.publicUrl ?? `/api/v1/printers/catalog/${id.toString()}/photo` } });
+  } catch (error) { await imageStorage.remove(stored.key).catch(() => undefined); throw error; }
 });
 
 printerRouter.delete('/catalog/:id/photo', requireCto, async (request, response) => {
@@ -124,8 +126,8 @@ printerRouter.delete('/catalog/:id/photo', requireCto, async (request, response)
     await audit(tx, context, 'PRINTER_CATALOG_PHOTO_REMOVED', 'printer_catalogs', id, existing, updated);
     return existing;
   });
-  if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key)
-    await storage.remove(previous.photo_object_key);
+  if (previous.photo_storage_provider === 'CLOUDINARY' && previous.photo_object_key) await imageStorage.remove(previous.photo_object_key).catch(() => undefined);
+  if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key) await storage.remove(previous.photo_object_key).catch(() => undefined);
   response.status(204).end();
 });
 
@@ -139,7 +141,7 @@ printerRouter.post('/:id/photo', requireCto, upload.single('file'), async (reque
     throw new AppError(404, 'Printer tidak ditemukan.', 'NOT_FOUND');
   if (printer.printer_catalog_id)
     throw new AppError(409, 'Foto unit dikelola melalui Data Printer.', 'PRINTER_CATALOG_PHOTO_ONLY');
-  const stored = await storage.save(context.workspaceId, request.file.buffer);
+  const stored = await imageStorage.upload({ bytes: request.file.buffer, localScope: context.workspaceId, assetFolder: `printers/units/printer-${id.toString()}` });
   try {
     const old = await prisma.$transaction(async (tx) => {
       const previous = await tx.printers.findFirst({ where: { id, workspace_id: context.workspaceId } });
@@ -150,20 +152,20 @@ printerRouter.post('/:id/photo', requireCto, upload.single('file'), async (reque
           photo_original_file_name: validated.filename,
           photo_mime_type: validated.mime,
           photo_file_size_bytes: BigInt(stored.size),
-          photo_storage_provider: 'LOCAL',
+          photo_storage_provider: stored.provider,
           photo_bucket_name: null,
           photo_object_key: stored.key,
-          photo_public_url: null,
+          photo_public_url: stored.publicUrl,
         },
       });
       await audit(tx, context, 'PRINTER_PHOTO_UPDATED', 'printers', id, previous, updated);
       return previous;
     });
-    if (old.photo_storage_provider === 'LOCAL' && old.photo_object_key && old.photo_object_key !== stored.key)
-      await storage.remove(old.photo_object_key);
-    response.json({ data: { photo_url: `/api/v1/printers/${id.toString()}/photo` } });
+    if (old.photo_storage_provider === 'CLOUDINARY' && old.photo_object_key && old.photo_object_key !== stored.key) await imageStorage.remove(old.photo_object_key).catch(() => undefined);
+    if (old.photo_storage_provider === 'LOCAL' && old.photo_object_key && old.photo_object_key !== stored.key) await storage.remove(old.photo_object_key).catch(() => undefined);
+    response.json({ data: { photo_url: stored.publicUrl ?? `/api/v1/printers/${id.toString()}/photo` } });
   } catch (error) {
-    await storage.remove(stored.key);
+    await imageStorage.remove(stored.key).catch(() => undefined);
     throw error;
   }
 });
@@ -184,8 +186,8 @@ printerRouter.delete('/:id/photo', requireCto, async (request, response) => {
     await audit(tx, context, 'PRINTER_PHOTO_REMOVED', 'printers', id, existing, updated);
     return existing;
   });
-  if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key)
-    await storage.remove(previous.photo_object_key);
+  if (previous.photo_storage_provider === 'CLOUDINARY' && previous.photo_object_key) await imageStorage.remove(previous.photo_object_key).catch(() => undefined);
+  if (previous.photo_storage_provider === 'LOCAL' && previous.photo_object_key) await storage.remove(previous.photo_object_key).catch(() => undefined);
   response.status(204).end();
 });
 

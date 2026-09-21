@@ -697,7 +697,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "external_url",
-        "label": "External Url",
+        "label": "Tautan Google Drive",
         "type": "textarea",
         "required": false,
         "nullable": true
@@ -1339,7 +1339,7 @@ export const resources: ResourceDefinition[] = [
       },
       {
         "name": "external_url",
-        "label": "External Url",
+        "label": "Tautan Google Drive",
         "type": "textarea",
         "required": false,
         "nullable": true

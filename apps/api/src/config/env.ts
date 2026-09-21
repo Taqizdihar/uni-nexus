@@ -30,8 +30,12 @@ const schema = z.object({
   COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   ALLOW_PUBLIC_SIGNUP: boolean.optional(),
   TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
-  STORAGE_DRIVER: z.literal('local').default('local'),
+  STORAGE_DRIVER: z.enum(['local', 'cloudinary']).default('local'),
   LOCAL_STORAGE_PATH: z.string().default(path.join(apiRoot, 'uploads')),
+  CLOUDINARY_CLOUD_NAME: z.string().trim().optional(),
+  CLOUDINARY_API_KEY: z.string().trim().optional(),
+  CLOUDINARY_API_SECRET: z.string().trim().optional(),
+  CLOUDINARY_FOLDER_ROOT: z.string().trim().default('uni-nexus'),
   MAX_UPLOAD_SIZE: z.coerce
     .number()
     .int()
@@ -52,6 +56,11 @@ export function parseEnvironment(input: NodeJS.ProcessEnv) {
   const production = value.NODE_ENV === 'production';
   if (production && !value.JWT_SECRET)
     throw new Error('JWT_SECRET is required in production (at least 32 characters).');
+  if (value.STORAGE_DRIVER === 'cloudinary') {
+    const missing = ['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET']
+      .filter((key) => !value[key as keyof typeof value]);
+    if (missing.length) throw new Error(`Invalid Cloudinary configuration: ${missing.join(', ')} must be set.`);
+  }
   const origins = (value.CORS_ORIGINS ?? value.FRONTEND_URL)
     .split(',')
     .map((origin) => origin.trim())
