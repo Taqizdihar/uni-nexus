@@ -71,6 +71,17 @@ export class CloudinaryImageService implements ImageStorageService {
       throw new AppError(502, 'Penyimpanan gambar sedang tidak tersedia. Coba lagi.', 'IMAGE_STORAGE_UNAVAILABLE',
         error instanceof Error ? { provider: 'CLOUDINARY' } : undefined);
     }
+    if (!result.public_id || !result.secure_url) {
+      throw new AppError(502, 'Respons penyimpanan gambar tidak valid.', 'IMAGE_STORAGE_INVALID_RESPONSE');
+    }
+    let secureUrl: URL;
+    try { secureUrl = new URL(result.secure_url); } catch {
+      throw new AppError(502, 'Respons penyimpanan gambar tidak valid.', 'IMAGE_STORAGE_INVALID_RESPONSE');
+    }
+    if (secureUrl.protocol !== 'https:')
+      throw new AppError(502, 'Respons penyimpanan gambar tidak valid.', 'IMAGE_STORAGE_INVALID_RESPONSE');
+    if (result.version !== undefined && (!Number.isSafeInteger(result.version) || result.version < 0))
+      throw new AppError(502, 'Respons penyimpanan gambar tidak valid.', 'IMAGE_STORAGE_INVALID_RESPONSE');
     return {
       provider: 'CLOUDINARY', key: result.public_id, size: result.bytes, publicUrl: result.secure_url,
       assetId: result.asset_id, assetFolder: result.asset_folder ?? assetFolder,

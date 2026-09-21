@@ -258,6 +258,19 @@ export async function updatePet(actorId: bigint, petId: bigint, input: PetMetada
 type UploadedFile = { originalname: string; mimetype: string; buffer: Buffer; size: number };
 type PetFrameInput = { state?: string; duration_ms?: number | null; frame_index?: number };
 
+function requireCloudinaryPetStorage(stored: Awaited<ReturnType<typeof imageStorage.upload>>) {
+  if (env.STORAGE_DRIVER !== 'cloudinary' || stored.provider !== 'CLOUDINARY')
+    throw new AppError(503, 'Cloudinary belum dikonfigurasi untuk media Pet.', 'CLOUDINARY_NOT_CONFIGURED');
+  if (!stored.key || !stored.publicUrl || !stored.resourceType)
+    throw new AppError(502, 'Respons penyimpanan gambar Pet tidak valid.', 'IMAGE_STORAGE_INVALID_RESPONSE');
+  return {
+    publicId: stored.key,
+    secureUrl: stored.publicUrl,
+    resourceType: stored.resourceType,
+    version: stored.version === null ? null : BigInt(stored.version),
+  };
+}
+
 function normalizeState(value: string | undefined): string {
   const state = (value ?? 'IDLE').trim().toUpperCase();
   if (!/^[A-Z][A-Z0-9_]{0,39}$/.test(state))
@@ -274,6 +287,8 @@ export async function uploadPetFrame(actorId: bigint, petId: bigint, file: Uploa
   const validated = validateUpload(file, env.MAX_UPLOAD_SIZE, true);
   if (validated.extension !== '.avif')
     throw new AppError(422, 'Format foto Pet harus AVIF.', 'INVALID_PET_IMAGE_FORMAT');
+  if (env.STORAGE_DRIVER !== 'cloudinary')
+    throw new AppError(503, 'Cloudinary belum dikonfigurasi untuk media Pet.', 'CLOUDINARY_NOT_CONFIGURED');
   const state = normalizeState(input.state);
   if (input.duration_ms !== undefined && input.duration_ms !== null && (!Number.isInteger(input.duration_ms) || input.duration_ms < 50 || input.duration_ms > 60_000))
     throw new AppError(422, 'Durasi frame harus antara 50 dan 60000 milidetik.', 'INVALID_FRAME_DURATION');
@@ -285,15 +300,16 @@ export async function uploadPetFrame(actorId: bigint, petId: bigint, file: Uploa
   if (!Number.isInteger(frameIndex) || frameIndex < 1)
     throw new AppError(422, 'Urutan frame harus dimulai dari 1.', 'INVALID_FRAME_INDEX');
   const stored = await imageStorage.upload({ bytes: file.buffer, assetFolder: `pets/pet-${petId.toString()}/states/${state.toLowerCase()}` });
+  const cloudinary = requireCloudinaryPetStorage(stored);
   try {
     const frame = await prisma.$transaction(async (tx) => {
       await assertCto(tx, actorId);
       const created = await tx.pet_media.create({ data: {
         pet_id: petId, state, frame_index: frameIndex, duration_ms: input.duration_ms ?? null,
         original_file_name: validated.filename, mime_type: validated.mime, file_size_bytes: BigInt(stored.size),
-        storage_provider: stored.provider, cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.provider === 'CLOUDINARY' ? stored.key : null,
-        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: stored.publicUrl,
-        cloudinary_resource_type: stored.resourceType, cloudinary_format: stored.format, cloudinary_version: stored.version,
+        storage_provider: 'CLOUDINARY', cloudinary_asset_id: stored.assetId, cloudinary_public_id: cloudinary.publicId,
+        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: cloudinary.secureUrl,
+        cloudinary_resource_type: cloudinary.resourceType, cloudinary_format: stored.format, cloudinary_version: cloudinary.version,
         width_px: stored.width, height_px: stored.height, uploaded_by_user_id: actorId,
       }, select: { id: true, state: true, frame_index: true, duration_ms: true, cloudinary_secure_url: true, width_px: true, height_px: true } });
       await tx.audit_logs.create({ data: {
@@ -305,6 +321,8 @@ export async function uploadPetFrame(actorId: bigint, petId: bigint, file: Uploa
     return serializeFrame(frame);
   } catch (error) {
     await imageStorage.remove(stored.key).catch(() => undefined);
+    if (typeof error === 'object' && error !== null && (error as { code?: string }).code === 'P2002')
+      throw new AppError(409, 'Urutan frame Pet sudah digunakan.', 'PET_FRAME_CONFLICT');
     throw error;
   }
 }
@@ -315,18 +333,21 @@ export const uploadPetImage = (actorId: bigint, petId: bigint, file: UploadedFil
 export async function replacePetFrame(actorId: bigint, petId: bigint, frameId: bigint, file: UploadedFile, durationMs?: number | null) {
   const validated = validateUpload(file, env.MAX_UPLOAD_SIZE, true);
   if (validated.extension !== '.avif') throw new AppError(422, 'Format foto Pet harus AVIF.', 'INVALID_PET_IMAGE_FORMAT');
+  if (env.STORAGE_DRIVER !== 'cloudinary')
+    throw new AppError(503, 'Cloudinary belum dikonfigurasi untuk media Pet.', 'CLOUDINARY_NOT_CONFIGURED');
   await assertCto(prisma, actorId);
   const old = await prisma.pet_media.findFirst({ where: { id: frameId, pet_id: petId, is_active: true } });
   if (!old) throw new AppError(404, 'Frame Pet tidak ditemukan.', 'PET_FRAME_NOT_FOUND');
   const stored = await imageStorage.upload({ bytes: file.buffer, assetFolder: `pets/pet-${petId.toString()}/states/${old.state.toLowerCase()}` });
+  const cloudinary = requireCloudinaryPetStorage(stored);
   try {
     const updated = await prisma.$transaction(async (tx) => {
       await assertCto(tx, actorId);
       const value = await tx.pet_media.update({ where: { id: frameId }, data: {
-        original_file_name: validated.filename, mime_type: validated.mime, file_size_bytes: BigInt(stored.size), storage_provider: stored.provider,
-        cloudinary_asset_id: stored.assetId, cloudinary_public_id: stored.provider === 'CLOUDINARY' ? stored.key : null,
-        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: stored.publicUrl, cloudinary_resource_type: stored.resourceType,
-        cloudinary_format: stored.format, cloudinary_version: stored.version, width_px: stored.width, height_px: stored.height,
+        original_file_name: validated.filename, mime_type: validated.mime, file_size_bytes: BigInt(stored.size), storage_provider: 'CLOUDINARY',
+        cloudinary_asset_id: stored.assetId, cloudinary_public_id: cloudinary.publicId,
+        cloudinary_asset_folder: stored.assetFolder, cloudinary_secure_url: cloudinary.secureUrl, cloudinary_resource_type: cloudinary.resourceType,
+        cloudinary_format: stored.format, cloudinary_version: cloudinary.version, width_px: stored.width, height_px: stored.height,
         duration_ms: durationMs === undefined ? old.duration_ms : durationMs,
       }, select: { id: true, state: true, frame_index: true, duration_ms: true, cloudinary_secure_url: true, width_px: true, height_px: true } });
       await tx.audit_logs.create({ data: { user_id: actorId, action: 'PET_MEDIA_UPDATED', entity_type: 'pet_media', entity_id: frameId, new_value_json: { pet_id: petId.toString() } } });

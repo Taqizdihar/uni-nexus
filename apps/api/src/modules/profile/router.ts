@@ -104,6 +104,7 @@ profileRouter.get('/profile/assets/:userId/:type', async (request, response, nex
   const targetUserId = parseId(request.params.userId, 'user ID');
   const record = await getProfileAssetForDownload(request.auth!.userId, targetUserId, type);
   response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   response.setHeader('Cache-Control', 'private, max-age=60');
   response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
   response.type(record.mime_type ?? 'application/octet-stream');

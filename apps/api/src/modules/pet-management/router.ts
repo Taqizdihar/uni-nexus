@@ -14,6 +14,7 @@ petManagementRouter.get('/pet-management/:petId/image', requireAuth, async (requ
   const petId = parseId(request.params.petId, 'pet ID');
   const record = await getPetImageForDownload(petId);
   response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   response.setHeader('Cache-Control', 'private, max-age=300');
   response.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
   response.type('image/avif');

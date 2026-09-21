@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Users } from 'lucide-react';
 import { ROLE_LABELS, type RoleCode } from '@uni-nexus/shared';
-import { assetUrl } from '../lib/api';
+import { SafeImage } from './safe-image';
 import { useOnlineUsers, type OnlineUser } from '../lib/presence';
 import { PresenceBadge } from './presence-badge';
 
@@ -13,7 +13,7 @@ function OnlineAvatar({ user, overflow }: { user?: OnlineUser; overflow?: number
   if (!user) return null;
   return (
     <span className="online-avatar" title={user.full_name}>
-      {user.photo_url ? <img src={assetUrl(user.photo_url)} alt="" /> : <span className="online-avatar-initials">{initials(user.full_name)}</span>}
+      <SafeImage source={user.photo_url} alt="" fallback={<span className="online-avatar-initials">{initials(user.full_name)}</span>} />
       <span className="online-dot" />
     </span>
   );

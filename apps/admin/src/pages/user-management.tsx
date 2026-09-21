@@ -10,7 +10,8 @@ import {
   type ExecutiveSlot,
   type RoleCode,
 } from '@uni-nexus/shared';
-import { ApiError, api, assetUrl, body, message, type Envelope, type Page } from '../lib/api';
+import { ApiError, api, body, message, type Envelope, type Page } from '../lib/api';
+import { SafeImage } from '../components/safe-image';
 import { EmptyState, ErrorState, PageHeader, Spinner, useToast } from '../components/ui';
 
 import { AccountActionModal } from '../components/account-action-modal';
@@ -65,7 +66,7 @@ function initials(name: string) {
 function AccountAvatar({ account, large }: { account: Account; large?: boolean }) {
   return (
     <span className={`avatar${large ? ' lg' : ''}`}>
-      {account.photo_url ? <img src={assetUrl(account.photo_url)} alt="" /> : initials(account.full_name)}
+      <SafeImage source={account.photo_url} alt="" fallback={initials(account.full_name)} />
     </span>
   );
 }
