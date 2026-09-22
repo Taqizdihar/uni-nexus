@@ -21,13 +21,53 @@ const date = (value: unknown) =>
     : 'Belum tercatat';
 
 export function PrinterPhoto({ printer, className = '' }: { printer: Row; className?: string }) {
+  const { workspace } = useAuth();
+  const source = assetUrl(String(printer.photo_url || ''));
+  const [imageSource, setImageSource] = useState<string>();
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setImageSource(undefined);
+    setFailed(false);
+    if (!source) return;
+
+    // Protected local printer photos need the active workspace header, which an
+    // ordinary <img> request cannot provide. Public URLs can be used directly.
+    if (!source.includes('/api/v1/printers/')) {
+      setImageSource(source);
+      return;
+    }
+
+    const controller = new AbortController();
+    let objectUrl: string | undefined;
+    fetch(source, {
+      credentials: 'include',
+      headers: workspace ? { 'X-Workspace-Id': workspace.id } : undefined,
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Printer photo request failed.');
+        return response.blob();
+      })
+      .then((blob) => {
+        objectUrl = URL.createObjectURL(blob);
+        setImageSource(objectUrl);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setFailed(true);
+      });
+
+    return () => {
+      controller.abort();
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [source, workspace?.id]);
+
+  const alt = text(printer.photo_alt_text, `Foto ${text(printer.name, 'printer')}`);
   return (
     <div className={`printer-photo ${className}`}>
-      {printer.photo_url ? (
-        <img
-          src={assetUrl(String(printer.photo_url))}
-          alt={`Foto ${text(printer.name, 'printer')}`}
-        />
+      {imageSource && !failed ? (
+        <img src={imageSource} alt={alt} onError={() => setFailed(true)} />
       ) : (
         <Printer size={58} strokeWidth={1.4} aria-label="Placeholder foto printer" />
       )}
