@@ -2209,7 +2209,7 @@ dd.json-value {
 .pet-selection-modal > h2 { padding-right: 28px; }
 .pet-selection-preview { display: grid; grid-template-columns: minmax(280px, 330px) minmax(0, 1fr); gap: 30px; align-items: center; margin: 20px 0 22px; padding: 22px; background: linear-gradient(135deg, #fff9df, #f7f8f3); border: 1px solid #eee2ad; border-radius: var(--radius-lg); }
 .pet-selection-preview-image { display: grid; width: min(100%, 330px); aspect-ratio: 1; place-items: center; color: var(--brand-yellow-deep); }
-.pet-selection-preview-image img { width: 100%; height: 100%; object-fit: contain; }
+.pet-selection-preview-image img { width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
 .pet-selection-preview-copy { max-width: 590px; }
 .pet-selection-preview-copy h3 { font-size: 29px; }
 .pet-selection-preview-copy p { margin: 10px 0 0; line-height: 1.6; }
@@ -3447,7 +3447,7 @@ dd.json-value {
   height: clamp(160px, 18vw, 190px);
   max-width: 88%;
   max-height: clamp(160px, 18vw, 190px);
-  border-radius: 999px;
+  border-radius: 0;
   object-fit: contain;
   background: transparent;
 }
