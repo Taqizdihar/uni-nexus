@@ -11,7 +11,11 @@ export class ApiError extends Error {
   }
 }
 
-const origin = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+// Hosting gateways may supply an API prefix; requests and assets already include it.
+const origin = (import.meta.env.VITE_API_URL || '')
+  .trim()
+  .replace(/\/+$/, '')
+  .replace(/\/api(?:\/v1)?$/, '');
 const base = `${origin}/api/v1`;
 
 /**
